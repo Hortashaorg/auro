@@ -1,9 +1,12 @@
 import { init } from "@package/framework";
-import { App } from "./test.tsx";
-import { renderToStringAsync } from "preact-render-to-string";
+import { router } from "./router.ts";
 
-const handler = async (_req: Request) => {
-  const result = await renderToStringAsync(App());
+const handler = async (req: Request) => {
+  const url = new URL(req.url);
+  if (url.pathname === "/favicon.ico") {
+    return new Response(null, { status: 404 });
+  }
+  const result = await router(req);
   return new Response(result, { headers: { "Content-Type": "text/html" } });
 };
 
