@@ -1,5 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact */
-
 export function App() {
     return (
         <html lang="en">
@@ -7,7 +5,7 @@ export function App() {
                 <title>Deno Hot Reload</title>
             </head>
             <body>
-                <h1>Hello my dude!</h1>
+                <h1>My hot reload on save!</h1>
             </body>
         </html>
     );

@@ -1,6 +1,3 @@
 {
-	"version": "0.0.1",
-	"imports": {
-		"preact": "npm:preact"
-	}
+	"version": "0.0.1"
 }
