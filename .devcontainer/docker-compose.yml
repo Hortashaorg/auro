@@ -1,0 +1,12 @@
+services:
+  local:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: local
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./..:/app
+      - ~/.ssh:/root/.ssh
+    command: "sleep infinity"
