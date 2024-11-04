@@ -7,6 +7,14 @@ const handler = async (req: Request) => {
     // TODO: Favicon and other assets?
     return new Response(null, { status: 404 });
   }
+
+  if (url.pathname === "/main.css") {
+    const cssFilePath = new URL("./public/main.css", import.meta.url).pathname;
+    const css = await Deno.readFile(cssFilePath);
+    return new Response(css, {
+      headers: { "Content-Type": "text/css" },
+    });
+  }
   const result = await router(req);
   return new Response(result, { headers: { "Content-Type": "text/html" } });
 };

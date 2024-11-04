@@ -14,10 +14,14 @@ export const BaseLayout = (props: {
                 <script src="https://unpkg.com/htmx.org@2.0.0"></script>
                 <script src="//unpkg.com/alpinejs" defer></script>
                 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+                <link
+                    href={`/main.css`}
+                    rel="stylesheet"
+                />
                 <title>{title}</title>
             </head>
-            <body class="dark:bg-background-dark bg-background-light">
-                <div class="container mx-auto p-4">
+            <body className="dark:bg-background-dark bg-background-light">
+                <div className="container mx-auto p-4">
                     <div>
                         {children}
                     </div>
