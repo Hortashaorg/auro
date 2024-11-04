@@ -4,6 +4,7 @@ import { router } from "./router.ts";
 const handler = async (req: Request) => {
   const url = new URL(req.url);
   if (url.pathname === "/favicon.ico") {
+    // TODO: Favicon and other assets?
     return new Response(null, { status: 404 });
   }
   const result = await router(req);

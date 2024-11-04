@@ -1,13 +1,9 @@
-export function Home() {
+import { BaseLayout } from "../layouts/BaseLayout.tsx";
+
+export const Home = () => {
     return (
-        <html lang="en">
-            <head>
-                <title>Deno Hot Dude</title>
-                <meta charSet="UTF-8" />
-            </head>
-            <body>
-                <h1>Hei Øystein!</h1>
-            </body>
-        </html>
+        <BaseLayout title="Deno Hot Dude">
+            <h1>Hei Øystein!</h1>
+        </BaseLayout>
     );
-}
+};
