@@ -1,0 +1,17 @@
+{
+	"workspace": [
+		"./packages/common",
+		"./packages/database",
+		"./packages/framework",
+		"./services/app",
+		"./services/jobs"
+	],
+	"tasks": {
+		"dev": "deno run -A scripts/dev.ts",
+		"dev:app": "deno run dev app"
+	},
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"jsxImportSource": "preact"
+	}
+}

@@ -11,7 +11,8 @@
 				"astro-build.astro-vscode",
 				"bradlc.vscode-tailwindcss",
 				"supermaven.supermaven",
-				"CraigRBroughton.htmx-attributes"
+				"CraigRBroughton.htmx-attributes",
+				"denoland.vscode-deno"
 			]
 		}
 	},

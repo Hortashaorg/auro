@@ -1,0 +1,4 @@
+{
+	"name": "@package/database",
+	"exports": "./mod.ts"
+}

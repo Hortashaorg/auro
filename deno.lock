@@ -1,0 +1,44 @@
+{
+  "version": "4",
+  "specifiers": {
+    "npm:preact-render-to-string@^6.5.11": "6.5.11_preact@10.24.3",
+    "npm:preact@*": "10.24.3",
+    "npm:preact@^10.24.3": "10.24.3"
+  },
+  "npm": {
+    "preact-render-to-string@6.5.11_preact@10.24.3": {
+      "integrity": "sha512-ubnauqoGczeGISiOh6RjX0/cdaF8v/oDXIjO85XALCQjwQP+SB4RDXXtvZ6yTYSjG+PC1QRP2AhPgCEsM2EvUw==",
+      "dependencies": [
+        "preact"
+      ]
+    },
+    "preact@10.24.3": {
+      "integrity": "sha512-Z2dPnBnMUfyQfSQ+GBdsGa16hz35YmLmtTLhM169uW944hYL6xzTYkJjC07j+Wosz733pMWx0fgON3JNw1jJQA=="
+    }
+  },
+  "redirects": {
+    "https://esm.sh/preact/jsx-runtime": "https://esm.sh/preact@10.24.3/jsx-runtime"
+  },
+  "remote": {
+    "https://esm.sh/lit-html@1.4.1": "e9511e997bc3ddbadb54dbe5b031dafc4b460fd5d4ceb3453e554ca4722992d1",
+    "https://esm.sh/preact@10.24.3/jsx-runtime": "b9e4a84f55cb84ddb400600787de5b6a0ee66d879d8cf920dc0cdc94d00ae847",
+    "https://esm.sh/stable/preact@10.24.3/denonext/jsx-runtime.js": "562a3adc7f89394c5fc430323f2875e9ec954bf138572227e5a26f9b42a8d179",
+    "https://esm.sh/stable/preact@10.24.3/denonext/preact.mjs": "adda7b905b40f0bab844d3ee900378e59da2b16f0f8e716ba9a8d67c15b78c87",
+    "https://esm.sh/v135/lit-html@1.4.1/denonext/lit-html.mjs": "8fc0dfa113081ab1ec4ead7afaf9179600c5783eeddbb026dd05fbf33cdc8eef"
+  },
+  "workspace": {
+    "members": {
+      "services/app": {
+        "dependencies": [
+          "npm:preact-render-to-string@^6.5.11",
+          "npm:preact@^10.24.3"
+        ]
+      },
+      "services/jobs": {
+        "dependencies": [
+          "npm:preact@*"
+        ]
+      }
+    }
+  }
+}
