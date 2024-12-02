@@ -10,7 +10,7 @@
   ],
   "tasks": {
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
-    "packages:test": "deno run -A scripts/task.ts '**' test"
+    "packages:test": "deno run -A scripts/task.ts '@package/*' test"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

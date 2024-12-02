@@ -27,6 +27,7 @@ for (const workspaceFile of workspaceFiles) {
         tasks: denofile.tasks ? Object.keys(denofile.tasks) : [],
     });
 }
+
 const globRegExp = globToRegExp(glob);
 const matchingWorkspaces = workspaces.filter((workspace) =>
     globRegExp.test(workspace.name)
