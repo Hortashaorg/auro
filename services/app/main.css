@@ -117,7 +117,7 @@
   /* Firefox scrollbar styles */
   * {
     scrollbar-width: thin;
-    scrollbar-color: theme(colors.primary.dark)
+    scrollbar-color: theme(colors.primary.800)
       transparent; /* Thumb color, track color */
   }
 }
