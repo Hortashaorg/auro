@@ -1,0 +1,6 @@
+Add Components
+env variables
+workflow - typecheck, linting and formatting
+auth. (Do not loose state?)
+State object for request
+support dynamic routes?
