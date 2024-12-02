@@ -1,4 +1,4 @@
 {
-	"name": "@package/common",
-	"exports": "./mod.ts"
+  "name": "@package/common",
+  "exports": "./mod.ts"
 }
