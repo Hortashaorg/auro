@@ -1,5 +1,7 @@
 {
   "version": "0.0.1",
+  "name": "@service/app",
+  "exports": "./main.ts",
   "imports": {
     "class-variance-authority": "npm:class-variance-authority@^0.7.0",
     "clsx": "npm:clsx@^2.1.1",

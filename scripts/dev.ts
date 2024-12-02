@@ -6,7 +6,7 @@ const command = new Deno.Command("deno", {
     "--allow-net",
     "--allow-read",
     "--watch",
-    `services/${workspace}/main.ts`,
+    `/app/services/${workspace}/main.ts`,
   ],
   stdin: "inherit",
   stdout: "inherit",

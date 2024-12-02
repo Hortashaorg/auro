@@ -1,4 +1,4 @@
-import { JSX } from "preact";
+import type { JSX } from "preact";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
 
 export const BaseLayout = (props: {

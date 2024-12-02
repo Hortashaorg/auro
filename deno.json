@@ -8,7 +8,8 @@
   ],
   "tasks": {
     "dev": "deno run -A scripts/dev.ts",
-    "dev:app": "deno run dev app"
+    "dev:app": "deno run dev app",
+    "test": "deno run -A scripts/test.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -23,5 +24,8 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "noUncheckedIndexedAccess": true
+  },
+  "imports": {
+    "@std/fs": "jsr:@std/fs@^1.0.6"
   }
 }

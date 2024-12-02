@@ -1,4 +1,4 @@
-import { JSX } from "preact";
+import type { JSX } from "preact";
 import { cn } from "@utils/tailwind.ts";
 
 interface Props extends JSX.HTMLAttributes<HTMLFieldSetElement> {}
