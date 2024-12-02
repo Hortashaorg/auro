@@ -1,0 +1,1 @@
+CREATE TYPE "public"."usertype" AS ENUM('admin', 'player');

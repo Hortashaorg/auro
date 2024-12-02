@@ -1,0 +1,71 @@
+{
+  "id": "f9a4d81c-9d91-467a-8532-38150093d794",
+  "prevId": "0bd859f7-fef3-47e2-bc82-910d7da100ce",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.asset": {
+      "name": "asset",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "type": {
+          "name": "type",
+          "type": "assetcategory",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.assetcategory": {
+      "name": "assetcategory",
+      "schema": "public",
+      "values": [
+        "avatar",
+        "weapon",
+        "armor",
+        "accessory",
+        "consumable",
+        "item",
+        "icon",
+        "companion",
+        "structure",
+        "currency"
+      ]
+    },
+    "public.usertype": {
+      "name": "usertype",
+      "schema": "public",
+      "values": [
+        "admin",
+        "player"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

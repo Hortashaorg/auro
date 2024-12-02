@@ -7,6 +7,8 @@
     "postgres": "npm:postgres@^3.4.5"
   },
   "tasks": {
-    "test": "deno run test.ts"
+    "generate": "deno run -A --node-modules-dir npm:drizzle-kit generate",
+    "migrate": "deno run -A --node-modules-dir npm:drizzle-kit migrate",
+    "test": "deno run -A mod.ts"
   }
 }

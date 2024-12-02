@@ -1,0 +1,27 @@
+{
+  "id": "0bd859f7-fef3-47e2-bc82-910d7da100ce",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {},
+  "enums": {
+    "public.usertype": {
+      "name": "usertype",
+      "schema": "public",
+      "values": [
+        "admin",
+        "player"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
