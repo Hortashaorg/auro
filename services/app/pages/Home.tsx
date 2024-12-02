@@ -1,5 +1,5 @@
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
-import { Text } from "@comps/Text.tsx";
+import { Text } from "@comp/Text.tsx";
 
 export const Home = () => {
   return (

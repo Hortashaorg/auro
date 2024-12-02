@@ -1,4 +1,5 @@
 import { JSX } from "preact";
+import { Navbar } from "@sections/navbar/Navbar.tsx";
 
 export const BaseLayout = (props: {
   title: string;
@@ -21,6 +22,7 @@ export const BaseLayout = (props: {
       </head>
       <body className="dark:bg-background-900 bg-background-50">
         <div className="container mx-auto p-4">
+          <Navbar />
           <div>
             {children}
           </div>
