@@ -8,7 +8,7 @@ export const NavButton = ({ className, ...rest }: Props) => {
     <button
       {...rest}
       className={cn(
-        "px-5 hover:text-text-500 dark:hover:text-text-200 text-base font-normal dark:text-text-100 text-text-800 font-body leading-loose",
+        "px-5 hover:text-text-500 dark:hover:text-text-300 text-base font-normal dark:text-text-200 text-text-800 font-body leading-loose",
         className,
       )}
     >

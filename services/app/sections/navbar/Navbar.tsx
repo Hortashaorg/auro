@@ -8,14 +8,13 @@ export const Navbar = () => {
   return (
     <Header>
       <Menu>
-        <Select name="Tools" variant="single" flow="right">
-          <Link href="/tools/raw-data-tool" variant="dropdownLink">
-            Raw Data Tool
+        <Select name="Admin" variant="double" flow="right">
+          <Link href="/admin/locations" variant="dropdownLink">Locations</Link>
+          <Link href="/admin/skills" variant="dropdownLink">Skills</Link>
+          <Link href="/admin/currencies" variant="dropdownLink">
+            Currencies
           </Link>
-          <Link href="/tools/invoke" variant="dropdownLink">Invoke Tool</Link>
-          <Link href="/tools/manage-state" variant="dropdownLink">
-            Manage-state Tool
-          </Link>
+          <Link href="/admin/items" variant="dropdownLink">Items</Link>
         </Select>
       </Menu>
       <Menu x-data="themeData">
@@ -28,7 +27,6 @@ export const Navbar = () => {
           name="Profile"
           variant="single"
           flow="left"
-          id="avatar"
         >
           <Link href="/profile" variant="dropdownLink">
             profile
