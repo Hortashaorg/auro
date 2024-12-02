@@ -1,5 +1,5 @@
 {
-  "id": "318172ca-eee5-4260-ac0e-ebfc07837efa",
+  "id": "0523b544-69f9-4eac-8fce-ce9083d9eb64",
   "prevId": "bba0decb-d259-4e58-9ffb-565773eef9d3",
   "version": "7",
   "dialect": "postgresql",
@@ -168,25 +168,23 @@
           "primaryKey": false,
           "notNull": false
         },
-        "token": {
-          "name": "token",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "createdAt": {
-          "name": "createdAt",
+        "refreshTokenExpires": {
+          "name": "refreshTokenExpires",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
         },
-        "updatedAt": {
-          "name": "updatedAt",
+        "accessTokenHash": {
+          "name": "accessTokenHash",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "accessTokenExpires": {
+          "name": "accessTokenExpires",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {},
@@ -212,6 +210,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "refreshTokenHash"
+          ]
+        },
+        "auth_accessTokenHash_unique": {
+          "name": "auth_accessTokenHash_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "accessTokenHash"
           ]
         }
       },
@@ -265,6 +270,184 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.skill": {
+      "name": "skill",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "serverId": {
+          "name": "serverId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "skill_serverId_server_id_fk": {
+          "name": "skill_serverId_server_id_fk",
+          "tableFrom": "skill",
+          "tableTo": "server",
+          "columnsFrom": [
+            "serverId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "unique_skill_name_per_server": {
+          "name": "unique_skill_name_per_server",
+          "nullsNotDistinct": false,
+          "columns": [
+            "serverId",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "accountId": {
+          "name": "accountId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "serverId": {
+          "name": "serverId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "actions": {
+          "name": "actions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 15
+        },
+        "type": {
+          "name": "type",
+          "type": "usertype",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'player'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_accountId_account_id_fk": {
+          "name": "user_accountId_account_id_fk",
+          "tableFrom": "user",
+          "tableTo": "account",
+          "columnsFrom": [
+            "accountId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "user_serverId_server_id_fk": {
+          "name": "user_serverId_server_id_fk",
+          "tableFrom": "user",
+          "tableTo": "server",
+          "columnsFrom": [
+            "serverId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "unique_user_name_per_server": {
+          "name": "unique_user_name_per_server",
+          "nullsNotDistinct": false,
+          "columns": [
+            "serverId",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -282,6 +465,31 @@
         "companion",
         "structure",
         "currency"
+      ]
+    },
+    "public.itemtype": {
+      "name": "itemtype",
+      "schema": "public",
+      "values": [
+        "weapon",
+        "armor",
+        "accessory",
+        "consumable",
+        "item",
+        "companion",
+        "structure"
+      ]
+    },
+    "public.rarity": {
+      "name": "rarity",
+      "schema": "public",
+      "values": [
+        "common",
+        "uncommon",
+        "rare",
+        "epic",
+        "legendary",
+        "ancient"
       ]
     },
     "public.usertype": {
