@@ -9,6 +9,6 @@
 		"tailwindcss": "npm:tailwindcss@^3.4.14"
 	},
 	"tasks": {
-		"tailwind": "tailwindcss -i ./main.css -o ./public/main.css --config ./tailwind.config.mjs --minify"
+		"tailwind": "tailwindcss -i ./main.css -o ./public/main.css --config ./tailwind.config.mjs --minify --watch"
 	}
 }

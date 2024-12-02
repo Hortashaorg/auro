@@ -8,12 +8,15 @@ const handler = async (req: Request) => {
     return new Response(null, { status: 404 });
   }
 
-  if (url.pathname === "/main.css") {
-    const cssFilePath = new URL("./public/main.css", import.meta.url).pathname;
+  const extensions = [".css", ".js", ".ico", ".svg"];
+
+  if (
+    extensions.some((ext) => url.pathname.endsWith(ext))
+  ) {
+    const cssFilePath =
+      new URL(`./public${url.pathname}`, import.meta.url).pathname;
     const css = await Deno.readFile(cssFilePath);
-    return new Response(css, {
-      headers: { "Content-Type": "text/css" },
-    });
+    return new Response(css);
   }
   const result = await router(req);
   return new Response(result, { headers: { "Content-Type": "text/html" } });

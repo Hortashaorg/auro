@@ -5,8 +5,6 @@ export default {
     theme: {
         colors: {
             text: {
-                dark: "#f8f6f1",
-                light: "#0e0c07",
                 50: "#f6f4ee",
                 100: "#eee9dd",
                 200: "#ddd3bb",
@@ -20,8 +18,6 @@ export default {
                 950: "#110f09",
             },
             background: {
-                dark: "#070603",
-                light: "#fcfbf8",
                 50: "#f7f5ed",
                 100: "#f0ebdb",
                 200: "#e0d6b8",
@@ -35,8 +31,6 @@ export default {
                 950: "#120f08",
             },
             primary: {
-                dark: "#9d8948",
-                light: "#b7a362",
                 50: "#f7f5ee",
                 100: "#efebdc",
                 200: "#dfd6b9",
@@ -50,8 +44,6 @@ export default {
                 950: "#110f08",
             },
             secondary: {
-                dark: "#575e2c",
-                light: "#ccd3a1",
                 50: "#f6f7ee",
                 100: "#ecefdc",
                 200: "#d9deba",
@@ -65,8 +57,6 @@ export default {
                 950: "#101108",
             },
             accent: {
-                dark: "#687e3a",
-                light: "#b0c581",
                 50: "#f4f7ee",
                 100: "#e9efdc",
                 200: "#d3dfb9",
@@ -89,34 +79,34 @@ export default {
             },
             rarity: {
                 common: {
-                    light: "#cccccc", // medium gray
-                    default: "#b3b3b3", // darker gray
-                    dark: "#666666", // even darker gray
+                    light: "#cccccc",
+                    default: "#b3b3b3",
+                    dark: "#666666",
                 },
                 uncommon: {
-                    light: "#99ff99", // light green
-                    default: "#00cc00", // darker green
-                    dark: "#003300", // very dark green
+                    light: "#99ff99",
+                    default: "#00cc00",
+                    dark: "#003300",
                 },
                 rare: {
-                    light: "#9999ff", // light blue
-                    default: "#0000cc", // darker blue
-                    dark: "#000033", // very dark blue
+                    light: "#9999ff",
+                    default: "#0000cc",
+                    dark: "#000033",
                 },
                 epic: {
-                    light: "#d299d2", // light purple
-                    default: "#660066", // darker purple
-                    dark: "#1a001a", // very dark purple
+                    light: "#d299d2",
+                    default: "#660066",
+                    dark: "#1a001a",
                 },
                 legendary: {
-                    light: "#ffcc99", // light orange
-                    default: "#cc8400", // darker orange
-                    dark: "#331a00", // very dark orange
+                    light: "#ffcc99",
+                    default: "#cc8400",
+                    dark: "#331a00",
                 },
                 ancient: {
-                    light: "#ff9999", // light red
-                    default: "#cc0000", // darker red
-                    dark: "#330000", // very dark red
+                    light: "#ff9999",
+                    default: "#cc0000",
+                    dark: "#330000",
                 },
             },
         },
