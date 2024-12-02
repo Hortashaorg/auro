@@ -9,8 +9,8 @@ const textVariants = cva([], {
       header: [
         "text-5xl",
         "font-bold",
-        "dark:text-text-800",
-        "text-text-200",
+        "dark:text-text-200",
+        "text-text-700",
         "font-heading",
         "leading-tight",
         "tracking-normal",

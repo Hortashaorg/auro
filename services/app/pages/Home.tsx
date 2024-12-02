@@ -1,4 +1,5 @@
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
+import { Text } from "@comps/Text.tsx";
 
 export const Home = () => {
   return (
@@ -11,6 +12,7 @@ export const Home = () => {
             x-text="isDarkMode ? 'Light Theme' : 'Dark Theme'"
           >
           </button>
+          <Text variant="header">Hello my dude</Text>
         </div>
       </>
     </BaseLayout>
