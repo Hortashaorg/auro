@@ -11,8 +11,6 @@ export const router = (request: Request) => {
   const pathname = new URL(request.url).pathname as keyof typeof routes;
   console.log("Page requested:", pathname);
 
-  // TODO: Path middleware
-
   const element = routes[pathname];
   if (element) {
     return renderToStringAsync(routes[pathname]);

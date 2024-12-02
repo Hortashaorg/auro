@@ -43,8 +43,7 @@ const textVariants = cva([], {
 });
 type TextVariants = NonNullableProps<typeof textVariants, "variant">;
 
-interface Props extends JSX.HTMLAttributes<HTMLDivElement>, TextVariants {
-}
+interface Props extends JSX.HTMLAttributes<HTMLDivElement>, TextVariants {}
 
 export const Text = (
   { variant, className, alignment = "left", ...rest }: Props,
