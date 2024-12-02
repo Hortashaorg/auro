@@ -50,7 +50,9 @@ export const account = pgTable("account", {
 export const auth = pgTable("auth", {
     accountId: uuid().references(() => account.id).notNull(),
     refreshTokenHash: varchar({ length: 500 }).unique(),
-    token: varchar({ length: 50 }).notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    refreshTokenExpires: timestamp(),
+    accessTokenHash: varchar({ length: 500 }).unique(),
+    accessTokenExpires: timestamp(),
 });
+
+export const user = pgTable("user", {});

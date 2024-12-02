@@ -7,7 +7,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Deno
-COPY --from=denoland/deno:bin-2.0.4 /deno /usr/local/bin/deno
+COPY --from=denoland/deno:bin-2.1.2 /deno /usr/local/bin/deno
 
 FROM base AS local
 
