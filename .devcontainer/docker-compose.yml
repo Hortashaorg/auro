@@ -10,3 +10,37 @@ services:
       - ./..:/app
       - ~/.ssh:/root/.ssh
     command: "sleep infinity"
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=root
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "root"
+      PGADMIN_SERVER_JSON_FILE: /servers.json
+    ports:
+      - "8080:80"
+    volumes:
+      - "./servers.json:/servers.json"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  kafka_data:
+    driver: local
