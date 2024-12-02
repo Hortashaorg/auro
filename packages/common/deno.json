@@ -1,4 +1,7 @@
 {
   "name": "@package/common",
-  "exports": "./mod.ts"
+  "exports": "./mod.ts",
+  "tasks": {
+    "test": "deno run test.ts"
+  }
 }

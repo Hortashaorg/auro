@@ -15,6 +15,7 @@
     "@sections/": "./sections/"
   },
   "tasks": {
-    "tailwind": "tailwindcss -i ./main.css -o ./public/main.css --config ./tailwind.config.mjs --minify --watch"
+    "tailwind": "tailwindcss -i ./main.css -o ./public/main.css --config ./tailwind.config.mjs --minify --watch",
+    "dev": "deno run --allow-net --allow-read --watch ./main.ts"
   }
 }

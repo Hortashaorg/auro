@@ -5,5 +5,8 @@
     "drizzle-kit": "npm:drizzle-kit@^0.28.1",
     "drizzle-orm": "npm:drizzle-orm@^0.36.4",
     "postgres": "npm:postgres@^3.4.5"
+  },
+  "tasks": {
+    "test": "deno run test.ts"
   }
 }

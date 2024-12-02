@@ -1003,7 +1003,8 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/fs@^1.0.6"
+      "jsr:@std/fs@^1.0.6",
+      "jsr:@std/path@^1.0.8"
     ],
     "members": {
       "packages/database": {

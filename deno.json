@@ -1,4 +1,6 @@
 {
+  "name": "@monorepo/auro",
+  "exports": "./main.ts",
   "workspace": [
     "./packages/common",
     "./packages/database",
@@ -7,9 +9,8 @@
     "./services/jobs"
   ],
   "tasks": {
-    "dev": "deno run -A scripts/dev.ts",
-    "dev:app": "deno run dev app",
-    "test": "deno run -A scripts/test.ts"
+    "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
+    "packages:test": "deno run -A scripts/task.ts '**' test"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -26,6 +27,7 @@
     "noUncheckedIndexedAccess": true
   },
   "imports": {
-    "@std/fs": "jsr:@std/fs@^1.0.6"
+    "@std/fs": "jsr:@std/fs@^1.0.6",
+    "@std/path": "jsr:@std/path@^1.0.8"
   }
 }
