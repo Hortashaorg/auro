@@ -1,4 +1,4 @@
-import { BaseLayout } from "../layouts/BaseLayout.tsx";
+import { BaseLayout } from "@layouts/BaseLayout.tsx";
 
 export const Home = () => {
   return (
