@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { serveStatic, upgradeWebSocket } from "hono/deno";
-import { logger } from "hono/logger";
 import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
 
@@ -27,6 +26,15 @@ export const app = (routes: Record<string, () => JSX.Element>, settings: {
 }) => {
   const app = new Hono();
 
+  //** Middleware */
+  /*
+  app.use(async (c, next) => {
+    setContext(10);
+    await next();
+  });
+  */
+
+  /** Rendering */
   for (const [path, component] of Object.entries(routes)) {
     app.get(path, (c) => {
       return c.html(render(component(), !settings.prod));
@@ -39,8 +47,6 @@ export const app = (routes: Record<string, () => JSX.Element>, settings: {
       root: `/`,
     }),
   );
-
-  app.use(logger());
 
   if (routes["404"]) {
     const notFound = routes["404"];
