@@ -215,3 +215,108 @@ export const location = pgTable(
     unique("unique_location_name_per_server").on(table.serverId, table.name),
   ],
 );
+
+export const locationRewardSkill = pgTable(
+  "location_reward_skill",
+  {
+    locationId: uuid().references(() => location.id).notNull(),
+    skillId: uuid().references(() => skill.id).notNull(),
+    chance: integer().notNull(),
+    min: integer().notNull(),
+    max: integer().notNull(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [
+    unique("unique_location_reward_skill_per_location").on(
+      table.locationId,
+      table.skillId,
+    ),
+  ],
+);
+
+export const locationRewardItem = pgTable(
+  "location_reward_item",
+  {
+    locationId: uuid().references(() => location.id).notNull(),
+    itemId: uuid().references(() => item.id).notNull(),
+    chance: integer().notNull(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [
+    unique("unique_location_reward_item_per_location").on(
+      table.locationId,
+      table.itemId,
+    ),
+  ],
+);
+
+export const locationRewardCurrency = pgTable(
+  "location_reward_currency",
+  {
+    locationId: uuid().references(() => location.id).notNull(),
+    currencyId: uuid().references(() => currency.id).notNull(),
+    chance: integer().notNull(),
+    min: integer().notNull(),
+    max: integer().notNull(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [
+    unique("unique_location_reward_currency_per_location").on(
+      table.locationId,
+      table.currencyId,
+    ),
+  ],
+);
+
+export const locationReqSkill = pgTable(
+  "location_req_skill",
+  {
+    locationId: uuid().references(() => location.id).notNull(),
+    skillId: uuid().references(() => skill.id).notNull(),
+    xp: integer().notNull(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [
+    unique("unique_location_req_skill_per_location").on(
+      table.locationId,
+      table.skillId,
+    ),
+  ],
+);
+
+export const locationReqItem = pgTable(
+  "location_req_item",
+  {
+    locationId: uuid().references(() => location.id).notNull(),
+    itemId: uuid().references(() => item.id).notNull(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [
+    unique("unique_location_req_item_per_location").on(
+      table.locationId,
+      table.itemId,
+    ),
+  ],
+);
+
+export const locationNpc = pgTable(
+  "location_npc",
+  {
+    locationId: uuid().references(() => location.id).notNull(),
+    npcId: uuid().references(() => npc.id).notNull(),
+    count: integer().notNull(),
+    createdAt: timestamp().notNull().defaultNow(),
+    updatedAt: timestamp().notNull().defaultNow(),
+  },
+  (table) => [
+    unique("unique_location_npc_per_location").on(
+      table.locationId,
+      table.npcId,
+    ),
+  ],
+);
