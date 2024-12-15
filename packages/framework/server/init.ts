@@ -1,66 +1,65 @@
-export const init = (
-  settings: {
-    port: number;
-    hostname: string;
-    env: "local" | "production";
-  },
-  handler: (req: Request) => Promise<Response>,
-): void => {
-  if (settings.env === "production") {
-    Deno.serve(
-      {
-        port: settings.port,
-        hostname: settings.hostname,
-      },
-      handler,
+import { Hono } from "hono";
+import { serveStatic, upgradeWebSocket } from "hono/deno";
+import { logger } from "hono/logger";
+import type { JSX } from "preact";
+import { renderToStringAsync } from "preact-render-to-string";
+
+const render = async (component: JSX.Element, hmr: boolean) => {
+  const html = await renderToStringAsync(component);
+  if (hmr) {
+    return html.replace(
+      "</body>",
+      `
+      <script>
+        const ws = new WebSocket('ws://' + location.host + '/ws');
+        ws.onclose = () => setInterval(() => location.reload(), 200);
+      </script>
+      </body>`,
+    );
+  }
+  return html;
+};
+
+export const app = (routes: Record<string, () => JSX.Element>, settings: {
+  port: number;
+  hostname: string;
+  prod?: boolean;
+}) => {
+  const app = new Hono();
+
+  for (const [path, component] of Object.entries(routes)) {
+    app.get(path, (c) => {
+      return c.html(render(component(), !settings.prod));
+    });
+  }
+
+  app.use(
+    "/public/*",
+    serveStatic({
+      root: `/`,
+    }),
+  );
+
+  app.use(logger());
+
+  if (routes["404"]) {
+    const notFound = routes["404"];
+    app.notFound((c) => {
+      return c.html(render(notFound(), !settings.prod));
+    });
+  }
+
+  if (!settings.prod) {
+    app.get(
+      "/ws",
+      upgradeWebSocket(() => {
+        return {};
+      }),
     );
   }
 
-  if (settings.env === "local") {
-    Deno.serve(
-      {
-        port: settings.port,
-        hostname: settings.hostname,
-      },
-      async (req) => {
-        const { pathname } = new URL(req.url);
-
-        if (pathname === "/ws") {
-          const { response } = Deno.upgradeWebSocket(req);
-          return response;
-        }
-
-        // Handle regular HTTP requests
-        let response = await handler(req);
-
-        // Check if response contains HTML to determine if reload script should be injected
-        if (
-          settings.env === "local" &&
-          response.headers.get("Content-Type") === "text/html"
-        ) {
-          const html = await response.text();
-          if (
-            html.includes("<html") ||
-            html.includes("<!DOCTYPE html")
-          ) {
-            // Inject WebSocket script for reload functionality
-            const modifiedHtml = html.replace(
-              "</body>",
-              `
-							<script>
-								const ws = new WebSocket('ws://' + location.host + '/ws');
-								ws.onclose = () => setInterval(() => location.reload(), 50);
-							</script>
-							</body>`,
-            );
-            response = new Response(modifiedHtml, {
-              headers: response.headers,
-            });
-          }
-        }
-
-        return response;
-      },
-    );
-  }
+  return Deno.serve({
+    port: settings.port,
+    hostname: settings.hostname,
+  }, app.fetch);
 };

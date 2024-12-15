@@ -9,8 +9,9 @@
     "npm:drizzle-kit@0.28.1": "0.28.1_esbuild@0.19.12",
     "npm:drizzle-kit@~0.28.1": "0.28.1_esbuild@0.19.12",
     "npm:drizzle-orm@~0.36.4": "0.36.4",
+    "npm:hono@^4.6.14": "4.6.14",
     "npm:postgres@^3.4.5": "3.4.5",
-    "npm:preact-render-to-string@^6.5.11": "6.5.11_preact@10.24.3",
+    "npm:preact-render-to-string@^6.5.12": "6.5.12_preact@10.24.3",
     "npm:preact@^10.24.3": "10.24.3",
     "npm:tailwind-merge@^2.5.4": "2.5.4",
     "npm:tailwindcss@3.4.14": "3.4.14_postcss@8.4.47",
@@ -503,6 +504,9 @@
         "function-bind"
       ]
     },
+    "hono@4.6.14": {
+      "integrity": "sha512-j4VkyUp2xazGJ8eCCLN1Vm/bxdvm/j5ZuU9AIjLu9vapn2M44p9L3Ktr9Vnb2RN2QtcR/wVjZVMlT5k7GJQgPw=="
+    },
     "is-binary-path@2.1.0": {
       "integrity": "sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==",
       "dependencies": [
@@ -677,8 +681,8 @@
     "postgres@3.4.5": {
       "integrity": "sha512-cDWgoah1Gez9rN3H4165peY9qfpEo+SA61oQv65O3cRUE1pOEoJWwddwcqKE8XZYjbblOJlYDlLV4h67HrEVDg=="
     },
-    "preact-render-to-string@6.5.11_preact@10.24.3": {
-      "integrity": "sha512-ubnauqoGczeGISiOh6RjX0/cdaF8v/oDXIjO85XALCQjwQP+SB4RDXXtvZ6yTYSjG+PC1QRP2AhPgCEsM2EvUw==",
+    "preact-render-to-string@6.5.12_preact@10.24.3": {
+      "integrity": "sha512-FpU7/cRipZo4diSWQq7gZWVp+Px76CtVduJZNvQwVzynDsAIxKteMrjCCGPbM2oEasReoDffaeMCMlaur9ohIg==",
       "dependencies": [
         "preact"
       ]
@@ -1016,11 +1020,17 @@
           "npm:postgres@^3.4.5"
         ]
       },
+      "packages/framework": {
+        "dependencies": [
+          "npm:hono@^4.6.14",
+          "npm:preact-render-to-string@^6.5.12",
+          "npm:preact@^10.24.3"
+        ]
+      },
       "services/app": {
         "dependencies": [
           "npm:class-variance-authority@0.7",
           "npm:clsx@^2.1.1",
-          "npm:preact-render-to-string@^6.5.11",
           "npm:preact@^10.24.3",
           "npm:tailwind-merge@^2.5.4",
           "npm:tailwindcss@^3.4.14"

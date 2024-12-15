@@ -6,7 +6,6 @@
     "class-variance-authority": "npm:class-variance-authority@^0.7.0",
     "clsx": "npm:clsx@^2.1.1",
     "preact": "npm:preact@^10.24.3",
-    "preact-render-to-string": "npm:preact-render-to-string@^6.5.11",
     "tailwind-merge": "npm:tailwind-merge@^2.5.4",
     "tailwindcss": "npm:tailwindcss@^3.4.14",
     "@utils/": "./utils/",

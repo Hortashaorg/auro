@@ -1,5 +1,5 @@
-import type { JSX } from "preact";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
+import type { JSX } from "preact";
 
 export const BaseLayout = (props: {
   title: string;
@@ -15,7 +15,7 @@ export const BaseLayout = (props: {
         <script src="https://unpkg.com/htmx.org@2.0.0"></script>
         <script src="//unpkg.com/alpinejs" defer></script>
         <link
-          href={`/main.css`}
+          href={`/public/main.css`}
           rel="stylesheet"
         />
         <title>{title}</title>
@@ -27,7 +27,7 @@ export const BaseLayout = (props: {
             {children}
           </div>
         </div>
-        <script src="/darkmode.js"></script>
+        <script src="/public/darkmode.js"></script>
       </body>
     </html>
   );
