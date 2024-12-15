@@ -1,10 +1,18 @@
-import { Hono } from "hono";
+import { type Context, Hono } from "hono";
 import { serveStatic, upgradeWebSocket } from "hono/deno";
 import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
+import { Render } from "../context/context.tsx";
 
-const render = async (component: JSX.Element, hmr: boolean) => {
-  const html = await renderToStringAsync(component);
+const render = async (
+  component: () => JSX.Element,
+  hmr: boolean,
+  context: Context,
+) => {
+  const html = await renderToStringAsync(
+    Render(context, component),
+  );
+
   if (hmr) {
     return html.replace(
       "</body>",
@@ -37,7 +45,7 @@ export const app = (routes: Record<string, () => JSX.Element>, settings: {
   /** Rendering */
   for (const [path, component] of Object.entries(routes)) {
     app.get(path, (c) => {
-      return c.html(render(component(), !settings.prod));
+      return c.html(render(component, !settings.prod, c));
     });
   }
 
@@ -51,7 +59,7 @@ export const app = (routes: Record<string, () => JSX.Element>, settings: {
   if (routes["404"]) {
     const notFound = routes["404"];
     app.notFound((c) => {
-      return c.html(render(notFound(), !settings.prod));
+      return c.html(render(notFound, !settings.prod, c));
     });
   }
 
