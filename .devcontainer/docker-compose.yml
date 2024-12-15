@@ -6,14 +6,19 @@ services:
       target: local
     ports:
       - "4000:4000"
+    networks:
+      - auro
     volumes:
       - ./..:/app
       - ~/.ssh:/root/.ssh
     command: "sleep infinity"
+
   postgres:
-    image: postgres:latest
+    image: postgres:16.3
     ports:
       - "5432:5432"
+    networks:
+      - auro
     environment:
       - POSTGRES_DB=root
       - POSTGRES_USER=root
@@ -35,6 +40,8 @@ services:
       PGADMIN_SERVER_JSON_FILE: /servers.json
     ports:
       - "8080:80"
+    networks:
+      - auro
     volumes:
       - "./servers.json:/servers.json"
     depends_on:
@@ -44,3 +51,6 @@ volumes:
   postgres_data:
   kafka_data:
     driver: local
+
+networks:
+  auro:

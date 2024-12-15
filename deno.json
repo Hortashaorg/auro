@@ -11,8 +11,7 @@
   "tasks": {
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
-    "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
-    "test": "deno run -A scripts/task.ts '@package/database' test"
+    "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
