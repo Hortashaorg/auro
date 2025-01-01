@@ -9,8 +9,9 @@
     "./services/jobs"
   ],
   "tasks": {
-    "typecheck": "deno check .",
-    "lint": "deno check .",
+    "all:typecheck": "deno run -A scripts/task.ts '@{package,service}/*' typecheck",
+    "all:lint": "deno run -A scripts/task.ts '@{package,service}/*' lint",
+    "all:fmt": "deno run -A scripts/task.ts '@{package,service}/*' fmt",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
     "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
