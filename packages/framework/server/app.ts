@@ -31,7 +31,7 @@ export const app = (routes: Record<string, () => JSX.Element>, settings: {
   port: number;
   hostname: string;
   prod?: boolean;
-}) => {
+}): Deno.HttpServer<Deno.NetAddr> => {
   const app = new Hono();
 
   //** Middleware */
