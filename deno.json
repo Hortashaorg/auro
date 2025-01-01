@@ -29,7 +29,7 @@
     "noUncheckedIndexedAccess": true
   },
   "imports": {
-    "@std/fs": "jsr:@std/fs@^1.0.6",
+    "@std/fs": "jsr:@std/fs@^1.0.8",
     "@std/path": "jsr:@std/path@^1.0.8"
   }
 }
