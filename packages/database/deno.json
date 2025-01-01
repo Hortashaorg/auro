@@ -10,5 +10,8 @@
     "generate": "deno run -A --node-modules-dir npm:drizzle-kit generate",
     "migrate": "deno run -A --node-modules-dir npm:drizzle-kit migrate",
     "test": "deno run -A mod.ts"
+  },
+  "lint": {
+    "exclude": ["drizzle"]
   }
 }
