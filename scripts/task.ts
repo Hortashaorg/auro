@@ -81,10 +81,12 @@ async function pipeWithPrefix(
     if (done) break;
 
     const output = decoder.decode(value);
-    output.split("\n").forEach((line) => {
+
+    const outputs = output.split("\n");
+    for (const line of outputs) {
       if (line.trim()) {
         target(`[ ${prefix} ]: ${line}`);
       }
-    });
+    }
   }
 }
