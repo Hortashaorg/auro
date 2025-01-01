@@ -46,11 +46,45 @@ const tasks = workspaceWithValidTask.map(async (workspace) => {
       task,
     ],
     stdin: "inherit",
-    stdout: "inherit",
-    stderr: "inherit",
+    stdout: "piped",
+    stderr: "piped",
   });
 
-  await command.output();
+  const process = command.spawn();
+
+  await Promise.all([
+    pipeWithPrefix(process.stdout, console.log, workspace.name),
+    pipeWithPrefix(process.stderr, console.error, workspace.name),
+  ]);
+
+  const status = await process.status;
+
+  if (!status.success) {
+    console.error(
+      `[${workspace.name}] Task failed with exit code ${status.code}`,
+    );
+  }
 });
 
 await Promise.all(tasks);
+
+async function pipeWithPrefix(
+  stream: ReadableStream<Uint8Array>,
+  target: (line: string) => void,
+  prefix: string,
+) {
+  const reader = stream.getReader();
+  const decoder = new TextDecoder();
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    const output = decoder.decode(value);
+    output.split("\n").forEach((line) => {
+      if (line.trim()) {
+        target(`[ ${prefix} ]: ${line}`);
+      }
+    });
+  }
+}
