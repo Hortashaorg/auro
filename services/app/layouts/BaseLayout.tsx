@@ -1,4 +1,3 @@
-import { Navbar } from "@sections/navbar/Navbar.tsx";
 import type { JSX } from "preact";
 
 export const BaseLayout = (props: {
@@ -12,7 +11,7 @@ export const BaseLayout = (props: {
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
-        <script src="https://unpkg.com/htmx.org@2.0.0"></script>
+        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
         <script src="//unpkg.com/alpinejs" defer></script>
         <link
           href={`/public/main.css`}
@@ -21,12 +20,7 @@ export const BaseLayout = (props: {
         <title>{title}</title>
       </head>
       <body className="dark:bg-background-900 bg-background-50">
-        <div className="container mx-auto p-4">
-          <Navbar />
-          <div>
-            {children}
-          </div>
-        </div>
+        {children}
         <script src="/public/darkmode.js"></script>
       </body>
     </html>
