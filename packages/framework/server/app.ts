@@ -1,5 +1,5 @@
-import { type Context, Hono } from "hono";
-import { serveStatic, upgradeWebSocket } from "hono/deno";
+import { type Context, Hono } from "@hono/hono";
+import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
 import { Render } from "../context/context.tsx";
@@ -29,18 +29,9 @@ const render = async (
 
 export const app = (routes: Record<string, () => JSX.Element>, settings: {
   port: number;
-  hostname: string;
   prod?: boolean;
 }): Deno.HttpServer<Deno.NetAddr> => {
   const app = new Hono();
-
-  //** Middleware */
-  /*
-  app.use(async (c, next) => {
-    setContext(10);
-    await next();
-  });
-  */
 
   /** Rendering */
   for (const [path, component] of Object.entries(routes)) {
@@ -74,6 +65,6 @@ export const app = (routes: Record<string, () => JSX.Element>, settings: {
 
   return Deno.serve({
     port: settings.port,
-    hostname: settings.hostname,
+    hostname: "127.0.0.1",
   }, app.fetch);
 };

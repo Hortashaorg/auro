@@ -1,7 +1,8 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@std/fs@^1.0.8": "1.0.8",
+    "jsr:@hono/hono@^4.6.16": "4.6.16",
+    "jsr:@std/fs@^1.0.9": "1.0.9",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "npm:class-variance-authority@0.7": "0.7.0",
     "npm:clsx@^2.1.1": "2.1.1",
@@ -9,7 +10,6 @@
     "npm:drizzle-kit@0.28.1": "0.28.1_esbuild@0.19.12",
     "npm:drizzle-kit@~0.28.1": "0.28.1_esbuild@0.19.12",
     "npm:drizzle-orm@~0.36.4": "0.36.4",
-    "npm:hono@^4.6.14": "4.6.14",
     "npm:postgres@^3.4.5": "3.4.5",
     "npm:preact-render-to-string@^6.5.12": "6.5.12_preact@10.24.3",
     "npm:preact@^10.24.3": "10.24.3",
@@ -18,8 +18,11 @@
     "npm:tailwindcss@^3.4.14": "3.4.14_postcss@8.4.47"
   },
   "jsr": {
-    "@std/fs@1.0.8": {
-      "integrity": "161c721b6f9400b8100a851b6f4061431c538b204bb76c501d02c508995cffe0",
+    "@hono/hono@4.6.16": {
+      "integrity": "b540c6b1352d73142895f7bb6bfd0b6cc514ede61c12940338c4ae5dd06cb326"
+    },
+    "@std/fs@1.0.9": {
+      "integrity": "3eef7e3ed3d317b29432c7dcb3b20122820dbc574263f721cb0248ad91bad890",
       "dependencies": [
         "jsr:@std/path"
       ]
@@ -503,9 +506,6 @@
       "dependencies": [
         "function-bind"
       ]
-    },
-    "hono@4.6.14": {
-      "integrity": "sha512-j4VkyUp2xazGJ8eCCLN1Vm/bxdvm/j5ZuU9AIjLu9vapn2M44p9L3Ktr9Vnb2RN2QtcR/wVjZVMlT5k7GJQgPw=="
     },
     "is-binary-path@2.1.0": {
       "integrity": "sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==",
@@ -1009,7 +1009,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/fs@^1.0.8",
+      "jsr:@std/fs@^1.0.9",
       "jsr:@std/path@^1.0.8"
     ],
     "members": {
@@ -1022,7 +1022,7 @@
       },
       "packages/framework": {
         "dependencies": [
-          "npm:hono@^4.6.14",
+          "jsr:@hono/hono@^4.6.16",
           "npm:preact-render-to-string@^6.5.12",
           "npm:preact@^10.24.3"
         ]

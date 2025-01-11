@@ -1,4 +1,4 @@
-import type { Context } from "hono";
+import type { Context } from "@hono/hono";
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
 export const RenderContext = createContext<null | Context>(null);
