@@ -22,7 +22,7 @@
   },
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "https://esm.sh/preact@10.24.3",
+    "jsxImportSource": "https://esm.sh/preact@10.25.4",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,

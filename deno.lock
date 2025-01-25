@@ -10,7 +10,6 @@
     "npm:drizzle-orm@~0.38.4": "0.38.4_postgres@3.4.5",
     "npm:postgres@^3.4.5": "3.4.5",
     "npm:preact-render-to-string@^6.5.12": "6.5.13_preact@10.25.4",
-    "npm:preact@^10.25.0": "10.25.4",
     "npm:preact@^10.25.4": "10.25.4",
     "npm:tailwind-merge@^2.6.0": "2.6.0",
     "npm:tailwindcss@4": "4.0.0"
@@ -448,6 +447,9 @@
     "https://deno.land/x/postgres@v0.19.3/utils/utils.ts": "ca47193ea03ff5b585e487a06f106d367e509263a960b787197ce0c03113a738",
     "https://esm.sh/lit-html@1.4.1": "e9511e997bc3ddbadb54dbe5b031dafc4b460fd5d4ceb3453e554ca4722992d1",
     "https://esm.sh/preact@10.24.3/jsx-runtime": "b9e4a84f55cb84ddb400600787de5b6a0ee66d879d8cf920dc0cdc94d00ae847",
+    "https://esm.sh/preact@10.25.4/denonext/jsx-runtime.mjs": "28db928810c77a6aa3a8690826a773d6bb08bea2bb5a2d9935b7b0a32808449e",
+    "https://esm.sh/preact@10.25.4/denonext/preact.mjs": "5b19c5a3daab9e9f4f4bed775afbb84dd4de2b8cc670ee332f5458c53a6a2d45",
+    "https://esm.sh/preact@10.25.4/jsx-runtime": "b9feb114168d102397dc3d6b09e00630b9ef61c4fa98316c0b18b4c02996356b",
     "https://esm.sh/stable/preact@10.24.3/denonext/jsx-runtime.js": "562a3adc7f89394c5fc430323f2875e9ec954bf138572227e5a26f9b42a8d179",
     "https://esm.sh/stable/preact@10.24.3/denonext/preact.mjs": "adda7b905b40f0bab844d3ee900378e59da2b16f0f8e716ba9a8d67c15b78c87",
     "https://esm.sh/v135/lit-html@1.4.1/denonext/lit-html.mjs": "8fc0dfa113081ab1ec4ead7afaf9179600c5783eeddbb026dd05fbf33cdc8eef"
@@ -476,7 +478,7 @@
         "dependencies": [
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
-          "npm:preact@^10.25.0",
+          "npm:preact@^10.25.4",
           "npm:tailwind-merge@^2.6.0",
           "npm:tailwindcss@4"
         ]

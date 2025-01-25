@@ -5,7 +5,7 @@
   "imports": {
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
     "clsx": "npm:clsx@^2.1.1",
-    "preact": "npm:preact@^10.25.0",
+    "preact": "npm:preact@^10.25.4",
     "tailwind-merge": "npm:tailwind-merge@^2.6.0",
     "tailwindcss": "npm:tailwindcss@^4.0.0",
     "@utils/": "./utils/",
@@ -17,7 +17,7 @@
     "typecheck": "deno check .",
     "lint": "deno lint .",
     "fmt": "deno fmt .",
-    "tailwind": "tailwindcss -i ./main.css -o ./public/main.css --config ./tailwind.config.mjs --minify --watch",
+    "tailwind": "./tailwindcss -i ./src/main.css -o ./public/main.css --minify --watch",
     "dev": "deno run --allow-net --allow-read --watch ./main.ts"
   },
   "fmt": {
