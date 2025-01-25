@@ -70,9 +70,7 @@ const buttonVariants = cva([
 });
 
 type ButtonVariants = NonNullableProps<typeof buttonVariants>;
-
-interface Props extends JSX.HTMLAttributes<HTMLButtonElement>, ButtonVariants {}
-
+interface Props extends JSX.ButtonHTMLAttributes, ButtonVariants {}
 export const Button = (
   { children, variant, buttonSize, className, ...rest }: Props,
 ) => {
