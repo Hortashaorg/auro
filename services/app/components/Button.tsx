@@ -13,6 +13,7 @@ const buttonVariants = cva([
   "font-normal",
   "leading-tight",
   "box-content",
+  "cursor-pointer",
 ], {
   variants: {
     variant: {
@@ -74,6 +75,7 @@ interface Props extends JSX.ButtonHTMLAttributes, ButtonVariants {}
 export const Button = (
   { children, variant, buttonSize, className, ...rest }: Props,
 ) => {
+  console.log();
   return (
     <button
       {...rest}
