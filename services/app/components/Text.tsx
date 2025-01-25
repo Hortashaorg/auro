@@ -26,8 +26,8 @@ const textVariants = cva([], {
       error: [
         "text-base",
         "font-normal",
-        "text-error-600",
-        "dark:text-error-400",
+        "text-danger-600",
+        "dark:text-danger-400",
         "font-body",
         "leading-loose",
       ],
@@ -38,10 +38,11 @@ const textVariants = cva([], {
     },
   },
   defaultVariants: {
+    variant: "paragraph",
     alignment: "left",
   },
 });
-type TextVariants = NonNullableProps<typeof textVariants, "variant">;
+type TextVariants = NonNullableProps<typeof textVariants>;
 
 interface Props extends JSX.HTMLAttributes<HTMLDivElement>, TextVariants {}
 

@@ -19,7 +19,7 @@ export const BaseLayout = (props: {
         />
         <title>{title}</title>
       </head>
-      <body className="dark:bg-background-900 bg-background-50">
+      <body className="dark:bg-background-950 bg-background-50">
         {children}
         <script src="/public/darkmode.js"></script>
       </body>
