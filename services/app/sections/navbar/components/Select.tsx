@@ -1,8 +1,8 @@
+import { Text } from "@comp/Text.tsx";
+import { cn } from "@utils/tailwind.ts";
+import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { JSX } from "preact";
-import type { NonNullableProps } from "@utils/types.ts";
-import { cn } from "@utils/tailwind.ts";
-import { Text } from "@comp/Text.tsx";
 
 const selectVariants = cva(
   [

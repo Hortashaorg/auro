@@ -1,7 +1,7 @@
+import { cn } from "@utils/tailwind.ts";
+import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { JSX } from "preact";
-import type { NonNullableProps } from "@utils/types.ts";
-import { cn } from "@utils/tailwind.ts";
 
 const formVariants = cva(["flex", "flex-col", "gap-5", "grow"], {
   variants: {
