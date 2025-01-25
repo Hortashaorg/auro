@@ -8,6 +8,7 @@
     "./services/app",
     "./services/jobs"
   ],
+  "nodeModulesDir": "auto",
   "tasks": {
     "typecheck": "deno check scripts",
     "lint": "deno lint scripts",
