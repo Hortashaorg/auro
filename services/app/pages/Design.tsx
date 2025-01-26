@@ -1,4 +1,5 @@
 import { Button } from "@comp/Button.tsx";
+import { Card } from "@comp/Card.tsx";
 import { Text } from "@comp/Text.tsx";
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
 
@@ -85,6 +86,33 @@ export const Design = () => {
           <Text variant="header">Title</Text>
           <Text>Paragraph</Text>
           <Text variant="error">Error</Text>
+        </div>
+
+        <div className="flex gap-2">
+          <Card>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+          </Card>
+          <Card>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+          </Card>
+          <Card>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+          </Card>
+          <Card>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+            <Text>This is a card</Text>
+          </Card>
         </div>
       </>
     </BaseLayout>
