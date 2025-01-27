@@ -1,4 +1,5 @@
 import { type Context, Hono } from "@hono/hono";
+
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
@@ -7,7 +8,7 @@ import { Render } from "../context/context.tsx";
 const render = async (
   component: () => JSX.Element,
   hmr: boolean,
-  context: Context,
+  context: Record<string, unknown>,
 ) => {
   const html = await renderToStringAsync(
     Render(context, component),
@@ -27,16 +28,23 @@ const render = async (
   return html;
 };
 
-export const app = (routes: Record<string, () => JSX.Element>, settings: {
-  port: number;
-  prod?: boolean;
-}): Deno.HttpServer<Deno.NetAddr> => {
+export const app = (
+  routes: Record<string, () => JSX.Element>,
+  customContext: (
+    context: Context,
+  ) => Promise<Record<string, unknown>>,
+  settings: {
+    port: number;
+    prod?: boolean;
+  },
+): Deno.HttpServer<Deno.NetAddr> => {
   const app = new Hono();
 
   /** Rendering */
   for (const [path, component] of Object.entries(routes)) {
-    app.get(path, (c) => {
-      return c.html(render(component, !settings.prod, c));
+    app.get(path, async (c) => {
+      const userContext = await customContext(c);
+      return c.html(render(component, !settings.prod, userContext));
     });
   }
 
@@ -49,8 +57,9 @@ export const app = (routes: Record<string, () => JSX.Element>, settings: {
 
   if (routes["404"]) {
     const notFound = routes["404"];
-    app.notFound((c) => {
-      return c.html(render(notFound, !settings.prod, c));
+    app.notFound(async (c) => {
+      const userContext = await customContext(c);
+      return c.html(render(notFound, !settings.prod, userContext));
     });
   }
 

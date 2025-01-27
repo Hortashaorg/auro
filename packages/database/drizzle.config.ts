@@ -4,6 +4,7 @@ export default defineConfig({
   schema: "./db/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: "postgresql://root:root@postgres:5432/root",
+    url: "postgresql://root:root@localhost:5432/root",
   },
+  casing: "snake_case",
 });
