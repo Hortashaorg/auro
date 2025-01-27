@@ -29,11 +29,11 @@ const render = async (
 };
 
 export const app = (
-  routes: Record<string, () => JSX.Element>,
-  customContext: (
-    context: Context,
-  ) => Promise<Record<string, unknown>>,
   settings: {
+    routes: Record<string, () => JSX.Element>;
+    customContext: (
+      context: Context,
+    ) => Promise<Record<string, unknown>>;
     port: number;
     prod?: boolean;
   },
@@ -41,9 +41,9 @@ export const app = (
   const app = new Hono();
 
   /** Rendering */
-  for (const [path, component] of Object.entries(routes)) {
+  for (const [path, component] of Object.entries(settings.routes)) {
     app.get(path, async (c) => {
-      const userContext = await customContext(c);
+      const userContext = await settings.customContext(c);
       return c.html(render(component, !settings.prod, userContext));
     });
   }
@@ -55,10 +55,10 @@ export const app = (
     }),
   );
 
-  if (routes["404"]) {
-    const notFound = routes["404"];
+  if (settings.routes["404"]) {
+    const notFound = settings.routes["404"];
     app.notFound(async (c) => {
-      const userContext = await customContext(c);
+      const userContext = await settings.customContext(c);
       return c.html(render(notFound, !settings.prod, userContext));
     });
   }
