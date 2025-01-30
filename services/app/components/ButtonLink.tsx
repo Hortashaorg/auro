@@ -3,7 +3,7 @@ import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { JSX } from "preact";
 
-const buttonVariants = cva([
+const buttonLinkVariants = cva([
   "rounded",
   "disabled:cursor-not-allowed",
   "disabled:opacity-50",
@@ -14,6 +14,9 @@ const buttonVariants = cva([
   "leading-tight",
   "box-content",
   "cursor-pointer",
+  "inline-block", // Added for better link behavior
+  "text-center", // Added for better link behavior
+  "no-underline", // Added to remove default link styling
 ], {
   variants: {
     variant: {
@@ -70,18 +73,19 @@ const buttonVariants = cva([
   },
 });
 
-type ButtonVariants = NonNullableProps<typeof buttonVariants>;
+type ButtonLinkVariants = NonNullableProps<typeof buttonLinkVariants>;
 interface Props
-  extends JSX.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariants {}
-export const Button = (
+  extends JSX.AnchorHTMLAttributes<HTMLAnchorElement>, ButtonLinkVariants {}
+
+export const ButtonLink = (
   { children, variant, buttonSize, className, ...rest }: Props,
 ) => {
   return (
-    <button
+    <a
       {...rest}
-      className={cn(buttonVariants({ variant, buttonSize }), className)}
+      className={cn(buttonLinkVariants({ variant, buttonSize }), className)}
     >
       {children}
-    </button>
+    </a>
   );
 };

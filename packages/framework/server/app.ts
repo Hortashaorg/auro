@@ -1,9 +1,11 @@
-import { type Context, Hono } from "@hono/hono";
+import { type Context, Hono, type Next } from "@hono/hono";
+import { getCookie } from "@hono/hono/cookie";
 
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
 import { Render } from "../context/context.tsx";
+import { throwError } from "@package/common";
 
 const render = async (
   component: () => JSX.Element,
@@ -34,15 +36,63 @@ export const app = (
     customContext: (
       context: Context,
     ) => Promise<Record<string, unknown>>;
+    authCodeLoginLogic?: (
+      context: Context,
+    ) => Promise<
+      {
+        success: boolean;
+        accessToken: string;
+        refreshToken: string;
+        email: string;
+        expires_in: number;
+      } | { success: boolean }
+    >;
+    authCodeLoginUrl?: string;
     port: number;
     prod?: boolean;
   },
 ): Deno.HttpServer<Deno.NetAddr> => {
   const app = new Hono();
 
+  if (settings.authCodeLoginUrl) {
+    app.use(settings.authCodeLoginUrl, async (c: Context, next: Next) => {
+      if (settings.authCodeLoginLogic) {
+        const result = await settings.authCodeLoginLogic(c);
+        console.log(result);
+      } else {
+        throwError("Provide authCodeLoginLogic function to handle login.");
+      }
+      await next();
+    });
+  }
+
+  app.use("/*", async (c: Context, next: Next) => {
+    if (c.req.path.startsWith("/public/")) {
+      await next();
+      return;
+    }
+
+    const accessToken = getCookie(c, "access_token");
+    if (accessToken) {
+      console.log("User is logged in with token:", accessToken);
+    } else {
+      const refreshToken = getCookie(c, "refresh_token");
+
+      if (refreshToken) {
+        console.log(
+          "Refresh token, but no access token",
+          refreshToken,
+        );
+      } else {
+        console.log("User is not logged in - no tokens found");
+      }
+    }
+    await next();
+  });
+
   /** Rendering */
   for (const [path, component] of Object.entries(settings.routes)) {
-    app.get(path, async (c) => {
+    app.get(path, async (c: Context) => {
       const userContext = await settings.customContext(c);
       return c.html(render(component, !settings.prod, userContext));
     });
@@ -57,7 +107,7 @@ export const app = (
 
   if (settings.routes["404"]) {
     const notFound = settings.routes["404"];
-    app.notFound(async (c) => {
+    app.notFound(async (c: Context) => {
       const userContext = await settings.customContext(c);
       return c.html(render(notFound, !settings.prod, userContext));
     });

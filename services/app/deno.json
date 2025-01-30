@@ -18,7 +18,7 @@
     "lint": "deno lint .",
     "fmt": "deno fmt .",
     "tailwind": "./tailwindcli -i ./main.css -o ./public/main.css --minify --watch",
-    "dev": "deno run --allow-net --allow-read --allow-env --env-file=.env.local --watch ./main.ts"
+    "dev": "doppler run --project auro --config local -- deno run --allow-net --allow-read --allow-env --watch ./main.ts"
   },
   "fmt": {
     "exclude": ["public/main.css"]
