@@ -1,6 +1,4 @@
-support dynamic routes?
-Middleware
-env variables
 workflow - typecheck, linting and formatting
-auth. (Do not loose state?)
-State object for request
+authentication
+server creation
+get resource on click (require some server setup)

@@ -7,6 +7,7 @@ const getThemePreference = () => {
     ? "dark"
     : "light";
 };
+
 const isDark = getThemePreference() === "dark";
 document.documentElement.classList[isDark ? "add" : "remove"]("dark");
 
