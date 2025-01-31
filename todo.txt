@@ -2,3 +2,5 @@ workflow - typecheck, linting and formatting
 authentication
 server creation
 get resource on click (require some server setup)
+seeds (default data)
+deployment
