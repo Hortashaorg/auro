@@ -1,13 +1,32 @@
 import {
   boolean,
+  customType,
   integer,
   pgEnum,
   pgTable,
-  timestamp,
   unique,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+
+const temporalTimestamp = customType<
+  {
+    data: Temporal.Instant;
+    driverData: string;
+    defaultNow: true;
+    notNull: true;
+  }
+>({
+  dataType() {
+    return `timestamp`;
+  },
+  fromDriver(value: string): Temporal.Instant {
+    return Temporal.Instant.from(value.replace(" ", "T") + "Z");
+  },
+  toDriver(value: Temporal.Instant): string {
+    return value.toString();
+  },
+});
 
 export const userType = pgEnum("usertype", ["admin", "player"]);
 
@@ -54,26 +73,32 @@ export const server = pgTable("server", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar({ length: 50 }).notNull(),
   online: boolean().notNull().default(false),
-  updatedAt: timestamp().notNull().defaultNow(),
-  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+  createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
 });
 
 export const account = pgTable("account", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: varchar({ length: 100 }).notNull().unique(),
-  registrationTime: timestamp().notNull().defaultNow(),
+  registrationTime: temporalTimestamp().notNull().default(
+    Temporal.Now.instant(),
+  ),
   avatarAssetId: uuid().references(() => asset.id).notNull(),
   currentServerId: uuid().references(() => server.id),
-  createdAt: timestamp().notNull().defaultNow(),
-  updatedAt: timestamp().notNull().defaultNow(),
+  createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+  updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
 });
 
 export const auth = pgTable("auth", {
   accountId: uuid().references(() => account.id).notNull(),
   refreshTokenHash: varchar({ length: 500 }).unique(),
-  refreshTokenExpires: timestamp(),
+  refreshTokenExpires: temporalTimestamp().notNull().default(
+    Temporal.Now.instant(),
+  ),
   accessTokenHash: varchar({ length: 500 }).unique(),
-  accessTokenExpires: timestamp(),
+  accessTokenExpires: temporalTimestamp().notNull().default(
+    Temporal.Now.instant(),
+  ),
 });
 
 export const user = pgTable(
@@ -85,8 +110,8 @@ export const user = pgTable(
     name: varchar({ length: 50 }).notNull(),
     actions: integer().notNull().default(15),
     type: userType().notNull().default("player"),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (
     table,
@@ -100,8 +125,8 @@ export const skill = pgTable(
     description: varchar({ length: 500 }),
     name: varchar({ length: 50 }).notNull(),
     serverId: uuid().references(() => server.id).notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (
     table,
@@ -119,8 +144,8 @@ export const npc = pgTable(
     attack: integer().notNull(),
     defense: integer().notNull(),
     speed: integer().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (
     table,
@@ -133,8 +158,8 @@ export const userSkill = pgTable(
     userId: uuid().references(() => user.id).notNull(),
     skillId: uuid().references(() => skill.id).notNull(),
     xp: integer().notNull().default(0),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
 );
 
@@ -148,8 +173,8 @@ export const item = pgTable(
     description: varchar({ length: 500 }),
     type: itemType().notNull(),
     rarity: rarity().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (
     table,
@@ -161,8 +186,8 @@ export const userItem = pgTable(
   {
     userId: uuid().references(() => user.id).notNull(),
     itemId: uuid().references(() => item.id).notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
 );
 
@@ -174,8 +199,8 @@ export const currency = pgTable(
     assetId: uuid().references(() => asset.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
     description: varchar({ length: 500 }),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (
     table,
@@ -190,8 +215,8 @@ export const userCurrency = pgTable(
     userId: uuid().references(() => user.id).notNull(),
     currencyId: uuid().references(() => currency.id).notNull(),
     amount: integer().notNull().default(0),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
 );
 
@@ -206,8 +231,8 @@ export const location = pgTable(
     available: boolean().notNull().default(false),
     cooldownMinutes: integer().notNull(),
     repeatable: boolean().notNull().default(true),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (
     table,
@@ -224,8 +249,8 @@ export const locationRewardSkill = pgTable(
     chance: integer().notNull(),
     min: integer().notNull(),
     max: integer().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (table) => [
     unique("unique_location_reward_skill_per_location").on(
@@ -241,8 +266,8 @@ export const locationRewardItem = pgTable(
     locationId: uuid().references(() => location.id).notNull(),
     itemId: uuid().references(() => item.id).notNull(),
     chance: integer().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (table) => [
     unique("unique_location_reward_item_per_location").on(
@@ -260,8 +285,8 @@ export const locationRewardCurrency = pgTable(
     chance: integer().notNull(),
     min: integer().notNull(),
     max: integer().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (table) => [
     unique("unique_location_reward_currency_per_location").on(
@@ -277,8 +302,8 @@ export const locationReqSkill = pgTable(
     locationId: uuid().references(() => location.id).notNull(),
     skillId: uuid().references(() => skill.id).notNull(),
     xp: integer().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (table) => [
     unique("unique_location_req_skill_per_location").on(
@@ -293,8 +318,8 @@ export const locationReqItem = pgTable(
   {
     locationId: uuid().references(() => location.id).notNull(),
     itemId: uuid().references(() => item.id).notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (table) => [
     unique("unique_location_req_item_per_location").on(
@@ -310,8 +335,8 @@ export const locationNpc = pgTable(
     locationId: uuid().references(() => location.id).notNull(),
     npcId: uuid().references(() => npc.id).notNull(),
     count: integer().notNull(),
-    createdAt: timestamp().notNull().defaultNow(),
-    updatedAt: timestamp().notNull().defaultNow(),
+    createdAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
+    updatedAt: temporalTimestamp().notNull().default(Temporal.Now.instant()),
   },
   (table) => [
     unique("unique_location_npc_per_location").on(

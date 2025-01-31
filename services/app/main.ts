@@ -1,4 +1,4 @@
-import { getAccount } from "@package/database";
+import { db } from "@package/database";
 import { app } from "@package/framework";
 import { NotFound } from "./pages/404.tsx";
 import { Design } from "./pages/Design.tsx";
@@ -14,9 +14,12 @@ const routes = {
 } as const;
 
 const customContext = async () => {
-  const user = await getAccount("eidemartin_303@hotmail.com");
+  const server = await db.query.server.findFirst({
+    where: (server, { eq }) => eq(server.name, "Test"),
+  });
+
   return {
-    email: user?.email,
+    server,
   };
 };
 
