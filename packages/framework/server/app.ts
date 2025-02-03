@@ -174,10 +174,7 @@ export const app = (
         return c.redirect(settings.redirectNoAccess);
       }
     }
-
-    // Add a default path for when routeNames.length !== 1
-    await next();
-    return;
+    throw new Error("There should only be one route");
   });
 
   /** Rendering */
