@@ -8,7 +8,7 @@ export const Home = () => {
         <ButtonLink
           href={`${Deno.env.get("GOOGLE_LOGIN_BASE_URL")}?client_id=${
             Deno.env.get("GOOGLE_CLIENT_ID")
-          }&redirect_uri=http://localhost:4000/login&response_type=code&scope=email&access_type=offline`}
+          }&redirect_uri=http://localhost:4000/login&response_type=code&scope=email&access_type=offline&prompt=consent`}
         >
           Login
         </ButtonLink>

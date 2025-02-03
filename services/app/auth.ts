@@ -1,6 +1,6 @@
 import { hashString, throwError } from "@package/common";
 import { type Context, decode } from "@package/framework";
-import { db, schema } from "@package/database";
+import { db, schema, sql } from "@package/database";
 
 export const authCodeLoginLogic = async (c: Context) => {
   const code = new URL(c.req.url).searchParams.get("code") ??
@@ -17,6 +17,7 @@ export const authCodeLoginLogic = async (c: Context) => {
     scope: "email",
     grant_type: "authorization_code",
     access_type: "offline",
+    prompt: "consent",
     code,
   });
 
@@ -41,6 +42,8 @@ export const authCodeLoginLogic = async (c: Context) => {
       id_token: string;
       expires_in: number;
     };
+
+    console.log(tokens);
     const email = decode(tokens.id_token).payload.email as string ??
       throwError("Missing email");
 
@@ -74,7 +77,12 @@ export const setAccountTokens = async (
   const account = (await db
     .insert(accountSchema)
     .values({ email })
-    .onConflictDoNothing()
+    .onConflictDoUpdate({
+      target: accountSchema.email,
+      set: {
+        email: sql`excluded.email`,
+      },
+    })
     .returning())[0] ?? throwError("Failed to create or read account");
 
   const authSchema = schema.auth;

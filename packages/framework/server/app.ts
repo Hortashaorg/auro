@@ -5,7 +5,6 @@ import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
 import { Render } from "../context/context.tsx";
-import { throwError } from "@package/common";
 
 const render = async (
   component: () => JSX.Element,
@@ -55,8 +54,12 @@ export const app = (
   const app = new Hono();
 
   if (settings.authCodeLoginUrl) {
-    app.use(settings.authCodeLoginUrl, async (c: Context, next: Next) => {
-      if (settings.authCodeLoginLogic) {
+    app.use(settings.authCodeLoginUrl, async (c: Context) => {
+      // login endpoint will redirect when after login attempt
+      const accessToken = getCookie(c, "access_token");
+      const refreshToken = getCookie(c, "refresh_token");
+
+      if (settings.authCodeLoginLogic && !refreshToken && !accessToken) {
         const result = await settings.authCodeLoginLogic(c);
         if (result.success) {
           setCookie(c, "access_token", result.accessToken, {
@@ -70,11 +73,13 @@ export const app = (
             secure: true,
             sameSite: "Lax",
           });
+
+          return c.redirect("/");
+        } else {
+          throw new Error("Failed to login");
         }
-      } else {
-        throwError("Provide authCodeLoginLogic function to handle login.");
       }
-      await next();
+      throw new Error("Already logged in");
     });
   }
 
@@ -104,6 +109,10 @@ export const app = (
 
   /** Rendering */
   for (const [path, component] of Object.entries(settings.routes)) {
+    if (path === "500" || path === "404") {
+      continue;
+    }
+
     app.get(path, async (c: Context) => {
       const userContext = await settings.customContext(c);
       return c.html(render(component, !settings.prod, userContext));
@@ -122,6 +131,16 @@ export const app = (
     app.notFound(async (c: Context) => {
       const userContext = await settings.customContext(c);
       return c.html(render(notFound, !settings.prod, userContext));
+    });
+  }
+
+  if (settings.routes["500"]) {
+    const onError = settings.routes["500"];
+
+    app.onError(async (err, c) => {
+      console.error("Error on request", err);
+      const userContext = await settings.customContext(c);
+      return c.html(render(onError, !settings.prod, userContext));
     });
   }
 

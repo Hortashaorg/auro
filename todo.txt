@@ -1,4 +1,5 @@
 workflow - typecheck, linting and formatting
+create a error page
 authentication
 server creation
 get resource on click (require some server setup)

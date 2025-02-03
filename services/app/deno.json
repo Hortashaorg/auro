@@ -11,7 +11,8 @@
     "@utils/": "./utils/",
     "@comp/": "./components/",
     "@layouts/": "./layouts/",
-    "@sections/": "./sections/"
+    "@sections/": "./sections/",
+    "@context/": "./context/"
   },
   "tasks": {
     "typecheck": "deno check .",
