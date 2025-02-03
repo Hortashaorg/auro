@@ -9,11 +9,36 @@ import type { CustomContext } from "@context/index.ts";
 
 // Routes should probebly contains both component + permission shield to be validated.
 // eg. isAdmin, isUser, isLoggedIn, isLoggedOut, etc
+
+const isPublic = (): boolean => {
+  return true;
+};
+
+const isDenied = (): boolean => {
+  return false;
+};
+
 const routes = {
-  "/": Home,
-  "design": Design,
-  404: NotFound,
-  500: Error,
+  "/": {
+    jsx: Home,
+    hasPermission: isPublic,
+  },
+  "design": {
+    jsx: Design,
+    hasPermission: isPublic,
+  },
+  "denied": {
+    jsx: Design,
+    hasPermission: isDenied,
+  },
+  404: {
+    jsx: NotFound,
+    hasPermission: isPublic,
+  },
+  500: {
+    jsx: Error,
+    hasPermission: isPublic,
+  },
 } as const;
 
 const customContext = async (c: Context): Promise<CustomContext> => {
@@ -28,6 +53,7 @@ const customContext = async (c: Context): Promise<CustomContext> => {
 
 app({
   routes: routes,
+  redirectNoAccess: "/",
   customContext,
   authCodeLoginUrl: "/login",
   authCodeLoginLogic,

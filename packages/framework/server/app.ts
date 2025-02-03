@@ -5,6 +5,7 @@ import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
 import { Render } from "../context/context.tsx";
+import { throwError } from "@package/common";
 
 const isPublic = (path: string): boolean => {
   return path.startsWith("/public/") || path === "/favicon.ico" ||
@@ -36,7 +37,11 @@ const render = async (
 
 export const app = (
   settings: {
-    routes: Record<string, () => JSX.Element>;
+    routes: Record<string, {
+      jsx: () => JSX.Element;
+      hasPermission: (c: unknown) => boolean;
+    }>;
+    redirectNoAccess: string;
     customContext: (
       context: Context,
     ) => Promise<Record<string, unknown>>;
@@ -144,10 +149,35 @@ export const app = (
       return;
     }
 
-    // Checking if user has access to path
+    const renderRoutes = Object.keys(
+      settings.routes,
+    );
 
-    console.log(c.req.url);
+    const routeNames = renderRoutes.filter((renderRoute) =>
+      c.req.matchedRoutes.some((matchedRoute) =>
+        matchedRoute.path === renderRoute ||
+        matchedRoute.path === `/${renderRoute}`
+      )
+    );
+
+    if (routeNames.length === 1) {
+      const routeName = routeNames[0] ?? throwError("Assert Route Name");
+      const route = settings.routes[routeName] ?? throwError("Assert Route");
+
+      const userContext = await settings.customContext(c);
+      const hasPermission = route.hasPermission(userContext);
+
+      if (hasPermission) {
+        await next();
+        return;
+      } else {
+        return c.redirect(settings.redirectNoAccess);
+      }
+    }
+
+    // Add a default path for when routeNames.length !== 1
     await next();
+    return;
   });
 
   /** Rendering */
@@ -158,7 +188,7 @@ export const app = (
 
     app.get(path, async (c: Context) => {
       const userContext = await settings.customContext(c);
-      return c.html(render(component, !settings.prod, userContext));
+      return c.html(render(component.jsx, !settings.prod, userContext));
     });
   }
 
@@ -173,7 +203,7 @@ export const app = (
     const notFound = settings.routes["404"];
     app.notFound(async (c: Context) => {
       const userContext = await settings.customContext(c);
-      return c.html(render(notFound, !settings.prod, userContext));
+      return c.html(render(notFound.jsx, !settings.prod, userContext));
     });
   }
 
@@ -183,7 +213,7 @@ export const app = (
     app.onError(async (err, c) => {
       console.error("Error on request", err);
       const userContext = await settings.customContext(c);
-      return c.html(render(onError, !settings.prod, userContext));
+      return c.html(render(onError.jsx, !settings.prod, userContext));
     });
   }
 
