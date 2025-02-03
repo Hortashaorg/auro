@@ -4,7 +4,7 @@ import type { JSX } from "preact";
 
 export const Layout = (props: {
   title: string;
-  children: JSX.Element;
+  children: JSX.Element[] | JSX.Element;
 }) => {
   const { title, children } = props;
   return (
