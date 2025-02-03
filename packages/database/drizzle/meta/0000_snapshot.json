@@ -1,5 +1,5 @@
 {
-  "id": "ea5fea20-ccf0-4d0b-9894-d6be459a1077",
+  "id": "f25eb849-e2d4-4c8f-beb0-addff429003e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -18,19 +18,6 @@
         "email": {
           "name": "email",
           "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "registration_time": {
-          "name": "registration_time",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "avatar_asset_id": {
-          "name": "avatar_asset_id",
-          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -57,19 +44,6 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "account_avatar_asset_id_asset_id_fk": {
-          "name": "account_avatar_asset_id_asset_id_fk",
-          "tableFrom": "account",
-          "tableTo": "asset",
-          "columnsFrom": [
-            "avatar_asset_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
         "account_current_server_id_server_id_fk": {
           "name": "account_current_server_id_server_id_fk",
           "tableFrom": "account",
@@ -127,6 +101,20 @@
           "type": "varchar(500)",
           "primaryKey": false,
           "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -172,7 +160,8 @@
           "name": "refresh_token_expires",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         },
         "access_token_hash": {
           "name": "access_token_hash",
@@ -184,7 +173,8 @@
           "name": "access_token_expires",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},

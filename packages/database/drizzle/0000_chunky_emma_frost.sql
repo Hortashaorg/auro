@@ -5,8 +5,6 @@ CREATE TYPE "public"."usertype" AS ENUM('admin', 'player');--> statement-breakpo
 CREATE TABLE "account" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" varchar(100) NOT NULL,
-	"registration_time" timestamp DEFAULT now() NOT NULL,
-	"avatar_asset_id" uuid NOT NULL,
 	"current_server_id" uuid,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
@@ -18,6 +16,8 @@ CREATE TABLE "asset" (
 	"type" "assetcategory" NOT NULL,
 	"name" varchar(50) NOT NULL,
 	"url" varchar(500) NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "asset_name_unique" UNIQUE("name"),
 	CONSTRAINT "asset_url_unique" UNIQUE("url")
 );
@@ -25,9 +25,9 @@ CREATE TABLE "asset" (
 CREATE TABLE "auth" (
 	"account_id" uuid NOT NULL,
 	"refresh_token_hash" varchar(500),
-	"refresh_token_expires" timestamp,
+	"refresh_token_expires" timestamp DEFAULT now() NOT NULL,
 	"access_token_hash" varchar(500),
-	"access_token_expires" timestamp,
+	"access_token_expires" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "auth_refreshTokenHash_unique" UNIQUE("refresh_token_hash"),
 	CONSTRAINT "auth_accessTokenHash_unique" UNIQUE("access_token_hash")
 );
@@ -194,7 +194,6 @@ CREATE TABLE "user_skill" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "account" ADD CONSTRAINT "account_avatar_asset_id_asset_id_fk" FOREIGN KEY ("avatar_asset_id") REFERENCES "public"."asset"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_current_server_id_server_id_fk" FOREIGN KEY ("current_server_id") REFERENCES "public"."server"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "auth" ADD CONSTRAINT "auth_account_id_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "currency" ADD CONSTRAINT "currency_server_id_server_id_fk" FOREIGN KEY ("server_id") REFERENCES "public"."server"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

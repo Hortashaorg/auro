@@ -18,8 +18,10 @@ const customContext = async () => {
     where: (server, { eq }) => eq(server.name, "Test"),
   });
 
+  console.log(server);
+
   return {
-    server,
+    something: null,
   };
 };
 

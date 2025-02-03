@@ -42,6 +42,7 @@ export const authCodeLoginLogic = async (c: Context) => {
     };
     const email = decode(tokens.id_token).payload.email as string ??
       throwError("Missing email");
+
     return {
       success: true,
       accessToken: tokens.access_token,
