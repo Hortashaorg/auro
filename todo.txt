@@ -1,5 +1,4 @@
 workflow - typecheck, linting and formatting
-logout logic
 server creation
 get resource on click (require some server setup)
 seeds (default data)

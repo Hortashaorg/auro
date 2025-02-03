@@ -1,11 +1,17 @@
-import { db } from "@package/database";
+import { db, type schema } from "@package/database";
 import { app, type Context } from "@package/framework";
 import { NotFound } from "./pages/404.tsx";
 import { Design } from "./pages/Design.tsx";
 import { Home } from "./pages/Home.tsx";
 import { Error } from "./pages/500.tsx";
-import { authCodeLoginLogic, logoutLogic, refreshTokenLogic } from "./auth.ts";
+import {
+  authCodeLoginLogic,
+  logoutLogic,
+  refreshTokenLogic,
+  validateUser,
+} from "./auth.ts";
 import type { CustomContext } from "@context/index.ts";
+import { hashString } from "@package/common";
 
 const isPublic = (): boolean => {
   return true;
@@ -38,13 +44,33 @@ const routes = {
   },
 } as const;
 
-const customContext = async (c: Context): Promise<CustomContext> => {
-  await db.query.server.findFirst({
-    where: (server, { eq }) => eq(server.name, "Test"),
-  });
+const customContext = async (
+  c: Context,
+  accessToken?: string,
+): Promise<CustomContext> => {
+  let account: typeof schema.account.$inferSelect | undefined;
+  let session: typeof schema.session.$inferSelect | undefined;
+
+  if (accessToken) {
+    const accessTokenHash = await hashString(accessToken);
+
+    const loginSession = await db.query.session.findFirst({
+      where: (session, { eq }) => eq(session.accessTokenHash, accessTokenHash),
+      with: {
+        account: true,
+      },
+    });
+
+    if (loginSession) {
+      account = loginSession.account;
+      session = loginSession;
+    }
+  }
 
   return {
     honoContext: c,
+    account,
+    session,
   };
 };
 
@@ -59,8 +85,6 @@ app({
   authCodeLoginLogic,
   refreshTokenLogic,
   logoutLogic,
-  // TODO: LogoutUrl
-  // TODO: Hook when user has logged out: Return true or false (success?)
-
+  validateUser,
   port: 4000,
 });

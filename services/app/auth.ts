@@ -1,6 +1,7 @@
 import { hashString, throwError } from "@package/common";
 import { type Context, decode, getCookie } from "@package/framework";
-import { db, schema, sql } from "@package/database";
+import { db, eq, lt, schema, sql } from "@package/database";
+import type { CustomContext } from "@context/index.ts";
 
 export const authCodeLoginLogic = async (c: Context) => {
   const code = new URL(c.req.url).searchParams.get("code") ??
@@ -50,7 +51,7 @@ export const authCodeLoginLogic = async (c: Context) => {
     const email = decode(tokens.id_token).payload.email as string ??
       throwError("Missing email");
 
-    await setAccountTokens(
+    await setAuth(
       tokens.access_token,
       tokens.refresh_token,
       email,
@@ -62,7 +63,7 @@ export const authCodeLoginLogic = async (c: Context) => {
       refreshToken: tokens.refresh_token,
       email,
       expires_in: tokens.expires_in,
-      refresh_token_expires_in: 3600 * 3, // 3 days
+      refresh_token_expires_in: 3600 * 72, // 3 days
     } as const;
   }
 
@@ -116,7 +117,7 @@ export const refreshTokenLogic = async (c: Context) => {
     const email = decode(tokens.id_token).payload.email as string ??
       throwError("Missing email");
 
-    await setAccountTokens(
+    await setAuth(
       tokens.access_token,
       refreshToken,
       email,
@@ -136,32 +137,50 @@ export const refreshTokenLogic = async (c: Context) => {
 };
 
 export const logoutLogic = async (c: Context) => {
-  const accessToken = getCookie(c, "access_token");
+  const refreshToken = getCookie(c, "refresh_token");
 
-  if (!accessToken) {
-    return { success: false } as const;
-  }
-  const accessTokenHash = await hashString(accessToken);
-
-  const auth = await db.query.auth.findFirst({
-    where: (auth, { eq }) => eq(auth.accessTokenHash, accessTokenHash),
-    with: {
-      account: true,
-    },
-  });
-
-  if (auth?.account) {
-    await setAccountTokens(null, null, auth.account.email);
+  if (refreshToken) {
+    await deleteAuth(refreshToken);
     return {
       success: true,
     } as const;
   }
-  throw new Error("Failed to find account");
+  throw new Error("Do not have refresh token");
 };
 
-export const setAccountTokens = async (
-  accessToken: string | null,
-  refreshToken: string | null,
+export const deleteExpiredAuth = async () => {
+  const sessionSchema = schema.session;
+  await db.delete(sessionSchema).where(
+    lt(sessionSchema.expire, Temporal.Now.instant()),
+  );
+};
+
+export const deleteAuth = async (refreshToken: string) => {
+  const sessionSchema = schema.session;
+  const refreshTokenHash = await hashString(refreshToken);
+  await db.delete(sessionSchema).where(
+    eq(sessionSchema.refreshTokenHash, refreshTokenHash),
+  );
+};
+
+export const validateUser = async (customContext: CustomContext) => {
+  if (!customContext.session) {
+    return true;
+  }
+
+  if (
+    customContext.session.expire.epochMilliseconds <
+      Temporal.Now.instant().epochMilliseconds
+  ) {
+    await deleteExpiredAuth();
+    return false;
+  }
+  return true;
+};
+
+export const setAuth = async (
+  accessToken: string,
+  refreshToken: string,
   email: string,
 ) => {
   const accountSchema = schema.account;
@@ -177,17 +196,12 @@ export const setAccountTokens = async (
     })
     .returning())[0] ?? throwError("Failed to create or read account");
 
-  const authSchema = schema.auth;
+  const sessionSchema = schema.session;
 
-  await db.insert(authSchema).values({
+  await db.insert(sessionSchema).values({
     accountId: account.id,
-    refreshTokenHash: refreshToken ? await hashString(refreshToken) : null,
-    accessTokenHash: accessToken ? await hashString(accessToken) : null,
-  }).onConflictDoUpdate({
-    target: authSchema.accountId,
-    set: {
-      accessTokenHash: accessToken ? await hashString(accessToken) : null,
-      refreshTokenHash: refreshToken ? await hashString(refreshToken) : null,
-    },
+    refreshTokenHash: await hashString(refreshToken),
+    accessTokenHash: await hashString(accessToken),
+    expire: Temporal.Now.instant().add({ hours: 72 }),
   });
 };

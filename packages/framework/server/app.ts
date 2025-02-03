@@ -46,6 +46,8 @@ export const app = (
     redirectAfterLogout: string;
     customContext: (
       context: Context,
+      accessToken?: string,
+      refreshToken?: string,
     ) => Promise<Record<string, unknown>>;
     authCodeLoginLogic: (
       context: Context,
@@ -76,10 +78,13 @@ export const app = (
     logoutUrl: string;
     logoutLogic: (context: Context) => Promise<{ success: boolean }>;
     prod?: boolean;
+    // deno-lint-ignore no-explicit-any
+    validateUser: (customContext: any) => Promise<boolean>;
   },
 ): Deno.HttpServer<Deno.NetAddr> => {
   const app = new Hono();
 
+  /** Auth Code Login */
   app.use(settings.authCodeLoginUrl, async (c: Context) => {
     // login endpoint will redirect when after login attempt
     const accessToken = getCookie(c, "access_token");
@@ -109,6 +114,7 @@ export const app = (
     throw new Error("Already logged in");
   });
 
+  /** Logout */
   app.use(settings.logoutUrl, async (c: Context) => {
     if (settings.logoutLogic) {
       const result = await settings.logoutLogic(c);
@@ -126,6 +132,7 @@ export const app = (
     throw new Error("Failed to logout");
   });
 
+  /** Refresh access token */
   app.use("/*", async (c: Context, next: Next) => {
     if (isPublic(c.req.path)) {
       await next();
@@ -162,6 +169,50 @@ export const app = (
     await next();
   });
 
+  /** Set User Context*/
+  app.use("/*", async (c: Context, next: Next) => {
+    if (isPublic(c.req.path)) {
+      await next();
+      return;
+    }
+
+    const accessToken = getCookie(c, "access_token");
+    const refreshToken = getCookie(c, "refresh_token");
+
+    c.env.userContext = await settings.customContext(
+      c,
+      accessToken,
+      refreshToken,
+    );
+
+    await next();
+  });
+
+  /** Validate User*/
+  app.use("/*", async (c: Context, next: Next) => {
+    if (
+      isPublic(c.req.path) ||
+      c.req.path === settings.redirectAfterLogout &&
+        !getCookie(c, "access_token")
+    ) {
+      await next();
+      return;
+    }
+    const isValid = await settings.validateUser(c.env.userContext);
+    if (!isValid) {
+      setCookie(c, "access_token", "", {
+        maxAge: 0,
+      });
+      setCookie(c, "refresh_token", "", {
+        maxAge: 0,
+      });
+      return c.redirect(settings.redirectAfterLogout);
+    }
+    await next();
+    return;
+  });
+
+  /** Access Control */
   app.use("/*", async (c: Context, next: Next) => {
     if (isPublic(c.req.path)) {
       await next();
@@ -183,8 +234,7 @@ export const app = (
       const routeName = routeNames[0] ?? throwError("Assert Route Name");
       const route = settings.routes[routeName] ?? throwError("Assert Route");
 
-      const userContext = await settings.customContext(c);
-      const hasPermission = route.hasPermission(userContext);
+      const hasPermission = route.hasPermission(c.env.userContext);
 
       if (hasPermission) {
         await next();
@@ -202,12 +252,12 @@ export const app = (
       continue;
     }
 
-    app.get(path, async (c: Context) => {
-      const userContext = await settings.customContext(c);
-      return c.html(render(component.jsx, !settings.prod, userContext));
+    app.get(path, (c: Context) => {
+      return c.html(render(component.jsx, !settings.prod, c.env.userContext));
     });
   }
 
+  /** Static Files */
   app.use(
     "/public/*",
     serveStatic({
@@ -215,14 +265,15 @@ export const app = (
     }),
   );
 
+  /** Not Found */
   if (settings.routes["404"]) {
     const notFound = settings.routes["404"];
-    app.notFound(async (c: Context) => {
-      const userContext = await settings.customContext(c);
-      return c.html(render(notFound.jsx, !settings.prod, userContext));
+    app.notFound((c: Context) => {
+      return c.html(render(notFound.jsx, !settings.prod, c.env.userContext));
     });
   }
 
+  /** Error */
   if (settings.routes["500"]) {
     const onError = settings.routes["500"];
 
@@ -233,6 +284,7 @@ export const app = (
     });
   }
 
+  /** Hot Reload in development */
   if (!settings.prod) {
     app.get(
       "/ws",
@@ -242,6 +294,7 @@ export const app = (
     );
   }
 
+  /** Serve */
   return Deno.serve({
     port: settings.port,
     hostname: "127.0.0.1",

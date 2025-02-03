@@ -86,15 +86,16 @@ export const account = pgTable("account", {
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
 });
 
-export const auth = pgTable("auth", {
-  accountId: uuid().references(() => account.id).notNull().unique(),
+export const session = pgTable("session", {
+  accountId: uuid().references(() => account.id).notNull(),
   refreshTokenHash: varchar({ length: 500 }).unique(),
   accessTokenHash: varchar({ length: 500 }).unique(),
+  expire: temporalTimestamp().notNull(),
 });
 
-export const authRelations = relations(auth, ({ one }) => ({
+export const authRelations = relations(session, ({ one }) => ({
   account: one(account, {
-    fields: [auth.accountId],
+    fields: [session.accountId],
     references: [account.id],
   }),
 }));

@@ -15,6 +15,13 @@
       "when": 1738565327924,
       "tag": "0001_big_edwin_jarvis",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1738590037270,
+      "tag": "0002_public_jimmy_woo",
+      "breakpoints": true
     }
   ]
 }
