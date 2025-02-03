@@ -12,9 +12,11 @@ export const authCodeLoginLogic = async (c: Context) => {
   const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
     throwError("Missing Google client ID");
 
+  const url = new URL(c.req.url);
+
   const params = new URLSearchParams({
     client_id: clientId,
-    redirect_uri: "http://localhost:4000/login",
+    redirect_uri: `${url.origin}/login`,
     client_secret: clientSecret,
     scope: "email",
     grant_type: "authorization_code",
