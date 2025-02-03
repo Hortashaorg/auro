@@ -12,6 +12,7 @@ const isPublic = (path: string): boolean => {
     path === "/ws";
 };
 
+/** Server Rendering with Top Level State */
 const render = async (
   component: () => JSX.Element,
   hmr: boolean,
@@ -35,6 +36,7 @@ const render = async (
   return html;
 };
 
+/** Init Framework App */
 export const app = (
   settings: {
     routes: Record<string, {

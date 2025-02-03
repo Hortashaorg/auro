@@ -1,3 +1,4 @@
+NotFound pages throw 500. opsy
 Split middleware components into their own functions and import them into main file (Framework)
 workflow - typecheck, linting and formatting
 server creation
