@@ -15,6 +15,9 @@ export const Home = () => {
         >
           Login
         </ButtonLink>
+        <ButtonLink href="/logout">
+          Logout
+        </ButtonLink>
       </div>
     </Layout>
   );

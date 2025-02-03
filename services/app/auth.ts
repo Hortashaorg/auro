@@ -135,6 +135,30 @@ export const refreshTokenLogic = async (c: Context) => {
   } as const;
 };
 
+export const logoutLogic = async (c: Context) => {
+  const accessToken = getCookie(c, "access_token");
+
+  if (!accessToken) {
+    return { success: false } as const;
+  }
+  const accessTokenHash = await hashString(accessToken);
+
+  const auth = await db.query.auth.findFirst({
+    where: (auth, { eq }) => eq(auth.accessTokenHash, accessTokenHash),
+    with: {
+      account: true,
+    },
+  });
+
+  if (auth?.account) {
+    await setAccountTokens(null, null, auth.account.email);
+    return {
+      success: true,
+    } as const;
+  }
+  throw new Error("Failed to find account");
+};
+
 export const setAccountTokens = async (
   accessToken: string | null,
   refreshToken: string | null,

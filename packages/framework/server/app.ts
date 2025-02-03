@@ -42,6 +42,8 @@ export const app = (
       hasPermission: (c: unknown) => boolean;
     }>;
     redirectNoAccess: string;
+    redirectAfterLogin: string;
+    redirectAfterLogout: string;
     customContext: (
       context: Context,
     ) => Promise<Record<string, unknown>>;
@@ -71,41 +73,58 @@ export const app = (
       } | { success: false }
     >;
     port: number;
+    logoutUrl: string;
+    logoutLogic: (context: Context) => Promise<{ success: boolean }>;
     prod?: boolean;
   },
 ): Deno.HttpServer<Deno.NetAddr> => {
   const app = new Hono();
 
-  if (settings.authCodeLoginUrl) {
-    app.use(settings.authCodeLoginUrl, async (c: Context) => {
-      // login endpoint will redirect when after login attempt
-      const accessToken = getCookie(c, "access_token");
-      const refreshToken = getCookie(c, "refresh_token");
+  app.use(settings.authCodeLoginUrl, async (c: Context) => {
+    // login endpoint will redirect when after login attempt
+    const accessToken = getCookie(c, "access_token");
+    const refreshToken = getCookie(c, "refresh_token");
 
-      if (!refreshToken && !accessToken) {
-        const result = await settings.authCodeLoginLogic(c);
-        if (result.success) {
-          setCookie(c, "access_token", result.accessToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "Lax",
-            maxAge: result.expires_in,
-          });
-          setCookie(c, "refresh_token", result.refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "Lax",
-            maxAge: result.refresh_token_expires_in,
-          });
+    if (!refreshToken && !accessToken) {
+      const result = await settings.authCodeLoginLogic(c);
+      if (result.success) {
+        setCookie(c, "access_token", result.accessToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "Lax",
+          maxAge: result.expires_in,
+        });
+        setCookie(c, "refresh_token", result.refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "Lax",
+          maxAge: result.refresh_token_expires_in,
+        });
 
-          return c.redirect("/");
-        } else {
-          throw new Error("Failed to login");
-        }
+        return c.redirect(settings.redirectAfterLogin);
+      } else {
+        throw new Error("Failed to login");
       }
-      throw new Error("Already logged in");
-    });
-  }
+    }
+    throw new Error("Already logged in");
+  });
+
+  app.use(settings.logoutUrl, async (c: Context) => {
+    if (settings.logoutLogic) {
+      const result = await settings.logoutLogic(c);
+      if (result.success) {
+        // Clear cookies
+        setCookie(c, "access_token", "", {
+          maxAge: 0,
+        });
+        setCookie(c, "refresh_token", "", {
+          maxAge: 0,
+        });
+        return c.redirect(settings.redirectAfterLogout);
+      }
+    }
+    throw new Error("Failed to logout");
+  });
 
   app.use("/*", async (c: Context, next: Next) => {
     if (isPublic(c.req.path)) {

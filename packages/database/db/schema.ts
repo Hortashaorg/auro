@@ -8,7 +8,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 const temporalTimestamp = customType<
   {
@@ -91,6 +91,13 @@ export const auth = pgTable("auth", {
   refreshTokenHash: varchar({ length: 500 }).unique(),
   accessTokenHash: varchar({ length: 500 }).unique(),
 });
+
+export const authRelations = relations(auth, ({ one }) => ({
+  account: one(account, {
+    fields: [auth.accountId],
+    references: [account.id],
+  }),
+}));
 
 export const user = pgTable(
   "user",

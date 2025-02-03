@@ -4,11 +4,8 @@ import { NotFound } from "./pages/404.tsx";
 import { Design } from "./pages/Design.tsx";
 import { Home } from "./pages/Home.tsx";
 import { Error } from "./pages/500.tsx";
-import { authCodeLoginLogic, refreshTokenLogic } from "./auth.ts";
+import { authCodeLoginLogic, logoutLogic, refreshTokenLogic } from "./auth.ts";
 import type { CustomContext } from "@context/index.ts";
-
-// Routes should probebly contains both component + permission shield to be validated.
-// eg. isAdmin, isUser, isLoggedIn, isLoggedOut, etc
 
 const isPublic = (): boolean => {
   return true;
@@ -52,15 +49,16 @@ const customContext = async (c: Context): Promise<CustomContext> => {
 };
 
 app({
-  routes: routes,
+  routes,
   redirectNoAccess: "/",
-  customContext,
+  redirectAfterLogin: "/",
+  redirectAfterLogout: "/",
   authCodeLoginUrl: "/login",
+  logoutUrl: "/logout",
+  customContext,
   authCodeLoginLogic,
   refreshTokenLogic,
-  // TODO: Refresh: Return Access Token + Refresh Token
-  // TODO: Check Valid Access Token: Return true or false
-  // TODO: Check Valid Refresh Token: Return true or false
+  logoutLogic,
   // TODO: LogoutUrl
   // TODO: Hook when user has logged out: Return true or false (success?)
 
