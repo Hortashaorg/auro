@@ -5,5 +5,9 @@
     "typecheck": "deno check .",
     "lint": "deno lint .",
     "fmt": "deno fmt ."
+  },
+  "imports": {
+    "@std/crypto": "jsr:@std/crypto@^1.0.4",
+    "@std/encoding": "jsr:@std/encoding@^1.0.7"
   }
 }

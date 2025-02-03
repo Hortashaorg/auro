@@ -8,6 +8,13 @@
       "when": 1738564370304,
       "tag": "0000_chunky_emma_frost",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1738565327924,
+      "tag": "0001_big_edwin_jarvis",
+      "breakpoints": true
     }
   ]
 }

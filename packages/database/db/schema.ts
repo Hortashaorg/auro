@@ -87,15 +87,9 @@ export const account = pgTable("account", {
 });
 
 export const auth = pgTable("auth", {
-  accountId: uuid().references(() => account.id).notNull(),
+  accountId: uuid().references(() => account.id).notNull().unique(),
   refreshTokenHash: varchar({ length: 500 }).unique(),
-  refreshTokenExpires: temporalTimestamp().notNull().default(
-    sql`now()`,
-  ),
   accessTokenHash: varchar({ length: 500 }).unique(),
-  accessTokenExpires: temporalTimestamp().notNull().default(
-    sql`now()`,
-  ),
 });
 
 export const user = pgTable(

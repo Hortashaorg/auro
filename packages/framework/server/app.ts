@@ -1,5 +1,5 @@
 import { type Context, Hono, type Next } from "@hono/hono";
-import { getCookie } from "@hono/hono/cookie";
+import { getCookie, setCookie } from "@hono/hono/cookie";
 
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import type { JSX } from "preact";
@@ -40,12 +40,12 @@ export const app = (
       context: Context,
     ) => Promise<
       {
-        success: boolean;
+        success: true;
         accessToken: string;
         refreshToken: string;
         email: string;
         expires_in: number;
-      } | { success: boolean }
+      } | { success: false }
     >;
     authCodeLoginUrl?: string;
     port: number;
@@ -58,7 +58,19 @@ export const app = (
     app.use(settings.authCodeLoginUrl, async (c: Context, next: Next) => {
       if (settings.authCodeLoginLogic) {
         const result = await settings.authCodeLoginLogic(c);
-        console.log(result);
+        if (result.success) {
+          setCookie(c, "access_token", result.accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
+            maxAge: result.expires_in,
+          });
+          setCookie(c, "refresh_token", result.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
+          });
+        }
       } else {
         throwError("Provide authCodeLoginLogic function to handle login.");
       }
