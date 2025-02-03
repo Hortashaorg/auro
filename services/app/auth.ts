@@ -1,5 +1,5 @@
 import { hashString, throwError } from "@package/common";
-import { type Context, decode } from "@package/framework";
+import { type Context, decode, getCookie } from "@package/framework";
 import { db, schema, sql } from "@package/database";
 
 export const authCodeLoginLogic = async (c: Context) => {
@@ -9,9 +9,11 @@ export const authCodeLoginLogic = async (c: Context) => {
   const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
     throwError("Missing Google client secret");
 
+  const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
+    throwError("Missing Google client ID");
+
   const params = new URLSearchParams({
-    client_id: Deno.env.get("GOOGLE_CLIENT_ID") ??
-      throwError("Missing Google client ID"),
+    client_id: clientId,
     redirect_uri: "http://localhost:4000/login",
     client_secret: clientSecret,
     scope: "email",
@@ -43,7 +45,6 @@ export const authCodeLoginLogic = async (c: Context) => {
       expires_in: number;
     };
 
-    console.log(tokens);
     const email = decode(tokens.id_token).payload.email as string ??
       throwError("Missing email");
 
@@ -54,12 +55,77 @@ export const authCodeLoginLogic = async (c: Context) => {
     );
 
     return {
-      success: true as true,
+      success: true,
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       email,
       expires_in: tokens.expires_in,
+      refresh_token_expires_in: 3600 * 3, // 3 days
+    } as const;
+  }
+
+  return {
+    success: false,
+  } as const;
+};
+
+export const refreshTokenLogic = async (c: Context) => {
+  const refreshToken = getCookie(c, "refresh_token");
+
+  if (!refreshToken) {
+    return { success: false } as const;
+  }
+
+  const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
+    throwError("Missing Google client secret");
+
+  const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
+    throwError("Missing Google client ID");
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    grant_type: "refresh_token",
+    scope: "email",
+    refresh_token: refreshToken,
+  });
+
+  const googleAuthBaseUrl = Deno.env.get("GOOGLE_AUTH_BASE_URL") ??
+    throwError("Missing Google auth base URL");
+
+  const res = await fetch(
+    `${googleAuthBaseUrl}/token`,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+      body: params,
+    },
+  );
+
+  if (res.ok) {
+    const tokens = await res.json() as {
+      access_token: string;
+      id_token: string;
+      expires_in: number;
     };
+
+    const email = decode(tokens.id_token).payload.email as string ??
+      throwError("Missing email");
+
+    await setAccountTokens(
+      tokens.access_token,
+      refreshToken,
+      email,
+    );
+
+    return {
+      success: true,
+      accessToken: tokens.access_token,
+      email,
+      expires_in: tokens.expires_in,
+    } as const;
   }
 
   return {

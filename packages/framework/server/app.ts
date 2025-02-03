@@ -6,6 +6,11 @@ import type { JSX } from "preact";
 import { renderToStringAsync } from "preact-render-to-string";
 import { Render } from "../context/context.tsx";
 
+const isPublic = (path: string): boolean => {
+  return path.startsWith("/public/") || path === "/favicon.ico" ||
+    path === "/ws";
+};
+
 const render = async (
   component: () => JSX.Element,
   hmr: boolean,
@@ -35,7 +40,7 @@ export const app = (
     customContext: (
       context: Context,
     ) => Promise<Record<string, unknown>>;
-    authCodeLoginLogic?: (
+    authCodeLoginLogic: (
       context: Context,
     ) => Promise<
       {
@@ -44,9 +49,22 @@ export const app = (
         refreshToken: string;
         email: string;
         expires_in: number;
+        refresh_token_expires_in?: number;
       } | { success: false }
     >;
-    authCodeLoginUrl?: string;
+    authCodeLoginUrl: string;
+    refreshTokenLogic: (
+      context: Context,
+    ) => Promise<
+      {
+        success: true;
+        accessToken: string;
+        refreshToken?: string;
+        email: string;
+        expires_in: number;
+        refresh_token_expires_in?: number;
+      } | { success: false }
+    >;
     port: number;
     prod?: boolean;
   },
@@ -59,7 +77,7 @@ export const app = (
       const accessToken = getCookie(c, "access_token");
       const refreshToken = getCookie(c, "refresh_token");
 
-      if (settings.authCodeLoginLogic && !refreshToken && !accessToken) {
+      if (!refreshToken && !accessToken) {
         const result = await settings.authCodeLoginLogic(c);
         if (result.success) {
           setCookie(c, "access_token", result.accessToken, {
@@ -72,6 +90,7 @@ export const app = (
             httpOnly: true,
             secure: true,
             sameSite: "Lax",
+            maxAge: result.refresh_token_expires_in,
           });
 
           return c.redirect("/");
@@ -84,26 +103,50 @@ export const app = (
   }
 
   app.use("/*", async (c: Context, next: Next) => {
-    if (c.req.path.startsWith("/public/")) {
+    if (isPublic(c.req.path)) {
       await next();
       return;
     }
 
     const accessToken = getCookie(c, "access_token");
-    if (accessToken) {
-      console.log("User is logged in with token:", accessToken);
-    } else {
-      const refreshToken = getCookie(c, "refresh_token");
+    const refreshToken = getCookie(c, "refresh_token");
 
-      if (refreshToken) {
-        console.log(
-          "Refresh token, but no access token",
-          refreshToken,
-        );
+    if (!accessToken && refreshToken) {
+      const result = await settings.refreshTokenLogic(c);
+
+      if (result.success) {
+        setCookie(c, "access_token", result.accessToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "Lax",
+          maxAge: result.expires_in,
+        });
+
+        if (result.refreshToken) {
+          setCookie(c, "refresh_token", result.refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
+            maxAge: result.refresh_token_expires_in,
+          });
+        }
       } else {
-        console.log("User is not logged in - no tokens found");
+        throw new Error("Failed to refresh");
       }
     }
+
+    await next();
+  });
+
+  app.use("/*", async (c: Context, next: Next) => {
+    if (isPublic(c.req.path)) {
+      await next();
+      return;
+    }
+
+    // Checking if user has access to path
+
+    console.log(c.req.url);
     await next();
   });
 

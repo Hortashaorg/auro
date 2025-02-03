@@ -2,7 +2,6 @@ import { getContext } from "@context/index.ts";
 
 export const Error = () => {
   const context = getContext();
-  console.log(context);
   return (
     <html lang="en">
       <head>

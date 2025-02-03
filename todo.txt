@@ -1,6 +1,6 @@
 workflow - typecheck, linting and formatting
-create a error page
-authentication
+logout logic
+permissions per page
 server creation
 get resource on click (require some server setup)
 seeds (default data)
