@@ -244,6 +244,9 @@ export const app = (
       } else {
         return c.redirect(settings.redirectNoAccess);
       }
+    } else if (routeNames.length < 1) {
+      await next();
+      return;
     }
     throw new Error("There should only be one route");
   });
