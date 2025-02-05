@@ -1,6 +1,5 @@
-Split middleware components into their own functions and import them into main file (Framework)
-workflow - typecheck, linting and formatting
 server creation
+workflow - typecheck, linting and formatting
 get resource on click (require some server setup)
 seeds (default data)
 deployment

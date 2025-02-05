@@ -8,7 +8,7 @@ import {
   authCodeLoginLogic,
   logoutLogic,
   refreshTokenLogic,
-  validateUser,
+  validateHook,
 } from "./auth.ts";
 import type { CustomContext } from "@context/index.ts";
 import { hashString } from "@package/common";
@@ -85,6 +85,6 @@ app({
   authCodeLoginLogic,
   refreshTokenLogic,
   logoutLogic,
-  validateUser,
+  validateHook,
   port: 4000,
 });

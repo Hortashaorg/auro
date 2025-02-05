@@ -163,7 +163,7 @@ export const deleteAuth = async (refreshToken: string) => {
   );
 };
 
-export const validateUser = async (customContext: CustomContext) => {
+export const validateHook = async (customContext: CustomContext) => {
   if (!customContext.session) {
     return true;
   }
@@ -203,5 +203,10 @@ export const setAuth = async (
     refreshTokenHash: await hashString(refreshToken),
     accessTokenHash: await hashString(accessToken),
     expire: Temporal.Now.instant().add({ hours: 72 }),
+  }).onConflictDoUpdate({
+    target: [sessionSchema.refreshTokenHash],
+    set: {
+      accessTokenHash: await hashString(accessToken),
+    },
   });
 };
