@@ -1,7 +1,7 @@
 import { cn } from "@utils/tailwind.ts";
 import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { JSX } from "preact";
+import type { JSX } from "@package/framework";
 
 const buttonLinkVariants = cva([
   "rounded",
@@ -74,8 +74,7 @@ const buttonLinkVariants = cva([
 });
 
 type ButtonLinkVariants = NonNullableProps<typeof buttonLinkVariants>;
-interface Props
-  extends JSX.AnchorHTMLAttributes<HTMLAnchorElement>, ButtonLinkVariants {}
+type Props = JSX.IntrinsicElements["a"] & ButtonLinkVariants;
 
 export const ButtonLink = (
   { children, variant, buttonSize, className, ...rest }: Props,

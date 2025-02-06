@@ -1,7 +1,7 @@
 import { cn } from "@utils/tailwind.ts";
 import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { JSX } from "preact";
+import type { JSX } from "@package/framework";
 
 const buttonVariants = cva([
   "rounded",
@@ -69,10 +69,10 @@ const buttonVariants = cva([
     buttonSize: "medium",
   },
 });
-
 type ButtonVariants = NonNullableProps<typeof buttonVariants>;
-interface Props
-  extends JSX.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariants {}
+
+type Props = JSX.IntrinsicElements["button"] & ButtonVariants;
+
 export const Button = (
   { children, variant, buttonSize, className, ...rest }: Props,
 ) => {

@@ -25,22 +25,27 @@ const routes = {
   "/": {
     jsx: Home,
     hasPermission: isPublic,
+    partial: false,
   },
   "design": {
     jsx: Design,
     hasPermission: isPublic,
+    partial: false,
   },
   "denied": {
     jsx: Design,
     hasPermission: isDenied,
+    partial: false,
   },
   404: {
     jsx: NotFound,
     hasPermission: isPublic,
+    partial: false,
   },
   500: {
     jsx: Error,
     hasPermission: isPublic,
+    partial: false,
   },
 } as const;
 

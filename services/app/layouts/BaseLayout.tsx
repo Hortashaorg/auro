@@ -1,8 +1,8 @@
-import type { JSX } from "preact";
+import type { Child } from "@package/framework";
 
 export const BaseLayout = (props: {
   title: string;
-  children: JSX.Element;
+  children: Child;
 }) => {
   const { title, children } = props;
   return (

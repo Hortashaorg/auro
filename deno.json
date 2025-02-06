@@ -22,8 +22,8 @@
     "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate"
   },
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "https://esm.sh/preact@10.25.4",
+    "jsx": "precompile",
+    "jsxImportSource": "jsr:@hono/hono/jsx",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,

@@ -7,7 +7,7 @@ import { refreshMiddleware } from "./middleware/refresh.ts";
 import { customContextMiddleware } from "./middleware/custom-context.ts";
 import { validateHookMiddleware } from "./middleware/validateHook.ts";
 import { accessShieldMiddleware } from "./middleware/access-shield.ts";
-import { render } from "./util/index.ts";
+import { Render } from "../context/context.tsx";
 
 /** Init Framework App */
 export const app = (
@@ -27,7 +27,9 @@ export const app = (
     prod?: boolean;
   },
 ): Deno.HttpServer<Deno.NetAddr> => {
-  const app = new Hono();
+  const app = new Hono({
+    strict: true,
+  });
 
   /** Static Files */
   app.use(
@@ -73,15 +75,26 @@ export const app = (
     }
 
     app.get(path, (c: Context) => {
-      return c.html(render(component.jsx, !settings.prod, c.env.userContext));
+      return c.html(
+        <Render
+          context={c.env.userContext}
+          addHmrScript={!settings.prod && !component.partial}
+        >
+          {component.jsx}
+        </Render>,
+      );
     });
   }
 
   /** Not Found */
   if (settings.routes["404"]) {
-    const notFound = settings.routes["404"];
+    const NotFound = settings.routes["404"];
     app.notFound((c: Context) => {
-      return c.html(render(notFound.jsx, !settings.prod, c.env.userContext));
+      return c.html(
+        <Render context={c.env.userContext} addHmrScript={!settings.prod}>
+          {NotFound.jsx}
+        </Render>,
+      );
     });
   }
 
@@ -92,7 +105,11 @@ export const app = (
     app.onError(async (err, c) => {
       console.error("Error on request", err);
       const userContext = await settings.customContext(c);
-      return c.html(render(onError.jsx, !settings.prod, userContext));
+      return c.html(
+        <Render context={userContext} addHmrScript={!settings.prod}>
+          {onError.jsx}
+        </Render>,
+      );
     });
   }
 

@@ -1,7 +1,7 @@
 import { cn } from "@utils/tailwind.ts";
 import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { JSX } from "preact";
+import type { JSX } from "@package/framework";
 
 const cardVariants = cva([
   "dark:bg-background-800",
@@ -22,7 +22,7 @@ const cardVariants = cva([
 });
 
 type CardVariants = NonNullableProps<typeof cardVariants>;
-interface Props extends JSX.HTMLAttributes<HTMLDivElement>, CardVariants {}
+type Props = JSX.IntrinsicElements["div"] & CardVariants;
 
 export const Card = ({ children, variant }: Props) => {
   return <div className={cn(cardVariants({ variant }))}>{children}</div>;

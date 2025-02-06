@@ -1,13 +1,37 @@
-import type { JSX } from "preact";
+import type { Child, FC } from "@hono/hono/jsx";
 import { RenderContext } from "./context.ts";
 
-export const Render = (
-  context: Record<string, unknown>,
-  Child: () => JSX.Element,
+const RenderChild: FC<{
+  children: () => Child;
+}> = (
+  { children },
 ) => {
   return (
+    <>
+      {children()}
+    </>
+  );
+};
+
+export const Render: FC<{
+  context: Record<string, unknown>;
+  children: () => Child;
+  addHmrScript: boolean;
+}> = (
+  { context, children, addHmrScript },
+) => {
+  const hmrScript = `
+      const ws = new WebSocket('ws://' + location.host + '/ws');
+      ws.onclose = () => setInterval(() => location.reload(), 200);
+  `;
+
+  return (
     <RenderContext.Provider value={context}>
-      <Child />
+      <RenderChild children={children} />
+      <script dangerouslySetInnerHTML={{ __html: hmrScript }} />
+      {addHmrScript && (
+        <script dangerouslySetInnerHTML={{ __html: hmrScript }} />
+      )}
     </RenderContext.Provider>
   );
 };

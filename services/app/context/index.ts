@@ -8,6 +8,5 @@ export type CustomContext = {
 };
 
 export const getContext = () => {
-  const context = getHonoContext();
-  return context as CustomContext;
+  return getHonoContext() as CustomContext;
 };

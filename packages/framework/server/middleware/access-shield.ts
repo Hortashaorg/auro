@@ -1,12 +1,13 @@
 import type { Context, Next } from "@hono/hono";
 import { isPublic } from "../util/index.ts";
 import { throwError } from "@package/common";
-import type { JSX } from "preact";
+import type { Child } from "@hono/hono/jsx";
 
 export const accessShieldMiddleware = (
   routes: Record<string, {
-    jsx: () => JSX.Element;
+    jsx: () => Child;
     hasPermission: (c: unknown) => boolean;
+    partial: boolean;
   }>,
   redirectNoAccess: string,
 ) => {

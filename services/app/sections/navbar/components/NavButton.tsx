@@ -1,9 +1,9 @@
 import { cn } from "@utils/tailwind.ts";
-import type { JSX } from "preact";
+import type { JSX } from "@package/framework";
 
-interface Props extends JSX.HTMLAttributes<HTMLButtonElement> {}
+type Props = JSX.IntrinsicElements["button"];
 
-export const NavButton = ({ className, ...rest }: Props) => {
+export const NavButton = ({ className, children, ...rest }: Props) => {
   return (
     <button
       {...rest}
@@ -12,6 +12,7 @@ export const NavButton = ({ className, ...rest }: Props) => {
         className,
       )}
     >
+      {children}
     </button>
   );
 };

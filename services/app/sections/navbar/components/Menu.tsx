@@ -1,9 +1,9 @@
 import { cn } from "@utils/tailwind.ts";
-import type { JSX } from "preact";
+import type { JSX } from "@package/framework";
 
-interface Props extends JSX.HTMLAttributes<HTMLElement> {}
+type Props = JSX.IntrinsicElements["nav"];
 
-export const Menu = ({ className, ...rest }: Props) => {
+export const Menu = ({ className, children, ...rest }: Props) => {
   return (
     <nav
       {...rest}
@@ -12,6 +12,7 @@ export const Menu = ({ className, ...rest }: Props) => {
         className,
       )}
     >
+      {children}
     </nav>
   );
 };

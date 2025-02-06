@@ -1,10 +1,10 @@
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
-import type { JSX } from "preact";
+import type { Child } from "@package/framework";
 
 export const Layout = (props: {
   title: string;
-  children: JSX.Element[] | JSX.Element;
+  children: Child;
 }) => {
   const { title, children } = props;
   return (

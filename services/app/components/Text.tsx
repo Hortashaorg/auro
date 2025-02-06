@@ -1,7 +1,7 @@
 import { cn } from "@utils/tailwind.ts";
 import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { JSX } from "preact";
+import type { JSX } from "@package/framework";
 
 const textVariants = cva([], {
   variants: {
@@ -44,10 +44,10 @@ const textVariants = cva([], {
 });
 type TextVariants = NonNullableProps<typeof textVariants>;
 
-interface Props extends JSX.HTMLAttributes<HTMLDivElement>, TextVariants {}
+type Props = JSX.IntrinsicElements["div"] & TextVariants;
 
 export const Text = (
-  { variant, className, alignment = "left", ...rest }: Props,
+  { variant, className, alignment = "left", children, ...rest }: Props,
 ) => {
   const Tag = variant === "header" ? "h1" : "p";
   return (
@@ -55,6 +55,7 @@ export const Text = (
       {...rest}
       className={cn(textVariants({ variant, alignment }), className)}
     >
+      {children}
     </Tag>
   );
 };

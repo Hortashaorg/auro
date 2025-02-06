@@ -2,7 +2,7 @@ import { Text } from "@comp/Text.tsx";
 import { cn } from "@utils/tailwind.ts";
 import type { NonNullableProps } from "@utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { JSX } from "preact";
+import type { JSX } from "@package/framework";
 
 const selectVariants = cva(
   [
@@ -34,9 +34,9 @@ type SelectVariants = NonNullableProps<
   "variant" | "flow"
 >;
 
-interface Props extends JSX.HTMLAttributes<HTMLDivElement>, SelectVariants {
+type Props = JSX.IntrinsicElements["div"] & SelectVariants & {
   name: string;
-}
+};
 
 export const Select = (
   { className, variant, flow, name, children, ...rest }: Props,

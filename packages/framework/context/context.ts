@@ -1,5 +1,4 @@
-import { createContext } from "preact";
-import { useContext } from "preact/hooks";
+import { createContext, useContext } from "@hono/hono/jsx";
 
 export const RenderContext = createContext<null | Record<string, unknown>>(
   null,
