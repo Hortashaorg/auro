@@ -1,0 +1,10 @@
+---
+description: How pages are to be structured
+globs: *.tsx
+---
+# Page rules
+
+- Pages should consist of components / layout only
+- Pages has a permissing function
+- HTMX endpoints are set to be partial
+- Can contain buisness logic

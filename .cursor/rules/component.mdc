@@ -1,0 +1,12 @@
+---
+description: Component structure and styling rules
+globs: *.tsx
+---
+# Component Rules
+
+- Not include any business logic
+- Define style variants with class-variance-authority
+- Use TypeScript for prop types
+- Use the `cn()` utility for class merging
+- Follow a single responsibility principle
+- Be properly exported with clear, descriptive names
