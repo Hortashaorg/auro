@@ -81,7 +81,7 @@ export const server = pgTable("server", {
 export const account = pgTable("account", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: varchar({ length: 100 }).notNull().unique(),
-  currentServerId: uuid().references(() => server.id),
+  canCreateServer: boolean().notNull().default(false),
   createdAt: temporalTimestamp().notNull().default(sql`now()`),
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
 });

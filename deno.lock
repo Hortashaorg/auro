@@ -10,6 +10,7 @@
     "npm:@types/node@*": "22.5.4",
     "npm:class-variance-authority@~0.7.1": "0.7.1",
     "npm:clsx@^2.1.1": "2.1.1",
+    "npm:drizzle-kit@*": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-kit@~0.30.4": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-orm@~0.39.1": "0.39.1_postgres@3.4.5",
     "npm:postgres@^3.4.5": "3.4.5",

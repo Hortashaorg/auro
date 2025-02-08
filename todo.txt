@@ -1,5 +1,19 @@
-server creation
-workflow - typecheck, linting and formatting
-get resource on click (require some server setup)
-seeds (default data)
-deployment
+Logged in:
+- When logging in for the first time, an account is created for me. And I'm unable to create game servers by default.
+- When logged in, i have the option to swap to another server.
+- If account is given permission to create servers, I can create a server. I will be admin by server created by me.
+
+Administrator:
+- As administrator on a server, I can manage the game server.
+- As administrator on a server, I am unable to play on the server.
+
+Player:
+- As a player on a server, I can play on the server..
+- As a player on a server, i can see what actions are available to me.
+
+
+Technical:
+Current Server is stored as a cookie
+Workflow - typecheck, linting and formatting
+CI/CD
+Open Telemetry
