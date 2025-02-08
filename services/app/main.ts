@@ -12,6 +12,7 @@ import {
 } from "./auth.ts";
 import type { CustomContext } from "@context/index.ts";
 import { hashString } from "@package/common";
+import { Servers } from "./pages/Servers.tsx";
 
 const isPublic = (): boolean => {
   return true;
@@ -29,6 +30,11 @@ const routes = {
   },
   "design": {
     jsx: Design,
+    hasPermission: isPublic,
+    partial: false,
+  },
+  "/servers": {
+    jsx: Servers,
     hasPermission: isPublic,
     partial: false,
   },
