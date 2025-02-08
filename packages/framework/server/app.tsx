@@ -77,7 +77,7 @@ export const app = (
     app.get(path, (c: Context) => {
       return c.html(
         <Render
-          context={c.env.userContext}
+          context={c.var.customContext}
           addHmrScript={!settings.prod && !component.partial}
         >
           {component.jsx}
@@ -91,7 +91,7 @@ export const app = (
     const NotFound = settings.routes["404"];
     app.notFound((c: Context) => {
       return c.html(
-        <Render context={c.env.userContext} addHmrScript={!settings.prod}>
+        <Render context={c.var.customContext} addHmrScript={!settings.prod}>
           {NotFound.jsx}
         </Render>,
       );

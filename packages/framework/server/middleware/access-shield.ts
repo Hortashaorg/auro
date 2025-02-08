@@ -5,8 +5,9 @@ import type { Child } from "@hono/hono/jsx";
 
 export const accessShieldMiddleware = (
   routes: Record<string, {
-    jsx: () => Child;
-    hasPermission: (c: unknown) => boolean;
+    jsx: () => Promise<Child> | Child;
+    // deno-lint-ignore no-explicit-any
+    hasPermission: (c: any) => boolean;
     partial: boolean;
   }>,
   redirectNoAccess: string,
@@ -31,8 +32,7 @@ export const accessShieldMiddleware = (
     if (routeNames.length === 1) {
       const routeName = routeNames[0] ?? throwError("Assert Route Name");
       const route = routes[routeName] ?? throwError("Assert Route");
-
-      const hasPermission = route.hasPermission(c.env.userContext);
+      const hasPermission = route.hasPermission(c.var.customContext);
 
       if (hasPermission) {
         await next();

@@ -7,7 +7,6 @@ import { getContext } from "@context/index.ts";
 
 export const Navbar = () => {
   const context = getContext();
-  const url = new URL(context.honoContext.req.url);
   const isLoggedIn = !!context.account;
 
   return (
@@ -44,7 +43,7 @@ export const Navbar = () => {
             <Link
               href={`${Deno.env.get("GOOGLE_LOGIN_BASE_URL")}?client_id=${
                 Deno.env.get("GOOGLE_CLIENT_ID")
-              }&redirect_uri=${url.origin}/login&response_type=code&scope=email&access_type=offline&prompt=consent`}
+              }&redirect_uri=${context.url.origin}/login&response_type=code&scope=email&access_type=offline&prompt=consent`}
               variant="dropdownLink"
             >
               Login

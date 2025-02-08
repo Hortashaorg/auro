@@ -22,23 +22,27 @@ const isDenied = (): boolean => {
   return false;
 };
 
+const isLoggedIn = (c: CustomContext): boolean => {
+  return !!c.account;
+};
+
 const routes = {
   "/": {
     jsx: Home,
     hasPermission: isPublic,
     partial: false,
   },
-  "design": {
+  "/design": {
     jsx: Design,
     hasPermission: isPublic,
     partial: false,
   },
   "/servers": {
     jsx: Servers,
-    hasPermission: isPublic,
+    hasPermission: isLoggedIn,
     partial: false,
   },
-  "denied": {
+  "/denied": {
     jsx: Design,
     hasPermission: isDenied,
     partial: false,
@@ -78,8 +82,10 @@ const customContext = async (
     }
   }
 
+  const url = new URL(c.req.url);
+
   return {
-    honoContext: c,
+    url,
     account,
     session,
   };

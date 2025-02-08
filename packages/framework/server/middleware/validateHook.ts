@@ -14,7 +14,7 @@ export const validateHookMiddleware = (
       await next();
       return;
     }
-    const isValid = await validateHook(c.env.userContext);
+    const isValid = await validateHook(c.var.customContext);
     if (!isValid) {
       setCookie(c, "access_token", "", {
         maxAge: 0,

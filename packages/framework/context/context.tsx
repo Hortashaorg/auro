@@ -1,25 +1,19 @@
 import type { Child, FC } from "@hono/hono/jsx";
+import type { HtmlEscapedString } from "@hono/hono/utils/html";
 import { RenderContext } from "./context.ts";
 
 const RenderChild: FC<{
-  children: () => Child;
-}> = (
-  { children },
-) => {
-  return (
-    <>
-      {children()}
-    </>
-  );
+  children: () => Promise<Child> | Child;
+}> = async ({ children }): Promise<HtmlEscapedString> => {
+  const result = await children();
+  return result as HtmlEscapedString;
 };
 
 export const Render: FC<{
   context: Record<string, unknown>;
-  children: () => Child;
+  children: () => Promise<Child> | Child;
   addHmrScript: boolean;
-}> = (
-  { context, children, addHmrScript },
-) => {
+}> = ({ context, children, addHmrScript }) => {
   const hmrScript = `
       const ws = new WebSocket('ws://' + location.host + '/ws');
       ws.onclose = () => setInterval(() => location.reload(), 200);

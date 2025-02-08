@@ -18,12 +18,13 @@ export const customContextMiddleware = (
     const accessToken = getCookie(c, "access_token");
     const refreshToken = getCookie(c, "refresh_token");
 
-    c.env.userContext = await customContext(
+    const customCtx = await customContext(
       c,
       accessToken,
       refreshToken,
     );
 
+    c.set("customContext", customCtx);
     await next();
   };
 };
