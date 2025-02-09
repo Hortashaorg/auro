@@ -11,22 +11,26 @@ export const Navbar = () => {
 
   return (
     <Header>
-      {isLoggedIn && (
-        <Menu>
-          <Select name="Admin" variant="double" flow="right">
+      {isLoggedIn
+        ? (
+          <Menu>
+            <Select name="Admin" variant="double" flow="right">
+              <Link href="/admin/locations" variant="dropdownLink">
+                Locations
+              </Link>
+              <Link href="/admin/skills" variant="dropdownLink">Skills</Link>
+              <Link href="/admin/currencies" variant="dropdownLink">
+                Currencies
+              </Link>
+              <Link href="/admin/items" variant="dropdownLink">Items</Link>
+            </Select>
             <Link href="/servers" variant="dropdownLink">Servers</Link>
-            <Link href="/admin/locations" variant="dropdownLink">
-              Locations
-            </Link>
-            <Link href="/admin/skills" variant="dropdownLink">Skills</Link>
-            <Link href="/admin/currencies" variant="dropdownLink">
-              Currencies
-            </Link>
-            <Link href="/admin/items" variant="dropdownLink">Items</Link>
-          </Select>
-        </Menu>
-      )}
-      <Menu></Menu>
+          </Menu>
+        )
+        : (
+          <Menu>
+          </Menu>
+        )}
       <Menu x-data="themeData">
         <NavButton
           x-on:click="themeToggle"

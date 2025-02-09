@@ -9,7 +9,7 @@ export const Layout = (props: {
   const { title, children } = props;
   return (
     <BaseLayout title={title}>
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4" x-data="{}">
         <Navbar />
         <div>
           {children}

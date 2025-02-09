@@ -35,3 +35,14 @@ download/tailwindcss-linux-x64
 chmod +x tailwindcss-linux-x64
 mv tailwindcss-linux-x64 tailwindcli
 ```
+
+## Development
+
+This application uses Alpine.js for client-side state management and client side
+reactivity. Application uses HTMX for server side reactivity.
+
+### Page-Level State
+
+Every page automatically has its own Alpine.js state scope through the Layout
+component. This means you can use Alpine.js directives anywhere within a page
+without additional wrappers.

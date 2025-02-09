@@ -1,0 +1,9 @@
+---
+description: Alpine.js state management rules
+globs: *.tsx
+---
+# Alpine.js State Management Rules
+
+- Each page has its own Alpine.js state scope through the Layout component
+- Additional x-data scopes can be added for component-specific state
+- Modal components must share state scope with their triggers
