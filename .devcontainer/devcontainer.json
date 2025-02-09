@@ -2,7 +2,6 @@
   "name": "auro",
   "customizations": {
     "vscode": {
-      "settings": {},
       "extensions": [
         "ms-azuretools.vscode-docker",
         "yoavbls.pretty-ts-errors",
