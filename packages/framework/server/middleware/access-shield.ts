@@ -2,12 +2,14 @@ import type { Context, Next } from "@hono/hono";
 import { isPublic } from "../util/index.ts";
 import { throwError } from "@package/common";
 import type { Child } from "@hono/hono/jsx";
+import type * as v from "@valibot/valibot";
 
 export const accessShieldMiddleware = (
   routes: Record<string, {
     jsx: () => Promise<Child> | Child;
     // deno-lint-ignore no-explicit-any
     hasPermission: (c: any) => boolean;
+    formValidationSchema?: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
     partial: boolean;
   }>,
   redirectNoAccess: string,

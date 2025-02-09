@@ -6,3 +6,4 @@ export { setCookie } from "@hono/hono/cookie";
 export { getCookie } from "@hono/hono/cookie";
 export type { JSX } from "@hono/hono/jsx";
 export type { Child } from "@hono/hono/jsx";
+export * as v from "@valibot/valibot";

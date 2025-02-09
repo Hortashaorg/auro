@@ -1,5 +1,5 @@
 import { type Context, Hono } from "@hono/hono";
-
+import { validator } from "@hono/hono/validator";
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import { loginMiddleware } from "./middleware/login.ts";
 import { logoutMiddleware } from "./middleware/logout.ts";
@@ -8,6 +8,7 @@ import { customContextMiddleware } from "./middleware/custom-context.ts";
 import { validateHookMiddleware } from "./middleware/validateHook.ts";
 import { accessShieldMiddleware } from "./middleware/access-shield.ts";
 import { Render } from "../context/context.tsx";
+import * as v from "@valibot/valibot";
 
 /** Init Framework App */
 export const app = (
@@ -74,16 +75,38 @@ export const app = (
       continue;
     }
 
-    app.get(path, (c: Context) => {
-      return c.html(
-        <Render
-          context={c.var.customContext}
-          addHmrScript={!settings.prod && !component.partial}
-        >
-          {component.jsx}
-        </Render>,
+    if (component.formValidationSchema) {
+      app.all(
+        path,
+        validator("form", (value) => {
+          return v.parse(component.formValidationSchema!, value);
+        }),
+        (c: Context) => {
+          return c.html(
+            <Render
+              context={c.var.customContext}
+              addHmrScript={!settings.prod && !component.partial}
+            >
+              {component.jsx}
+            </Render>,
+          );
+        },
       );
-    });
+    } else {
+      app.all(
+        path,
+        (c: Context) => {
+          return c.html(
+            <Render
+              context={c.var.customContext}
+              addHmrScript={!settings.prod && !component.partial}
+            >
+              {component.jsx}
+            </Render>,
+          );
+        },
+      );
+    }
   }
 
   /** Not Found */

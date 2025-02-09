@@ -13,7 +13,7 @@ import {
   validateHook,
 } from "./auth.ts";
 import type { CustomContext } from "@context/index.ts";
-import { CreateServer } from "@api/CreateServer.tsx";
+import { CreateServer, CreateServerSchema } from "@api/CreateServer.tsx";
 
 const isPublic = (): boolean => {
   return true;
@@ -61,6 +61,7 @@ const routes = {
   "/api/create-server": {
     jsx: CreateServer,
     hasPermission: isLoggedIn,
+    formValidationSchema: CreateServerSchema,
     partial: false,
   },
 } as const;
