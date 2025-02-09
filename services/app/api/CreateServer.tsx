@@ -2,7 +2,9 @@ import { getContext } from "@context/index.ts";
 import { v } from "@package/framework";
 export const CreateServer = () => {
   const context = getContext();
-  const data = context.req.valid("form");
+  const data = context.req.valid("form") as v.InferOutput<
+    typeof CreateServerSchema
+  >;
   console.log(data);
 
   return <p>response</p>;
