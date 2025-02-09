@@ -79,7 +79,7 @@ export const app = (
       app.all(
         path,
         validator("form", (value) => {
-          return v.parse(component.formValidationSchema!, value);
+          return v.safeParse(component.formValidationSchema!, value);
         }),
         (c: Context) => {
           return c.html(
