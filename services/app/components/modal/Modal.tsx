@@ -19,31 +19,38 @@ export const Modal = ({
   return (
     <dialog
       className={cn(
+        "fixed inset-0 m-auto",
         "backdrop:bg-background-950/50",
-        "p-6",
+        "w-full max-w-md",
         "rounded-lg",
-        "dark:bg-background-800",
-        "bg-background-100",
-        "w-full",
-        "max-w-md",
-        "border-2",
-        "dark:border-background-500",
-        "border-background-500",
+        "dark:bg-background-800 bg-background-100",
+        "border dark:border-background-700 border-background-300",
+        "shadow-lg",
         className,
       )}
       x-ref={modalRef}
       {...props}
     >
-      <Flex direction="col" gap={4}>
-        <Flex justify="between" align="center">
+      <Flex direction="col" gap={4} className="p-6 w-full">
+        <div className="flex items-center justify-between w-full">
           <Text variant="header" className="text-xl">{title}</Text>
           <Button
             variant="outline"
+            className="!p-2 !border-0 hover:bg-background-200 dark:hover:bg-background-700 rounded-full"
             x-on:click={`$refs.${modalRef}.close()`}
           >
-            ✕
+            <svg
+              className="w-4 h-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
           </Button>
-        </Flex>
+        </div>
         {children}
       </Flex>
     </dialog>
