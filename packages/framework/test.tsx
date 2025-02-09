@@ -4,49 +4,66 @@ import * as v from "@valibot/valibot";
 import type { FC } from "@hono/hono/jsx";
 import { createContext, useContext } from "@hono/hono/jsx";
 
+type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
+// Define the route configuration type
+type RouteConfig<TPath extends string, TFormValidation extends BaseSchema> = {
+  path: TPath;
+  formValidationSchema: TFormValidation;
+};
+
+// Define custom environment type for the validation result
+type ValidatedInput<T extends BaseSchema> = {
+  in: {
+    form: unknown;
+  };
+  out: {
+    form: v.SafeParseResult<T>;
+  };
+};
+
 export const createRoute = <
   TPath extends string,
-  TSchema extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
->(config: {
-  path: TPath;
-  validationSchema: TSchema;
-}) => {
+  TFormValidation extends BaseSchema,
+>(config: RouteConfig<TPath, TFormValidation>) => {
+  // Create a new Hono instance with the validated environment
   const app = new Hono();
 
-  type PathContext = Context<Record<string | number | symbol, never>, TPath, {
-    out: {
-      form: v.SafeParseResult<TSchema>;
-    };
-  }>;
-
-  const RenderContext = createContext<
-    | null
-    | PathContext
+  // Create a strongly typed context
+  const RouteContext = createContext<
+    Context<
+      Record<string | number | symbol, never>,
+      TPath,
+      ValidatedInput<TFormValidation>
+    > | null
   >(null);
 
   app.all(
     "/",
     validator("form", (values) => {
-      return v.safeParse(config.validationSchema, values);
+      return v.safeParse(config.formValidationSchema, values);
     }),
     (c) => {
       return c.html(
-        <RenderContext.Provider value={c}>
-          <Test />
-        </RenderContext.Provider>,
+        <RouteContext.Provider value={c}>
+          <Home />
+        </RouteContext.Provider>,
       );
     },
   );
 
   return {
     app,
-    context: () => useContext(RenderContext) as PathContext,
+    context: () => {
+      const ctx = useContext(RouteContext);
+      if (!ctx) throw new Error("Route context must be used within a route");
+      return ctx;
+    },
   };
 };
 
-const app2 = createRoute({
+const homeRoute = createRoute({
   path: "/",
-  validationSchema: v.object({
+  formValidationSchema: v.object({
     name: v.string(),
   }),
 });
@@ -54,7 +71,7 @@ const app2 = createRoute({
 export const server = () => {
   const app = new Hono();
 
-  app.route("/", app2.app);
+  app.route("/", homeRoute.app);
 
   return Deno.serve({
     port: 4001,
@@ -62,11 +79,14 @@ export const server = () => {
   }, app.fetch);
 };
 
-export const Test: FC = () => {
-  const form = app2.context().req.valid("form");
-  console.log(form);
+export const Home: FC = () => {
+  const form = homeRoute.context().req.valid("form");
+  if (form.success) {
+    form.output.name;
+    console.log(form.output.name);
+  }
 
-  return <p>hello world</p>;
+  return <p>Home page</p>;
 };
 
 server();
