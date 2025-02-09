@@ -22,7 +22,6 @@ export const Render: FC<{
   return (
     <RenderContext.Provider value={context}>
       <RenderChild children={children} />
-      <script dangerouslySetInnerHTML={{ __html: hmrScript }} />
       {addHmrScript && (
         <script dangerouslySetInnerHTML={{ __html: hmrScript }} />
       )}

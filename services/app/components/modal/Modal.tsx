@@ -16,6 +16,8 @@ export const Modal = ({
   modalRef,
   ...props
 }: Props) => {
+  props["x-on:close-dialog.window"] = `$refs.${modalRef}.close()`;
+
   return (
     <dialog
       className={cn(
@@ -36,7 +38,7 @@ export const Modal = ({
           <Text variant="header" className="text-xl">{title}</Text>
           <Button
             variant="outline"
-            className="!p-2 !border-0 hover:bg-background-200 dark:hover:bg-background-700 rounded-full"
+            className="p-2 border-0 hover:bg-background-200 dark:hover:bg-background-700 rounded-full"
             x-on:click={`$refs.${modalRef}.close()`}
           >
             <svg
