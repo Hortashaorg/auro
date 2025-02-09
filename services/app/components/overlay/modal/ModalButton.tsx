@@ -1,4 +1,4 @@
-import { Button } from "@comp/Button.tsx";
+import { Button } from "@comp/inputs/Button.tsx";
 import type { JSX } from "@package/framework";
 
 type Props = JSX.IntrinsicElements["button"] & {

@@ -1,6 +1,6 @@
-import { Button } from "@comp/Button.tsx";
-import { Card } from "@comp/Card.tsx";
-import { Text } from "@comp/Text.tsx";
+import { Button } from "@comp/inputs/Button.tsx";
+import { Card } from "@comp/layout/Card.tsx";
+import { Text } from "@comp/content/Text.tsx";
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
 
 export const Design = () => {

@@ -1,13 +1,13 @@
 import { Layout } from "@layouts/Layout.tsx";
-import { Text } from "@comp/Text.tsx";
-import { Card } from "@comp/Card.tsx";
+import { Text } from "@comp/content/Text.tsx";
+import { Card } from "@comp/layout/Card.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
 import { Flex } from "@comp/layout/Flex.tsx";
-import { Badge } from "@comp/Badge.tsx";
-import { Modal } from "@comp/modal/Modal.tsx";
-import { ButtonLink } from "@comp/ButtonLink.tsx";
+import { Modal } from "@comp/overlay/modal/Modal.tsx";
+import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 import { db } from "@package/database";
-import { ModalButton } from "@comp/modal/ModalButton.tsx";
+import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
+import { Badge } from "@comp/content/Badge.tsx";
 
 export const Servers = async () => {
   // Fetch all servers

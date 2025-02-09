@@ -1,8 +1,8 @@
-import { Header } from "@sections/navbar/components/Header.tsx";
-import { Link } from "@sections/navbar/components/Link.tsx";
-import { Menu } from "@sections/navbar/components/Menu.tsx";
-import { NavButton } from "@sections/navbar/components/NavButton.tsx";
-import { Select } from "@sections/navbar/components/Select.tsx";
+import { Header } from "@comp/navigation/Header.tsx";
+import { Link } from "@comp/navigation/Link.tsx";
+import { Menu } from "@comp/navigation/Menu.tsx";
+import { NavButton } from "@comp/navigation/NavButton.tsx";
+import { Select } from "@comp/navigation/Select.tsx";
 import { getContext } from "@context/index.ts";
 
 export const Navbar = () => {
