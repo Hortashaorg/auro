@@ -10,3 +10,5 @@ globs: *.tsx
 - Use the `cn()` utility for class merging
 - Follow a single responsibility principle
 - Be properly exported with clear, descriptive names
+- Keep base components framework-agnostic (no HTMX/Alpine.js specific logic)
+- Pass framework-specific attributes through props

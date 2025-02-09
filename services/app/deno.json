@@ -11,7 +11,9 @@
     "@comp/": "./components/",
     "@layouts/": "./layouts/",
     "@sections/": "./sections/",
-    "@context/": "./context/"
+    "@context/": "./context/",
+    "@pages/": "./pages/",
+    "@api/": "./api/"
   },
   "tasks": {
     "typecheck": "deno check .",

@@ -1,9 +1,11 @@
 import { db, type schema } from "@package/database";
 import { app, type Context } from "@package/framework";
-import { NotFound } from "./pages/404.tsx";
-import { Design } from "./pages/Design.tsx";
-import { Home } from "./pages/Home.tsx";
-import { Error } from "./pages/500.tsx";
+import { hashString } from "@package/common";
+import { NotFound } from "@pages/404.tsx";
+import { Design } from "@pages/Design.tsx";
+import { Home } from "@pages/Home.tsx";
+import { Error } from "@pages/500.tsx";
+import { Servers } from "@pages/Servers.tsx";
 import {
   authCodeLoginLogic,
   logoutLogic,
@@ -11,8 +13,7 @@ import {
   validateHook,
 } from "./auth.ts";
 import type { CustomContext } from "@context/index.ts";
-import { hashString } from "@package/common";
-import { Servers } from "./pages/Servers.tsx";
+import { CreateServer } from "@api/CreateServer.tsx";
 
 const isPublic = (): boolean => {
   return true;
@@ -57,6 +58,11 @@ const routes = {
     hasPermission: isPublic,
     partial: false,
   },
+  "/api/create-server": {
+    jsx: CreateServer,
+    hasPermission: isLoggedIn,
+    partial: false,
+  },
 } as const;
 
 const customContext = async (
@@ -85,6 +91,7 @@ const customContext = async (
   const url = new URL(c.req.url);
 
   return {
+    req: c.req,
     url,
     account,
     session,

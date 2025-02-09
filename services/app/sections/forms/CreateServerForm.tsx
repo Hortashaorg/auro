@@ -10,7 +10,7 @@ export const CreateServerForm = ({ ...props }: Props) => {
   return (
     <Form
       {...props}
-      hx-post="/api/servers"
+      hx-post="/api/create-server"
       hx-target="#serverList"
       hx-swap="innerHTML"
     >
