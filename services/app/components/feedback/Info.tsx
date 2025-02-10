@@ -8,7 +8,7 @@ const infoVariants = cva([
   "p-4",
   "flex",
   "gap-3",
-  "items-start",
+  "items-center",
 ], {
   variants: {
     variant: {
@@ -53,7 +53,7 @@ export const Info = ({ className, variant, children, ...props }: Props) => {
       className={cn(infoVariants({ variant }), className)}
       {...props}
     >
-      <div className="shrink-0">
+      <div className="shrink-0 flex items-center">
         {variant === "info" && (
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
             <path
