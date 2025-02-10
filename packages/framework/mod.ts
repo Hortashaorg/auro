@@ -9,4 +9,5 @@ export * as v from "@valibot/valibot";
 export {
   createRoute,
   type ExtractContextFromRoute,
+  type ExtractCustomContextFromRoute,
 } from "./routing/create-route.tsx";
