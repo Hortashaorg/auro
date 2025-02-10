@@ -2,8 +2,8 @@
   "name": "@package/framework",
   "exports": "./mod.ts",
   "imports": {
-    "@hono/hono": "jsr:@hono/hono@^4.6.19",
-    "@valibot/valibot": "jsr:@valibot/valibot@^0.42.1"
+    "@hono/hono": "jsr:@hono/hono@^4.7.0",
+    "@valibot/valibot": "jsr:@valibot/valibot@^1.0.0-rc.0"
   },
   "tasks": {
     "typecheck": "deno check .",

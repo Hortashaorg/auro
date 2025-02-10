@@ -1,26 +1,27 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@hono/hono@*": "4.6.19",
-    "jsr:@hono/hono@^4.6.19": "4.6.19",
+    "jsr:@hono/hono@*": "4.7.0",
+    "jsr:@hono/hono@^4.7.0": "4.7.0",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.7": "1.0.7",
-    "jsr:@std/fs@^1.0.10": "1.0.10",
+    "jsr:@std/fs@^1.0.11": "1.0.11",
     "jsr:@std/path@^1.0.8": "1.0.8",
-    "jsr:@valibot/valibot@~0.42.1": "0.42.1",
+    "jsr:@valibot/valibot@^1.0.0-rc.0": "1.0.0-rc.0",
     "npm:@types/node@*": "22.5.4",
     "npm:class-variance-authority@~0.7.1": "0.7.1",
     "npm:clsx@^2.1.1": "2.1.1",
     "npm:drizzle-kit@*": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-kit@~0.30.4": "0.30.4_esbuild@0.19.12",
-    "npm:drizzle-orm@~0.39.1": "0.39.1_postgres@3.4.5",
+    "npm:drizzle-orm@~0.39.1": "0.39.2_postgres@3.4.5",
+    "npm:drizzle-orm@~0.39.2": "0.39.2_postgres@3.4.5",
     "npm:postgres@^3.4.5": "3.4.5",
     "npm:tailwind-merge@^3.0.1": "3.0.1",
-    "npm:tailwindcss@^4.0.1": "4.0.1"
+    "npm:tailwindcss@^4.0.5": "4.0.5"
   },
   "jsr": {
-    "@hono/hono@4.6.19": {
-      "integrity": "5ba1bd0ef74449c0a647f029e29896776c30fb64aefbcef8724af4ce4846791b"
+    "@hono/hono@4.7.0": {
+      "integrity": "1eb10e1976d3dda22ab43115ecfa348a43cd17c8aea5c0039c9757ebded624f8"
     },
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
@@ -28,8 +29,8 @@
     "@std/encoding@1.0.7": {
       "integrity": "f631247c1698fef289f2de9e2a33d571e46133b38d042905e3eac3715030a82d"
     },
-    "@std/fs@1.0.10": {
-      "integrity": "bf041f9d7a0a460817f0421be8946d0e06011b3433e6c83a215628de5e3c7c2c",
+    "@std/fs@1.0.11": {
+      "integrity": "ba674672693340c5ebdd018b4fe1af46cb08741f42b4c538154e97d217b55bdd",
       "dependencies": [
         "jsr:@std/path"
       ]
@@ -37,8 +38,8 @@
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
     },
-    "@valibot/valibot@0.42.1": {
-      "integrity": "ba0f6f7964aaeec0e4b1f793d575061f325ae6254cbb9d7ff01fb65068a0a23b"
+    "@valibot/valibot@1.0.0-rc.0": {
+      "integrity": "2937c0444f9b1bffee13a8e918e9cb1c9706effd1098226edf09a90129b1ea87"
     }
   },
   "npm": {
@@ -227,8 +228,8 @@
         "esbuild-register"
       ]
     },
-    "drizzle-orm@0.39.1_postgres@3.4.5": {
-      "integrity": "sha512-2bDHlzTY31IDmrYn8i+ZZrxK8IyBD4mPZ7JmZdVDQj2tpBZXs/gxB/1kK5pSvkjxPUMNOVsTnoGkSltgjuJwcA==",
+    "drizzle-orm@0.39.2_postgres@3.4.5": {
+      "integrity": "sha512-cuopo+udkKEGGpSxCML9ZRQ43R01zYCTsbqCrb9kJkabx1QEwFlPIFoQfx6E6tuawtiX930Gwyrkwj4inlpzDg==",
       "dependencies": [
         "postgres"
       ]
@@ -323,8 +324,8 @@
     "tailwind-merge@3.0.1": {
       "integrity": "sha512-AvzE8FmSoXC7nC+oU5GlQJbip2UO7tmOhOfQyOmPhrStOGXHU08j8mZEHZ4BmCqY5dWTCo4ClWkNyRNx1wpT0g=="
     },
-    "tailwindcss@4.0.1": {
-      "integrity": "sha512-UK5Biiit/e+r3i0O223bisoS5+y7ZT1PM8Ojn0MxRHzXN1VPZ2KY6Lo6fhu1dOfCfyUAlK7Lt6wSxowRabATBw=="
+    "tailwindcss@4.0.5": {
+      "integrity": "sha512-DZZIKX3tA23LGTjHdnwlJOTxfICD1cPeykLLsYF1RQBI9QsCR3i0szohJfJDVjr6aNRAIio5WVO7FGB77fRHwg=="
     },
     "undici-types@6.19.8": {
       "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
@@ -333,7 +334,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@*",
-      "jsr:@std/fs@^1.0.10",
+      "jsr:@std/fs@^1.0.11",
       "jsr:@std/path@^1.0.8"
     ],
     "members": {
@@ -346,14 +347,14 @@
       "packages/database": {
         "dependencies": [
           "npm:drizzle-kit@~0.30.4",
-          "npm:drizzle-orm@~0.39.1",
+          "npm:drizzle-orm@~0.39.2",
           "npm:postgres@^3.4.5"
         ]
       },
       "packages/framework": {
         "dependencies": [
-          "jsr:@hono/hono@^4.6.19",
-          "jsr:@valibot/valibot@~0.42.1"
+          "jsr:@hono/hono@^4.7.0",
+          "jsr:@valibot/valibot@^1.0.0-rc.0"
         ]
       },
       "services/app": {
@@ -361,7 +362,7 @@
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
           "npm:tailwind-merge@^3.0.1",
-          "npm:tailwindcss@^4.0.1"
+          "npm:tailwindcss@^4.0.5"
         ]
       }
     }
