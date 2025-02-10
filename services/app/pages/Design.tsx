@@ -4,11 +4,12 @@ import { BaseLayout } from "@layouts/BaseLayout.tsx";
 import { createRoute, v } from "@package/framework";
 import { isPublic } from "@permissions/index.ts";
 
-const Design = () => {
+const Design = async () => {
   const context = designRoute.context();
+  const customContext = await designRoute.customContext();
   const form = context.req.valid("form");
   console.log(form);
-
+  console.log(customContext);
   return (
     <BaseLayout title="Deno Hot Dude">
       <>

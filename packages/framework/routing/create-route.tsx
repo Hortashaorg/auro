@@ -13,10 +13,17 @@ type RouteContext<TPath extends string, TFormValidation extends BaseSchema> =
     ValidatedInput<TFormValidation>
   >;
 
-type RouteConfig<TPath extends string, TFormValidation extends BaseSchema> = {
+type RouteConfig<
+  TPath extends string,
+  TFormValidation extends BaseSchema,
+  TCustomContext extends (
+    c: RouteContext<TPath, TFormValidation>,
+  ) => unknown | Promise<unknown>,
+> = {
   path: TPath;
   formValidationSchema: TFormValidation;
   hasPermission: (c: RouteContext<TPath, TFormValidation>) => boolean;
+  customContext?: TCustomContext;
   component: () => Promise<HtmlEscapedString> | HtmlEscapedString;
   partial: boolean;
   hmr: boolean;
@@ -41,7 +48,10 @@ export const INTERNAL_APP = Symbol("_app");
 export const createRoute = <
   TPath extends string,
   TFormValidation extends BaseSchema,
->(config: RouteConfig<TPath, TFormValidation>) => {
+  TCustomContext extends (
+    c: RouteContext<TPath, TFormValidation>,
+  ) => unknown | Promise<unknown> = () => null,
+>(config: RouteConfig<TPath, TFormValidation, TCustomContext>) => {
   const RenderChild: FC<{
     children: () => Promise<HtmlEscapedString> | HtmlEscapedString;
   }> = async ({ children }): Promise<HtmlEscapedString> => {
@@ -83,8 +93,14 @@ export const createRoute = <
     [INTERNAL_APP]: app,
     context: () => {
       const ctx = useContext(RouteContext);
-      if (!ctx) throw new Error("Route context must be used within a route");
+      if (!ctx) throw new Error("Unable to generate context");
       return ctx;
+    },
+    customContext: async () => {
+      const ctx = useContext(RouteContext);
+      if (!ctx) throw new Error("Unable to generate context");
+      const res = config.customContext ? await config.customContext(ctx) : null;
+      return res as Awaited<ReturnType<TCustomContext>>;
     },
   };
 };
