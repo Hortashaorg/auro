@@ -1,12 +1,12 @@
 import type { Context, Next } from "@hono/hono";
 import { isPublic } from "../util/index.ts";
 import { throwError } from "@package/common";
-import type { Child } from "@hono/hono/jsx";
+import type { HtmlEscapedString } from "@hono/hono/utils/html";
 import type * as v from "@valibot/valibot";
 
 export const accessShieldMiddleware = (
   routes: Record<string, {
-    jsx: () => Promise<Child> | Child;
+    jsx: () => Promise<HtmlEscapedString> | HtmlEscapedString;
     // deno-lint-ignore no-explicit-any
     hasPermission: (c: any) => boolean;
     formValidationSchema?: v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;

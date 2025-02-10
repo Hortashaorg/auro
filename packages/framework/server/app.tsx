@@ -9,7 +9,8 @@ import { validateHookMiddleware } from "./middleware/validateHook.ts";
 import { accessShieldMiddleware } from "./middleware/access-shield.ts";
 import { Render } from "../context/context.tsx";
 import * as v from "@valibot/valibot";
-
+import type { createRoute } from "../routing/create-route.tsx";
+import { INTERNAL_APP } from "../routing/create-route.tsx";
 /** Init Framework App */
 export const app = (
   settings: {
@@ -145,6 +146,44 @@ export const app = (
       }),
     );
   }
+
+  /** Serve */
+  return Deno.serve({
+    port: settings.port,
+    hostname: "127.0.0.1",
+  }, app.fetch);
+};
+
+/** Init Framework App */
+export const app2 = (
+  settings: {
+    routes: ReturnType<typeof createRoute>[];
+    port: number;
+  },
+): Deno.HttpServer<Deno.NetAddr> => {
+  const app = new Hono({
+    strict: true,
+  });
+
+  /** Static Files */
+  app.use(
+    "/public/*",
+    serveStatic({
+      root: `/`,
+    }),
+  );
+
+  for (const route of settings.routes) {
+    app.route("/", route[INTERNAL_APP]);
+  }
+
+  /** Hot Reload in development */
+  app.get(
+    "/ws",
+    upgradeWebSocket(() => {
+      return {};
+    }),
+  );
 
   /** Serve */
   return Deno.serve({

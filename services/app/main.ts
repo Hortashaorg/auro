@@ -1,8 +1,8 @@
 import { db, type schema } from "@package/database";
-import { app, type Context } from "@package/framework";
+import { app, app2, type GeneralContext } from "@package/framework";
 import { hashString } from "@package/common";
 import { NotFound } from "@pages/404.tsx";
-import { Design } from "@pages/Design.tsx";
+import { designRoute } from "@pages/Design.tsx";
 import { Home } from "@pages/Home.tsx";
 import { Error } from "@pages/500.tsx";
 import { Servers } from "@pages/Servers.tsx";
@@ -14,14 +14,7 @@ import {
 } from "./auth.ts";
 import type { CustomContext } from "@context/index.ts";
 import { CreateServer, CreateServerSchema } from "@api/CreateServer.tsx";
-
-const isPublic = (): boolean => {
-  return true;
-};
-
-const isDenied = (): boolean => {
-  return false;
-};
+import { isPublic } from "@permissions/index.ts";
 
 const isLoggedIn = (c: CustomContext): boolean => {
   return !!c.account;
@@ -33,19 +26,9 @@ const routes = {
     hasPermission: isPublic,
     partial: false,
   },
-  "/design": {
-    jsx: Design,
-    hasPermission: isPublic,
-    partial: false,
-  },
   "/servers": {
     jsx: Servers,
     hasPermission: isLoggedIn,
-    partial: false,
-  },
-  "/denied": {
-    jsx: Design,
-    hasPermission: isDenied,
     partial: false,
   },
   404: {
@@ -67,7 +50,7 @@ const routes = {
 } as const;
 
 const customContext = async (
-  c: Context,
+  c: GeneralContext,
   accessToken?: string,
 ): Promise<CustomContext> => {
   let account: typeof schema.account.$inferSelect | undefined;
@@ -112,4 +95,11 @@ app({
   logoutLogic,
   validateHook,
   port: 4000,
+});
+
+app2({
+  routes: [
+    designRoute,
+  ],
+  port: 4001,
 });

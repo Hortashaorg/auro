@@ -1,9 +1,9 @@
 import { hashString, throwError } from "@package/common";
-import { type Context, decode, getCookie } from "@package/framework";
+import { decode, type GeneralContext, getCookie } from "@package/framework";
 import { db, eq, lt, schema, sql } from "@package/database";
 import type { CustomContext } from "@context/index.ts";
 
-export const authCodeLoginLogic = async (c: Context) => {
+export const authCodeLoginLogic = async (c: GeneralContext) => {
   const code = new URL(c.req.url).searchParams.get("code") ??
     throwError("Missing auth code");
 
@@ -72,7 +72,7 @@ export const authCodeLoginLogic = async (c: Context) => {
   } as const;
 };
 
-export const refreshTokenLogic = async (c: Context) => {
+export const refreshTokenLogic = async (c: GeneralContext) => {
   const refreshToken = getCookie(c, "refresh_token");
 
   if (!refreshToken) {
@@ -136,7 +136,7 @@ export const refreshTokenLogic = async (c: Context) => {
   } as const;
 };
 
-export const logoutLogic = async (c: Context) => {
+export const logoutLogic = async (c: GeneralContext) => {
   const refreshToken = getCookie(c, "refresh_token");
 
   if (refreshToken) {

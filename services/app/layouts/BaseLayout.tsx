@@ -1,10 +1,12 @@
-import type { Child } from "@package/framework";
+import type { JSX } from "@package/framework";
 
-export const BaseLayout = (props: {
+type Props = JSX.IntrinsicElements["body"] & {
   title: string;
-  children: Child;
-}) => {
-  const { title, children } = props;
+};
+export const BaseLayout = ({
+  title,
+  children,
+}: Props) => {
   return (
     <html lang="en" id="page">
       <head>
