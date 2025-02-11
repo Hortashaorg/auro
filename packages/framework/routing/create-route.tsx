@@ -11,21 +11,49 @@ type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
 type RouteContext<
   TPath extends string,
   TFormValidation extends BaseSchema | undefined,
+  TCookieValidation extends BaseSchema | undefined,
+  THeaderValidation extends BaseSchema | undefined,
+  TJsonValidation extends BaseSchema | undefined,
+  TParamValidation extends BaseSchema | undefined,
+  TQueryValidation extends BaseSchema | undefined,
 > = Context<
   Record<string | number | symbol, never>,
   TPath,
-  ValidatedInput<TFormValidation>
->;
-
-// Validation types provided the valibot schema
-type ValidatedInput<T extends BaseSchema | undefined> = T extends BaseSchema ? {
-    in: { form: unknown };
-    out: { form: v.SafeParseResult<T> };
+  {
+    in:
+      & (TFormValidation extends BaseSchema ? { form: unknown }
+        : Record<never, unknown>)
+      & (TCookieValidation extends BaseSchema ? { cookie: unknown }
+        : Record<never, unknown>)
+      & (THeaderValidation extends BaseSchema ? { header: unknown }
+        : Record<never, unknown>)
+      & (TJsonValidation extends BaseSchema ? { json: unknown }
+        : Record<never, unknown>)
+      & (TParamValidation extends BaseSchema ? { param: unknown }
+        : Record<never, unknown>)
+      & (TQueryValidation extends BaseSchema ? { query: unknown }
+        : Record<never, unknown>);
+    out:
+      & (TFormValidation extends BaseSchema
+        ? { form: v.SafeParseResult<TFormValidation> }
+        : Record<never, unknown>)
+      & (TCookieValidation extends BaseSchema
+        ? { cookie: v.SafeParseResult<TCookieValidation> }
+        : Record<never, unknown>)
+      & (THeaderValidation extends BaseSchema
+        ? { header: v.SafeParseResult<THeaderValidation> }
+        : Record<never, unknown>)
+      & (TJsonValidation extends BaseSchema
+        ? { json: v.SafeParseResult<TJsonValidation> }
+        : Record<never, unknown>)
+      & (TParamValidation extends BaseSchema
+        ? { param: v.SafeParseResult<TParamValidation> }
+        : Record<never, unknown>)
+      & (TQueryValidation extends BaseSchema
+        ? { query: v.SafeParseResult<TQueryValidation> }
+        : Record<never, unknown>);
   }
-  : {
-    in: Record<string, never>;
-    out: Record<string, never>;
-  };
+>;
 
 // Helper to extract context from route
 export type ExtractContextFromRoute<T extends ReturnType<typeof createRoute>> =
@@ -47,13 +75,34 @@ export const INTERNAL_APP = Symbol("_app");
 export const createRoute = <
   TPath extends string,
   TFormValidation extends BaseSchema | undefined = undefined,
+  TCookieValidation extends BaseSchema | undefined = undefined,
+  THeaderValidation extends BaseSchema | undefined = undefined,
+  TJsonValidation extends BaseSchema | undefined = undefined,
+  TParamValidation extends BaseSchema | undefined = undefined,
+  TQueryValidation extends BaseSchema | undefined = undefined,
   TCustomContextReturnType = undefined,
+  TContextType = RouteContext<
+    TPath,
+    TFormValidation,
+    TCookieValidation,
+    THeaderValidation,
+    TJsonValidation,
+    TParamValidation,
+    TQueryValidation
+  >,
 >(config: {
   path: TPath;
   formValidationSchema?: TFormValidation;
-  hasPermission: (c: RouteContext<TPath, TFormValidation>) => boolean;
+  cookieValidationSchema?: TCookieValidation;
+  headerValidationSchema?: THeaderValidation;
+  jsonValidationSchema?: TJsonValidation;
+  paramValidationSchema?: TParamValidation;
+  queryValidationSchema?: TQueryValidation;
+  hasPermission: (
+    c: TContextType,
+  ) => boolean;
   customContext?: (
-    c: RouteContext<TPath, TFormValidation>,
+    c: TContextType,
   ) => TCustomContextReturnType;
   component: () => Promise<HtmlEscapedString> | HtmlEscapedString;
   partial: boolean;
@@ -72,19 +121,34 @@ export const createRoute = <
 
   // Create a context for the route.
   const RouteContext = createContext<
-    RouteContext<TPath, TFormValidation> | null
+    TContextType | null
   >(null);
+
+  const validators = [
+    validator("form", (values) => {
+      return v.safeParse(config.formValidationSchema!, values);
+    }),
+    validator("cookie", (values) => {
+      return v.safeParse(config.cookieValidationSchema!, values);
+    }),
+    validator("header", (values) => {
+      return v.safeParse(config.headerValidationSchema!, values);
+    }),
+    validator("json", (values) => {
+      return v.safeParse(config.jsonValidationSchema!, values);
+    }),
+    validator("param", (values) => {
+      return v.safeParse(config.paramValidationSchema!, values);
+    }),
+    validator("query", (values) => {
+      return v.safeParse(config.queryValidationSchema!, values);
+    }),
+  ] as const;
 
   // Create a new route with the given path.
   app.all(
     config.path,
-    ...(config.formValidationSchema
-      ? [
-        validator("form", (values) => {
-          return v.safeParse(config.formValidationSchema!, values);
-        }),
-      ]
-      : []),
+    ...validators,
     (c) => {
       // HMR script development purposes only.
       const hmrScript = `
@@ -95,7 +159,7 @@ export const createRoute = <
       // Provide the context to the route, and render via child component.
       return c.html(
         <RouteContext.Provider
-          value={c as RouteContext<TPath, TFormValidation>}
+          value={c as TContextType}
         >
           <RenderChild children={config.component} />
           {(!config.partial && config.hmr) && (

@@ -5,8 +5,11 @@ import { createRoute, v } from "@package/framework";
 import { isPublic } from "@permissions/index.ts";
 
 const Design = async () => {
-  const context = await designRoute.customContext();
+  const context = designRoute.context().req.valid("query");
   console.log(context);
+  if (context.success) {
+    context.output.name;
+  }
 
   return (
     <BaseLayout title="Deno Hot Dude">
@@ -104,11 +107,15 @@ export const designRoute = createRoute({
   path: "/design",
   component: Design,
   hasPermission: isPublic,
-  formValidationSchema: DesignFormSchema,
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
+  cookieValidationSchema: DesignFormSchema,
+  headerValidationSchema: DesignFormSchema,
+  jsonValidationSchema: DesignFormSchema,
+  paramValidationSchema: DesignFormSchema,
+  queryValidationSchema: DesignFormSchema,
   customContext: (c) => {
-    c.req.valid("form");
+    c.req.valid("cookie");
     return {
       name: "hello world",
     };
