@@ -25,3 +25,10 @@ Open Telemetry
 
 New Routing Strategy:
 Add more validation options for the route
+
+App2 Implementation:
+- Permission on route must be implemented
+- Create login route with auth flow
+- Create logout route with auth flow
+- Add error handling with 404/500 routes at app level
+- Add production mode configuration (Could possibly be done better)
