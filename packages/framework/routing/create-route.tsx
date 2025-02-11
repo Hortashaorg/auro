@@ -8,22 +8,24 @@ import type { HtmlEscapedString } from "@hono/hono/utils/html";
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
 
 // Helper to define hono context type for specific route
-type RouteContext<TPath extends string, TFormValidation extends BaseSchema> =
-  Context<
-    Record<string | number | symbol, never>,
-    TPath,
-    ValidatedInput<TFormValidation>
-  >;
+type RouteContext<
+  TPath extends string,
+  TFormValidation extends BaseSchema | undefined,
+> = Context<
+  Record<string | number | symbol, never>,
+  TPath,
+  ValidatedInput<TFormValidation>
+>;
 
 // Validation types provided the valibot schema
-type ValidatedInput<T extends BaseSchema> = {
-  in: {
-    form: unknown;
+type ValidatedInput<T extends BaseSchema | undefined> = T extends BaseSchema ? {
+    in: { form: unknown };
+    out: { form: v.SafeParseResult<T> };
+  }
+  : {
+    in: Record<string, never>;
+    out: Record<string, never>;
   };
-  out: {
-    form: v.SafeParseResult<T>;
-  };
-};
 
 // Helper to extract context from route
 export type ExtractContextFromRoute<T extends ReturnType<typeof createRoute>> =
@@ -41,30 +43,22 @@ export type ExtractCustomContextFromRoute<
 // Internal app instance, used by framework, unavailable package user
 export const INTERNAL_APP = Symbol("_app");
 
-// createRoute config input with generics
-type RouteConfig<
-  TPath extends string,
-  TFormValidation extends BaseSchema,
-  TCustomContext extends (
-    c: RouteContext<TPath, TFormValidation>,
-  ) => unknown | Promise<unknown>,
-> = {
-  path: TPath;
-  formValidationSchema: TFormValidation;
-  hasPermission: (c: RouteContext<TPath, TFormValidation>) => boolean;
-  customContext?: TCustomContext;
-  component: () => Promise<HtmlEscapedString> | HtmlEscapedString;
-  partial: boolean;
-  hmr: boolean;
-};
 // Create a route with the given config
 export const createRoute = <
   TPath extends string,
-  TFormValidation extends BaseSchema,
-  TCustomContext extends (
+  TFormValidation extends BaseSchema | undefined = undefined,
+  TCustomContextReturnType = undefined,
+>(config: {
+  path: TPath;
+  formValidationSchema?: TFormValidation;
+  hasPermission: (c: RouteContext<TPath, TFormValidation>) => boolean;
+  customContext?: (
     c: RouteContext<TPath, TFormValidation>,
-  ) => unknown | Promise<unknown> = () => null,
->(config: RouteConfig<TPath, TFormValidation, TCustomContext>) => {
+  ) => TCustomContextReturnType;
+  component: () => Promise<HtmlEscapedString> | HtmlEscapedString;
+  partial: boolean;
+  hmr: boolean;
+}) => {
   // Must be rendered inside of child component in order to make context available.
   const RenderChild: FC<{
     children: () => Promise<HtmlEscapedString> | HtmlEscapedString;
@@ -84,9 +78,13 @@ export const createRoute = <
   // Create a new route with the given path.
   app.all(
     config.path,
-    validator("form", (values) => {
-      return v.safeParse(config.formValidationSchema, values);
-    }),
+    ...(config.formValidationSchema
+      ? [
+        validator("form", (values) => {
+          return v.safeParse(config.formValidationSchema!, values);
+        }),
+      ]
+      : []),
     (c) => {
       // HMR script development purposes only.
       const hmrScript = `
@@ -96,7 +94,9 @@ export const createRoute = <
 
       // Provide the context to the route, and render via child component.
       return c.html(
-        <RouteContext.Provider value={c}>
+        <RouteContext.Provider
+          value={c as RouteContext<TPath, TFormValidation>}
+        >
           <RenderChild children={config.component} />
           {(!config.partial && config.hmr) && (
             <script
@@ -122,7 +122,8 @@ export const createRoute = <
       const ctx = useContext(RouteContext);
       if (!ctx) throw new Error("Unable to generate context");
       const res = config.customContext ? await config.customContext(ctx) : null;
-      return res as Awaited<ReturnType<TCustomContext>>;
+      return res as TCustomContextReturnType extends undefined ? null
+        : TCustomContextReturnType;
     },
   };
 };

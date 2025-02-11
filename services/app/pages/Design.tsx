@@ -5,11 +5,9 @@ import { createRoute, v } from "@package/framework";
 import { isPublic } from "@permissions/index.ts";
 
 const Design = async () => {
-  const context = designRoute.context();
-  const customContext = await designRoute.customContext();
-  const form = context.req.valid("form");
-  console.log(form);
-  console.log(customContext);
+  const context = await designRoute.customContext();
+  console.log(context);
+
   return (
     <BaseLayout title="Deno Hot Dude">
       <>
@@ -109,4 +107,10 @@ export const designRoute = createRoute({
   formValidationSchema: DesignFormSchema,
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
+  customContext: (c) => {
+    c.req.valid("form");
+    return {
+      name: "hello world",
+    };
+  },
 });
