@@ -7,6 +7,10 @@ import type { HtmlEscapedString } from "@hono/hono/utils/html";
 // Valibot unknown schema.
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
 
+export type Variables = {
+  loginUrl: string;
+};
+
 // Helper to define hono context type for specific route
 type RouteContext<
   TPath extends string,
@@ -17,7 +21,9 @@ type RouteContext<
   TParamValidation extends BaseSchema | undefined,
   TQueryValidation extends BaseSchema | undefined,
 > = Context<
-  Record<string | number | symbol, never>,
+  {
+    Variables: Variables;
+  },
   TPath,
   {
     in:

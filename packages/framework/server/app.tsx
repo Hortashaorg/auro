@@ -9,7 +9,7 @@ import { validateHookMiddleware } from "./middleware/validateHook.ts";
 import { accessShieldMiddleware } from "./middleware/access-shield.ts";
 import { Render } from "../context/context.tsx";
 import * as v from "@valibot/valibot";
-import type { createRoute } from "../routing/create-route.tsx";
+import type { createRoute, Variables } from "../routing/create-route.tsx";
 import { INTERNAL_APP } from "../routing/create-route.tsx";
 /** Init Framework App */
 export const app = (
@@ -161,7 +161,7 @@ export const app2 = (
     port: number;
   },
 ): Deno.HttpServer<Deno.NetAddr> => {
-  const app = new Hono({
+  const app = new Hono<{ Variables: Variables }>({
     strict: true,
   });
 

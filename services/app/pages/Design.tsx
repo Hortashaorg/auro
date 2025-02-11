@@ -2,7 +2,6 @@ import { Button } from "@comp/inputs/Button.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
 import { createRoute, v } from "@package/framework";
-import { isPublic } from "@permissions/index.ts";
 
 const Design = () => {
   return (
