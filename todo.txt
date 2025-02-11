@@ -25,8 +25,8 @@ Open Telemetry
 
 App2 Auth Implementation:
 Provider Configuration:
-- Support Google OAuth provider (extendable for more providers)
-- Provider requires: clientId, clientSecret, url.origin(Base URL)
+- Support Google OAuth provider (extendable for more providers) (DONE)
+- Provider requires: clientId, clientSecret, url.origin(Base URL) (DONE)
 
 Auth Flow:
 - Framework validate API requests using Valibot schemas. (We catch incorrect data types and values)
