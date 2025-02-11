@@ -18,8 +18,10 @@ Player:
 - As a player on a server, I recive energy to spend on doing actions.
 
 Technical:
-The current routing strategy could be a bit better. See test.tsx
 Current Server is stored as a cookie
 Workflow - typecheck, linting and formatting
 CI/CD
 Open Telemetry
+
+New Routing Strategy:
+Add more validation options for the route
