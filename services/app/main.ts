@@ -1,6 +1,6 @@
 import { db, type schema } from "@package/database";
 import { app, app2, type GeneralContext } from "@package/framework";
-import { hashString } from "@package/common";
+import { hashString, throwError } from "@package/common";
 import { NotFound } from "@pages/404.tsx";
 import { designRoute } from "@pages/Design.tsx";
 import { Home } from "@pages/Home.tsx";
@@ -97,7 +97,26 @@ app({
   port: 4000,
 });
 
+const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
+  throwError("Missing Google client secret");
+
+const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
+  throwError("Missing Google client ID");
+
 app2({
+  authProvider: {
+    name: "google",
+    clientId,
+    clientSecret,
+    redirectPathAfterLogin: "/",
+    redirectPathAfterLogout: "/",
+    afterLoginHook: (loginResult) => {
+      console.log(loginResult);
+    },
+    beforeLogoutHook: (logoutInfo) => {
+      console.log(logoutInfo);
+    },
+  },
   routes: [
     designRoute,
   ],

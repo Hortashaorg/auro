@@ -11,6 +11,8 @@ import { Render } from "../context/context.tsx";
 import * as v from "@valibot/valibot";
 import type { createRoute, Variables } from "../routing/create-route.tsx";
 import { INTERNAL_APP } from "../routing/create-route.tsx";
+import { decode } from "@hono/hono/jwt";
+
 /** Init Framework App */
 export const app = (
   settings: {
@@ -154,15 +156,118 @@ export const app = (
   }, app.fetch);
 };
 
+type AfterLoginHookTypes<T extends "google"> = T extends "google" ? {
+    success: true;
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+    expires_in: number;
+    refresh_token_expires_in: number;
+  } | {
+    success: false;
+    error: unknown;
+  }
+  : never;
+
+type BeforeLogoutHookTypes<T extends "google"> = T extends "google" ? {
+    refreshToken: string;
+    accessToken: string;
+    email: string;
+  }
+  : never;
+
 /** Init Framework App */
-export const app2 = (
+export const app2 = <TProvider extends "google">(
   settings: {
+    authProvider: {
+      name: TProvider;
+      clientId: string;
+      clientSecret: string;
+      redirectPathAfterLogin: string;
+      redirectPathAfterLogout: string;
+      afterLoginHook: (
+        loginResult: AfterLoginHookTypes<TProvider>,
+      ) => Promise<void> | void;
+      beforeLogoutHook: (
+        logoutInfo: BeforeLogoutHookTypes<TProvider>,
+      ) => Promise<void> | void;
+    };
     routes: ReturnType<typeof createRoute>[];
     port: number;
   },
 ): Deno.HttpServer<Deno.NetAddr> => {
   const app = new Hono<{ Variables: Variables }>({
     strict: true,
+  });
+
+  app.use("/auth/login", async (c) => {
+    if (settings.authProvider.name === "google") {
+      try {
+        const url = new URL(c.req.url);
+        const code = url.searchParams.get("code");
+
+        if (!code) throw new Error("Missing auth code");
+
+        const params = new URLSearchParams({
+          client_id: settings.authProvider.clientId,
+          redirect_uri: `${url.origin}/login`,
+          client_secret: settings.authProvider.clientSecret,
+          scope: "email",
+          grant_type: "authorization_code",
+          access_type: "offline",
+          prompt: "consent",
+          code,
+        });
+
+        const googleBaseUrl = "https://oauth2.googleapis.com";
+
+        const res = await fetch(
+          `${googleBaseUrl}/token`,
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            method: "POST",
+            body: params,
+          },
+        );
+
+        if (res.ok) {
+          const responseSchema = v.strictObject({
+            access_token: v.string(),
+            refresh_token: v.string(),
+            id_token: v.string(),
+            expires_in: v.number(),
+          });
+          const tokens = v.parse(responseSchema, await res.json());
+
+          const email = v.parse(
+            v.string(),
+            decode(tokens.id_token).payload.email,
+          );
+
+          const result = {
+            success: true,
+            accessToken: tokens.access_token,
+            refreshToken: tokens.refresh_token,
+            email,
+            expires_in: tokens.expires_in,
+            refresh_token_expires_in: 3600 * 72, // 3 days
+          } as AfterLoginHookTypes<TProvider>;
+          await settings.authProvider.afterLoginHook(result);
+          return c.redirect(settings.authProvider.redirectPathAfterLogin);
+        }
+        throw new Error("Failed to login");
+      } catch (error) {
+        const result = {
+          error,
+          success: false,
+        } as AfterLoginHookTypes<TProvider>;
+        await settings.authProvider.afterLoginHook(result);
+        return c.redirect(settings.authProvider.redirectPathAfterLogin);
+      }
+    }
+    throw new Error("Invalid auth provider");
   });
 
   /** Static Files */
