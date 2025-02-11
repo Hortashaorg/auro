@@ -4,13 +4,7 @@ import { BaseLayout } from "@layouts/BaseLayout.tsx";
 import { createRoute, v } from "@package/framework";
 import { isPublic } from "@permissions/index.ts";
 
-const Design = async () => {
-  const context = designRoute.context().req.valid("query");
-  console.log(context);
-  if (context.success) {
-    context.output.name;
-  }
-
+const Design = () => {
   return (
     <BaseLayout title="Deno Hot Dude">
       <>
@@ -109,13 +103,8 @@ export const designRoute = createRoute({
   hasPermission: isPublic,
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
-  cookieValidationSchema: DesignFormSchema,
-  headerValidationSchema: DesignFormSchema,
-  jsonValidationSchema: DesignFormSchema,
   paramValidationSchema: DesignFormSchema,
-  queryValidationSchema: DesignFormSchema,
-  customContext: (c) => {
-    c.req.valid("cookie");
+  customContext: () => {
     return {
       name: "hello world",
     };

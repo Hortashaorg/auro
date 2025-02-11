@@ -124,27 +124,47 @@ export const createRoute = <
     TContextType | null
   >(null);
 
-  const validators = [
-    validator("form", (values) => {
-      return v.safeParse(config.formValidationSchema!, values);
-    }),
-    validator("cookie", (values) => {
-      return v.safeParse(config.cookieValidationSchema!, values);
-    }),
-    validator("header", (values) => {
-      return v.safeParse(config.headerValidationSchema!, values);
-    }),
-    validator("json", (values) => {
-      return v.safeParse(config.jsonValidationSchema!, values);
-    }),
-    validator("param", (values) => {
-      return v.safeParse(config.paramValidationSchema!, values);
-    }),
-    validator("query", (values) => {
-      return v.safeParse(config.queryValidationSchema!, values);
-    }),
-  ] as const;
+  const {
+    formValidationSchema,
+    cookieValidationSchema,
+    headerValidationSchema,
+    jsonValidationSchema,
+    paramValidationSchema,
+    queryValidationSchema,
+  } = config;
 
+  const validators = [
+    formValidationSchema
+      ? validator("form", (values) => v.safeParse(formValidationSchema, values))
+      : undefined,
+    cookieValidationSchema
+      ? validator(
+        "cookie",
+        (values) => v.safeParse(cookieValidationSchema, values),
+      )
+      : undefined,
+    headerValidationSchema
+      ? validator(
+        "header",
+        (values) => v.safeParse(headerValidationSchema, values),
+      )
+      : undefined,
+    jsonValidationSchema
+      ? validator("json", (values) => v.safeParse(jsonValidationSchema, values))
+      : undefined,
+    paramValidationSchema
+      ? validator(
+        "param",
+        (values) => v.safeParse(paramValidationSchema, values),
+      )
+      : undefined,
+    queryValidationSchema
+      ? validator(
+        "query",
+        (values) => v.safeParse(queryValidationSchema, values),
+      )
+      : undefined,
+  ].filter((v) => v !== undefined) as ReturnType<typeof validator>[];
   // Create a new route with the given path.
   app.all(
     config.path,
