@@ -100,7 +100,10 @@ const DesignFormSchema = v.object({
 export const designRoute = createRoute({
   path: "/design",
   component: Design,
-  hasPermission: isPublic,
+  permission: {
+    check: () => true,
+    redirectPath: "/",
+  },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
   paramValidationSchema: DesignFormSchema,

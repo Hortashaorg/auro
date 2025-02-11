@@ -98,9 +98,12 @@ export const createRoute = <
   jsonValidationSchema?: TJsonValidation;
   paramValidationSchema?: TParamValidation;
   queryValidationSchema?: TQueryValidation;
-  hasPermission: (
-    c: TContextType,
-  ) => boolean;
+  permission: {
+    check: (
+      c: TContextType,
+    ) => boolean;
+    redirectPath: string;
+  };
   customContext?: (
     c: TContextType,
   ) => TCustomContextReturnType;
@@ -170,6 +173,12 @@ export const createRoute = <
     config.path,
     ...validators,
     (c) => {
+      // Check permission before rendering
+      const hasPermission = config.permission.check(c as TContextType);
+      if (!hasPermission) {
+        return c.redirect(config.permission.redirectPath);
+      }
+
       // HMR script development purposes only.
       const hmrScript = `
         const ws = new WebSocket('ws://' + location.host + '/ws');
