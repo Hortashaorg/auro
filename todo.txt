@@ -37,10 +37,10 @@ Auth Flow:
 - Framework provides protected login/logout routes
 
 User Hooks:
-- afterLogin: Called after successful OAuth with provider data
+- afterLogin: Called after successful OAuth with provider data (DONE)
   - Receives: email, accessToken, refreshToken, provider
   - User implements account creation/update logic
-- beforeLogout: Called before clearing auth session
+- beforeLogout: Called before clearing auth session (DONE)
   - Receives: current account and session data
   - Optional cleanup tasks
 - validateRequest: Called on every authenticated request
