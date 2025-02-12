@@ -188,6 +188,13 @@ type RefreshHookTypes<T extends "google"> = T extends "google" ? {
   }
   : never;
 
+type ValidateHookTypes<T extends "google"> = T extends "google" ? {
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+  }
+  : never;
+
 /** Init Framework App */
 export const app2 = <TProvider extends "google">(
   settings: {
@@ -207,11 +214,7 @@ export const app2 = <TProvider extends "google">(
         refreshResult: RefreshHookTypes<TProvider>,
       ) => Promise<void> | void;
       validateHook?: (
-        validateInfo: {
-          accessToken: string;
-          refreshToken: string;
-          email: string;
-        },
+        validateInfo: ValidateHookTypes<TProvider>,
       ) => Promise<boolean>;
     };
     routes: ReturnType<typeof createRoute>[];
@@ -279,12 +282,21 @@ export const app2 = <TProvider extends "google">(
 
           setCookie(c, "access_token", result.accessToken, {
             maxAge: result.expires_in,
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
           });
           setCookie(c, "refresh_token", result.refreshToken, {
             maxAge: result.refresh_token_expires_in,
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
           });
           setCookie(c, "email", result.email, {
             maxAge: result.refresh_token_expires_in,
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
           });
 
           await settings.authProvider.afterLoginHook?.(
@@ -352,6 +364,9 @@ export const app2 = <TProvider extends "google">(
 
             setCookie(c, "access_token", result.accessToken, {
               maxAge: result.expires_in,
+              httpOnly: true,
+              secure: true,
+              sameSite: "Lax",
             });
 
             await settings.authProvider.refreshHook?.(
@@ -396,12 +411,21 @@ export const app2 = <TProvider extends "google">(
         // Clear cookies
         setCookie(c, "access_token", "", {
           maxAge: 0,
+          httpOnly: true,
+          secure: true,
+          sameSite: "Lax",
         });
         setCookie(c, "refresh_token", "", {
           maxAge: 0,
+          httpOnly: true,
+          secure: true,
+          sameSite: "Lax",
         });
         setCookie(c, "email", "", {
           maxAge: 0,
+          httpOnly: true,
+          secure: true,
+          sameSite: "Lax",
         });
 
         return c.redirect(settings.authProvider.redirectPathAfterLogout);
@@ -426,21 +450,51 @@ export const app2 = <TProvider extends "google">(
             accessToken,
             refreshToken,
             email,
-          });
+          } as ValidateHookTypes<TProvider>);
 
           if (isValid === false) {
             // Clear all auth cookies if validation fails
-            setCookie(c, "access_token", "", { maxAge: 0 });
-            setCookie(c, "refresh_token", "", { maxAge: 0 });
-            setCookie(c, "email", "", { maxAge: 0 });
+            setCookie(c, "access_token", "", {
+              maxAge: 0,
+              httpOnly: true,
+              secure: true,
+              sameSite: "Lax",
+            });
+            setCookie(c, "refresh_token", "", {
+              maxAge: 0,
+              httpOnly: true,
+              secure: true,
+              sameSite: "Lax",
+            });
+            setCookie(c, "email", "", {
+              maxAge: 0,
+              httpOnly: true,
+              secure: true,
+              sameSite: "Lax",
+            });
             return c.redirect(settings.authProvider.redirectPathAfterLogout);
           }
         } catch (error) {
           console.error("Error in validate hook:", error);
           // Clear cookies on error and redirect
-          setCookie(c, "access_token", "", { maxAge: 0 });
-          setCookie(c, "refresh_token", "", { maxAge: 0 });
-          setCookie(c, "email", "", { maxAge: 0 });
+          setCookie(c, "access_token", "", {
+            maxAge: 0,
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
+          });
+          setCookie(c, "refresh_token", "", {
+            maxAge: 0,
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
+          });
+          setCookie(c, "email", "", {
+            maxAge: 0,
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax",
+          });
           return c.redirect(settings.authProvider.redirectPathAfterLogout);
         }
       }

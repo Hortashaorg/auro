@@ -43,16 +43,14 @@ User Hooks:
 - beforeLogout: Called before clearing auth session (DONE)
   - Receives: current account and session data
   - Optional cleanup tasks
-- validateRequest: Called on every authenticated request
+- validateRequest: Called on every authenticated request (DONE)
   - Receives: current account and session
   - Custom validation logic (e.g., check if account is banned)
 
 Security:
-- Secure cookie settings (httpOnly, sameSite)
-- CSRF protection
-- Token refresh mechanism
-- Session expiration handling
-- Environment variable validation
+- Secure cookie settings (httpOnly, sameSite) (DONE)
+- Token refresh mechanism (DONE)
+- Session expiration handling (DONE)
 
 Context:
 - Can we also provide global context outside of the route? It would not have any fancy type inference, but we can fetch this context from anywhere.
