@@ -206,6 +206,13 @@ export const app2 = <TProvider extends "google">(
       refreshHook?: (
         refreshResult: RefreshHookTypes<TProvider>,
       ) => Promise<void> | void;
+      validateHook?: (
+        validateInfo: {
+          accessToken: string;
+          refreshToken: string;
+          email: string;
+        },
+      ) => Promise<boolean>;
     };
     routes: ReturnType<typeof createRoute>[];
     port: number;
@@ -280,11 +287,9 @@ export const app2 = <TProvider extends "google">(
             maxAge: result.refresh_token_expires_in,
           });
 
-          if (settings.authProvider.afterLoginHook) {
-            await settings.authProvider.afterLoginHook(
-              result as AfterLoginHookTypes<TProvider>,
-            );
-          }
+          await settings.authProvider.afterLoginHook?.(
+            result as AfterLoginHookTypes<TProvider>,
+          );
 
           return c.redirect(settings.authProvider.redirectPathAfterLogin);
         }
@@ -295,9 +300,7 @@ export const app2 = <TProvider extends "google">(
           success: false,
         } as AfterLoginHookTypes<TProvider>;
 
-        if (settings.authProvider.afterLoginHook) {
-          await settings.authProvider.afterLoginHook(result);
-        }
+        await settings.authProvider.afterLoginHook?.(result);
 
         return c.redirect(settings.authProvider.redirectPathAfterLogin);
       }
@@ -351,19 +354,15 @@ export const app2 = <TProvider extends "google">(
               maxAge: result.expires_in,
             });
 
-            if (settings.authProvider.refreshHook) {
-              await settings.authProvider.refreshHook(
-                result as RefreshHookTypes<TProvider>,
-              );
-            }
+            await settings.authProvider.refreshHook?.(
+              result as RefreshHookTypes<TProvider>,
+            );
           } else {
             const result = {
               success: false,
               error: new Error("Failed to refresh token"),
             } as RefreshHookTypes<TProvider>;
-            if (settings.authProvider.refreshHook) {
-              await settings.authProvider.refreshHook(result);
-            }
+            await settings.authProvider.refreshHook?.(result);
           }
         }
       } catch (error) {
@@ -371,9 +370,7 @@ export const app2 = <TProvider extends "google">(
           success: false,
           error,
         } as RefreshHookTypes<TProvider>;
-        if (settings.authProvider.refreshHook) {
-          await settings.authProvider.refreshHook(result);
-        }
+        await settings.authProvider.refreshHook?.(result);
       }
     }
     await next();
@@ -390,13 +387,11 @@ export const app2 = <TProvider extends "google">(
           throw new Error("Missing tokens or email");
         }
 
-        if (settings.authProvider.beforeLogoutHook) {
-          await settings.authProvider.beforeLogoutHook({
-            refreshToken,
-            accessToken,
-            email,
-          } as BeforeLogoutHookTypes<TProvider>);
-        }
+        await settings.authProvider.beforeLogoutHook?.({
+          refreshToken,
+          accessToken,
+          email,
+        } as BeforeLogoutHookTypes<TProvider>);
 
         // Clear cookies
         setCookie(c, "access_token", "", {
@@ -416,6 +411,42 @@ export const app2 = <TProvider extends "google">(
       }
     }
     throw new Error("Invalid auth provider");
+  });
+
+  /** Validate Hook */
+  app.use("/*", async (c, next) => {
+    if (settings.authProvider.name === "google") {
+      const accessToken = getCookie(c, "access_token");
+      const refreshToken = getCookie(c, "refresh_token");
+      const email = getCookie(c, "email");
+
+      if (accessToken && refreshToken && email) {
+        try {
+          const isValid = await settings.authProvider.validateHook?.({
+            accessToken,
+            refreshToken,
+            email,
+          });
+
+          if (isValid === false) {
+            // Clear all auth cookies if validation fails
+            setCookie(c, "access_token", "", { maxAge: 0 });
+            setCookie(c, "refresh_token", "", { maxAge: 0 });
+            setCookie(c, "email", "", { maxAge: 0 });
+            return c.redirect(settings.authProvider.redirectPathAfterLogout);
+          }
+        } catch (error) {
+          console.error("Error in validate hook:", error);
+          // Clear cookies on error and redirect
+          setCookie(c, "access_token", "", { maxAge: 0 });
+          setCookie(c, "refresh_token", "", { maxAge: 0 });
+          setCookie(c, "email", "", { maxAge: 0 });
+          return c.redirect(settings.authProvider.redirectPathAfterLogout);
+        }
+      }
+    }
+    await next();
+    return;
   });
 
   /** Static Files */

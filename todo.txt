@@ -29,12 +29,12 @@ Provider Configuration:
 - Provider requires: clientId, clientSecret, url.origin(Base URL) (DONE)
 
 Auth Flow:
-- Framework validate API requests using Valibot schemas. (We catch incorrect data types and values)
-- Framework handles OAuth flow internally
+- Framework validate API requests using Valibot schemas. (We catch incorrect data types and values) (DONE)
+- Framework handles OAuth flow internally (DONE)
 - Framework generates login URL (available in context)
-- Framework handles token refresh automatically
-- Framework manages secure cookie storage
-- Framework provides protected login/logout routes
+- Framework handles token refresh automatically (DONE)
+- Framework manages secure cookie storage (DONE)
+- Framework provides protected login/logout routes (DONE)
 
 User Hooks:
 - afterLogin: Called after successful OAuth with provider data (DONE)
