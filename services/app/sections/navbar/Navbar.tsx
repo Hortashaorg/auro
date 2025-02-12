@@ -39,7 +39,7 @@ export const Navbar = () => {
           ? (
             <Select name="Profile" variant="single" flow="left">
               <Link href="/profile" variant="dropdownLink">Profile</Link>
-              <Link href="/logout" variant="dropdownLink">Logout</Link>
+              <Link href="/auth/logout" variant="dropdownLink">Logout</Link>
             </Select>
           )
           : (

@@ -46,7 +46,7 @@ type ValidateHookTypes<T extends "google"> = T extends "google" ? {
   : never;
 
 /** Init Framework App */
-export const app2 = <TProvider extends "google">(
+export const app = <TProvider extends "google">(
   settings: {
     authProvider: {
       name: TProvider;
