@@ -1,9 +1,11 @@
 import { Button } from "@comp/inputs/Button.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
-import { createRoute, v } from "@package/framework";
+import { createRoute, getGlobalContext, v } from "@package/framework";
 
 const Design = () => {
+  const globalContext = getGlobalContext();
+  console.log(globalContext.var.loginUrl);
   return (
     <BaseLayout title="Deno Hot Dude">
       <>
