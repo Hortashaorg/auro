@@ -85,7 +85,7 @@ export const app = <TProvider extends "google">(
 
         const params = new URLSearchParams({
           client_id: settings.authProvider.clientId,
-          redirect_uri: `${url.origin}/login`,
+          redirect_uri: `${url.origin}/auth/login`,
           client_secret: settings.authProvider.clientSecret,
           scope: "email",
           grant_type: "authorization_code",
@@ -108,13 +108,16 @@ export const app = <TProvider extends "google">(
         );
 
         if (res.ok) {
-          const responseSchema = v.strictObject({
+          const responseSchema = v.object({
             access_token: v.string(),
             refresh_token: v.string(),
             id_token: v.string(),
             expires_in: v.number(),
           });
-          const tokens = v.parse(responseSchema, await res.json());
+
+          const responseData = await res.json();
+
+          const tokens = v.parse(responseSchema, responseData);
 
           const email = v.parse(
             v.string(),
@@ -198,11 +201,12 @@ export const app = <TProvider extends "google">(
           );
 
           if (res.ok) {
-            const responseSchema = v.strictObject({
+            const responseSchema = v.object({
               access_token: v.string(),
               id_token: v.string(),
               expires_in: v.number(),
             });
+
             const tokens = v.parse(responseSchema, await res.json());
 
             const result = {
@@ -357,7 +361,6 @@ export const app = <TProvider extends "google">(
   /** Context Variables */
   app.use("/*", async (c, next) => {
     if (settings.authProvider.name === "google") {
-      const accessToken = getCookie(c, "access_token");
       const refreshToken = getCookie(c, "refresh_token");
       const email = getCookie(c, "email");
 
@@ -373,7 +376,7 @@ export const app = <TProvider extends "google">(
       c.set("logoutUrl", "/auth/logout");
 
       // Set isLoggedIn
-      c.set("isLoggedIn", !!(accessToken && refreshToken && email));
+      c.set("isLoggedIn", !!(refreshToken && email));
 
       // Set email if available
       if (email) {
