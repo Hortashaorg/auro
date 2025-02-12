@@ -12,6 +12,7 @@ import * as v from "@valibot/valibot";
 import type { createRoute, Variables } from "../routing/create-route.tsx";
 import { INTERNAL_APP } from "../routing/create-route.tsx";
 import { decode } from "@hono/hono/jwt";
+import { getCookie, setCookie } from "@hono/hono/cookie";
 
 /** Init Framework App */
 export const app = (
@@ -176,6 +177,17 @@ type BeforeLogoutHookTypes<T extends "google"> = T extends "google" ? {
   }
   : never;
 
+type RefreshHookTypes<T extends "google"> = T extends "google" ? {
+    success: true;
+    accessToken: string;
+    email: string;
+    expires_in: number;
+  } | {
+    success: false;
+    error: unknown;
+  }
+  : never;
+
 /** Init Framework App */
 export const app2 = <TProvider extends "google">(
   settings: {
@@ -185,11 +197,14 @@ export const app2 = <TProvider extends "google">(
       clientSecret: string;
       redirectPathAfterLogin: string;
       redirectPathAfterLogout: string;
-      afterLoginHook: (
+      afterLoginHook?: (
         loginResult: AfterLoginHookTypes<TProvider>,
       ) => Promise<void> | void;
-      beforeLogoutHook: (
+      beforeLogoutHook?: (
         logoutInfo: BeforeLogoutHookTypes<TProvider>,
+      ) => Promise<void> | void;
+      refreshHook?: (
+        refreshResult: RefreshHookTypes<TProvider>,
       ) => Promise<void> | void;
     };
     routes: ReturnType<typeof createRoute>[];
@@ -253,8 +268,24 @@ export const app2 = <TProvider extends "google">(
             email,
             expires_in: tokens.expires_in,
             refresh_token_expires_in: 3600 * 72, // 3 days
-          } as AfterLoginHookTypes<TProvider>;
-          await settings.authProvider.afterLoginHook(result);
+          };
+
+          setCookie(c, "access_token", result.accessToken, {
+            maxAge: result.expires_in,
+          });
+          setCookie(c, "refresh_token", result.refreshToken, {
+            maxAge: result.refresh_token_expires_in,
+          });
+          setCookie(c, "email", result.email, {
+            maxAge: result.refresh_token_expires_in,
+          });
+
+          if (settings.authProvider.afterLoginHook) {
+            await settings.authProvider.afterLoginHook(
+              result as AfterLoginHookTypes<TProvider>,
+            );
+          }
+
           return c.redirect(settings.authProvider.redirectPathAfterLogin);
         }
         throw new Error("Failed to login");
@@ -263,8 +294,125 @@ export const app2 = <TProvider extends "google">(
           error,
           success: false,
         } as AfterLoginHookTypes<TProvider>;
-        await settings.authProvider.afterLoginHook(result);
+
+        if (settings.authProvider.afterLoginHook) {
+          await settings.authProvider.afterLoginHook(result);
+        }
+
         return c.redirect(settings.authProvider.redirectPathAfterLogin);
+      }
+    }
+    throw new Error("Invalid auth provider");
+  });
+
+  app.use("/*", async (c, next) => {
+    if (settings.authProvider.name === "google") {
+      try {
+        const accessToken = getCookie(c, "access_token");
+        const refreshToken = getCookie(c, "refresh_token");
+        const email = getCookie(c, "email");
+
+        if (!accessToken && refreshToken && email) {
+          const params = new URLSearchParams({
+            client_id: settings.authProvider.clientId,
+            client_secret: settings.authProvider.clientSecret,
+            grant_type: "refresh_token",
+            refresh_token: refreshToken,
+          });
+
+          const googleBaseUrl = "https://oauth2.googleapis.com";
+          const res = await fetch(
+            `${googleBaseUrl}/token`,
+            {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              method: "POST",
+              body: params,
+            },
+          );
+
+          if (res.ok) {
+            const responseSchema = v.strictObject({
+              access_token: v.string(),
+              id_token: v.string(),
+              expires_in: v.number(),
+            });
+            const tokens = v.parse(responseSchema, await res.json());
+
+            const result = {
+              success: true,
+              accessToken: tokens.access_token,
+              email,
+              expires_in: tokens.expires_in,
+            };
+
+            setCookie(c, "access_token", result.accessToken, {
+              maxAge: result.expires_in,
+            });
+
+            if (settings.authProvider.refreshHook) {
+              await settings.authProvider.refreshHook(
+                result as RefreshHookTypes<TProvider>,
+              );
+            }
+          } else {
+            const result = {
+              success: false,
+              error: new Error("Failed to refresh token"),
+            } as RefreshHookTypes<TProvider>;
+            if (settings.authProvider.refreshHook) {
+              await settings.authProvider.refreshHook(result);
+            }
+          }
+        }
+      } catch (error) {
+        const result = {
+          success: false,
+          error,
+        } as RefreshHookTypes<TProvider>;
+        if (settings.authProvider.refreshHook) {
+          await settings.authProvider.refreshHook(result);
+        }
+      }
+    }
+    await next();
+  });
+
+  app.use("/auth/logout", async (c) => {
+    if (settings.authProvider.name === "google") {
+      try {
+        const accessToken = getCookie(c, "access_token");
+        const refreshToken = getCookie(c, "refresh_token");
+        const email = getCookie(c, "email");
+
+        if (!refreshToken || !accessToken || !email) {
+          throw new Error("Missing tokens or email");
+        }
+
+        if (settings.authProvider.beforeLogoutHook) {
+          await settings.authProvider.beforeLogoutHook({
+            refreshToken,
+            accessToken,
+            email,
+          } as BeforeLogoutHookTypes<TProvider>);
+        }
+
+        // Clear cookies
+        setCookie(c, "access_token", "", {
+          maxAge: 0,
+        });
+        setCookie(c, "refresh_token", "", {
+          maxAge: 0,
+        });
+        setCookie(c, "email", "", {
+          maxAge: 0,
+        });
+
+        return c.redirect(settings.authProvider.redirectPathAfterLogout);
+      } catch (error) {
+        console.error("Error during logout:", error);
+        return c.redirect(settings.authProvider.redirectPathAfterLogout);
       }
     }
     throw new Error("Invalid auth provider");
