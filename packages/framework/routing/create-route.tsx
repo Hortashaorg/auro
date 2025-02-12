@@ -3,12 +3,16 @@ import { validator } from "@hono/hono/validator";
 import * as v from "@valibot/valibot";
 import { createContext, type FC, useContext } from "@hono/hono/jsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
+import { GlobalContext } from "../context/global-context.tsx";
 
 // Valibot unknown schema.
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
 
 export type Variables = {
   loginUrl: string;
+  logoutUrl: string;
+  isLoggedIn: boolean;
+  email?: string;
 };
 
 // Helper to define hono context type for specific route
@@ -196,12 +200,16 @@ export const createRoute = <
         <RouteContext.Provider
           value={c as TContextType}
         >
-          <RenderChild children={config.component} />
-          {(!config.partial && config.hmr) && (
-            <script
-              dangerouslySetInnerHTML={{ __html: hmrScript }}
-            />
-          )}
+          <GlobalContext.Provider
+            value={c as Context}
+          >
+            <RenderChild children={config.component} />
+            {(!config.partial && config.hmr) && (
+              <script
+                dangerouslySetInnerHTML={{ __html: hmrScript }}
+              />
+            )}
+          </GlobalContext.Provider>
         </RouteContext.Provider>,
       );
     },

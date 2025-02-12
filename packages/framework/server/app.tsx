@@ -503,6 +503,35 @@ export const app2 = <TProvider extends "google">(
     return;
   });
 
+  /** Context Variables */
+  app.use("/*", async (c, next) => {
+    if (settings.authProvider.name === "google") {
+      const accessToken = getCookie(c, "access_token");
+      const refreshToken = getCookie(c, "refresh_token");
+      const email = getCookie(c, "email");
+
+      const url = new URL(c.req.url);
+
+      // Set login URL
+      c.set(
+        "loginUrl",
+        `https://accounts.google.com/o/oauth2/v2/auth?client_id=${settings.authProvider.clientId}&redirect_uri=${url.origin}/login&response_type=code&scope=email&access_type=offline&prompt=consent`,
+      );
+
+      // Set logout URL
+      c.set("logoutUrl", "/auth/logout");
+
+      // Set isLoggedIn
+      c.set("isLoggedIn", !!(accessToken && refreshToken && email));
+
+      // Set email if available
+      if (email) {
+        c.set("email", email);
+      }
+    }
+    await next();
+  });
+
   /** Static Files */
   app.use(
     "/public/*",
