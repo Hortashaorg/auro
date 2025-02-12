@@ -3,15 +3,14 @@ import { Link } from "@comp/navigation/Link.tsx";
 import { Menu } from "@comp/navigation/Menu.tsx";
 import { NavButton } from "@comp/navigation/NavButton.tsx";
 import { Select } from "@comp/navigation/Select.tsx";
-import { getContext } from "@context/index.ts";
+import { getGlobalContext } from "@package/framework";
 
 export const Navbar = () => {
-  const context = getContext();
-  const isLoggedIn = !!context.account;
+  const context = getGlobalContext();
 
   return (
     <Header>
-      {isLoggedIn
+      {context.var.isLoggedIn
         ? (
           <Menu>
             <Select name="Admin" variant="double" flow="right">
@@ -36,7 +35,7 @@ export const Navbar = () => {
           x-on:click="themeToggle"
           x-text="isDarkMode ? 'Light Theme' : 'Dark Theme'"
         />
-        {isLoggedIn
+        {context.var.isLoggedIn
           ? (
             <Select name="Profile" variant="single" flow="left">
               <Link href="/profile" variant="dropdownLink">Profile</Link>
@@ -45,9 +44,7 @@ export const Navbar = () => {
           )
           : (
             <Link
-              href={`${Deno.env.get("GOOGLE_LOGIN_BASE_URL")}?client_id=${
-                Deno.env.get("GOOGLE_CLIENT_ID")
-              }&redirect_uri=${context.url.origin}/login&response_type=code&scope=email&access_type=offline&prompt=consent`}
+              href={context.var.loginUrl}
               variant="dropdownLink"
             >
               Login

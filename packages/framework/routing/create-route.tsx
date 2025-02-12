@@ -111,7 +111,7 @@ export const createRoute = <
   permission: {
     check: (
       c: TContextType,
-    ) => boolean;
+    ) => Promise<boolean> | boolean;
     redirectPath: string;
   };
   customContext?: (
@@ -182,9 +182,9 @@ export const createRoute = <
   app.all(
     config.path,
     ...validators,
-    (c) => {
+    async (c) => {
       // Check permission before rendering
-      const hasPermission = config.permission.check(c as TContextType);
+      const hasPermission = await config.permission.check(c as TContextType);
       if (!hasPermission) {
         return c.redirect(config.permission.redirectPath);
       }
