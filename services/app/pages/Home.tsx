@@ -5,8 +5,10 @@ import { Tooltip } from "@comp/overlay/Tooltip.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { Flex } from "@comp/layout/Flex.tsx";
 import { Card } from "@comp/layout/Card.tsx";
+import { createRoute } from "@package/framework";
+import { isPublic } from "@permissions/index.ts";
 
-export const Home = () => {
+const Home = () => {
   return (
     <Layout title="Deno Hot Dude">
       <Text variant="header" className="mb-8">Home page</Text>
@@ -42,3 +44,14 @@ export const Home = () => {
     </Layout>
   );
 };
+
+export const homeRoute = createRoute({
+  path: "/",
+  component: Home,
+  permission: {
+    check: isPublic,
+    redirectPath: "/",
+  },
+  partial: false,
+  hmr: Deno.env.get("ENV") === "local",
+});

@@ -18,8 +18,13 @@ Player:
 - As a player on a server, I recive energy to spend on doing actions.
 
 Technical:
-The current routing strategy could be a bit better. See test.tsx
 Current Server is stored as a cookie
 Workflow - typecheck, linting and formatting
 CI/CD
 Open Telemetry
+
+App2 Auth Implementation:
+1. Convert app to use app2
+2. Replace app with app2 (delete old app)
+3. Implement 404 fallback (Not sure how yet)
+4. Implement 500 fallback (Not sure how yet)

@@ -13,6 +13,7 @@
     "@sections/": "./sections/",
     "@context/": "./context/",
     "@pages/": "./pages/",
+    "@permissions/": "./permissions/",
     "@api/": "./api/"
   },
   "tasks": {

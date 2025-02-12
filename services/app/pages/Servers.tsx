@@ -5,14 +5,15 @@ import { Grid } from "@comp/layout/Grid.tsx";
 import { Flex } from "@comp/layout/Flex.tsx";
 import { Modal } from "@comp/overlay/modal/Modal.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
-import { db } from "@package/database";
+import { db, type schema } from "@package/database";
 import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
 import { CreateServerForm } from "@sections/forms/CreateServerForm.tsx";
-import { getContext } from "@context/index.ts";
+import { createRoute } from "@package/framework";
+import { isPublic } from "@permissions/index.ts";
 
-export const Servers = async () => {
-  const context = getContext();
+const Servers = async () => {
+  const context = await serversRoute.customContext();
   const canCreateServer = context.account?.canCreateServer ?? false;
 
   // Fetch all servers
@@ -65,3 +66,27 @@ export const Servers = async () => {
     </Layout>
   );
 };
+
+export const serversRoute = createRoute({
+  path: "/servers",
+  component: Servers,
+  permission: {
+    check: isPublic,
+    redirectPath: "/",
+  },
+  partial: false,
+  hmr: Deno.env.get("ENV") === "local",
+  customContext: async (c) => {
+    let account: typeof schema.account.$inferSelect | undefined;
+
+    const email = c.var.email;
+    if (email) {
+      account = await db.query.account.findFirst({
+        where: (account, { eq }) => eq(account.email, email),
+      });
+    }
+    return {
+      account,
+    };
+  },
+});

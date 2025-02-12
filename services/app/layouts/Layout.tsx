@@ -1,12 +1,14 @@
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
-import type { Child } from "@package/framework";
+import type { JSX } from "@package/framework";
 
-export const Layout = (props: {
+type Props = JSX.IntrinsicElements["div"] & {
   title: string;
-  children: Child;
-}) => {
-  const { title, children } = props;
+};
+export const Layout = ({
+  title,
+  children,
+}: Props) => {
   return (
     <BaseLayout title={title}>
       <div className="container mx-auto p-4" x-data="{}">

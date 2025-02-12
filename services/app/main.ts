@@ -1,115 +1,31 @@
-import { db, type schema } from "@package/database";
-import { app, type Context } from "@package/framework";
-import { hashString } from "@package/common";
-import { NotFound } from "@pages/404.tsx";
-import { Design } from "@pages/Design.tsx";
-import { Home } from "@pages/Home.tsx";
-import { Error } from "@pages/500.tsx";
-import { Servers } from "@pages/Servers.tsx";
-import {
-  authCodeLoginLogic,
-  logoutLogic,
-  refreshTokenLogic,
-  validateHook,
-} from "./auth.ts";
-import type { CustomContext } from "@context/index.ts";
-import { CreateServer, CreateServerSchema } from "@api/CreateServer.tsx";
+import { app } from "@package/framework";
+import { throwError } from "@package/common";
+import { afterLoginHook, beforeLogoutHook, refreshHook } from "./auth.ts";
+import { serversRoute } from "@pages/Servers.tsx";
+import { homeRoute } from "@pages/Home.tsx";
+import { createServerRoute } from "@api/CreateServer.tsx";
 
-const isPublic = (): boolean => {
-  return true;
-};
+const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
+  throwError("Missing Google client secret");
 
-const isDenied = (): boolean => {
-  return false;
-};
-
-const isLoggedIn = (c: CustomContext): boolean => {
-  return !!c.account;
-};
-
-const routes = {
-  "/": {
-    jsx: Home,
-    hasPermission: isPublic,
-    partial: false,
-  },
-  "/design": {
-    jsx: Design,
-    hasPermission: isPublic,
-    partial: false,
-  },
-  "/servers": {
-    jsx: Servers,
-    hasPermission: isLoggedIn,
-    partial: false,
-  },
-  "/denied": {
-    jsx: Design,
-    hasPermission: isDenied,
-    partial: false,
-  },
-  404: {
-    jsx: NotFound,
-    hasPermission: isPublic,
-    partial: false,
-  },
-  500: {
-    jsx: Error,
-    hasPermission: isPublic,
-    partial: false,
-  },
-  "/api/create-server": {
-    jsx: CreateServer,
-    hasPermission: isLoggedIn,
-    formValidationSchema: CreateServerSchema,
-    partial: false,
-  },
-} as const;
-
-const customContext = async (
-  c: Context,
-  accessToken?: string,
-): Promise<CustomContext> => {
-  let account: typeof schema.account.$inferSelect | undefined;
-  let session: typeof schema.session.$inferSelect | undefined;
-
-  if (accessToken) {
-    const accessTokenHash = await hashString(accessToken);
-
-    const loginSession = await db.query.session.findFirst({
-      where: (session, { eq }) => eq(session.accessTokenHash, accessTokenHash),
-      with: {
-        account: true,
-      },
-    });
-
-    if (loginSession) {
-      account = loginSession.account;
-      session = loginSession;
-    }
-  }
-
-  const url = new URL(c.req.url);
-
-  return {
-    req: c.req,
-    url,
-    account,
-    session,
-  };
-};
+const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
+  throwError("Missing Google client ID");
 
 app({
-  routes,
-  redirectNoAccess: "/",
-  redirectAfterLogin: "/",
-  redirectAfterLogout: "/",
-  authCodeLoginUrl: "/login",
-  logoutUrl: "/logout",
-  customContext,
-  authCodeLoginLogic,
-  refreshTokenLogic,
-  logoutLogic,
-  validateHook,
+  authProvider: {
+    name: "google",
+    clientId,
+    clientSecret,
+    redirectPathAfterLogin: "/",
+    redirectPathAfterLogout: "/",
+    afterLoginHook,
+    beforeLogoutHook,
+    refreshHook,
+  },
+  routes: [
+    serversRoute,
+    homeRoute,
+    createServerRoute,
+  ],
   port: 4000,
 });

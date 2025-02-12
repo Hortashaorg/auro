@@ -1,9 +1,9 @@
 import { Button } from "@comp/inputs/Button.tsx";
-import { Card } from "@comp/layout/Card.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { BaseLayout } from "@layouts/BaseLayout.tsx";
+import { createRoute, v } from "@package/framework";
 
-export const Design = () => {
+const Design = () => {
   return (
     <BaseLayout title="Deno Hot Dude">
       <>
@@ -87,34 +87,28 @@ export const Design = () => {
           <Text>Paragraph</Text>
           <Text variant="error">Error</Text>
         </div>
-
-        <div className="flex gap-2">
-          <Card>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-          </Card>
-          <Card>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-          </Card>
-          <Card>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-          </Card>
-          <Card>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-            <Text>This is a card</Text>
-          </Card>
-        </div>
       </>
     </BaseLayout>
   );
 };
+
+const DesignFormSchema = v.object({
+  name: v.string(),
+});
+
+export const designRoute = createRoute({
+  path: "/design",
+  component: Design,
+  permission: {
+    check: () => true,
+    redirectPath: "/",
+  },
+  partial: false,
+  hmr: Deno.env.get("ENV") === "local",
+  formValidationSchema: DesignFormSchema,
+  customContext: () => {
+    return {
+      name: "hello world",
+    };
+  },
+});
