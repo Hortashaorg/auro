@@ -24,35 +24,7 @@ CI/CD
 Open Telemetry
 
 App2 Auth Implementation:
-Provider Configuration:
-- Support Google OAuth provider (extendable for more providers) (DONE)
-- Provider requires: clientId, clientSecret, url.origin(Base URL) (DONE)
-
-Auth Flow:
-- Framework validate API requests using Valibot schemas. (We catch incorrect data types and values) (DONE)
-- Framework handles OAuth flow internally (DONE)
-- Framework generates login URL (available in context)
-- Framework handles token refresh automatically (DONE)
-- Framework manages secure cookie storage (DONE)
-- Framework provides protected login/logout routes (DONE)
-
-User Hooks:
-- afterLogin: Called after successful OAuth with provider data (DONE)
-  - Receives: email, accessToken, refreshToken, provider
-  - User implements account creation/update logic
-- beforeLogout: Called before clearing auth session (DONE)
-  - Receives: current account and session data
-  - Optional cleanup tasks
-- validateRequest: Called on every authenticated request (DONE)
-  - Receives: current account and session
-  - Custom validation logic (e.g., check if account is banned)
-
-Security:
-- Secure cookie settings (httpOnly, sameSite) (DONE)
-- Token refresh mechanism (DONE)
-- Session expiration handling (DONE)
-
-Context:
-- Can we also provide global context outside of the route? It would not have any fancy type inference, but we can fetch this context from anywhere.
-- While the route implementation is very good at form validation and its outputs, but you can't use it outside for other then that particular route.
-- I think we can implement this global context by wrapping component in another context and providing a halper function to get that context and use it in any component.
+1. Convert app to use app2
+2. Replace app with app2 (delete old app)
+3. Implement 404 fallback (Not sure how yet)
+4. Implement 500 fallback (Not sure how yet)
