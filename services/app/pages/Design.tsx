@@ -105,7 +105,7 @@ export const designRoute = createRoute({
   },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
-  paramValidationSchema: DesignFormSchema,
+  formValidationSchema: DesignFormSchema,
   customContext: () => {
     return {
       name: "hello world",

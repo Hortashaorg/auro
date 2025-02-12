@@ -53,3 +53,8 @@ Security:
 - Token refresh mechanism
 - Session expiration handling
 - Environment variable validation
+
+Context:
+- Can we also provide global context outside of the route? It would not have any fancy type inference, but we can fetch this context from anywhere.
+- While the route implementation is very good at form validation and its outputs, but you can't use it outside for other then that particular route.
+- I think we can implement this global context by wrapping component in another context and providing a halper function to get that context and use it in any component.
