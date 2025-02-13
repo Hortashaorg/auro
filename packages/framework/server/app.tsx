@@ -5,6 +5,7 @@ import type { createRoute, Variables } from "../routing/create-route.tsx";
 import { INTERNAL_APP } from "../routing/create-route.tsx";
 import { decode } from "@hono/hono/jwt";
 import { getCookie, setCookie } from "@hono/hono/cookie";
+import type { BlankSchema } from "@hono/hono/types";
 
 type AfterLoginHookTypes<T extends "google"> = T extends "google" ? {
     success: true;
@@ -70,7 +71,13 @@ export const app = <TProvider extends "google">(
     routes: ReturnType<typeof createRoute>[];
     port: number;
   },
-): Deno.HttpServer<Deno.NetAddr> => {
+): Hono<
+  {
+    Variables: Variables;
+  },
+  BlankSchema,
+  "/"
+> => {
   const app = new Hono<{ Variables: Variables }>({
     strict: true,
   });
@@ -406,9 +413,5 @@ export const app = <TProvider extends "google">(
     }),
   );
 
-  /** Serve */
-  return Deno.serve({
-    port: settings.port,
-    hostname: "127.0.0.1",
-  }, app.fetch);
+  return app;
 };

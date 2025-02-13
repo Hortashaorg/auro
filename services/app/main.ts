@@ -11,7 +11,7 @@ const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
 const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
   throwError("Missing Google client ID");
 
-app({
+const myApp = app({
   authProvider: {
     name: "google",
     clientId,
@@ -29,3 +29,8 @@ app({
   ],
   port: 4000,
 });
+
+Deno.serve({
+  port: 4000,
+  hostname: "127.0.0.1",
+}, myApp.fetch);
