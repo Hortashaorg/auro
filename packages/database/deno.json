@@ -15,5 +15,10 @@
   },
   "fmt": {
     "exclude": ["drizzle/"]
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-slow-types"]
+    }
   }
 }

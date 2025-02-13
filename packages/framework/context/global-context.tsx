@@ -8,7 +8,9 @@ export const GlobalContext = createContext<
   }> | null
 >(null);
 
-export const getGlobalContext = () => {
+export const getGlobalContext = (): Context<{
+  Variables: Variables;
+}> => {
   const context = useContext(GlobalContext);
   if (!context) {
     throw new Error(

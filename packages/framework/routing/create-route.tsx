@@ -120,7 +120,14 @@ export const createRoute = <
   component: () => Promise<HtmlEscapedString> | HtmlEscapedString;
   partial: boolean;
   hmr: boolean;
-}) => {
+}): {
+  [INTERNAL_APP]: Hono;
+  context: () => TContextType;
+  customContext: () => Promise<
+    TCustomContextReturnType extends undefined ? null
+      : TCustomContextReturnType
+  >;
+} => {
   // Must be rendered inside of child component in order to make context available.
   const RenderChild: FC<{
     children: () => Promise<HtmlEscapedString> | HtmlEscapedString;
