@@ -24,7 +24,5 @@ CI/CD
 Open Telemetry
 
 App2 Auth Implementation:
-1. Convert app to use app2
-2. Replace app with app2 (delete old app)
-3. Implement 404 fallback (Not sure how yet)
-4. Implement 500 fallback (Not sure how yet)
+1. Implement 404 fallback (Not sure how yet)
+2. Implement 500 fallback (Not sure how yet)
