@@ -1,0 +1,24 @@
+{
+  "name": "@package/client",
+  "exports": "./mod.ts",
+  "tasks": {
+    "typecheck": "deno check .",
+    "lint": "deno lint .",
+    "fmt": "deno fmt .",
+    "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --watch",
+    "dev": "deno run -A src/app.tsx --watch src/app.tsx"
+  },
+  "imports": {
+    "@hono/hono": "jsr:@hono/hono@^4.7.1",
+    "esbuild": "npm:esbuild@^0.25.0"
+  },
+  "fmt": {
+    "exclude": ["dist/"]
+  },
+  "lint": {
+    "exclude": ["dist/"]
+  },
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "deno.ns"]
+  }
+}

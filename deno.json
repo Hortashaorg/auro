@@ -5,6 +5,7 @@
     "./packages/common",
     "./packages/database",
     "./packages/framework",
+    "./packages/client",
     "./services/app"
   ],
   "nodeModulesDir": "auto",
