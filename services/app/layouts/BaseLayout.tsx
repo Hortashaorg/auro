@@ -13,11 +13,6 @@ export const BaseLayout = ({
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
-        <script
-          type="module"
-          src="https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.0-beta.6/bundles/datastar.js"
-        >
-        </script>
         <link
           href={`/public/main.css`}
           rel="stylesheet"
@@ -26,6 +21,8 @@ export const BaseLayout = ({
       </head>
       <body className="dark:bg-background-950 bg-background-50">
         {children}
+        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
         <script src="/public/darkmode.js"></script>
       </body>
     </html>
