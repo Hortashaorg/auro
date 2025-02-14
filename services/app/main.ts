@@ -1,4 +1,4 @@
-import { app } from "@package/framework";
+import { app } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { afterLoginHook, beforeLogoutHook, refreshHook } from "./auth.ts";
 import { serversRoute } from "@pages/Servers.tsx";

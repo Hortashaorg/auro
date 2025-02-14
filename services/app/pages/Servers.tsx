@@ -3,7 +3,7 @@ import { Modal } from "@kalena/components/overlay";
 import { ModalButton } from "@kalena/components/overlay";
 import { CreateServerForm } from "@sections/forms/CreateServerForm.tsx";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
-import { createRoute } from "@package/framework";
+import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";
 import { db } from "@package/database";
 

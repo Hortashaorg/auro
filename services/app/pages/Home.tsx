@@ -5,7 +5,7 @@ import { Tooltip } from "@kalena/components/overlay";
 import { Button } from "@kalena/components/inputs";
 import { Flex } from "@kalena/components/layouts";
 import { Card } from "@kalena/components/layouts";
-import { createRoute } from "@package/framework";
+import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";
 
 const Home = () => {

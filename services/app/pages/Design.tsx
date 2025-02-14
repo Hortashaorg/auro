@@ -1,7 +1,7 @@
 import { Button } from "@kalena/components/inputs";
 import { Text } from "@kalena/components/content";
 import { BaseLayout } from "@kalena/components/layouts";
-import { createRoute, v } from "@package/framework";
+import { createRoute, v } from "@kalena/framework";
 
 const Design = () => {
   return (

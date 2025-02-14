@@ -1,6 +1,6 @@
 import { BaseLayout } from "@kalena/components/layouts";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
-import type { JSX } from "@package/framework";
+import type { JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["div"] & {
   title: string;

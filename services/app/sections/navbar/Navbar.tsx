@@ -3,7 +3,7 @@ import { Link } from "@kalena/components/navigation";
 import { Menu } from "@kalena/components/navigation";
 import { NavButton } from "@kalena/components/navigation";
 import { Select } from "@kalena/components/navigation";
-import { getGlobalContext } from "@package/framework";
+import { getGlobalContext } from "@kalena/framework";
 
 export const Navbar = () => {
   const context = getGlobalContext();
