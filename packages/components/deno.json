@@ -13,7 +13,8 @@
   "tasks": {
     "typecheck": "deno check .",
     "lint": "deno lint .",
-    "fmt": "deno fmt ."
+    "fmt": "deno fmt .",
+    "publish": "deno publish --allow-slow-types"
   },
   "imports": {
     "@comp/": "./",
