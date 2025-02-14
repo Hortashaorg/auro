@@ -1,11 +1,18 @@
 import { Hono } from "@hono/hono";
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import * as v from "@valibot/valibot";
-import type { createRoute, Variables } from "../routing/create-route.tsx";
-import { INTERNAL_APP } from "../routing/create-route.tsx";
+import type { createRoute } from "../routing/create-route.tsx";
+import {
+  hmrScript,
+  INTERNAL_APP,
+  RenderChild,
+  type Variables,
+} from "../common/index.ts";
 import { decode } from "@hono/hono/jwt";
 import { getCookie, setCookie } from "@hono/hono/cookie";
 import type { BlankSchema } from "@hono/hono/types";
+import { GlobalContext } from "../context/global-context.tsx";
+import type { HtmlEscapedString } from "@hono/hono/utils/html";
 
 type AfterLoginHookTypes<T extends "google"> = T extends "google" ? {
     success: true;
@@ -70,6 +77,10 @@ export const app = <TProvider extends "google">(
     };
     routes: ReturnType<typeof createRoute>[];
     port: number;
+    errorPages?: {
+      notFound?: () => Promise<HtmlEscapedString> | HtmlEscapedString;
+      serverError?: () => Promise<HtmlEscapedString> | HtmlEscapedString;
+    };
   },
 ): Hono<
   {
@@ -386,11 +397,49 @@ export const app = <TProvider extends "google">(
       c.set("isLoggedIn", !!(refreshToken && email));
 
       // Set email if available
-      if (email) {
-        c.set("email", email);
-      }
+      c.set("email", email);
     }
     await next();
+  });
+
+  /** Error Handling */
+  app.onError((err, c) => {
+    console.error(`Server Error:`, err);
+    if (settings.errorPages?.serverError) {
+      return c.html(
+        <GlobalContext.Provider value={c}>
+          <RenderChild children={settings.errorPages.serverError} />
+          <script
+            dangerouslySetInnerHTML={{ __html: hmrScript }}
+          />
+        </GlobalContext.Provider>,
+        500,
+      );
+    }
+    return c.html(
+      `<h1>500 - Internal Server Error</h1>
+      <p>Something went wrong on our end. Please try again later.</p>`,
+      500,
+    );
+  });
+
+  app.notFound((c) => {
+    if (settings.errorPages?.notFound) {
+      return c.html(
+        <GlobalContext.Provider value={c}>
+          <RenderChild children={settings.errorPages.notFound} />
+          <script
+            dangerouslySetInnerHTML={{ __html: hmrScript }}
+          />
+        </GlobalContext.Provider>,
+        404,
+      );
+    }
+    return c.html(
+      `<h1>404 - Page Not Found</h1>
+      <p>The page you're looking for doesn't exist.</p>`,
+      404,
+    );
   });
 
   /** Static Files */

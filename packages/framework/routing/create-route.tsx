@@ -1,19 +1,18 @@
 import { type Context, Hono } from "@hono/hono";
 import { validator } from "@hono/hono/validator";
 import * as v from "@valibot/valibot";
-import { createContext, type FC, useContext } from "@hono/hono/jsx";
+import { createContext, useContext } from "@hono/hono/jsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
 import { GlobalContext } from "../context/global-context.tsx";
+import {
+  hmrScript,
+  INTERNAL_APP,
+  RenderChild,
+  type Variables,
+} from "../common/index.ts";
 
 // Valibot unknown schema.
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
-
-export type Variables = {
-  loginUrl: string;
-  logoutUrl: string;
-  isLoggedIn: boolean;
-  email?: string;
-};
 
 // Helper to define hono context type for specific route
 type RouteContext<
@@ -78,9 +77,6 @@ export type ExtractCustomContextFromRoute<
   T["customContext"]
 >;
 
-// Internal app instance, used by framework, unavailable package user
-export const INTERNAL_APP = Symbol("_app");
-
 // Create a route with the given config
 export const createRoute = <
   TPath extends string,
@@ -128,14 +124,6 @@ export const createRoute = <
       : TCustomContextReturnType
   >;
 } => {
-  // Must be rendered inside of child component in order to make context available.
-  const RenderChild: FC<{
-    children: () => Promise<HtmlEscapedString> | HtmlEscapedString;
-  }> = async ({ children }): Promise<HtmlEscapedString> => {
-    const result = await children();
-    return result;
-  };
-
   // Create a new Hono app instance.
   const app = new Hono();
 
@@ -195,12 +183,6 @@ export const createRoute = <
       if (!hasPermission) {
         return c.redirect(config.permission.redirectPath);
       }
-
-      // HMR script development purposes only.
-      const hmrScript = `
-        const ws = new WebSocket('ws://' + location.host + '/ws');
-        ws.onclose = () => setInterval(() => location.reload(), 200);
-      `;
 
       // Provide the context to the route, and render via child component.
       return c.html(
