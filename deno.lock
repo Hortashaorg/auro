@@ -501,7 +501,6 @@
       },
       "services/app": {
         "dependencies": [
-          "jsr:@hono/hono@^4.7.1",
           "jsr:@kalena/components@~0.1.2",
           "jsr:@kalena/framework@~0.1.2",
           "npm:class-variance-authority@~0.7.1",

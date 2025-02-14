@@ -3,7 +3,6 @@
   "name": "@service/app",
   "exports": "./main.ts",
   "imports": {
-    "@hono/hono": "jsr:@hono/hono@^4.7.1",
     "@kalena/components": "jsr:@kalena/components@^0.1.2",
     "@kalena/framework": "jsr:@kalena/framework@^0.1.2",
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
