@@ -1,11 +1,16 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@hono/hono@*": "4.7.1",
     "jsr:@hono/hono@4.7.1": "4.7.1",
+    "jsr:@hono/hono@^4.7.1": "4.7.1",
+    "jsr:@kalena/components@~0.1.1": "0.1.1",
+    "jsr:@kalena/framework@0.1": "0.1.0",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.7": "1.0.7",
     "jsr:@std/fs@^1.0.11": "1.0.11",
     "jsr:@std/path@^1.0.8": "1.0.8",
+    "jsr:@valibot/valibot@1.0.0-rc.0": "1.0.0-rc.0",
     "npm:@types/node@*": "22.5.4",
     "npm:class-variance-authority@0.7.1": "0.7.1",
     "npm:class-variance-authority@~0.7.1": "0.7.1",
@@ -29,6 +34,23 @@
     "@hono/hono@4.7.1": {
       "integrity": "f75aaf6a026ad05406e60125a70a3d2a77e3b62991f8c4e38c624bdfc1a1dc26"
     },
+    "@kalena/components@0.1.1": {
+      "integrity": "8e9782099718367a2e2cba7882000ea041586a4d29ce8545289acaff3239df26",
+      "dependencies": [
+        "jsr:@hono/hono@*",
+        "npm:class-variance-authority@0.7.1",
+        "npm:clsx@2.1.1",
+        "npm:tailwind-merge@3.0.1"
+      ]
+    },
+    "@kalena/framework@0.1.0": {
+      "integrity": "a361be3694db3fda2c6552897166f480097c8c5e3c87febc85709e24afd9f333",
+      "dependencies": [
+        "jsr:@hono/hono@*",
+        "jsr:@hono/hono@4.7.1",
+        "jsr:@valibot/valibot"
+      ]
+    },
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
     },
@@ -43,6 +65,9 @@
     },
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    },
+    "@valibot/valibot@1.0.0-rc.0": {
+      "integrity": "2937c0444f9b1bffee13a8e918e9cb1c9706effd1098226edf09a90129b1ea87"
     }
   },
   "npm": {
@@ -441,6 +466,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@hono/hono@*",
       "jsr:@std/fs@^1.0.11",
       "jsr:@std/path@^1.0.8"
     ],
@@ -475,6 +501,8 @@
       },
       "services/app": {
         "dependencies": [
+          "jsr:@kalena/components@~0.1.1",
+          "jsr:@kalena/framework@0.1",
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
           "npm:tailwind-merge@^3.0.1",

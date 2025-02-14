@@ -1,4 +1,4 @@
-import { createRoute, v } from "@package/framework";
+import { createRoute, v } from "@kalena/framework";
 import { db, schema } from "@package/database";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
 

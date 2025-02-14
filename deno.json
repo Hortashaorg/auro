@@ -31,7 +31,9 @@
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "jsx": "precompile",
+    "jsxImportSource": "jsr:@hono/hono/jsx"
   },
   "imports": {
     "@std/fs": "jsr:@std/fs@^1.0.11",
