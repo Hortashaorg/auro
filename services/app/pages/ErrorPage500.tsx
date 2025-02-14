@@ -1,7 +1,7 @@
-import { ErrorLayout } from "@layouts/ErrorLayout.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
+import { ErrorLayout } from "@kalena/components/layouts";
+import { Text } from "@kalena/components/content";
+import { ButtonLink } from "@kalena/components/navigation";
+import { Flex } from "@kalena/components/layouts";
 
 export const ErrorPage500 = () => {
   return (

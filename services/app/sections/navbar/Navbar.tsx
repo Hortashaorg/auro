@@ -1,15 +1,15 @@
-import { Header } from "@comp/navigation/Header.tsx";
-import { Link } from "@comp/navigation/Link.tsx";
-import { Menu } from "@comp/navigation/Menu.tsx";
-import { NavButton } from "@comp/navigation/NavButton.tsx";
-import { Select } from "@comp/navigation/Select.tsx";
+import { Header } from "@kalena/components/navigation";
+import { Link } from "@kalena/components/navigation";
+import { Menu } from "@kalena/components/navigation";
+import { NavButton } from "@kalena/components/navigation";
+import { Select } from "@kalena/components/navigation";
 import { getGlobalContext } from "@package/framework";
 
 export const Navbar = () => {
   const context = getGlobalContext();
 
   return (
-    <Header>
+    <Header id="section-navbar">
       {context.var.isLoggedIn
         ? (
           <Menu>

@@ -1,4 +1,4 @@
-import { BaseLayout } from "@layouts/BaseLayout.tsx";
+import { BaseLayout } from "@kalena/components/layouts";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
 import type { JSX } from "@package/framework";
 
@@ -11,7 +11,7 @@ export const Layout = ({
 }: Props) => {
   return (
     <BaseLayout title={title}>
-      <div className="container mx-auto p-4" x-data="{}">
+      <div className="container mx-auto p-4">
         <Navbar />
         <div>
           {children}

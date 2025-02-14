@@ -1,0 +1,12 @@
+---
+description: Rules for section components
+globs: sections/**/*.tsx
+---
+# Section Rules
+
+- Sections should always have a unique ID for HTMX targeting
+- IDs should be descriptive and follow kebab-case naming convention
+- Sections that may be re-rendered via HTMX should use consistent IDs
+- Multiple instances of the same section type should append a unique identifier
+- Section IDs should match their HTMX target selectors.
+- The use of sections in this way is the enforce the pattern of rerendring a section after a change have been submitted to the server.

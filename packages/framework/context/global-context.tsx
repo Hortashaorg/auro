@@ -1,6 +1,6 @@
 import { createContext, useContext } from "@hono/hono/jsx";
 import type { Context } from "@hono/hono";
-import type { Variables } from "../routing/create-route.tsx";
+import type { Variables } from "../common/index.ts";
 
 export const GlobalContext = createContext<
   Context<{

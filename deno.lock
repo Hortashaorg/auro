@@ -2,7 +2,6 @@
   "version": "4",
   "specifiers": {
     "jsr:@hono/hono@*": "4.7.0",
-    "jsr:@hono/hono@^4.7.0": "4.7.1",
     "jsr:@hono/hono@^4.7.1": "4.7.1",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.7": "1.0.7",
@@ -449,16 +448,19 @@
       "jsr:@std/path@^1.0.8"
     ],
     "members": {
-      "packages/client": {
-        "dependencies": [
-          "jsr:@hono/hono@^4.7.1",
-          "npm:esbuild@0.25"
-        ]
-      },
       "packages/common": {
         "dependencies": [
           "jsr:@std/crypto@^1.0.4",
           "jsr:@std/encoding@^1.0.7"
+        ]
+      },
+      "packages/components": {
+        "dependencies": [
+          "jsr:@hono/hono@4.7.1",
+          "jsr:@valibot/valibot@^1.0.0-rc.0",
+          "npm:class-variance-authority@~0.7.1",
+          "npm:clsx@^2.1.1",
+          "npm:tailwind-merge@^3.0.1"
         ]
       },
       "packages/database": {
@@ -470,7 +472,7 @@
       },
       "packages/framework": {
         "dependencies": [
-          "jsr:@hono/hono@^4.7.0",
+          "jsr:@hono/hono@^4.7.1",
           "jsr:@valibot/valibot@^1.0.0-rc.0"
         ]
       },

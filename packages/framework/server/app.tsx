@@ -1,4 +1,4 @@
-import { Hono } from "@hono/hono";
+import { type Context, Hono } from "@hono/hono";
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import * as v from "@valibot/valibot";
 import type { createRoute } from "../routing/create-route.tsx";
@@ -407,7 +407,7 @@ export const app = <TProvider extends "google">(
     console.error(`Server Error:`, err);
     if (settings.errorPages?.serverError) {
       return c.html(
-        <GlobalContext.Provider value={c}>
+        <GlobalContext.Provider value={c as Context}>
           <RenderChild children={settings.errorPages.serverError} />
           <script
             dangerouslySetInnerHTML={{ __html: hmrScript }}
@@ -426,7 +426,7 @@ export const app = <TProvider extends "google">(
   app.notFound((c) => {
     if (settings.errorPages?.notFound) {
       return c.html(
-        <GlobalContext.Provider value={c}>
+        <GlobalContext.Provider value={c as Context}>
           <RenderChild children={settings.errorPages.notFound} />
           <script
             dangerouslySetInnerHTML={{ __html: hmrScript }}

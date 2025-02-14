@@ -1,7 +1,7 @@
-import { Button } from "@comp/inputs/Button.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { Form } from "@comp/inputs/form/Form.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Button } from "@kalena/components/inputs";
+import { Input } from "@kalena/components/inputs";
+import { Form } from "@kalena/components/inputs";
+import { Text } from "@kalena/components/content";
 import type { JSX } from "@package/framework";
 
 type Props = JSX.IntrinsicElements["form"];
@@ -11,8 +11,9 @@ export const CreateServerForm = ({ ...props }: Props) => {
     <Form
       {...props}
       hx-post="/api/create-server"
-      hx-target="#serverList"
-      hx-swap="innerHTML"
+      hx-target="#section-server-grid"
+      hx-swap="outerHTML"
+      id="section-create-server-form"
     >
       <div>
         <Text variant="paragraph" className="mb-2">Server Name</Text>

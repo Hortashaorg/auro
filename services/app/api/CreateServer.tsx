@@ -1,14 +1,43 @@
 import { createRoute, v } from "@package/framework";
-import { db } from "@package/database";
+import { db, schema } from "@package/database";
+import { ServerGrid } from "@sections/views/ServerGrid.tsx";
 
-const CreateServer = () => {
+const CreateServer = async () => {
   const context = createServerRoute.context();
+  const result = context.req.valid("form");
 
-  const data = context.req.valid("form");
+  if (!result.success) {
+    return (
+      <p className="text-red-500">
+        {result.issues[0].message}
+      </p>
+    );
+  }
 
-  console.log(data);
+  // Create the server
+  await db.insert(schema.server).values({
+    name: result.output.name,
+  });
 
-  return <p>response</p>;
+  // Fetch updated server list
+  const servers = await db.query.server.findMany({
+    orderBy: (server, { desc }) => [desc(server.updatedAt)],
+  });
+
+  context.header(
+    "HX-Trigger",
+    JSON.stringify({
+      "close-dialog": {
+        value: true,
+      },
+      "input-error": {
+        message: "Server created successfully",
+      },
+    }),
+  );
+
+  // Return the updated server list using ServerGrid component
+  return <ServerGrid servers={servers} />;
 };
 
 const CreateServerSchema = v.object({

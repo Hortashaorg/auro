@@ -7,7 +7,6 @@
     "clsx": "npm:clsx@^2.1.1",
     "tailwind-merge": "npm:tailwind-merge@^3.0.1",
     "tailwindcss": "npm:tailwindcss@^4.0.5",
-    "@utils/": "./utils/",
     "@comp/": "./components/",
     "@layouts/": "./layouts/",
     "@sections/": "./sections/",
