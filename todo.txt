@@ -22,7 +22,3 @@ Current Server is stored as a cookie
 Workflow - typecheck, linting and formatting
 CI/CD
 Open Telemetry
-
-App2 Auth Implementation:
-1. Implement 404 fallback (Not sure how yet)
-2. Implement 500 fallback (Not sure how yet)
