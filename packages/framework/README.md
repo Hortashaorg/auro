@@ -171,7 +171,7 @@ The application only requires to configure the authentication provider and the
 pass the routes you have created.
 
 ```ts
-app({
+const myApp = app({
   authProvider: {
     name: "google",
     clientId: clientId,
@@ -250,17 +250,6 @@ When using route validation schemas, validation errors are automatically handled
 and can be accessed in your components:
 
 ```ts
-const CreateServerSchema = v.object({
-  name: v.pipe(v.string(), v.minLength(3)),
-});
-
-export const createServerRoute = createRoute({
-  path: "/api/create-server",
-  component: CreateServer,
-  formValidationSchema: CreateServerSchema,
-  // ... other config
-});
-
 const CreateServer = () => {
   const context = createServerRoute.context();
   const validationResult = context.req.valid("form");
@@ -275,6 +264,17 @@ const CreateServer = () => {
   const data = validationResult.output;
   return <div>Success: {data.name}</div>;
 };
+
+const CreateServerSchema = v.object({
+  name: v.pipe(v.string(), v.minLength(3)),
+});
+
+export const createServerRoute = createRoute({
+  path: "/api/create-server",
+  component: CreateServer,
+  formValidationSchema: CreateServerSchema,
+  // ... other config
+});
 ```
 
 ## Custom Error Handling
@@ -322,19 +322,5 @@ export const adminRoute = createRoute({
     redirectPath: "/unauthorized", // User is redirected here if check fails
   },
   // ... other config
-});
-```
-
-## Global Error Pages
-
-You can define custom error pages for common HTTP status codes:
-
-```ts
-app({
-  // ... other config
-  errorPages: {
-    404: () => <NotFoundPage />,
-    500: () => <ServerErrorPage />,
-  },
 });
 ```
