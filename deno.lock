@@ -2,12 +2,10 @@
   "version": "4",
   "specifiers": {
     "jsr:@hono/hono@4.7.1": "4.7.1",
-    "jsr:@hono/hono@^4.7.1": "4.7.1",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.7": "1.0.7",
     "jsr:@std/fs@^1.0.11": "1.0.11",
     "jsr:@std/path@^1.0.8": "1.0.8",
-    "jsr:@valibot/valibot@^1.0.0-rc.0": "1.0.0-rc.0",
     "npm:@types/node@*": "22.5.4",
     "npm:class-variance-authority@0.7.1": "0.7.1",
     "npm:class-variance-authority@~0.7.1": "0.7.1",
@@ -45,9 +43,6 @@
     },
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
-    },
-    "@valibot/valibot@1.0.0-rc.0": {
-      "integrity": "2937c0444f9b1bffee13a8e918e9cb1c9706effd1098226edf09a90129b1ea87"
     }
   },
   "npm": {
@@ -474,8 +469,8 @@
       },
       "packages/framework": {
         "dependencies": [
-          "jsr:@hono/hono@^4.7.1",
-          "jsr:@valibot/valibot@^1.0.0-rc.0"
+          "jsr:@hono/hono@4.7.1",
+          "jsr:@valibot/valibot@1.0.0-rc.0"
         ]
       },
       "services/app": {
