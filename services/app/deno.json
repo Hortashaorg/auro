@@ -11,7 +11,6 @@
     "@comp/": "./components/",
     "@layouts/": "./layouts/",
     "@sections/": "./sections/",
-    "@context/": "./context/",
     "@pages/": "./pages/",
     "@permissions/": "./permissions/",
     "@api/": "./api/"
@@ -22,7 +21,6 @@
     "fmt": "deno fmt .",
     "tailwind": "./tailwindcli -i ./main.css -o ./public/main.css --minify --watch",
     "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --allow-net --allow-read --allow-env --watch ./main.ts",
-    "comp": "deno run --allow-read --allow-net --allow-write https://raw.githubusercontent.com/Hortashaorg/auro/df9d2d837333e30bba898199b63d6e6d7352b4ef/packages/components/cli.ts",
     "comp:build": "deno run --allow-read --allow-write createStructure.ts"
   },
   "fmt": {
