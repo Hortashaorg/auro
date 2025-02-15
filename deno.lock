@@ -479,7 +479,7 @@
       },
       "packages/components": {
         "dependencies": [
-          "jsr:@hono/hono@4.7.1",
+          "jsr:@kalena/framework@~0.1.2",
           "jsr:@valibot/valibot@1.0.0-rc.0",
           "npm:class-variance-authority@0.7.1",
           "npm:clsx@2.1.1",

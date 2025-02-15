@@ -1,5 +1,5 @@
-import { Button } from "@comp/inputs/Button.tsx";
-import type { FC, JSX } from "@hono/hono/jsx";
+import { Button } from "@/inputs/Button.tsx";
+import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["button"] & {
   modalRef: string;

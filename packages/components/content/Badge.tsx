@@ -1,8 +1,7 @@
-import { cn } from "@utils/tailwind.ts";
+import { cn } from "@/utils/tailwind.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@hono/hono/jsx";
-
-import type { NonNullableProps } from "@utils/types.ts";
+import type { FC, JSX } from "@kalena/framework";
+import type { NonNullableProps } from "@/utils/types.ts";
 
 const badgeVariants = cva([
   "inline-flex",

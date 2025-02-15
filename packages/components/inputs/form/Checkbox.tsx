@@ -1,5 +1,5 @@
-import { cn } from "@utils/tailwind.ts";
-import type { FC, JSX } from "@hono/hono/jsx";
+import { cn } from "@/utils/tailwind.ts";
+import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["input"] & {
   label?: string;

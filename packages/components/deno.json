@@ -2,25 +2,16 @@
   "name": "@kalena/components",
   "version": "0.1.4",
   "license": "MIT",
-  "exports": {
-    "./layouts": "./layout/index.ts",
-    "./content": "./content/index.ts",
-    "./feedback": "./feedback/index.ts",
-    "./inputs": "./inputs/index.ts",
-    "./overlay": "./overlay/index.ts",
-    "./navigation": "./navigation/index.ts",
-    "./theme": "./theme/default.css"
-  },
+  "exports": "./cli.ts",
   "tasks": {
     "typecheck": "deno check .",
     "lint": "deno lint .",
     "fmt": "deno fmt .",
-    "publish": "deno publish --allow-slow-types"
+    "build": "deno run --allow-read --allow-write createStructure.ts"
   },
   "imports": {
-    "@comp/": "./",
-    "@hono/hono": "jsr:@hono/hono@4.7.1",
-    "@utils/": "./utils/",
+    "@/": "./",
+    "@kalena/framework": "jsr:@kalena/framework@^0.1.2",
     "@valibot/valibot": "jsr:@valibot/valibot@1.0.0-rc.0",
     "class-variance-authority": "npm:class-variance-authority@0.7.1",
     "clsx": "npm:clsx@2.1.1",

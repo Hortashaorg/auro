@@ -1,8 +1,8 @@
-import { Text } from "@comp/content/Text.tsx";
-import { cn } from "@utils/tailwind.ts";
-import type { NonNullableProps } from "@utils/types.ts";
+import { Text } from "@/content/Text.tsx";
+import { cn } from "@/utils/tailwind.ts";
+import type { NonNullableProps } from "@/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@hono/hono/jsx";
+import type { FC, JSX } from "@kalena/framework";
 
 const selectVariants = cva(
   [

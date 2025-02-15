@@ -1,6 +1,4 @@
-import type { FC, JSX } from "@hono/hono/jsx";
-/** @jsxImportSource jsr:@hono/hono/jsx/jsx-runtime@4.7.1 */
-
+import type { FC, JSX } from "@kalena/framework";
 type Props = JSX.IntrinsicElements["body"] & {
   title: string;
 };
