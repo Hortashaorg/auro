@@ -4,7 +4,7 @@
   "editor.defaultFormatter": "denoland.vscode-deno",
   "editor.formatOnSave": true,
   "files.associations": {
-    "*.css": "tailwindcss"
+    "main.css": "tailwindcss"
   },
   "editor.quickSuggestions": {
     "strings": "on"
