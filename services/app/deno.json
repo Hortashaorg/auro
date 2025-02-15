@@ -22,7 +22,8 @@
     "lint": "deno lint .",
     "fmt": "deno fmt .",
     "tailwind": "./tailwindcli -i ./main.css -o ./public/main.css --minify --watch",
-    "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --allow-net --allow-read --allow-env --watch ./main.ts"
+    "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --allow-net --allow-read --allow-env --watch ./main.ts",
+    "comp": "deno run https://raw.githubusercontent.com/Hortashaorg/auro/refs/heads/main/packages/components/test.ts"
   },
   "fmt": {
     "exclude": ["public/main.css"]
