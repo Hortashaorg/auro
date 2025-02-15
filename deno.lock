@@ -4,7 +4,7 @@
     "jsr:@hono/hono@*": "4.7.1",
     "jsr:@hono/hono@4.7.1": "4.7.1",
     "jsr:@hono/hono@^4.7.1": "4.7.1",
-    "jsr:@kalena/framework@~0.1.2": "0.1.2",
+    "jsr:@kalena/framework@~0.1.3": "0.1.3",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.7": "1.0.7",
     "jsr:@std/fs@^1.0.11": "1.0.11",
@@ -35,8 +35,8 @@
     "@hono/hono@4.7.1": {
       "integrity": "f75aaf6a026ad05406e60125a70a3d2a77e3b62991f8c4e38c624bdfc1a1dc26"
     },
-    "@kalena/framework@0.1.2": {
-      "integrity": "85a32b0371c3b8f3c05ea1ffe379ea00dbe006b669f3e5bd4c8d06af571d5b90",
+    "@kalena/framework@0.1.3": {
+      "integrity": "1ca9fbcc5ff111283830e95d84129bc1f0045cf011102d18455127380126ac07",
       "dependencies": [
         "jsr:@hono/hono@4.7.1",
         "jsr:@valibot/valibot"
@@ -483,7 +483,7 @@
       },
       "services/app": {
         "dependencies": [
-          "jsr:@kalena/framework@~0.1.2",
+          "jsr:@kalena/framework@~0.1.3",
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
           "npm:tailwind-merge@^3.0.1",
