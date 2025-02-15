@@ -64,4 +64,7 @@ for (const file of allComponents) {
   }
 }
 
-await Deno.writeTextFile("./componentMap.json", JSON.stringify(componentMap));
+await Deno.writeTextFile(
+  "./components/componentMap.json",
+  JSON.stringify(componentMap),
+);
