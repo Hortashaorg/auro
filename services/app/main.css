@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@kalena/components/theme/default.css";
 
 /* Local 
 @import "../../packages/components/theme/default.css";

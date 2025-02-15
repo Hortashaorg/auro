@@ -1,6 +1,6 @@
 {
   "name": "@kalena/components",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "exports": {
     "./layouts": "./layout/index.ts",
@@ -8,7 +8,8 @@
     "./feedback": "./feedback/index.ts",
     "./inputs": "./inputs/index.ts",
     "./overlay": "./overlay/index.ts",
-    "./navigation": "./navigation/index.ts"
+    "./navigation": "./navigation/index.ts",
+    "./theme": "./theme/default.css"
   },
   "tasks": {
     "typecheck": "deno check .",
