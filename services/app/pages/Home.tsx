@@ -1,10 +1,10 @@
 import { Layout } from "@layouts/Layout.tsx";
-import { Text } from "@kalena/components/content";
-import { Info } from "@kalena/components/feedback";
-import { Tooltip } from "@kalena/components/overlay";
-import { Button } from "@kalena/components/inputs";
-import { Flex } from "@kalena/components/layouts";
-import { Card } from "@kalena/components/layouts";
+import { Text } from "@comp/content/Text.tsx";
+import { Info } from "@comp/feedback/Info.tsx";
+import { Tooltip } from "@comp/overlay/Tooltip.tsx";
+import { Button } from "@comp/inputs/Button.tsx";
+import { Flex } from "@comp/layout/Flex.tsx";
+import { Card } from "@comp/layout/Card.tsx";
 import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";
 

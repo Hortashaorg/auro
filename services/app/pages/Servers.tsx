@@ -1,6 +1,6 @@
 import { Layout } from "@layouts/Layout.tsx";
-import { Modal } from "@kalena/components/overlay";
-import { ModalButton } from "@kalena/components/overlay";
+import { Modal } from "@comp/overlay/modal/Modal.tsx";
+import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
 import { CreateServerForm } from "@sections/forms/CreateServerForm.tsx";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
 import { createRoute } from "@kalena/framework";

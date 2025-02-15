@@ -1,9 +1,9 @@
-import { Grid } from "@kalena/components/layouts";
-import { Card } from "@kalena/components/layouts";
-import { Flex } from "@kalena/components/layouts";
-import { Text } from "@kalena/components/content";
-import { Badge } from "@kalena/components/content";
-import { ButtonLink } from "@kalena/components/navigation";
+import { Grid } from "@comp/layout/Grid.tsx";
+import { Card } from "@comp/layout/Card.tsx";
+import { Flex } from "@comp/layout/Flex.tsx";
+import { Text } from "@comp/content/Text.tsx";
+import { Badge } from "@comp/content/Badge.tsx";
+import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 import type { schema } from "@package/database";
 
 type Props = {

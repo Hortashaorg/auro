@@ -1,6 +1,6 @@
-import { Button } from "@kalena/components/inputs";
-import { Text } from "@kalena/components/content";
-import { BaseLayout } from "@kalena/components/layouts";
+import { Button } from "@comp/inputs/Button.tsx";
+import { Text } from "@comp/content/Text.tsx";
+import { BaseLayout } from "@comp/layout/BaseLayout.tsx";
 import { createRoute, v } from "@kalena/framework";
 
 const Design = () => {

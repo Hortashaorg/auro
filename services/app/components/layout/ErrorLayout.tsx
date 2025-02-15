@@ -1,19 +1,18 @@
 import { BaseLayout } from "@comp/layout/BaseLayout.tsx";
-import { Navbar } from "@sections/navbar/Navbar.tsx";
-import type { JSX } from "@kalena/framework";
+import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["div"] & {
   title: string;
 };
-export const Layout = ({
+
+export const ErrorLayout: FC<Props> = ({
   title,
   children,
 }: Props) => {
   return (
     <BaseLayout title={title}>
-      <div className="container mx-auto p-4">
-        <Navbar />
-        <div>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
           {children}
         </div>
       </div>

@@ -1,7 +1,7 @@
-import { Button } from "@kalena/components/inputs";
-import { Input } from "@kalena/components/inputs";
-import { Form } from "@kalena/components/inputs";
-import { Text } from "@kalena/components/content";
+import { Button } from "@comp/inputs/Button.tsx";
+import { Input } from "@comp/inputs/form/Input.tsx";
+import { Form } from "@comp/inputs/form/Form.tsx";
+import { Text } from "@comp/content/Text.tsx";
 import type { JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["form"];

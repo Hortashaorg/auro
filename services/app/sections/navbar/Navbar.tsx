@@ -1,8 +1,8 @@
-import { Header } from "@kalena/components/navigation";
-import { Link } from "@kalena/components/navigation";
-import { Menu } from "@kalena/components/navigation";
-import { NavButton } from "@kalena/components/navigation";
-import { Select } from "@kalena/components/navigation";
+import { Header } from "@comp/navigation/Header.tsx";
+import { Link } from "@comp/navigation/Link.tsx";
+import { Menu } from "@comp/navigation/Menu.tsx";
+import { NavButton } from "@comp/navigation/NavButton.tsx";
+import { Select } from "@comp/navigation/Select.tsx";
 import { getGlobalContext } from "@kalena/framework";
 
 export const Navbar = () => {
