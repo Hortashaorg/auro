@@ -3,7 +3,6 @@
   "name": "@service/app",
   "exports": "./main.ts",
   "imports": {
-    "@kalena/components": "jsr:@kalena/components@^0.1.3",
     "@kalena/framework": "jsr:@kalena/framework@^0.1.2",
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
     "clsx": "npm:clsx@^2.1.1",
@@ -24,7 +23,7 @@
     "tailwind": "./tailwindcli -i ./main.css -o ./public/main.css --minify --watch",
     "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --allow-net --allow-read --allow-env --watch ./main.ts",
     "comp": "deno run --allow-read --allow-net --allow-write https://raw.githubusercontent.com/Hortashaorg/auro/df9d2d837333e30bba898199b63d6e6d7352b4ef/packages/components/cli.ts",
-    "comp:build": "deno run --allow-read --allow-write components/createStructure.ts"
+    "comp:build": "deno run --allow-read --allow-write createStructure.ts"
   },
   "fmt": {
     "exclude": ["public/main.css"]
