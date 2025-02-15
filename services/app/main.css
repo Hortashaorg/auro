@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import "@kalena/components/theme/default.css";
+@import url("https://raw.githubusercontent.com/Hortashaorg/auro/refs/heads/main/packages/components/theme/default.css");
+@source "@kalena";
 
 /* Local 
 @import "../../packages/components/theme/default.css";
