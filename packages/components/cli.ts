@@ -58,9 +58,8 @@ async function downloadComponent(path: string) {
 // CLI interface
 const [command, ...args] = Deno.args;
 
-const componentsJSON = await Deno.readTextFile(
-  "./componentMap.json",
-);
+const response = await fetch(`${baseUrl}/componentMap.json`);
+const componentsJSON = await response.text();
 
 const components: Record<string, {
   file: string;
