@@ -10,7 +10,7 @@
     "build": "deno run --allow-read --allow-write createStructure.ts"
   },
   "imports": {
-    "@/": "./",
+    "@comp/": "./",
     "@kalena/framework": "jsr:@kalena/framework@^0.1.2",
     "@valibot/valibot": "jsr:@valibot/valibot@1.0.0-rc.0",
     "class-variance-authority": "npm:class-variance-authority@0.7.1",

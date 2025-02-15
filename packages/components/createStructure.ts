@@ -55,11 +55,11 @@ for (const file of allComponents) {
     componentMap[componentName] = {
       file: relativePath,
       dependencies: compImports.filter((compimport) =>
-        !compimport.startsWith("@/")
+        !compimport.startsWith("@comp/")
       ),
       localDependencies: compImports.filter((compimport) =>
-        compimport.startsWith("@/")
-      ).map((compimport) => compimport.replace("@/", "")),
+        compimport.startsWith("@comp/")
+      ).map((compimport) => compimport.replace("@comp/", "")),
     };
   }
 }

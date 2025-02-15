@@ -1,5 +1,5 @@
-import { cn } from "@/utils/tailwind.ts";
-import { Flex } from "@/layout/Flex.tsx";
+import { cn } from "@comp/utils/tailwind.ts";
+import { Flex } from "@comp/layout/Flex.tsx";
 import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["form"];

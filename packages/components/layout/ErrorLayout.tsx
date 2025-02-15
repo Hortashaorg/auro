@@ -1,4 +1,4 @@
-import { BaseLayout } from "@/layout/BaseLayout.tsx";
+import { BaseLayout } from "@comp/layout/BaseLayout.tsx";
 import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["div"] & {

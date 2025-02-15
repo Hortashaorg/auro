@@ -1,7 +1,7 @@
-import { cn } from "@/utils/tailwind.ts";
-import { Flex } from "@/layout/Flex.tsx";
-import { Button } from "@/inputs/Button.tsx";
-import { Text } from "@/content/Text.tsx";
+import { cn } from "@comp/utils/tailwind.ts";
+import { Flex } from "@comp/layout/Flex.tsx";
+import { Button } from "@comp/inputs/Button.tsx";
+import { Text } from "@comp/content/Text.tsx";
 import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["dialog"] & {

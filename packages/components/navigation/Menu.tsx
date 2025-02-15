@@ -1,4 +1,4 @@
-import { cn } from "@/utils/tailwind.ts";
+import { cn } from "@comp/utils/tailwind.ts";
 import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["nav"];
