@@ -1,5 +1,4 @@
 Logged in:
-- When logging in for the first time, an account is created for me. And I'm unable to create game servers by default.
 - When logged in, i have the option to swap to another server.
 - If account is given permission to create servers, I can create a server. I will be admin by server created by me.
 
@@ -21,4 +20,3 @@ Technical:
 Current Server is stored as a cookie
 Workflow - typecheck, linting and formatting
 CI/CD
-Open Telemetry

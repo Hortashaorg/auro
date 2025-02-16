@@ -79,7 +79,28 @@ export type ExtractCustomContextFromRoute<
   T["customContext"]
 >;
 
-// Create a route with the given config
+/**
+ * Create a route with the given config
+ * @param config - The config for the route
+ * @param config.path - The path of the route
+ * @param config.formValidationSchema - The form validation schema for the route
+ * @param config.cookieValidationSchema - The cookie validation schema for the route
+ * @param config.headerValidationSchema - The header validation schema for the route
+ * @param config.jsonValidationSchema - The json validation schema for the route
+ * @param config.paramValidationSchema - The param validation schema for the route
+ * @param config.queryValidationSchema - The query validation schema for the route
+ * @param config.permission - The permission for the route
+ * @param config.permission.check - The function to check the permission for the route
+ * @param config.permission.redirectPath - The path to redirect to if the permission check fails
+ * @param config.customContext - The custom context defined by user. Available by `route.customContext()`
+ * @param config.component - The component to render for the route
+ * @param config.partial - Whether the component is a partial or not (HTMX is example of something that should be partial)
+ * @param config.hmr - Whether to enable HMR for the route. You would only like to enable in a dev environment.
+ * @returns {
+ *   context: () => TContextType;
+ *   customContext: () => Promise<TCustomContextReturnType extends undefined ? null : TCustomContextReturnType>;
+ * } Returns context function for route specific hono context and custom context function for route specific custom context
+ */
 export const createRoute = <
   TPath extends string,
   TFormValidation extends BaseSchema | undefined = undefined,

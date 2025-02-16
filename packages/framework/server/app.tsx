@@ -55,7 +55,15 @@ type ValidateHookTypes<T extends "google"> = T extends "google" ? {
   }
   : never;
 
-/** Init Framework App */
+/**
+ * Init Framework App
+ * @param settings - The settings for the app
+ * @param settings.authProvider - The auth provider configuration and authentication hooks
+ * @param settings.routes - Routes to be added to the app
+ * @param settings.port - The port to use
+ * @param settings.errorPages - The error pages for 404 and 500 errors
+ * @returns {Hono<{Variables: Variables}, BlankSchema, "/">} The framework app
+ */
 export const app = <TProvider extends "google">(
   settings: {
     authProvider?: {

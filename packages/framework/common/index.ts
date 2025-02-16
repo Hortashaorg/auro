@@ -24,4 +24,4 @@ const ws = new WebSocket('ws://' + location.host + '/ws');
 ws.onclose = () => setInterval(() => location.reload(), 200);
 `;
 
-export const tracer = trace.getTracer("@kalena/framework", "0.1.6");
+export const tracer = trace.getTracer("@kalena/framework", "0.1.7");

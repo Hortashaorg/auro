@@ -8,6 +8,10 @@ export const GlobalContext = createContext<
   }> | null
 >(null);
 
+/**
+ * Get the global context
+ * @returns {Context<{Variables: Variables}>} The global context
+ */
 export const getGlobalContext = (): Context<{
   Variables: Variables;
 }> => {
