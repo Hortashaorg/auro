@@ -66,13 +66,21 @@ type RouteContext<
   }
 >;
 
-// Helper to extract context from route
+/**
+ * Extract the context from the route
+ * @param route - The route to extract the context from
+ * @returns {T["context"]} The context for the route
+ */
 export type ExtractContextFromRoute<T extends ReturnType<typeof createRoute>> =
   ReturnType<
     T["context"]
   >;
 
-// Helper to extract custom context from route
+/**
+ * Extract the custom context from the route
+ * @param route - The route to extract the custom context from
+ * @returns {T["customContext"]} The custom context for the route
+ */
 export type ExtractCustomContextFromRoute<
   T extends ReturnType<typeof createRoute>,
 > = ReturnType<
