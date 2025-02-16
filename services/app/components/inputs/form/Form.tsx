@@ -9,7 +9,12 @@ export const Form: FC<Props> = ({
   className,
   ...props
 }: Props) => {
-  props["x-on:input-error.window"] = `console.log($event.detail)`;
+  props["x-data"] = "{ errors: {} }";
+  props["x-on:clear-form.window"] = `
+    $el.reset();
+    errors = {};
+  `;
+  props["x-on:form-error.window"] = `errors = $event.detail`;
 
   return (
     <form {...props} className={cn("w-full", className)}>

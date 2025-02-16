@@ -2,6 +2,7 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { FC, JSX } from "@kalena/framework";
+import { Text } from "@comp/content/Text.tsx";
 
 const inputVariants = cva([
   "rounded-md",
@@ -47,12 +48,20 @@ export const Input: FC<Props> = ({
   className,
   size,
   state,
-  ...rest
+  ...props
 }: Props) => {
   return (
-    <input
-      {...rest}
-      className={cn(inputVariants({ size, state }), className)}
-    />
+    <>
+      <input
+        {...props}
+        className={cn(inputVariants({ size, state }), className)}
+      />
+      <Text
+        variant="error"
+        className="mt-1 text-sm"
+        x-show={`errors['${props.name}']`}
+        x-text={`errors['${props.name}']`}
+      />
+    </>
   );
 };

@@ -5,14 +5,15 @@ import { Text } from "@comp/content/Text.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 import type { schema } from "@package/database";
+import type { JSX } from "@kalena/framework";
 
-type Props = {
+type Props = JSX.IntrinsicElements["div"] & {
   servers: typeof schema.server.$inferSelect[];
 };
 
-export const ServerGrid = ({ servers }: Props) => {
+export const ServerGrid = ({ servers, ...props }: Props) => {
   return (
-    <Grid cols={2} gap={4} id="section-server-grid">
+    <Grid cols={2} gap={4} id="section-server-grid" {...props}>
       {servers.map((server) => (
         <Card key={server.id} className="relative">
           <Flex direction="col" gap={4}>

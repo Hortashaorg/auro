@@ -12,7 +12,7 @@ export const CreateServerForm = ({ ...props }: Props) => {
       {...props}
       hx-post="/api/create-server"
       hx-target="#section-server-grid"
-      hx-swap="outerHTML"
+      hx-swap="none"
       id="section-create-server-form"
     >
       <div>

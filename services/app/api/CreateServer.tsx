@@ -1,12 +1,32 @@
 import { createRoute, v } from "@kalena/framework";
 import { db, schema } from "@package/database";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
+import { createEvents } from "@comp/utils/events.ts";
+import { throwError } from "@package/common";
 
 const CreateServer = async () => {
   const context = createServerRoute.context();
   const result = context.req.valid("form");
 
   if (!result.success) {
+    const errorEvents: Record<string, string> = {};
+
+    for (const issue of result.issues) {
+      const field: string = issue.path?.[0]?.key as string ??
+        throwError("Invalid issue path");
+      errorEvents[field] = issue.message;
+    }
+
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        {
+          name: "form-error",
+          values: errorEvents,
+        },
+      ]),
+    );
+
     return (
       <p className="text-red-500">
         {result.issues[0].message}
@@ -26,22 +46,28 @@ const CreateServer = async () => {
 
   context.header(
     "HX-Trigger",
-    JSON.stringify({
-      "close-dialog": {
-        value: true,
+    createEvents([
+      {
+        name: "close-dialog",
+        values: {
+          value: true,
+        },
       },
-      "input-error": {
-        message: "Server created successfully",
+      {
+        name: "clear-form",
+        values: {
+          value: true,
+        },
       },
-    }),
+    ]),
   );
 
   // Return the updated server list using ServerGrid component
-  return <ServerGrid servers={servers} />;
+  return <ServerGrid servers={servers} hx-swap-oob="true" />;
 };
 
 const CreateServerSchema = v.object({
-  name: v.pipe(v.string(), v.minLength(3)),
+  name: v.pipe(v.string(), v.minLength(10)),
 });
 
 export const createServerRoute = createRoute({
