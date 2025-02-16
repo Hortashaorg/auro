@@ -8,9 +8,10 @@ import {
   hmrScript,
   INTERNAL_APP,
   RenderChild,
+  tracer,
   type Variables,
 } from "../common/index.ts";
-import { SpanStatusCode, trace } from "@opentelemetry/api";
+import { SpanStatusCode } from "@opentelemetry/api";
 
 // Valibot unknown schema.
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
@@ -77,8 +78,6 @@ export type ExtractCustomContextFromRoute<
 > = ReturnType<
   T["customContext"]
 >;
-
-const tracer = trace.getTracer("auro-route", "1.0.0");
 
 // Create a route with the given config
 export const createRoute = <
@@ -196,12 +195,7 @@ export const createRoute = <
 
           span.addEvent("render");
 
-          span.setStatus({
-            code: SpanStatusCode.ERROR,
-            message: "A error message",
-          });
-
-          const html = c.html(
+          const html = await c.html(
             <RouteContext.Provider
               value={c as TContextType}
             >
@@ -217,6 +211,10 @@ export const createRoute = <
               </GlobalContext.Provider>
             </RouteContext.Provider>,
           );
+
+          span.setStatus({
+            code: SpanStatusCode.OK,
+          });
 
           return html;
         } catch (error) {

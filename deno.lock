@@ -4,7 +4,6 @@
     "jsr:@hono/hono@*": "4.7.1",
     "jsr:@hono/hono@4.7.1": "4.7.1",
     "jsr:@hono/hono@^4.7.1": "4.7.1",
-    "jsr:@kalena/framework@~0.1.4": "0.1.4",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.7": "1.0.7",
     "jsr:@std/fs@^1.0.11": "1.0.11",
@@ -35,14 +34,6 @@
     },
     "@hono/hono@4.7.1": {
       "integrity": "f75aaf6a026ad05406e60125a70a3d2a77e3b62991f8c4e38c624bdfc1a1dc26"
-    },
-    "@kalena/framework@0.1.4": {
-      "integrity": "17a52999d78b5c7bd2f2479614cc385f2a77624010e111d884379af944b4cdcd",
-      "dependencies": [
-        "jsr:@hono/hono@4.7.1",
-        "jsr:@valibot/valibot",
-        "npm:@opentelemetry/api"
-      ]
     },
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
@@ -489,7 +480,6 @@
       },
       "services/app": {
         "dependencies": [
-          "jsr:@kalena/framework@~0.1.4",
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
           "npm:tailwind-merge@^3.0.1",

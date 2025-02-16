@@ -6,6 +6,7 @@ import {
   hmrScript,
   INTERNAL_APP,
   RenderChild,
+  tracer,
   type Variables,
 } from "../common/index.ts";
 import { decode } from "@hono/hono/jwt";
@@ -13,6 +14,7 @@ import { getCookie, setCookie } from "@hono/hono/cookie";
 import type { BlankSchema } from "@hono/hono/types";
 import { GlobalContext } from "../context/global-context.tsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
+import { SpanStatusCode } from "@opentelemetry/api";
 
 type AfterLoginHookTypes<T extends "google"> = T extends "google" ? {
     success: true;
@@ -96,240 +98,221 @@ export const app = <TProvider extends "google">(
   const authProvider = settings.authProvider;
 
   if (authProvider) {
-    app.use("/auth/login", async (c) => {
-      if (authProvider.name === "google") {
+    app.use("/auth/login", (c) => {
+      return tracer.startActiveSpan("login", async (span) => {
         try {
-          const url = new URL(c.req.url);
-          const code = url.searchParams.get("code");
+          if (authProvider.name === "google") {
+            try {
+              const url = new URL(c.req.url);
+              const code = url.searchParams.get("code");
 
-          if (!code) throw new Error("Missing auth code");
+              if (!code) throw new Error("Missing auth code");
 
-          const params = new URLSearchParams({
-            client_id: authProvider.clientId,
-            redirect_uri: `${url.origin}/auth/login`,
-            client_secret: authProvider.clientSecret,
-            scope: "email",
-            grant_type: "authorization_code",
-            access_type: "offline",
-            prompt: "consent",
-            code,
-          });
+              const params = new URLSearchParams({
+                client_id: authProvider.clientId,
+                redirect_uri: `${url.origin}/auth/login`,
+                client_secret: authProvider.clientSecret,
+                scope: "email",
+                grant_type: "authorization_code",
+                access_type: "offline",
+                prompt: "consent",
+                code,
+              });
 
-          const googleBaseUrl = "https://oauth2.googleapis.com";
+              const googleBaseUrl = "https://oauth2.googleapis.com";
 
-          const res = await fetch(
-            `${googleBaseUrl}/token`,
-            {
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-              method: "POST",
-              body: params,
-            },
-          );
+              const res = await fetch(
+                `${googleBaseUrl}/token`,
+                {
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  method: "POST",
+                  body: params,
+                },
+              );
 
-          if (res.ok) {
-            const responseSchema = v.object({
-              access_token: v.string(),
-              refresh_token: v.string(),
-              id_token: v.string(),
-              expires_in: v.number(),
-            });
+              if (res.ok) {
+                const responseSchema = v.object({
+                  access_token: v.string(),
+                  refresh_token: v.string(),
+                  id_token: v.string(),
+                  expires_in: v.number(),
+                });
 
-            const responseData = await res.json();
+                const responseData = await res.json();
 
-            const tokens = v.parse(responseSchema, responseData);
+                const tokens = v.parse(responseSchema, responseData);
 
-            const email = v.parse(
-              v.string(),
-              decode(tokens.id_token).payload.email,
-            );
+                const email = v.parse(
+                  v.string(),
+                  decode(tokens.id_token).payload.email,
+                );
 
-            const result = {
-              success: true,
-              accessToken: tokens.access_token,
-              refreshToken: tokens.refresh_token,
-              email,
-              expires_in: tokens.expires_in,
-              refresh_token_expires_in: 3600 * 72, // 3 days
-            };
+                const result = {
+                  success: true,
+                  accessToken: tokens.access_token,
+                  refreshToken: tokens.refresh_token,
+                  email,
+                  expires_in: tokens.expires_in,
+                  refresh_token_expires_in: 3600 * 72, // 3 days
+                };
 
-            setCookie(c, "access_token", result.accessToken, {
-              maxAge: result.expires_in,
-              httpOnly: true,
-              secure: true,
-              sameSite: "Lax",
-            });
-            setCookie(c, "refresh_token", result.refreshToken, {
-              maxAge: result.refresh_token_expires_in,
-              httpOnly: true,
-              secure: true,
-              sameSite: "Lax",
-            });
-            setCookie(c, "email", result.email, {
-              maxAge: result.refresh_token_expires_in,
-              httpOnly: true,
-              secure: true,
-              sameSite: "Lax",
-            });
+                setCookie(c, "access_token", result.accessToken, {
+                  maxAge: result.expires_in,
+                  httpOnly: true,
+                  secure: true,
+                  sameSite: "Lax",
+                });
+                setCookie(c, "refresh_token", result.refreshToken, {
+                  maxAge: result.refresh_token_expires_in,
+                  httpOnly: true,
+                  secure: true,
+                  sameSite: "Lax",
+                });
+                setCookie(c, "email", result.email, {
+                  maxAge: result.refresh_token_expires_in,
+                  httpOnly: true,
+                  secure: true,
+                  sameSite: "Lax",
+                });
 
-            await authProvider.afterLoginHook?.(
-              result as AfterLoginHookTypes<TProvider>,
-            );
+                await authProvider.afterLoginHook?.(
+                  result as AfterLoginHookTypes<TProvider>,
+                );
 
-            return c.redirect(authProvider.redirectPathAfterLogin);
+                return c.redirect(authProvider.redirectPathAfterLogin);
+              }
+              throw new Error("Failed to login");
+            } catch (error) {
+              const result = {
+                error,
+                success: false,
+              } as AfterLoginHookTypes<TProvider>;
+
+              await authProvider.afterLoginHook?.(result);
+
+              return c.redirect(authProvider.redirectPathAfterLogin);
+            }
           }
-          throw new Error("Failed to login");
+          throw new Error("Invalid auth provider");
         } catch (error) {
-          const result = {
-            error,
-            success: false,
-          } as AfterLoginHookTypes<TProvider>;
-
-          await authProvider.afterLoginHook?.(result);
-
-          return c.redirect(authProvider.redirectPathAfterLogin);
+          span.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: (error as Error).message,
+          });
+          throw error;
+        } finally {
+          span.end();
         }
-      }
-      throw new Error("Invalid auth provider");
+      });
     });
 
     app.use("/*", async (c, next) => {
-      if (authProvider.name === "google") {
+      await tracer.startActiveSpan("refresh", async (span) => {
         try {
-          const accessToken = getCookie(c, "access_token");
-          const refreshToken = getCookie(c, "refresh_token");
-          const email = getCookie(c, "email");
+          if (authProvider.name === "google") {
+            try {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
 
-          if (!accessToken && refreshToken && email) {
-            const params = new URLSearchParams({
-              client_id: authProvider.clientId,
-              client_secret: authProvider.clientSecret,
-              grant_type: "refresh_token",
-              refresh_token: refreshToken,
-            });
+              if (!accessToken && refreshToken && email) {
+                const params = new URLSearchParams({
+                  client_id: authProvider.clientId,
+                  client_secret: authProvider.clientSecret,
+                  grant_type: "refresh_token",
+                  refresh_token: refreshToken,
+                });
 
-            const googleBaseUrl = "https://oauth2.googleapis.com";
-            const res = await fetch(
-              `${googleBaseUrl}/token`,
-              {
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded",
-                },
-                method: "POST",
-                body: params,
-              },
-            );
+                const googleBaseUrl = "https://oauth2.googleapis.com";
+                const res = await fetch(
+                  `${googleBaseUrl}/token`,
+                  {
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    method: "POST",
+                    body: params,
+                  },
+                );
 
-            if (res.ok) {
-              const responseSchema = v.object({
-                access_token: v.string(),
-                id_token: v.string(),
-                expires_in: v.number(),
-              });
+                if (res.ok) {
+                  const responseSchema = v.object({
+                    access_token: v.string(),
+                    id_token: v.string(),
+                    expires_in: v.number(),
+                  });
 
-              const tokens = v.parse(responseSchema, await res.json());
+                  const tokens = v.parse(responseSchema, await res.json());
 
-              const result = {
-                success: true,
-                accessToken: tokens.access_token,
-                refreshToken,
-                email,
-                expires_in: tokens.expires_in,
-              };
+                  const result = {
+                    success: true,
+                    accessToken: tokens.access_token,
+                    refreshToken,
+                    email,
+                    expires_in: tokens.expires_in,
+                  };
 
-              setCookie(c, "access_token", result.accessToken, {
-                maxAge: result.expires_in,
-                httpOnly: true,
-                secure: true,
-                sameSite: "Lax",
-              });
+                  setCookie(c, "access_token", result.accessToken, {
+                    maxAge: result.expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
 
-              await authProvider.refreshHook?.(
-                result as RefreshHookTypes<TProvider>,
-              );
-            } else {
+                  await authProvider.refreshHook?.(
+                    result as RefreshHookTypes<TProvider>,
+                  );
+                } else {
+                  const result = {
+                    success: false,
+                    error: new Error("Failed to refresh token"),
+                  } as RefreshHookTypes<TProvider>;
+                  await authProvider.refreshHook?.(result);
+                }
+              }
+            } catch (error) {
               const result = {
                 success: false,
-                error: new Error("Failed to refresh token"),
+                error,
               } as RefreshHookTypes<TProvider>;
               await authProvider.refreshHook?.(result);
             }
           }
         } catch (error) {
-          const result = {
-            success: false,
-            error,
-          } as RefreshHookTypes<TProvider>;
-          await authProvider.refreshHook?.(result);
+          span.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: (error as Error).message,
+          });
+          throw error;
+        } finally {
+          span.end();
         }
-      }
+      });
       await next();
     });
 
-    app.use("/auth/logout", async (c) => {
-      if (authProvider.name === "google") {
+    app.use("/auth/logout", (c) => {
+      return tracer.startActiveSpan("logout", async (span) => {
         try {
-          const accessToken = getCookie(c, "access_token");
-          const refreshToken = getCookie(c, "refresh_token");
-          const email = getCookie(c, "email");
+          if (authProvider.name === "google") {
+            try {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
 
-          if (!refreshToken || !accessToken || !email) {
-            throw new Error("Missing tokens or email");
-          }
+              if (!refreshToken || !accessToken || !email) {
+                throw new Error("Missing tokens or email");
+              }
 
-          await authProvider.beforeLogoutHook?.({
-            refreshToken,
-            accessToken,
-            email,
-          } as BeforeLogoutHookTypes<TProvider>);
+              await authProvider.beforeLogoutHook?.({
+                refreshToken,
+                accessToken,
+                email,
+              } as BeforeLogoutHookTypes<TProvider>);
 
-          // Clear cookies
-          setCookie(c, "access_token", "", {
-            maxAge: 0,
-            httpOnly: true,
-            secure: true,
-            sameSite: "Lax",
-          });
-          setCookie(c, "refresh_token", "", {
-            maxAge: 0,
-            httpOnly: true,
-            secure: true,
-            sameSite: "Lax",
-          });
-          setCookie(c, "email", "", {
-            maxAge: 0,
-            httpOnly: true,
-            secure: true,
-            sameSite: "Lax",
-          });
-
-          return c.redirect(authProvider.redirectPathAfterLogout);
-        } catch (error) {
-          console.error("Error during logout:", error);
-          return c.redirect(authProvider.redirectPathAfterLogout);
-        }
-      }
-      throw new Error("Invalid auth provider");
-    });
-
-    /** Validate Hook */
-    app.use("/*", async (c, next) => {
-      if (authProvider.name === "google") {
-        const accessToken = getCookie(c, "access_token");
-        const refreshToken = getCookie(c, "refresh_token");
-        const email = getCookie(c, "email");
-
-        if (accessToken && refreshToken && email) {
-          try {
-            const isValid = await authProvider.validateHook?.({
-              accessToken,
-              refreshToken,
-              email,
-            } as ValidateHookTypes<TProvider>);
-
-            if (isValid === false) {
-              // Clear all auth cookies if validation fails
+              // Clear cookies
               setCookie(c, "access_token", "", {
                 maxAge: 0,
                 httpOnly: true,
@@ -348,33 +331,109 @@ export const app = <TProvider extends "google">(
                 secure: true,
                 sameSite: "Lax",
               });
+
+              return c.redirect(authProvider.redirectPathAfterLogout);
+            } catch (error) {
+              console.error("Error during logout:", error);
               return c.redirect(authProvider.redirectPathAfterLogout);
             }
-          } catch (error) {
-            console.error("Error in validate hook:", error);
-            // Clear cookies on error and redirect
-            setCookie(c, "access_token", "", {
-              maxAge: 0,
-              httpOnly: true,
-              secure: true,
-              sameSite: "Lax",
-            });
-            setCookie(c, "refresh_token", "", {
-              maxAge: 0,
-              httpOnly: true,
-              secure: true,
-              sameSite: "Lax",
-            });
-            setCookie(c, "email", "", {
-              maxAge: 0,
-              httpOnly: true,
-              secure: true,
-              sameSite: "Lax",
-            });
-            return c.redirect(authProvider.redirectPathAfterLogout);
           }
+          throw new Error("Invalid auth provider");
+        } catch (error) {
+          span.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: (error as Error).message,
+          });
+          throw error;
+        } finally {
+          span.end();
         }
+      });
+    });
+
+    /** Validate Hook */
+    app.use("/*", async (c, next) => {
+      const response = await tracer.startActiveSpan(
+        "validate",
+        async (span) => {
+          try {
+            if (authProvider.name === "google") {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
+
+              if (accessToken && refreshToken && email) {
+                try {
+                  const isValid = await authProvider.validateHook?.({
+                    accessToken,
+                    refreshToken,
+                    email,
+                  } as ValidateHookTypes<TProvider>);
+
+                  if (isValid === false) {
+                    // Clear all auth cookies if validation fails
+                    setCookie(c, "access_token", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    setCookie(c, "refresh_token", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    setCookie(c, "email", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    return c.redirect(authProvider.redirectPathAfterLogout);
+                  }
+                } catch (error) {
+                  console.error("Error in validate hook:", error);
+                  // Clear cookies on error and redirect
+                  setCookie(c, "access_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "refresh_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "email", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  return c.redirect(authProvider.redirectPathAfterLogout);
+                }
+              }
+            }
+            return;
+          } catch (error) {
+            span.setStatus({
+              code: SpanStatusCode.ERROR,
+              message: (error as Error).message,
+            });
+            throw error;
+          } finally {
+            span.end();
+          }
+        },
+      );
+
+      if (response && response.redirected) {
+        return response;
       }
+
       await next();
       return;
     });
@@ -408,42 +467,71 @@ export const app = <TProvider extends "google">(
 
   /** Error Handling */
   app.onError((err, c) => {
-    console.error(`Server Error:`, err);
-    if (settings.errorPages?.serverError) {
-      return c.html(
-        <GlobalContext.Provider value={c as Context}>
-          <RenderChild children={settings.errorPages.serverError} />
-          <script
-            dangerouslySetInnerHTML={{ __html: hmrScript }}
-          />
-        </GlobalContext.Provider>,
-        500,
-      );
-    }
-    return c.html(
-      `<h1>500 - Internal Server Error</h1>
-      <p>Something went wrong on our end. Please try again later.</p>`,
-      500,
-    );
+    return tracer.startActiveSpan("error page", (span) => {
+      try {
+        console.error(`Server Error:`, err);
+        span.setStatus({
+          code: SpanStatusCode.ERROR,
+          message: (err as Error).message,
+        });
+
+        if (settings.errorPages?.serverError) {
+          return c.html(
+            <GlobalContext.Provider value={c as Context}>
+              <RenderChild children={settings.errorPages.serverError} />
+              <script
+                dangerouslySetInnerHTML={{ __html: hmrScript }}
+              />
+            </GlobalContext.Provider>,
+            500,
+          );
+        }
+        return c.html(
+          `<h1>500 - Internal Server Error</h1>
+          <p>Something went wrong on our end. Please try again later.</p>`,
+          500,
+        );
+      } catch (error) {
+        span.setStatus({
+          code: SpanStatusCode.ERROR,
+          message: (error as Error).message,
+        });
+        throw error;
+      } finally {
+        span.end();
+      }
+    });
   });
 
   app.notFound((c) => {
-    if (settings.errorPages?.notFound) {
-      return c.html(
-        <GlobalContext.Provider value={c as Context}>
-          <RenderChild children={settings.errorPages.notFound} />
-          <script
-            dangerouslySetInnerHTML={{ __html: hmrScript }}
-          />
-        </GlobalContext.Provider>,
-        404,
-      );
-    }
-    return c.html(
-      `<h1>404 - Page Not Found</h1>
-      <p>The page you're looking for doesn't exist.</p>`,
-      404,
-    );
+    return tracer.startActiveSpan("not found", (span) => {
+      try {
+        if (settings.errorPages?.notFound) {
+          return c.html(
+            <GlobalContext.Provider value={c as Context}>
+              <RenderChild children={settings.errorPages.notFound} />
+              <script
+                dangerouslySetInnerHTML={{ __html: hmrScript }}
+              />
+            </GlobalContext.Provider>,
+            404,
+          );
+        }
+        return c.html(
+          `<h1>404 - Page Not Found</h1>
+          <p>The page you're looking for doesn't exist.</p>`,
+          404,
+        );
+      } catch (error) {
+        span.setStatus({
+          code: SpanStatusCode.ERROR,
+          message: (error as Error).message,
+        });
+        throw error;
+      } finally {
+        span.end();
+      }
+    });
   });
 
   /** Static Files */
