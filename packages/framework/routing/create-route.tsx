@@ -10,6 +10,7 @@ import {
   RenderChild,
   type Variables,
 } from "../common/index.ts";
+import { type Span, trace } from "@opentelemetry/api";
 
 // Valibot unknown schema.
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
@@ -178,14 +179,19 @@ export const createRoute = <
     config.path,
     ...validators,
     async (c) => {
+      const span = trace.getActiveSpan() as Span;
       // Check permission before rendering
       const hasPermission = await config.permission.check(c as TContextType);
       if (!hasPermission) {
+        span.addEvent("redirect", {
+          redirectPath: config.permission.redirectPath,
+        });
         return c.redirect(config.permission.redirectPath);
       }
 
-      // Provide the context to the route, and render via child component.
-      return c.html(
+      span.addEvent("render");
+
+      const html = c.html(
         <RouteContext.Provider
           value={c as TContextType}
         >
@@ -201,6 +207,11 @@ export const createRoute = <
           </GlobalContext.Provider>
         </RouteContext.Provider>,
       );
+
+      span.end();
+
+      // Provide the context to the route, and render via child component.
+      return html;
     },
   );
 
