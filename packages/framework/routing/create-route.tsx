@@ -10,7 +10,7 @@ import {
   RenderChild,
   type Variables,
 } from "../common/index.ts";
-import { type Span, trace } from "@opentelemetry/api";
+import { SpanStatusCode, trace } from "@opentelemetry/api";
 
 // Valibot unknown schema.
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
@@ -77,6 +77,8 @@ export type ExtractCustomContextFromRoute<
 > = ReturnType<
   T["customContext"]
 >;
+
+const tracer = trace.getTracer("auro-route", "1.0.0");
 
 // Create a route with the given config
 export const createRoute = <
@@ -178,40 +180,55 @@ export const createRoute = <
   app.all(
     config.path,
     ...validators,
-    async (c) => {
-      const span = trace.getActiveSpan() as Span;
-      // Check permission before rendering
-      const hasPermission = await config.permission.check(c as TContextType);
-      if (!hasPermission) {
-        span.addEvent("redirect", {
-          redirectPath: config.permission.redirectPath,
-        });
-        return c.redirect(config.permission.redirectPath);
-      }
+    (c) => {
+      return tracer.startActiveSpan("render", async (span) => {
+        try {
+          // Check permission before rendering
+          const hasPermission = await config.permission.check(
+            c as TContextType,
+          );
+          if (!hasPermission) {
+            span.addEvent("redirect", {
+              redirectPath: config.permission.redirectPath,
+            });
+            return c.redirect(config.permission.redirectPath);
+          }
 
-      span.addEvent("render");
+          span.addEvent("render");
 
-      const html = c.html(
-        <RouteContext.Provider
-          value={c as TContextType}
-        >
-          <GlobalContext.Provider
-            value={c as Context}
-          >
-            <RenderChild children={config.component} />
-            {(!config.partial && config.hmr) && (
-              <script
-                dangerouslySetInnerHTML={{ __html: hmrScript }}
-              />
-            )}
-          </GlobalContext.Provider>
-        </RouteContext.Provider>,
-      );
+          span.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: "A error message",
+          });
 
-      span.end();
+          const html = c.html(
+            <RouteContext.Provider
+              value={c as TContextType}
+            >
+              <GlobalContext.Provider
+                value={c as Context}
+              >
+                <RenderChild children={config.component} />
+                {(!config.partial && config.hmr) && (
+                  <script
+                    dangerouslySetInnerHTML={{ __html: hmrScript }}
+                  />
+                )}
+              </GlobalContext.Provider>
+            </RouteContext.Provider>,
+          );
 
-      // Provide the context to the route, and render via child component.
-      return html;
+          return html;
+        } catch (error) {
+          span.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: (error as Error).message,
+          });
+          throw error;
+        } finally {
+          span.end();
+        }
+      });
     },
   );
 
