@@ -5,7 +5,11 @@ import type { createRoute } from "../routing/create-route.tsx";
 import {
   hmrScript,
   INTERNAL_APP,
+  loginCounter,
+  logoutCounter,
+  refreshCounter,
   RenderChild,
+  requestCounter,
   tracer,
   type Variables,
 } from "../common/index.ts";
@@ -108,6 +112,7 @@ export const app = <TProvider extends "google">(
   if (authProvider) {
     app.use("/auth/login", (c) => {
       return tracer.startActiveSpan("login", async (span) => {
+        loginCounter.add(1);
         try {
           if (authProvider.name === "google") {
             try {
@@ -226,6 +231,7 @@ export const app = <TProvider extends "google">(
               const email = getCookie(c, "email");
 
               if (!accessToken && refreshToken && email) {
+                refreshCounter.add(1);
                 const params = new URLSearchParams({
                   client_id: authProvider.clientId,
                   client_secret: authProvider.clientSecret,
@@ -303,6 +309,7 @@ export const app = <TProvider extends "google">(
 
     app.use("/auth/logout", (c) => {
       return tracer.startActiveSpan("logout", async (span) => {
+        logoutCounter.add(1);
         try {
           if (authProvider.name === "google") {
             try {
@@ -448,6 +455,7 @@ export const app = <TProvider extends "google">(
 
     /** Context Variables */
     app.use("/*", async (c, next) => {
+      requestCounter.add(1);
       if (authProvider.name === "google") {
         const refreshToken = getCookie(c, "refresh_token");
         const email = getCookie(c, "email");

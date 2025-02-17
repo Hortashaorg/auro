@@ -1,6 +1,6 @@
 import type { FC } from "@hono/hono/jsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
-import { trace } from "@opentelemetry/api";
+import { metrics, trace } from "@opentelemetry/api";
 
 export const RenderChild: FC<{
   children: () => Promise<HtmlEscapedString> | HtmlEscapedString;
@@ -25,3 +25,24 @@ ws.onclose = () => setInterval(() => location.reload(), 200);
 `;
 
 export const tracer = trace.getTracer("@kalena/framework", "0.1.8");
+const meter = metrics.getMeter("@kalena/framework", "0.1.8");
+
+export const requestCounter = meter.createCounter("route.requests", {
+  description: "Counts the number of requests to routes",
+  unit: "requests",
+});
+
+export const loginCounter = meter.createCounter("auth.login", {
+  description: "Counts the number of logins",
+  unit: "requests",
+});
+
+export const logoutCounter = meter.createCounter("auth.logout", {
+  description: "Counts the number of logouts",
+  unit: "requests",
+});
+
+export const refreshCounter = meter.createCounter("auth.refresh", {
+  description: "Counts the number of refreshes",
+  unit: "requests",
+});
