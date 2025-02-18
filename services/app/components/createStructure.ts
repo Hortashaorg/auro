@@ -29,9 +29,13 @@ const allComponents = await Array.fromAsync(expandGlob("./**/*.{tsx,ts}", {
   includeDirs: false,
 }));
 
+const allComponentsInDiv = allComponents.filter((file) => {
+  return file.path.startsWith(currentDir);
+});
+
 const componentMap: ComponentMap = {};
 
-for (const file of allComponents) {
+for (const file of allComponentsInDiv) {
   // Remove the currentDir prefix to get the relative path
   const relativePath = file.path.replace(currentDir, "");
 

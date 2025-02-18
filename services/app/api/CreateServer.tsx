@@ -67,7 +67,7 @@ const CreateServer = async () => {
 };
 
 const CreateServerSchema = v.object({
-  name: v.pipe(v.string(), v.minLength(10)),
+  name: v.pipe(v.string(), v.minLength(3), v.maxLength(50)),
 });
 
 export const createServerRoute = createRoute({
