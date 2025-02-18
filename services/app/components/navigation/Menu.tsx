@@ -8,7 +8,7 @@ export const Menu: FC<Props> = ({ className, children, ...rest }: Props) => {
     <nav
       {...rest}
       className={cn(
-        "flex font-medium px-3",
+        "flex font-medium",
         className,
       )}
     >

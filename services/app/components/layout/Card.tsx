@@ -24,6 +24,12 @@ const cardVariants = cva([
 type CardVariants = NonNullableProps<typeof cardVariants>;
 type Props = JSX.IntrinsicElements["div"] & CardVariants;
 
-export const Card: FC<Props> = ({ children, variant }: Props) => {
-  return <div className={cn(cardVariants({ variant }))}>{children}</div>;
+export const Card: FC<Props> = (
+  { children, variant, className, ...props }: Props,
+) => {
+  return (
+    <div className={cn(cardVariants({ variant }), className)} {...props}>
+      {children}
+    </div>
+  );
 };
