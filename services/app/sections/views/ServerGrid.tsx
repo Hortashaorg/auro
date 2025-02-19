@@ -35,7 +35,7 @@ export const ServerGrid = ({ servers, ...props }: Props) => {
           <ButtonLink
             href={`/server/${server.id}/join`}
             variant="primary"
-            className="w-full"
+            width="full"
             disabled={!server.online}
           >
             Join Server

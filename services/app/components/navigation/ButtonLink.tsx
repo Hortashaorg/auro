@@ -12,11 +12,16 @@ const buttonLinkVariants = cva([
   "text-base",
   "font-normal",
   "leading-tight",
-  "box-content",
+  "box-border",
   "cursor-pointer",
-  "inline-block", // Added for better link behavior
-  "text-center", // Added for better link behavior
-  "no-underline", // Added to remove default link styling
+  "block",
+  "text-center",
+  "no-underline",
+  "w-fit",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "role-button",
 ], {
   variants: {
     variant: {
@@ -66,10 +71,15 @@ const buttonLinkVariants = cva([
       medium: ["text-base", "px-5", "py-2.5"],
       large: ["text-lg", "px-7", "py-3"],
     },
+    width: {
+      fit: "w-fit",
+      full: "w-full",
+    },
   },
   defaultVariants: {
     variant: "primary",
     buttonSize: "medium",
+    width: "fit",
   },
 });
 
@@ -77,12 +87,16 @@ type ButtonLinkVariants = NonNullableProps<typeof buttonLinkVariants>;
 type Props = JSX.IntrinsicElements["a"] & ButtonLinkVariants;
 
 export const ButtonLink: FC<Props> = (
-  { children, variant, buttonSize, className, ...rest }: Props,
+  { children, variant, buttonSize, className, width, ...rest }: Props,
 ) => {
   return (
     <a
       {...rest}
-      className={cn(buttonLinkVariants({ variant, buttonSize }), className)}
+      role="button"
+      className={cn(
+        buttonLinkVariants({ variant, buttonSize, width }),
+        className,
+      )}
     >
       {children}
     </a>
