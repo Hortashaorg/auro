@@ -22,7 +22,5 @@
     "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --allow-net --allow-read --allow-env --watch ./main.ts",
     "comp:build": "deno run --allow-read --allow-write components/createStructure.ts"
   },
-  "fmt": {
-    "exclude": ["public/main.css"]
-  }
+  "exclude": ["public/main.css"]
 }

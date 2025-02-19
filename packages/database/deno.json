@@ -13,9 +13,7 @@
     "generate": "deno run -A --node-modules-dir --unstable-temporal npm:drizzle-kit generate",
     "migrate": "deno run -A --node-modules-dir npm:drizzle-kit migrate"
   },
-  "fmt": {
-    "exclude": ["drizzle/"]
-  },
+  "exclude": ["drizzle/"],
   "lint": {
     "rules": {
       "exclude": ["no-slow-types"]
