@@ -1,3 +1,5 @@
+// deno-lint-ignore-file jsx-no-children-prop
+
 import { type Context, Hono } from "@hono/hono";
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import * as v from "@valibot/valibot";
@@ -525,6 +527,7 @@ export const app = <TProvider extends "google">(
         if (settings.errorPages?.notFound) {
           return c.html(
             <GlobalContext.Provider value={c as Context}>
+              // deno-lint-ignore jsx-no-children-prop
               <RenderChild children={settings.errorPages.notFound} />
               <script
                 dangerouslySetInnerHTML={{ __html: hmrScript }}

@@ -45,7 +45,7 @@ export const Select: FC<Props> = (
     <div {...rest} className={cn("relative", className)}>
       <div x-on:click={`name = name == "${name}" ? "" : "${name}"`}>
         {
-          <button className="group cursor-pointer py-3 px-5">
+          <button className="group cursor-pointer py-3 px-5" type="button">
             <Text
               variant="paragraph"
               className="flex items-center justify-between gap-3 dark:group-hover:text-text-300 group-hover:text-text-500"

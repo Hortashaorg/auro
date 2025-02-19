@@ -1,3 +1,5 @@
+// deno-lint-ignore-file jsx-no-children-prop
+
 import { type Context, Hono } from "@hono/hono";
 import { validator } from "@hono/hono/validator";
 import * as v from "@valibot/valibot";
