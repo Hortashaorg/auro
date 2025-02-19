@@ -3,7 +3,6 @@
   "specifiers": {
     "jsr:@hono/hono@*": "4.7.1",
     "jsr:@hono/hono@4.7.1": "4.7.1",
-    "jsr:@hono/hono@4.7.2": "4.7.2",
     "jsr:@hono/hono@^4.7.1": "4.7.1",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.7": "1.0.7",
@@ -33,9 +32,6 @@
     },
     "@hono/hono@4.7.1": {
       "integrity": "f75aaf6a026ad05406e60125a70a3d2a77e3b62991f8c4e38c624bdfc1a1dc26"
-    },
-    "@hono/hono@4.7.2": {
-      "integrity": "73466a24bd6eb3b527cde18e59ca5543890ddacb4312fc0bc7504d28a7e57a38"
     },
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
@@ -476,7 +472,7 @@
       },
       "packages/framework": {
         "dependencies": [
-          "jsr:@hono/hono@4.7.2",
+          "jsr:@hono/hono@4.7.1",
           "jsr:@valibot/valibot@1.0.0-rc.1",
           "npm:@opentelemetry/api@^1.9.0"
         ]
