@@ -33,7 +33,7 @@ export const Modal: FC<Props> = ({
       x-ref={modalRef}
       {...props}
     >
-      <Flex direction="col" gap={4} className="p-6 w-full">
+      <Flex direction="col" gap="md" className="p-6 w-full">
         <div className="flex items-center justify-between w-full">
           <Text variant="header" className="text-xl">{title}</Text>
           <Button

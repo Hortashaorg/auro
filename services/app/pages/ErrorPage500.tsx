@@ -6,7 +6,7 @@ import { Flex } from "@comp/layout/Flex.tsx";
 export const ErrorPage500 = () => {
   return (
     <ErrorLayout title="500 - Server Error">
-      <Flex direction="col" align="center" gap={4}>
+      <Flex direction="col" align="center" gap="md">
         <Text variant="header">500 - Server Error</Text>
         <Text variant="paragraph" alignment="center">
           Something went wrong on our end. Please try again later.

@@ -19,7 +19,7 @@ const Home = () => {
 
       <Card className="mb-8">
         <Text variant="header" className="text-xl mb-4">Tooltip Examples</Text>
-        <Flex gap={4} align="center" justify="center" className="p-4">
+        <Flex gap="md" align="center" justify="center" className="p-4">
           <Tooltip content="Default top tooltip" position="top">
             <Button>Hover Me (Top)</Button>
           </Tooltip>

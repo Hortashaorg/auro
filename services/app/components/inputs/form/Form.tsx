@@ -18,7 +18,7 @@ export const Form: FC<Props> = ({
 
   return (
     <form {...props} className={cn("w-full", className)}>
-      <Flex direction="col" gap={4}>
+      <Flex direction="col" gap="md">
         {children}
       </Flex>
     </form>

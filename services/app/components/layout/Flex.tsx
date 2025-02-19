@@ -11,7 +11,7 @@ const flexVariants = cva("flex", {
       "row-reverse": "flex-row-reverse",
       "col-reverse": "flex-col-reverse",
     },
-    align: {
+    items: {
       start: "items-start",
       center: "items-center",
       end: "items-end",
@@ -27,16 +27,12 @@ const flexVariants = cva("flex", {
       evenly: "justify-evenly",
     },
     gap: {
-      0: "gap-0",
-      1: "gap-1",
-      2: "gap-2",
-      3: "gap-3",
-      4: "gap-4",
-      5: "gap-5",
-      6: "gap-6",
-      8: "gap-8",
-      10: "gap-10",
-      12: "gap-12",
+      none: "gap-0",
+      sm: "gap-2",
+      md: "gap-4",
+      lg: "gap-6",
+      xl: "gap-8",
+      "2xl": "gap-12",
     },
     wrap: {
       wrap: "flex-wrap",
@@ -46,9 +42,9 @@ const flexVariants = cva("flex", {
   },
   defaultVariants: {
     direction: "row",
-    align: "start",
+    items: "start",
     justify: "start",
-    gap: 0,
+    gap: "none",
     wrap: "nowrap",
   },
 });
@@ -59,7 +55,7 @@ type Props = JSX.IntrinsicElements["div"] & FlexVariants;
 export const Flex: FC<Props> = ({
   className,
   direction,
-  align,
+  items,
   justify,
   gap,
   wrap,
@@ -69,7 +65,7 @@ export const Flex: FC<Props> = ({
   return (
     <div
       className={cn(
-        flexVariants({ direction, align, justify, gap, wrap }),
+        flexVariants({ direction, items, justify, gap, wrap }),
         className,
       )}
       {...props}

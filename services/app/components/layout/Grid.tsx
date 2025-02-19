@@ -15,13 +15,13 @@ const gridVariants = cva("grid", {
       md: "gap-4",
       lg: "gap-6",
     },
-    itemsAlign: {
+    items: {
       start: "items-start",
       center: "items-center",
       end: "items-end",
       stretch: "items-stretch",
     },
-    justifyItems: {
+    justify: {
       start: "justify-items-start",
       center: "justify-items-center",
       end: "justify-items-end",
@@ -31,8 +31,8 @@ const gridVariants = cva("grid", {
   defaultVariants: {
     content: "medium",
     gap: "md",
-    itemsAlign: "start",
-    justifyItems: "stretch",
+    items: "start",
+    justify: "stretch",
   },
 });
 
@@ -44,14 +44,14 @@ export const Grid: FC<Props> = ({
   content,
   gap,
   children,
-  itemsAlign,
-  justifyItems,
+  items,
+  justify,
   ...props
 }) => {
   return (
     <div
       className={cn(
-        gridVariants({ content, gap, itemsAlign, justifyItems }),
+        gridVariants({ content, gap, items, justify }),
         className,
       )}
       {...props}

@@ -6,7 +6,7 @@ import { Flex } from "@comp/layout/Flex.tsx";
 export const ErrorPage404 = () => {
   return (
     <ErrorLayout title="404 - Page Not Found">
-      <Flex direction="col" align="center" gap={4}>
+      <Flex direction="col" align="center" gap="md">
         <Text variant="header">404 - Page Not Found</Text>
         <Text variant="paragraph" alignment="center">
           The page you're looking for doesn't exist or has been moved.
