@@ -12,9 +12,14 @@ type Props = JSX.IntrinsicElements["div"] & {
 
 export const ServerGrid = ({ servers, ...props }: Props) => {
   return (
-    <Grid gap="md" id="section-server-grid" {...props}>
+    <Grid
+      gap="md"
+      content="medium"
+      id="section-server-grid"
+      {...props}
+    >
       {servers.map((server) => (
-        <Card key={server.id} className="p-4 space-y-4 w-60">
+        <Card key={server.id} className="p-4 space-y-4">
           <div className="flex justify-between items-start">
             <Text variant="header" className="text-xl truncate mr-2">
               {server.name}
@@ -27,7 +32,6 @@ export const ServerGrid = ({ servers, ...props }: Props) => {
               {server.online ? "Online" : "Offline"}
             </Badge>
           </div>
-
           <ButtonLink
             href={`/server/${server.id}/join`}
             variant="primary"

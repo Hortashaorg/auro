@@ -5,19 +5,34 @@ import type { FC, JSX } from "@kalena/framework";
 
 const gridVariants = cva("grid", {
   variants: {
-    variant: {
-      default: "flex flex-wrap gap-4 items-start justify-start custom-flex",
-      fit: "grid-cols-3 grid-flow-row-dense gap-4",
+    content: {
+      large: "grid-cols-[repeat(auto-fit,minmax(24rem,1fr))]",
+      medium: "grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]",
+      small: "grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]",
     },
     gap: {
       sm: "gap-2",
       md: "gap-4",
       lg: "gap-6",
     },
+    itemsAlign: {
+      start: "items-start",
+      center: "items-center",
+      end: "items-end",
+      stretch: "items-stretch",
+    },
+    justifyItems: {
+      start: "justify-items-start",
+      center: "justify-items-center",
+      end: "justify-items-end",
+      stretch: "justify-items-stretch",
+    },
   },
   defaultVariants: {
-    variant: "default",
+    content: "medium",
     gap: "md",
+    itemsAlign: "start",
+    justifyItems: "stretch",
   },
 });
 
@@ -26,14 +41,19 @@ type Props = JSX.IntrinsicElements["div"] & GridVariants;
 
 export const Grid: FC<Props> = ({
   className,
-  variant,
+  content,
   gap,
   children,
+  itemsAlign,
+  justifyItems,
   ...props
 }) => {
   return (
     <div
-      className={cn(gridVariants({ variant, gap }), className)}
+      className={cn(
+        gridVariants({ content, gap, itemsAlign, justifyItems }),
+        className,
+      )}
       {...props}
     >
       {children}
