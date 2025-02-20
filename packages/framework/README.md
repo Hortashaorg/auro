@@ -28,13 +28,12 @@ applications with built-in authentication, form validation, and type safety.
 
 ## Dependencies
 
-This framework is built on top of these excellent libraries:
+This framework is built on top of these libraries:
 
 - [Hono](https://hono.dev/) - Ultrafast web framework for the Edges
 - [Valibot](https://valibot.dev/) - Type-safe schema validation library
 
-We are grateful to the maintainers and contributors of these projects for their
-amazing work.
+They both have no js dependencies.
 
 ## Features
 
@@ -44,7 +43,6 @@ amazing work.
 - 🔄 Automatic token refresh
 - 🛡️ Authentication event hooks
 - 🎨 Server-side rendering with JSX
-- 🔥 Hot Module Reloading for development
 
 # Creating Routes
 
