@@ -38,14 +38,6 @@ const CreateServer = async () => {
       })
       .returning();
 
-    console.log({
-      accountId: customContext.account?.id ?? throwError("No account found"),
-      serverId: server?.id ?? throwError("No server id"),
-      name: "Admin",
-      type: "admin",
-    });
-    console.log(customContext.account);
-
     await tx.insert(schema.user)
       .values({
         accountId: customContext.account?.id ?? throwError("No account found"),
