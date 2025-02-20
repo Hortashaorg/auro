@@ -58,6 +58,11 @@
     "dependencies": ["class-variance-authority", "@kalena/framework"],
     "localDependencies": ["utils/tailwind.ts", "utils/types.ts"]
   },
+  "container": {
+    "file": "layout/Container.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["layout/Flex.tsx"]
+  },
   "errorlayout": {
     "file": "layout/ErrorLayout.tsx",
     "dependencies": ["@kalena/framework"],
@@ -72,6 +77,26 @@
     "file": "layout/Grid.tsx",
     "dependencies": ["class-variance-authority", "@kalena/framework"],
     "localDependencies": ["utils/tailwind.ts", "utils/types.ts"]
+  },
+  "htmxwrapper": {
+    "file": "layout/HtmxWrapper.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "layout/Flex.tsx"]
+  },
+  "layout": {
+    "file": "layout/Layout.tsx",
+    "dependencies": ["@sections/navbar/Navbar.tsx", "@kalena/framework"],
+    "localDependencies": ["layout/BaseLayout.tsx", "layout/Main.tsx"]
+  },
+  "main": {
+    "file": "layout/Main.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "layout/Flex.tsx"]
+  },
+  "section": {
+    "file": "layout/Section.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts"]
   },
   "buttonlink": {
     "file": "navigation/ButtonLink.tsx",
