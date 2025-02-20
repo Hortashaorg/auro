@@ -8,7 +8,6 @@
     "tailwind-merge": "npm:tailwind-merge@^3.0.1",
     "tailwindcss": "npm:tailwindcss@^4.0.7",
     "@comp/": "./components/",
-    "@layouts/": "./layouts/",
     "@sections/": "./sections/",
     "@pages/": "./pages/",
     "@permissions/": "./permissions/",

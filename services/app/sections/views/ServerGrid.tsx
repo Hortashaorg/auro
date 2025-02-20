@@ -8,6 +8,7 @@ import { Flex } from "@comp/layout/Flex.tsx";
 import { visableServersForUser } from "@queries/servers.ts";
 import { throwError } from "@package/common";
 import { Section } from "@comp/layout/Section.tsx";
+import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -24,10 +25,10 @@ export const ServerGrid = async ({ ...props }: Props) => {
   );
 
   return (
-    <Flex {...props} className="grow" direction="col" gap="md">
+    <HtmxWrapper {...props} id="server-section">
       {adminServers.length > 0 && (
         <Section>
-          <Text variant="header" className="mb-4">My Servers</Text>
+          <Text variant="header">My Servers</Text>
           <Grid gap="md" content="medium">
             {adminServers.map((server) => (
               <ServerCard key={server.id} server={server} />
@@ -37,14 +38,14 @@ export const ServerGrid = async ({ ...props }: Props) => {
       )}
 
       <Section>
-        <Text variant="header" className="mb-4">Available Servers</Text>
+        <Text variant="header">Available Servers</Text>
         <Grid gap="md" content="medium">
           {publicServers.map((server) => (
             <ServerCard key={server.id} server={server} />
           ))}
         </Grid>
       </Section>
-    </Flex>
+    </HtmxWrapper>
   );
 };
 

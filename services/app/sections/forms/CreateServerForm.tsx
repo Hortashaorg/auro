@@ -11,7 +11,7 @@ export const CreateServerForm = ({ ...props }: Props) => {
     <Form
       {...props}
       hx-post="/api/create-server"
-      hx-target="#section-server-grid"
+      hx-target="#server-section"
       hx-swap="none"
       id="section-create-server-form"
     >

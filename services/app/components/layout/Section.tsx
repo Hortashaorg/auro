@@ -9,7 +9,7 @@ export const Section: FC<Props> = ({
   ...props
 }) => {
   return (
-    <section className={cn("grow w-full", className)} {...props}>
+    <section className={cn("w-full space-y-4", className)} {...props}>
       {children}
     </section>
   );
