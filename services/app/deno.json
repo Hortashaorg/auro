@@ -12,7 +12,8 @@
     "@sections/": "./sections/",
     "@pages/": "./pages/",
     "@permissions/": "./permissions/",
-    "@api/": "./api/"
+    "@api/": "./api/",
+    "@queries/": "./queries/"
   },
   "tasks": {
     "typecheck": "deno check .",

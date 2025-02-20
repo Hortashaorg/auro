@@ -6,6 +6,7 @@ import { throwError } from "@package/common";
 
 const CreateServer = async () => {
   const context = createServerRoute.context();
+  const customContext = await createServerRoute.customContext();
   const result = context.req.valid("form");
 
   if (!result.success) {
@@ -27,22 +28,40 @@ const CreateServer = async () => {
       ]),
     );
 
-    return (
-      <p className="text-red-500">
-        {result.issues[0].message}
-      </p>
-    );
+    return <p>Failure</p>;
   }
 
-  // Create the server
-  await db.insert(schema.server).values({
-    name: result.output.name,
+  await db.transaction(async (tx) => {
+    const [server] = await tx.insert(schema.server)
+      .values({
+        name: result.output.name,
+      })
+      .returning();
+
+    console.log({
+      accountId: customContext.account?.id ?? throwError("No account found"),
+      serverId: server?.id ?? throwError("No server id"),
+      name: "Admin",
+      type: "admin",
+    });
+    console.log(customContext.account);
+
+    await tx.insert(schema.user)
+      .values({
+        accountId: customContext.account?.id ?? throwError("No account found"),
+        serverId: server?.id ?? throwError("No server id"),
+        name: "Admin",
+        type: "admin",
+      });
   });
 
-  // Fetch updated server list
-  const servers = await db.query.server.findMany({
-    orderBy: (server, { desc }) => [desc(server.updatedAt)],
-  });
+  context.header(
+    "HX-Trigger",
+    createEvents([
+      { name: "close-dialog", values: { value: true } },
+      { name: "clear-form", values: { value: true } },
+    ]),
+  );
 
   context.header(
     "HX-Trigger",
@@ -63,7 +82,7 @@ const CreateServer = async () => {
   );
 
   // Return the updated server list using ServerGrid component
-  return <ServerGrid servers={servers} hx-swap-oob="true" />;
+  return <ServerGrid hx-swap-oob="true" />;
 };
 
 const CreateServerSchema = v.object({
@@ -91,4 +110,14 @@ export const createServerRoute = createRoute({
   partial: true,
   hmr: Deno.env.get("ENV") === "local",
   formValidationSchema: CreateServerSchema,
+  customContext: async (c) => {
+    let account;
+    const email = c.var.email;
+    if (email) {
+      account = await db.query.account.findFirst({
+        where: (account, { eq }) => eq(account.email, email),
+      });
+    }
+    return { account };
+  },
 });

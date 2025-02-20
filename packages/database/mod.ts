@@ -10,4 +10,4 @@ export const db = drizzle({
 export * as schema from "./db/schema.ts";
 
 export { sql } from "drizzle-orm";
-export { eq, gt, lt } from "drizzle-orm";
+export { and, eq, exists, gt, lt, or } from "drizzle-orm";

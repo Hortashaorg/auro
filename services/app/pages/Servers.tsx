@@ -11,11 +11,6 @@ const Servers = async () => {
   const context = await serversRoute.customContext();
   const canCreateServer = context.account?.canCreateServer ?? false;
 
-  // Fetch all servers
-  const servers = await db.query.server.findMany({
-    orderBy: (server, { desc }) => [desc(server.updatedAt)],
-  });
-
   return (
     <Layout title="Select Server">
       {canCreateServer && (
@@ -30,7 +25,7 @@ const Servers = async () => {
         </>
       )}
 
-      <ServerGrid servers={servers} />
+      <ServerGrid />
     </Layout>
   );
 };

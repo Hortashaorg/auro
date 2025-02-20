@@ -1,0 +1,41 @@
+---
+description: Context Types in the Framework
+globs: *.tsx
+---
+# Context Types in the Framework
+
+There are three main types of contexts available in routes:
+
+## 1. getGlobalContext()
+- Base Hono context containing request/response objects
+- Contains global variables like `email` from authentication
+- Available in all routes
+- Example usage: `const email = getGlobalContext().var.email`
+
+## 2. route.context()
+- Extends global context with route-specific features
+- Includes form validation via `req.valid()`
+- Includes header management via `header()`
+- Example usage:
+```ts
+const context = myRoute.context();
+const formData = context.req.valid("form");
+```
+
+## 3. route.customContext()
+- User-defined context specific to each route
+- Typically used for data fetching and authorization
+- Must be defined in route configuration
+- Example usage:
+```ts
+export const myRoute = createRoute({
+    customContext: async (c) => {
+        const account = await db.query.account.findFirst({
+            where: (account, { eq }) => eq(account.email, c.var.email),
+        });
+        return { account };
+    }
+});
+// In component:
+const { account } = await myRoute.customContext();
+```
