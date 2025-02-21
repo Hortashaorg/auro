@@ -17,7 +17,5 @@ Player:
 - As a player on a server, I recive energy to spend on doing actions.
 
 Technical:
-Current Server is stored as a cookie
 Workflow - typecheck, linting and formatting
 CI/CD
-Something about the grid layout. It turned out to be a flex. Lets work more on that.

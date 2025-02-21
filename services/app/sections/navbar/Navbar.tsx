@@ -10,26 +10,12 @@ export const Navbar = () => {
 
   return (
     <Header id="section-navbar">
-      {context.var.isLoggedIn
-        ? (
-          <Menu>
-            <Select name="Admin" variant="double" flow="right">
-              <Link href="/admin/locations" variant="dropdownLink">
-                Locations
-              </Link>
-              <Link href="/admin/skills" variant="dropdownLink">Skills</Link>
-              <Link href="/admin/currencies" variant="dropdownLink">
-                Currencies
-              </Link>
-              <Link href="/admin/items" variant="dropdownLink">Items</Link>
-            </Select>
-            <Link href="/servers" variant="dropdownLink">Servers</Link>
-          </Menu>
-        )
-        : (
-          <Menu>
-          </Menu>
-        )}
+      {context.var.isLoggedIn && (
+        <Menu>
+          <Link href="/servers" variant="dropdownLink">Servers</Link>
+        </Menu>
+      )}
+
       <Menu x-data="themeData">
         <NavButton
           x-on:click="themeToggle"
@@ -38,7 +24,6 @@ export const Navbar = () => {
         {context.var.isLoggedIn
           ? (
             <Select name="Profile" variant="single" flow="left">
-              <Link href="/profile" variant="dropdownLink">Profile</Link>
               <Link href={context.var.logoutUrl} variant="dropdownLink">
                 Logout
               </Link>

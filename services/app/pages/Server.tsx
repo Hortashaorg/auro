@@ -4,6 +4,26 @@ import { Text } from "@comp/content/Text.tsx";
 import { throwError } from "@package/common";
 import { hasAccessToServer } from "@permissions/index.ts";
 import { serverAndUser } from "@queries/serverAndUser.ts";
+import type { InferSelectModel, schema } from "@package/database";
+
+const AdminDashboard = (
+  { server }: { server: InferSelectModel<typeof schema.server> },
+) => {
+  return (
+    <>
+      <Text variant="header">Server Status</Text>
+      <Text>Status: {server.online ? "Online" : "Offline"}</Text>
+    </>
+  );
+};
+
+const PlayerDashboard = () => {
+  return (
+    <>
+      <Text>Welcome to the server</Text>
+    </>
+  );
+};
 
 const Server = async () => {
   const context = await serverRoute.customContext();
@@ -12,10 +32,10 @@ const Server = async () => {
 
   return (
     <Layout title={server.name}>
-      <Text variant="header">{server.name}</Text>
+      <Text variant="header" className="mb-8">{server.name}</Text>
       {user.type === "admin"
-        ? <Text variant="paragraph">Admin Dashboard</Text>
-        : <Text variant="paragraph">Player Dashboard</Text>}
+        ? <AdminDashboard server={server} />
+        : <PlayerDashboard />}
     </Layout>
   );
 };
