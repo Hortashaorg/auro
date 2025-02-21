@@ -1,0 +1,14 @@
+---
+description: How to work with layout type components
+globs: *.tsx
+---
+@file
+
+- Use consistent spacing scales
+- Implement responsive patterns
+- Support flexible content arrangements
+- Follow consistent prop patterns for:
+  - Alignment
+  - Spacing
+  - Distribution
+  - Responsive behavior

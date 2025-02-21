@@ -1,7 +1,9 @@
 ---
-description: Component structure and styling rules
+description: Patterns that are important to follow  when creating components
 globs: *.tsx
 ---
+@file
+
 # Component Rules
 
 - Not include any business logic
@@ -10,5 +12,11 @@ globs: *.tsx
 - Use the `cn()` utility for class merging
 - Follow a single responsibility principle
 - Be properly exported with clear, descriptive names
-- Keep base components framework-agnostic (no HTMX/Alpine.js specific logic)
+- Components should not include HTMX specific logic.
 - Pass framework-specific attributes through props
+- Use class-variance-authority (cva) for component variants
+- Implement dark mode support through Tailwind classes
+- Follow consistent variant naming across components:
+  - size: sm/md/lg
+  - variant: primary/secondary/outline/danger
+  - state: default/error

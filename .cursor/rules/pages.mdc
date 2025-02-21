@@ -1,10 +1,14 @@
 ---
-description: How pages are to be structured
+description: Pages that users can navigate to and how you can build one.
 globs: *.tsx
 ---
+@file
+
 # Page rules
 
-- Pages should consist of components / layout only
-- Pages has a permissing function
-- HTMX endpoints are set to be partial
-- Can contain buisness logic
+- Pages should consist of components.
+- Use components over native html.
+- Most styling should be happening on the component level
+- Every page should define its own route
+- Routes has permissions defined. Nice if these are reusable across multiple pages.
+- Can contain buisness logic or use buisness logic functions.

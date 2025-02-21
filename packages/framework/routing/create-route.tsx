@@ -152,10 +152,8 @@ export const createRoute = <
 }): {
   [INTERNAL_APP]: Hono;
   context: () => TContextType;
-  customContext: () => Promise<
-    TCustomContextReturnType extends undefined ? null
-      : TCustomContextReturnType
-  >;
+  customContext: () => TCustomContextReturnType extends undefined ? null
+    : TCustomContextReturnType;
 } => {
   // Create a new Hono app instance.
   const app = new Hono();
@@ -271,12 +269,12 @@ export const createRoute = <
       return ctx;
     },
     // Helper to extract custom context from route, defined by package user
-    customContext: async () => {
+    customContext: () => {
       const ctx = useContext(RouteContext);
       if (!ctx) throw new Error("Unable to generate context");
-      const res = config.customContext ? await config.customContext(ctx) : null;
+      const res = config.customContext ? config.customContext(ctx) : null;
       return res as TCustomContextReturnType extends undefined ? null
-        : Awaited<TCustomContextReturnType>;
+        : TCustomContextReturnType;
     },
   };
 };
