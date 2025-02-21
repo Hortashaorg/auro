@@ -2,8 +2,6 @@
 description: Important for client side behaviour of components
 globs: *.tsx
 ---
-@file
-
 # Alpine.js State Management Rules
 
 - Each page has its own Alpine.js state scope through the Layout component

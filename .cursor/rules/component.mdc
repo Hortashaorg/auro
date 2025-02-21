@@ -2,8 +2,6 @@
 description: Patterns that are important to follow  when creating components
 globs: *.tsx
 ---
-@file
-
 # Component Rules
 
 - Not include any business logic

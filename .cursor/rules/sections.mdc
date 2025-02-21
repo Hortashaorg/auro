@@ -2,8 +2,6 @@
 description: Using HTMX you often get multiple paths that all render the same section of a web page. Make these sections reusable instead of repeating yourself.
 globs: *.tsx
 ---
-@file
-
 # Section Rules
 
 - Sections should always have a unique ID for HTMX targeting

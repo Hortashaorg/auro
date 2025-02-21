@@ -2,8 +2,6 @@
 description: How to work with layout type components
 globs: *.tsx
 ---
-@file
-
 - Use consistent spacing scales
 - Implement responsive patterns
 - Support flexible content arrangements

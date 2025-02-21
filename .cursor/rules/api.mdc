@@ -2,8 +2,6 @@
 description: Rules for creating API endpoints that handle HTMX requests and server-side operations
 globs: *.tsx
 ---
-@file
-
 # API Rules
 
 ## Route Configuration

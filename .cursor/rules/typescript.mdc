@@ -2,8 +2,6 @@
 description: Typescript is strictly enfroced and we have some repeating typescript patterns.
 globs: 
 ---
-@file
-
 # TypeScript Rules
 
 - Use NonNullableProps for component variant types

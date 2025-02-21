@@ -2,8 +2,6 @@
 description: Global Context and route specific context
 globs: *.tsx
 ---
-@file
-
 # Context Types in the Framework
 
 There are three main types of contexts available in routes:

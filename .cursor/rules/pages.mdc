@@ -2,8 +2,6 @@
 description: Pages that users can navigate to and how you can build one.
 globs: *.tsx
 ---
-@file
-
 # Page rules
 
 - Pages should consist of components.
