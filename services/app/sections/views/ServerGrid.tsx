@@ -76,7 +76,7 @@ const ServerCard = ({ server }: {
         width="full"
         disabled={!server.online}
       >
-        Join Server
+        Enter
       </ButtonLink>
     </Card>
   );

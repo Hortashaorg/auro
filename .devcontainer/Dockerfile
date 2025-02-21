@@ -7,7 +7,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Deno
-COPY --from=denoland/deno:bin-2.2.0 /deno /usr/local/bin/deno
+COPY --from=denoland/deno:bin-2.2.1 /deno /usr/local/bin/deno
 
 # Install curl
 RUN apt-get update && \
