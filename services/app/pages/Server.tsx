@@ -11,7 +11,7 @@ const AdminDashboard = (
 ) => {
   return (
     <>
-      <Text variant="header">Server Status</Text>
+      <Text variant="h2">Server Status</Text>
       <Text>Status: {server.online ? "Online" : "Offline"}</Text>
     </>
   );
@@ -32,7 +32,7 @@ const Server = async () => {
 
   return (
     <Layout title={server.name}>
-      <Text variant="header" className="mb-8">{server.name}</Text>
+      <Text variant="h1" className="mb-8">{server.name}</Text>
       {user.type === "admin"
         ? <AdminDashboard server={server} />
         : <PlayerDashboard />}

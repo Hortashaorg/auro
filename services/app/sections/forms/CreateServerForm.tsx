@@ -16,7 +16,7 @@ export const CreateServerForm = ({ ...props }: Props) => {
       id="section-create-server-form"
     >
       <div>
-        <Text variant="paragraph" className="mb-2">Server Name</Text>
+        <Text variant="body" className="mb-2">Server Name</Text>
         <Input
           name="name"
           type="text"

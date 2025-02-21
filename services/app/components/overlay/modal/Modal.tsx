@@ -35,7 +35,7 @@ export const Modal: FC<Props> = ({
     >
       <Flex direction="col" gap="md" className="p-6 w-full">
         <div className="flex items-center justify-between w-full">
-          <Text variant="header" className="text-xl">{title}</Text>
+          <Text variant="h1" className="text-xl">{title}</Text>
           <Button
             variant="outline"
             className="p-2 border-0 hover:bg-background-200 dark:hover:bg-background-700 rounded-full"

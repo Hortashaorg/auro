@@ -31,7 +31,7 @@ export const Link: FC<Props> = (
       {...rest}
       className={cn(linkVariants({ variant }), className)}
     >
-      <Text variant="paragraph" className="group-hover:text-text-400">
+      <Text variant="body" className="group-hover:text-text-400">
         {children}
       </Text>
     </a>

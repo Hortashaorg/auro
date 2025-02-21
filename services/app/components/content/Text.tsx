@@ -6,20 +6,38 @@ import type { FC, JSX } from "@kalena/framework";
 const textVariants = cva([], {
   variants: {
     variant: {
-      header: [
+      h1: [
         "text-5xl",
         "font-bold",
         "dark:text-text-200",
-        "text-text-700",
+        "text-text-800",
         "font-heading",
         "leading-tight",
         "tracking-normal",
       ],
-      paragraph: [
+      h2: [
+        "text-4xl",
+        "font-bold",
+        "dark:text-text-200",
+        "text-text-800",
+        "font-heading",
+        "leading-tight",
+        "tracking-normal",
+      ],
+      h3: [
+        "text-3xl",
+        "font-semibold",
+        "dark:text-text-200",
+        "text-text-800",
+        "font-heading",
+        "leading-tight",
+        "tracking-normal",
+      ],
+      body: [
         "text-base",
         "font-normal",
         "dark:text-text-200",
-        "text-text-700",
+        "text-text-800",
         "font-body",
         "leading-loose",
       ],
@@ -38,10 +56,11 @@ const textVariants = cva([], {
     },
   },
   defaultVariants: {
-    variant: "paragraph",
+    variant: "body",
     alignment: "left",
   },
 });
+
 type TextVariants = NonNullableProps<typeof textVariants>;
 
 type Props = JSX.IntrinsicElements["div"] & TextVariants;
@@ -49,7 +68,7 @@ type Props = JSX.IntrinsicElements["div"] & TextVariants;
 export const Text: FC<Props> = (
   { variant, className, alignment = "left", children, ...rest }: Props,
 ) => {
-  const Tag = variant === "header" ? "h1" : "p";
+  const Tag = variant?.startsWith("h") ? variant : "p";
   return (
     <Tag
       {...rest}

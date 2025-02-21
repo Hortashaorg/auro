@@ -7,8 +7,8 @@ export const ErrorPage500 = () => {
   return (
     <ErrorLayout title="500 - Server Error">
       <Flex direction="col" align="center" gap="md">
-        <Text variant="header">500 - Server Error</Text>
-        <Text variant="paragraph" alignment="center">
+        <Text variant="h1">500 - Server Error</Text>
+        <Text variant="body" alignment="center">
           Something went wrong on our end. Please try again later.
         </Text>
         <ButtonLink href="/" variant="primary">

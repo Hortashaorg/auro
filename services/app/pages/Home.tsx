@@ -11,14 +11,14 @@ import { isPublic } from "@permissions/index.ts";
 const Home = () => {
   return (
     <Layout title="Deno Hot Dude">
-      <Text variant="header" className="mb-8">Home page</Text>
+      <Text variant="h1" className="mb-8">Home page</Text>
 
       <Info variant="warning" className="mb-8">
         <Text>This is a warning</Text>
       </Info>
 
       <Card className="mb-8">
-        <Text variant="header" className="text-xl mb-4">Tooltip Examples</Text>
+        <Text variant="body" className="text-xl mb-4">Tooltip Examples</Text>
         <Flex gap="md" align="center" justify="center" className="p-4">
           <Tooltip content="Default top tooltip" position="top">
             <Button>Hover Me (Top)</Button>

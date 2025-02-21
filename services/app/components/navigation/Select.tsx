@@ -47,7 +47,7 @@ export const Select: FC<Props> = (
         {
           <button className="group cursor-pointer py-3 px-5" type="button">
             <Text
-              variant="paragraph"
+              variant="body"
               className="flex items-center justify-between gap-3 dark:group-hover:text-text-300 group-hover:text-text-500"
             >
               {name}

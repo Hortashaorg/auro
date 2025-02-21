@@ -28,7 +28,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
     <HtmxWrapper {...props} id="server-section">
       {adminServers.length > 0 && (
         <Section>
-          <Text variant="header">My Servers</Text>
+          <Text variant="h2">My Servers</Text>
           <Grid gap="md" content="medium">
             {adminServers.map((server) => (
               <ServerCard key={server.id} server={server} />
@@ -38,7 +38,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
       )}
 
       <Section>
-        <Text variant="header">Available Servers</Text>
+        <Text variant="h2">Available Servers</Text>
         <Grid gap="md" content="medium">
           {publicServers.map((server) => (
             <ServerCard key={server.id} server={server} />
@@ -59,7 +59,7 @@ const ServerCard = ({ server }: {
   return (
     <Card className="p-4 space-y-4">
       <Flex justify="between" items="start">
-        <Text variant="header" className="text-xl truncate mr-2">
+        <Text variant="h1" className="text-xl truncate mr-2">
           {server.name}
         </Text>
         <Badge
