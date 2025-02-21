@@ -276,7 +276,7 @@ export const createRoute = <
       if (!ctx) throw new Error("Unable to generate context");
       const res = config.customContext ? await config.customContext(ctx) : null;
       return res as TCustomContextReturnType extends undefined ? null
-        : TCustomContextReturnType;
+        : Awaited<TCustomContextReturnType>;
     },
   };
 };

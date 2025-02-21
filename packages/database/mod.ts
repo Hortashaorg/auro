@@ -11,3 +11,4 @@ export * as schema from "./db/schema.ts";
 
 export { sql } from "drizzle-orm";
 export { and, eq, exists, gt, lt, or } from "drizzle-orm";
+export type { InferInsertModel, InferSelectModel } from "drizzle-orm";
