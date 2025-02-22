@@ -68,3 +68,36 @@ export const user = pgTable(
     table,
   ) => [unique("unique_user_name_per_server").on(table.serverId, table.name)],
 );
+
+export const location = pgTable(
+  "location",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    serverId: uuid("server_id").references(() => server.id).notNull(),
+    name: varchar("name", { length: 50 }).notNull(),
+    description: varchar("description", { length: 500 }),
+    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+  },
+  (table) => [
+    unique("unique_location_name_per_server").on(table.serverId, table.name),
+  ],
+);
+
+export const action = pgTable(
+  "action",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    serverId: uuid("server_id").references(() => server.id).notNull(),
+    locationId: uuid("location_id").references(() => location.id),
+    name: varchar("name", { length: 50 }).notNull(),
+    description: varchar("description", { length: 500 }),
+    cooldownMinutes: integer("cooldown_minutes").notNull().default(0),
+    repeatable: boolean("repeatable").notNull().default(true),
+    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+  },
+  (table) => [
+    unique("unique_action_name_per_server").on(table.serverId, table.name),
+  ],
+);
