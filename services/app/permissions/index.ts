@@ -1,5 +1,5 @@
 import type { Context } from "@kalena/framework";
-import { db, eq, schema, sql } from "@package/database";
+import { and, db, eq, schema, sql } from "@package/database";
 
 export const isPublic = (): boolean => {
   return true;
@@ -12,7 +12,7 @@ export const isDenied = (): boolean => {
 export const hasAccessToServer = async (
   c: Context,
 ): Promise<boolean> => {
-  const serverId = c.req.param("id");
+  const serverId = c.req.param("serverId");
 
   // Check if server exists and is online
   const [server] = await db.select({
@@ -33,4 +33,24 @@ export const hasAccessToServer = async (
   const isServerAdmin = !!server && server.userIsAdmin;
 
   return isLoggedInAndServerAccessable || isServerAdmin;
+};
+
+export const isAdminOfServer = async (c: Context): Promise<boolean> => {
+  const serverId = c.req.param("serverId");
+  const email = c.var.email;
+
+  const [data] = await db.select().from(schema.user).innerJoin(
+    schema.server,
+    eq(schema.user.serverId, schema.server.id),
+  ).innerJoin(
+    schema.account,
+    eq(schema.user.accountId, schema.account.id),
+  ).where(
+    and(
+      eq(schema.server.id, serverId),
+      eq(schema.account.email, email),
+    ),
+  );
+
+  return !!data && data.user.type === "admin" && data.server.id === serverId;
 };

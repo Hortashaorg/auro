@@ -120,15 +120,6 @@ export const createRoute = <
   TParamValidation extends BaseSchema | undefined = undefined,
   TQueryValidation extends BaseSchema | undefined = undefined,
   TCustomContextReturnType = undefined,
-  TContextType = RouteContext<
-    TPath,
-    TFormValidation,
-    TCookieValidation,
-    THeaderValidation,
-    TJsonValidation,
-    TParamValidation,
-    TQueryValidation
-  >,
 >(config: {
   path: TPath;
   formValidationSchema?: TFormValidation;
@@ -139,19 +130,43 @@ export const createRoute = <
   queryValidationSchema?: TQueryValidation;
   permission: {
     check: (
-      c: TContextType,
+      c: RouteContext<
+        TPath,
+        TFormValidation,
+        TCookieValidation,
+        THeaderValidation,
+        TJsonValidation,
+        TParamValidation,
+        TQueryValidation
+      >,
     ) => Promise<boolean> | boolean;
     redirectPath: string;
   };
   customContext?: (
-    c: TContextType,
+    c: RouteContext<
+      TPath,
+      TFormValidation,
+      TCookieValidation,
+      THeaderValidation,
+      TJsonValidation,
+      TParamValidation,
+      TQueryValidation
+    >,
   ) => TCustomContextReturnType;
   component: () => Promise<HtmlEscapedString> | HtmlEscapedString;
   partial: boolean;
   hmr: boolean;
 }): {
   [INTERNAL_APP]: Hono;
-  context: () => TContextType;
+  context: () => RouteContext<
+    TPath,
+    TFormValidation,
+    TCookieValidation,
+    THeaderValidation,
+    TJsonValidation,
+    TParamValidation,
+    TQueryValidation
+  >;
   customContext: () => TCustomContextReturnType extends undefined ? null
     : TCustomContextReturnType;
 } => {
@@ -160,7 +175,15 @@ export const createRoute = <
 
   // Create a context for the route.
   const RouteContext = createContext<
-    TContextType | null
+    RouteContext<
+      TPath,
+      TFormValidation,
+      TCookieValidation,
+      THeaderValidation,
+      TJsonValidation,
+      TParamValidation,
+      TQueryValidation
+    > | null
   >(null);
 
   const {
@@ -213,7 +236,15 @@ export const createRoute = <
         try {
           // Check permission before rendering
           const hasPermission = await config.permission.check(
-            c as TContextType,
+            c as unknown as RouteContext<
+              TPath,
+              TFormValidation,
+              TCookieValidation,
+              THeaderValidation,
+              TJsonValidation,
+              TParamValidation,
+              TQueryValidation
+            >,
           );
           if (!hasPermission) {
             span.addEvent("redirect", {
@@ -226,7 +257,15 @@ export const createRoute = <
 
           const html = await c.html(
             <RouteContext.Provider
-              value={c as TContextType}
+              value={c as unknown as RouteContext<
+                TPath,
+                TFormValidation,
+                TCookieValidation,
+                THeaderValidation,
+                TJsonValidation,
+                TParamValidation,
+                TQueryValidation
+              >}
             >
               <GlobalContext.Provider
                 value={c as Context}
@@ -266,13 +305,33 @@ export const createRoute = <
     context: () => {
       const ctx = useContext(RouteContext);
       if (!ctx) throw new Error("Unable to generate context");
-      return ctx;
+      return ctx as RouteContext<
+        TPath,
+        TFormValidation,
+        TCookieValidation,
+        THeaderValidation,
+        TJsonValidation,
+        TParamValidation,
+        TQueryValidation
+      >;
     },
     // Helper to extract custom context from route, defined by package user
     customContext: () => {
       const ctx = useContext(RouteContext);
       if (!ctx) throw new Error("Unable to generate context");
-      const res = config.customContext ? config.customContext(ctx) : null;
+      const res = config.customContext
+        ? config.customContext(
+          ctx as RouteContext<
+            TPath,
+            TFormValidation,
+            TCookieValidation,
+            THeaderValidation,
+            TJsonValidation,
+            TParamValidation,
+            TQueryValidation
+          >,
+        )
+        : null;
       return res as TCustomContextReturnType extends undefined ? null
         : TCustomContextReturnType;
     },

@@ -41,7 +41,7 @@ const Server = async () => {
 };
 
 export const serverRoute = createRoute({
-  path: "/server/:id",
+  path: "/server/:serverId",
   component: Server,
   permission: {
     check: hasAccessToServer,
@@ -50,7 +50,7 @@ export const serverRoute = createRoute({
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
   customContext: (c) => {
-    const serverId = c.req.param("id");
+    const serverId = c.req.param("serverId");
     const email = c.var.email ?? throwError("Email not found");
 
     return serverAndUser(serverId, email);
