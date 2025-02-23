@@ -19,6 +19,11 @@ export const Navbar = async () => {
   return (
     <Header id="section-navbar">
       <Menu>
+        {context.var.isLoggedIn && isServer && (
+          <Link href={`/servers/${serverId}`} variant="dropdownLink">
+            Overview
+          </Link>
+        )}
         {context.var.isLoggedIn && isAdmin && (
           <Link href={`/servers/${serverId}/locations`} variant="dropdownLink">
             Locations
