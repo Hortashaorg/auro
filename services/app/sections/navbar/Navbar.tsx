@@ -24,7 +24,7 @@ export const Navbar = async () => {
             Locations
           </Link>
         )}
-        {context.var.isLoggedIn && (
+        {context.var.isLoggedIn && !isServer && (
           <Link href="/servers" variant="dropdownLink">Servers</Link>
         )}
       </Menu>
@@ -37,6 +37,9 @@ export const Navbar = async () => {
         {context.var.isLoggedIn
           ? (
             <Select name="Profile" variant="single" flow="left">
+              <Link href="/servers" variant="dropdownLink">
+                Servers
+              </Link>
               <Link href={context.var.logoutUrl} variant="dropdownLink">
                 Logout
               </Link>
