@@ -8,8 +8,6 @@ const CreateLocation = async () => {
   const context = createLocationRoute.context();
   const result = context.req.valid("form");
 
-  console.log(result);
-
   if (!result.success) {
     const errorEvents: Record<string, string> = {};
 

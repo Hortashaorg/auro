@@ -4,19 +4,22 @@ import { Text } from "@comp/content/Text.tsx";
 import { throwError } from "@package/common";
 import { hasAccessToServer } from "@permissions/index.ts";
 import { serverAndUser } from "@queries/serverAndUser.ts";
-import type { InferSelectModel, schema } from "@package/database";
+import { db, type InferSelectModel, schema } from "@package/database";
 import { Modal } from "@comp/overlay/modal/Modal.tsx";
 import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
 import { Form } from "@comp/inputs/form/Form.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
+import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
 
-const AdminDashboard = (
+const AdminDashboard = async (
   { server }: { server: InferSelectModel<typeof schema.server> },
 ) => {
   const context = serverRoute.context();
   const serverId = context.req.param("serverId");
+
+  const assets = await db.select().from(schema.asset);
 
   return (
     <>
@@ -51,10 +54,13 @@ const AdminDashboard = (
 
             <div>
               <Text variant="body" className="mb-2">Location Asset</Text>
-              <Input
+              <ImageGridInput
                 name="assetId"
-                type="text"
-                placeholder="Enter asset id"
+                assets={assets.map((asset) => ({
+                  id: asset.id,
+                  url: asset.url,
+                }))}
+                required
               />
             </div>
           </div>
