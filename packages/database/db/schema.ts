@@ -90,6 +90,7 @@ export const location = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     serverId: uuid("server_id").references(() => server.id).notNull(),
+    assetId: uuid("asset_id").references(() => asset.id).notNull(),
     name: varchar("name", { length: 50 }).notNull(),
     description: varchar("description", { length: 500 }),
     createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
@@ -105,6 +106,7 @@ export const action = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     serverId: uuid("server_id").references(() => server.id).notNull(),
+    assetId: uuid("asset_id").references(() => asset.id).notNull(),
     locationId: uuid("location_id").references(() => location.id),
     name: varchar("name", { length: 50 }).notNull(),
     description: varchar("description", { length: 500 }),
