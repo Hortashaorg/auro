@@ -15,6 +15,7 @@
     "all:typecheck": "deno run -A scripts/task.ts '@*/*' typecheck",
     "all:lint": "deno run -A scripts/task.ts '@*/*' lint",
     "all:fmt": "deno run -A scripts/task.ts '@*/*' fmt",
+    "framework:publish": "deno run -A scripts/task.ts '@kalena/framework' publish",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
     "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
