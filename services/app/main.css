@@ -6,6 +6,51 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Thin scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: theme("colors.background.400") theme("colors.background.200");
+}
+
+/* Webkit scrollbar styles */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: theme("colors.background.200");
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: theme("colors.background.400");
+  border-radius: 4px;
+  border: 2px solid theme("colors.background.200");
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: theme("colors.background.500");
+}
+
+/* Dark mode scrollbar */
+.dark * {
+  scrollbar-color: theme("colors.background.600") theme("colors.background.800");
+}
+
+.dark *::-webkit-scrollbar-track {
+  background: theme("colors.background.800");
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background-color: theme("colors.background.600");
+  border: 2px solid theme("colors.background.800");
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background-color: theme("colors.background.500");
+}
+
 @theme {
   --color-text-50: theme("colors.slate.50");
   --color-text-100: theme("colors.slate.100");

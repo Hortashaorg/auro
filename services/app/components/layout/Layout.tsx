@@ -14,7 +14,7 @@ export const Layout = ({
 }: Props) => {
   return (
     <BaseLayout title={title}>
-      <div className="container mx-auto p-4 px-10">
+      <div className="container mx-auto p-4 px-10 dark:scheme-dark scheme-normal">
         <Navbar />
         <Flex
           className={cn("w-full", className)}
