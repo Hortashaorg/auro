@@ -29,6 +29,22 @@ const temporalTimestamp = customType<
 
 export const userType = pgEnum("usertype", ["admin", "player"]);
 
+export const assetCategory = pgEnum("assetcategory", [
+  "character",
+  "creature",
+  "action",
+  "location",
+]);
+
+export const asset = pgTable("asset", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  type: assetCategory().notNull(),
+  name: varchar({ length: 50 }).notNull().unique(),
+  url: varchar({ length: 500 }).notNull().unique(),
+  createdAt: temporalTimestamp().notNull().default(sql`now()`),
+  updatedAt: temporalTimestamp().notNull().default(sql`now()`),
+});
+
 export const server = pgTable("server", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar({ length: 50 }).notNull(),
