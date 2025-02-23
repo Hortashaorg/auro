@@ -18,7 +18,8 @@
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
     "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
-    "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate"
+    "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
+    "db:seed": "deno run -A scripts/task.ts '@package/database' seed"
   },
   "compilerOptions": {
     "noUnusedLocals": true,
