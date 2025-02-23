@@ -4,7 +4,6 @@ import { db, eq, schema } from "@package/database";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
 import { Card } from "@comp/layout/Card.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
 import { Img } from "@comp/content/Img.tsx";
@@ -61,39 +60,99 @@ const ActionCard = ({ action }: {
   };
 }) => {
   return (
-    <Card className="p-4 space-y-4">
-      <Flex justify="between" items="start">
-        <div className="flex-1">
-          <Text variant="h1" className="text-xl truncate mr-2">
+    <Card className="group relative overflow-hidden hover:ring-2 hover:ring-primary-500 transition-all">
+      {/* Background Image with Gradient Overlay */}
+      <div className="absolute inset-0">
+        <Img
+          src={action.assetUrl}
+          alt=""
+          className="w-full h-full object-cover opacity-25 dark:opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background-100 dark:from-background-900 to-transparent" />
+      </div>
+
+      {/* Content */}
+      <div className="relative p-4">
+        {/* Action Icon */}
+        <div className="float-right ml-4 mb-2">
+          <div className="w-16 h-16 rounded-lg overflow-hidden ring-2 ring-background-200 dark:ring-background-800">
+            <Img
+              src={action.assetUrl}
+              alt={action.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Title and Description */}
+        <div className="space-y-2">
+          <Text variant="h1" className="text-xl font-bold">
             {action.name}
           </Text>
           {action.description && (
-            <Text variant="body" className="text-sm text-gray-500 mt-1">
+            <Text
+              variant="body"
+              className="text-sm text-text-500 dark:text-text-400"
+            >
               {action.description}
             </Text>
           )}
-          <div className="mt-2 space-x-2">
-            <Badge variant="warning">
-              {action.cooldownMinutes}m cooldown
-            </Badge>
-            <Badge variant={action.repeatable ? "success" : "danger"}>
-              {action.repeatable ? "Repeatable" : "One-time"}
-            </Badge>
-            {action.locationName && (
-              <Badge variant="default">
-                {action.locationName}
-              </Badge>
-            )}
-          </div>
         </div>
-        <div className="w-16 h-16 flex-shrink-0">
-          <Img
-            src={action.assetUrl}
-            alt={action.name}
-            className="w-full h-full object-cover rounded"
-          />
+
+        {/* Badges */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Badge variant="warning" className="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
+            </svg>
+            {action.cooldownMinutes}m cooldown
+          </Badge>
+          <Badge
+            variant={action.repeatable ? "success" : "danger"}
+            className="flex items-center gap-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              {action.repeatable
+                ? (
+                  <path d="M17 2l4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3" />
+                )
+                : <path d="M18 6L6 18M6 6l12 12" />}
+            </svg>
+            {action.repeatable ? "Repeatable" : "One-time"}
+          </Badge>
+          {action.locationName && (
+            <Badge variant="default" className="flex items-center gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              {action.locationName}
+            </Badge>
+          )}
         </div>
-      </Flex>
+      </div>
     </Card>
   );
 };

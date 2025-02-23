@@ -1,0 +1,29 @@
+---
+description: How to do routing
+globs: *.tsx
+alwaysApply: false
+---
+ # Route Rules
+
+## Route Registration
+- All routes must be registered in `services/app/main.ts`
+- Export routes with descriptive names ending in `Route` (e.g., `createLocationRoute`)
+- Use `createRoute` from `@kalena/framework` to define routes
+
+## Route Structure
+- Place page routes in `services/app/pages/`
+- Place API routes in `services/app/api/`
+- Follow the URL structure in the file path (e.g., `/servers/:serverId/actions` → `pages/server/admin/actions.tsx`)
+
+## Route Configuration
+- Always define permissions using the `permission` field
+- Set `partial: true` for HTMX API endpoints
+- Set `partial: false` for full page routes
+- Use `formValidationSchema` for form handling routes
+- Set `hmr: Deno.env.get("ENV") === "local"` for development
+
+## Route Components
+- Page routes should use the `Layout` component
+- API routes should return HTMX compatible responses
+- Use `route.context()` to access route parameters and validation
+- Handle form validation errors with `form-error` events
