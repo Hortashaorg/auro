@@ -39,8 +39,26 @@
     "dependencies": ["@kalena/framework"],
     "localDependencies": ["utils/tailwind.ts", "layout/Flex.tsx"]
   },
+  "imagegridinput": {
+    "file": "inputs/form/ImageGridInput.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "content/Img.tsx",
+      "content/Text.tsx"
+    ]
+  },
   "input": {
     "file": "inputs/form/Input.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "content/Text.tsx"
+    ]
+  },
+  "textarea": {
+    "file": "inputs/form/Textarea.tsx",
     "dependencies": ["class-variance-authority", "@kalena/framework"],
     "localDependencies": [
       "utils/tailwind.ts",
@@ -86,12 +104,11 @@
   "layout": {
     "file": "layout/Layout.tsx",
     "dependencies": ["@sections/navbar/Navbar.tsx", "@kalena/framework"],
-    "localDependencies": ["layout/BaseLayout.tsx", "layout/Main.tsx"]
-  },
-  "main": {
-    "file": "layout/Main.tsx",
-    "dependencies": ["@kalena/framework"],
-    "localDependencies": ["utils/tailwind.ts", "layout/Flex.tsx"]
+    "localDependencies": [
+      "layout/BaseLayout.tsx",
+      "utils/tailwind.ts",
+      "layout/Flex.tsx"
+    ]
   },
   "section": {
     "file": "layout/Section.tsx",
