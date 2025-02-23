@@ -2,12 +2,12 @@ import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { db, eq, schema } from "@package/database";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
 import { Card } from "@comp/layout/Card.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
 import { Img } from "@comp/content/Img.tsx";
-
+import { Flex } from "@comp/layout/Flex.tsx";
+import { Grid } from "@comp/layout/Grid.tsx";
 type Props = JSX.IntrinsicElements["div"];
 
 export const ActionGrid = async ({ ...props }: Props) => {
@@ -33,7 +33,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="action-section">
-      <Grid gap="md" content="medium">
+      <Grid gap="lg" content="medium">
         {actions.map((action) => (
           <ActionCard
             key={action.id}
@@ -60,47 +60,33 @@ const ActionCard = ({ action }: {
   };
 }) => {
   return (
-    <Card className="group relative overflow-hidden hover:ring-2 hover:ring-primary-500 transition-all">
-      {/* Background Image with Gradient Overlay */}
-      <div className="absolute inset-0">
+    <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
+      <div className="aspect-[16/9] overflow-hidden">
         <Img
           src={action.assetUrl}
-          alt=""
-          className="w-full h-full object-cover opacity-25 dark:opacity-20"
+          alt={action.name}
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background-100 dark:from-background-900 to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="relative p-4">
-        {/* Action Icon */}
-        <div className="float-right ml-4 mb-2">
-          <div className="w-16 h-16 rounded-lg overflow-hidden ring-2 ring-background-200 dark:ring-background-800">
-            <Img
-              src={action.assetUrl}
-              alt={action.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-
-        {/* Title and Description */}
-        <div className="space-y-2">
-          <Text variant="h1" className="text-xl font-bold">
-            {action.name}
-          </Text>
-          {action.description && (
-            <Text
-              variant="body"
-              className="text-sm text-text-500 dark:text-text-400"
-            >
-              {action.description}
+      <div className="p-4 space-y-4">
+        <Flex justify="between" items="start" className="gap-4">
+          <div className="space-y-2 flex-1">
+            <Text variant="h1" className="text-xl font-bold truncate">
+              {action.name}
             </Text>
-          )}
-        </div>
+            {action.description && (
+              <Text
+                variant="body"
+                className="text-sm text-text-500 dark:text-text-400 line-clamp-2"
+              >
+                {action.description}
+              </Text>
+            )}
+          </div>
+        </Flex>
 
-        {/* Badges */}
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           <Badge variant="warning" className="flex items-center gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"

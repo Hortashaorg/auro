@@ -4,9 +4,10 @@ import { db, eq, schema } from "@package/database";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
 import { Card } from "@comp/layout/Card.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { Img } from "@comp/content/Img.tsx";
+import { Flex } from "@comp/layout/Flex.tsx";
+
 type Props = JSX.IntrinsicElements["div"];
 
 export const LocationGrid = async ({ ...props }: Props) => {
@@ -27,7 +28,7 @@ export const LocationGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="location-section">
-      <Grid gap="md" content="medium">
+      <Grid gap="lg" content="medium">
         {locations.map((location) => (
           <LocationCard key={location.id} location={location} />
         ))}
@@ -44,13 +45,24 @@ const LocationCard = ({ location }: {
   };
 }) => {
   return (
-    <Card className="p-4 space-y-4">
-      <Img src={location.url} alt={location.name} />
-      <Flex justify="between" items="start">
-        <Text variant="h1" className="text-xl truncate mr-2">
-          {location.name}
-        </Text>
-      </Flex>
+    <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
+      <div className="aspect-[16/9] overflow-hidden">
+        <Img
+          src={location.url}
+          alt={location.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      <div className="p-4">
+        <Flex justify="between" items="start" className="gap-4">
+          <div className="flex-1">
+            <Text variant="h1" className="text-xl font-bold truncate">
+              {location.name}
+            </Text>
+          </div>
+        </Flex>
+      </div>
     </Card>
   );
 };
