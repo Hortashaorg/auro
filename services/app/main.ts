@@ -10,6 +10,7 @@ import { serverRoute } from "@pages/server/Server.tsx";
 import { createLocationRoute } from "@api/CreateLocation.tsx";
 import { locationsRoute } from "@pages/server/admin/locations.tsx";
 import { actionsRoute } from "@pages/server/admin/actions.tsx";
+import { createActionRoute } from "@api/CreateAction.tsx";
 
 const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
   throwError("Missing Google client secret");
@@ -36,6 +37,7 @@ const myApp = app({
     createLocationRoute,
     locationsRoute,
     actionsRoute,
+    createActionRoute,
   ],
   port: 4000,
   errorPages: {

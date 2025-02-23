@@ -9,10 +9,28 @@ import { Text } from "@comp/content/Text.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { SelectInput } from "@comp/inputs/form/SelectInput.tsx";
+import { ActionGrid } from "@sections/views/ActionGrid.tsx";
+import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
+import { db, eq, schema } from "@package/database";
 
-const Actions = () => {
+const Actions = async () => {
   const context = actionsRoute.context();
   const serverId = context.req.param("serverId");
+
+  const [assets, locations] = await Promise.all([
+    db.select({
+      id: schema.asset.id,
+      url: schema.asset.url,
+    })
+      .from(schema.asset)
+      .where(eq(schema.asset.type, "action")),
+    db.select({
+      id: schema.location.id,
+      name: schema.location.name,
+    })
+      .from(schema.location)
+      .where(eq(schema.location.serverId, serverId)),
+  ]);
 
   return (
     <Layout title="Actions">
@@ -31,7 +49,7 @@ const Actions = () => {
                 name="name"
                 type="text"
                 required
-                placeholder="Enter action name"
+                placeholder="Enter action name (e.g., Fishing, Mining, Smelting)"
               />
             </div>
 
@@ -45,26 +63,50 @@ const Actions = () => {
             </div>
 
             <div>
-              <Text variant="body" className="mb-2">Action Type</Text>
-              <SelectInput
-                name="type"
+              <Text variant="body" className="mb-2">Action Asset</Text>
+              <ImageGridInput
+                name="assetId"
+                assets={assets.map((asset) => ({
+                  id: asset.id,
+                  url: asset.url,
+                }))}
                 required
-                options={[
-                  { value: "command", label: "Command" },
-                  { value: "script", label: "Script" },
-                  { value: "webhook", label: "Webhook" },
-                ]}
-                placeholder="Select action type"
               />
             </div>
 
             <div>
-              <Text variant="body" className="mb-2">Command/Script/URL</Text>
-              <Textarea
-                name="content"
-                type="text"
+              <Text variant="body" className="mb-2">Location (Optional)</Text>
+              <SelectInput
+                name="locationId"
+                options={locations.map((location) => ({
+                  value: location.id,
+                  label: location.name,
+                }))}
+                placeholder="Select location"
+              />
+            </div>
+
+            <div>
+              <Text variant="body" className="mb-2">Cooldown (Minutes)</Text>
+              <Input
+                name="cooldownMinutes"
+                type="number"
+                min="0"
                 required
-                placeholder="Enter command, script content, or webhook URL"
+                defaultValue="0"
+              />
+            </div>
+
+            <div>
+              <Text variant="body" className="mb-2">Repeatable</Text>
+              <SelectInput
+                name="repeatable"
+                required
+                options={[
+                  { value: "true", label: "Yes" },
+                  { value: "false", label: "No" },
+                ]}
+                defaultValue="true"
               />
             </div>
           </div>
@@ -74,12 +116,7 @@ const Actions = () => {
           </Button>
         </Form>
       </Modal>
-
-      {/* We'll create and add the ActionGrid component here later */}
-      <div className="mt-4">
-        <Text variant="h2">Actions List</Text>
-        {/* ActionGrid component will go here */}
-      </div>
+      <ActionGrid />
     </Layout>
   );
 };
