@@ -46,7 +46,7 @@ const LocationCard = ({ location }: {
 }) => {
   return (
     <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
-      <div className="aspect-[16/9] overflow-hidden">
+      <div className="aspect-square overflow-hidden">
         <Img
           src={location.url}
           alt={location.name}
