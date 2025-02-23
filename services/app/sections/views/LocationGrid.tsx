@@ -55,7 +55,7 @@ const LocationCard = ({ location }: {
       </div>
 
       <div className="p-4">
-        <Flex justify="between" items="start" className="gap-4">
+        <Flex justify="between" items="start" gap="md">
           <div className="flex-1">
             <Text variant="h1" className="text-xl font-bold truncate">
               {location.name}
