@@ -3,6 +3,7 @@ import { db, schema } from "@package/database";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
+import { LocationGrid } from "@sections/views/LocationGrid.tsx";
 
 const CreateLocation = async () => {
   const context = createLocationRoute.context();
@@ -48,7 +49,7 @@ const CreateLocation = async () => {
     ]),
   );
 
-  return <p>Success</p>;
+  return <LocationGrid hx-swap-oob="true" />;
 };
 
 const CreateLocationSchema = v.object({

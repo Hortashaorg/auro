@@ -10,6 +10,7 @@ import { Text } from "@comp/content/Text.tsx";
 import { db, schema } from "@package/database";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
+import { LocationGrid } from "@sections/views/LocationGrid.tsx";
 
 const Locations = async () => {
   const context = locationsRoute.context();
@@ -64,6 +65,8 @@ const Locations = async () => {
           </Button>
         </Form>
       </Modal>
+
+      <LocationGrid />
     </Layout>
   );
 };
