@@ -29,9 +29,6 @@ export const Navbar = async () => {
             Locations
           </Link>
         )}
-        {context.var.isLoggedIn && !isServer && (
-          <Link href="/servers" variant="dropdownLink">Servers</Link>
-        )}
       </Menu>
 
       <Menu x-data="themeData">
