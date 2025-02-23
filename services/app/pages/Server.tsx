@@ -10,6 +10,7 @@ import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
 import { Form } from "@comp/inputs/form/Form.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
+import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 
 const AdminDashboard = (
   { server }: { server: InferSelectModel<typeof schema.server> },
@@ -41,7 +42,7 @@ const AdminDashboard = (
 
             <div>
               <Text variant="body" className="mb-2">Description</Text>
-              <Input
+              <Textarea
                 name="description"
                 type="text"
                 placeholder="Enter location description"
