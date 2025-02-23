@@ -8,6 +8,8 @@ const CreateLocation = async () => {
   const context = createLocationRoute.context();
   const result = context.req.valid("form");
 
+  console.log(result);
+
   if (!result.success) {
     const errorEvents: Record<string, string> = {};
 
@@ -53,8 +55,13 @@ const CreateLocation = async () => {
 
 const CreateLocationSchema = v.object({
   name: v.pipe(v.string(), v.minLength(3), v.maxLength(50)),
-  description: v.optional(v.string()),
-  assetId: v.string(),
+  description: v.optional(v.pipe(
+    v.string(),
+    v.transform((val) => {
+      return val.trim() === "" ? undefined : val;
+    }),
+  )),
+  assetId: v.pipe(v.string(), v.uuid()),
 });
 
 export const createLocationRoute = createRoute({

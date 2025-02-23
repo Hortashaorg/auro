@@ -28,20 +28,38 @@ const AdminDashboard = (
           hx-post={`/api/servers/${serverId}/create-location`}
           hx-swap="none"
         >
-          <div>
-            <Text variant="body" className="mb-2">Location Name</Text>
-            <Input
-              name="name"
-              type="text"
-              required
-              minLength={3}
-              maxLength={50}
-              placeholder="Enter location name"
-            />
+          <div className="space-y-4">
+            <div>
+              <Text variant="body" className="mb-2">Location Name</Text>
+              <Input
+                name="name"
+                type="text"
+                required
+                placeholder="Enter location name"
+              />
+            </div>
+
+            <div>
+              <Text variant="body" className="mb-2">Description</Text>
+              <Input
+                name="description"
+                type="text"
+                placeholder="Enter location description"
+              />
+            </div>
+
+            <div>
+              <Text variant="body" className="mb-2">Location Asset</Text>
+              <Input
+                name="assetId"
+                type="text"
+                placeholder="Enter asset id"
+              />
+            </div>
           </div>
 
-          <Button type="submit" variant="primary">
-            Create Server
+          <Button type="submit" variant="primary" className="mt-4">
+            Create Location
           </Button>
         </Form>
       </Modal>
