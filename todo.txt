@@ -1,17 +1,11 @@
-Logged in:
-- When logged in, i have the option to swap to another server.
-- If account is given permission to create servers, I can create a server. I will be admin by server created by me.
-
 Administrator:
-- As administrator on a server, I can manage the game server.
-- As administrator on a server, I am unable to play on the server.
 - As administrator on a server, I can create and modify actions available to players.
-- As administrator on a server, I can set up requirements for executing an action.
+- As administrator on a server, I can modify locations.
+- As administrator on a server, I can create and modify items on the server.
 - As administrator on a server, I can set up rewards for executing an action.
 - As administrator on a server, I can set up costs for executing an action.
 
 Player:
-- As a player on a server, I can play on the server..
 - As a player on a server, I can see what actions are available to me.
 - As a player on a server, I can do an action and be rewarded accordingly.
 - As a player on a server, I recive energy to spend on doing actions.
