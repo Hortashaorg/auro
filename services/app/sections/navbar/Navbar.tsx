@@ -25,9 +25,17 @@ export const Navbar = async () => {
           </Link>
         )}
         {context.var.isLoggedIn && isAdmin && (
-          <Link href={`/servers/${serverId}/locations`} variant="dropdownLink">
-            Locations
-          </Link>
+          <>
+            <Link
+              href={`/servers/${serverId}/locations`}
+              variant="dropdownLink"
+            >
+              Locations
+            </Link>
+            <Link href={`/servers/${serverId}/actions`} variant="dropdownLink">
+              Actions
+            </Link>
+          </>
         )}
       </Menu>
 
