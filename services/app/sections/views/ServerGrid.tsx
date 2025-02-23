@@ -71,7 +71,7 @@ const ServerCard = ({ server }: {
         </Badge>
       </Flex>
       <ButtonLink
-        href={`/server/${server.id}`}
+        href={`/servers/${server.id}`}
         variant="primary"
         width="full"
         disabled={!server.online}

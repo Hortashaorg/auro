@@ -4,10 +4,11 @@ import { afterLoginHook, beforeLogoutHook, refreshHook } from "./auth.ts";
 import { serversRoute } from "@pages/Servers.tsx";
 import { homeRoute } from "@pages/Home.tsx";
 import { createServerRoute } from "@api/CreateServer.tsx";
-import { ErrorPage404 } from "@pages/ErrorPage404.tsx";
-import { ErrorPage500 } from "@pages/ErrorPage500.tsx";
-import { serverRoute } from "@pages/Server.tsx";
+import { ErrorPage404 } from "@pages/errors/ErrorPage404.tsx";
+import { ErrorPage500 } from "@pages/errors/ErrorPage500.tsx";
+import { serverRoute } from "@pages/server/Server.tsx";
 import { createLocationRoute } from "@api/CreateLocation.tsx";
+import { locationsRoute } from "@pages/server/admin/locations.tsx";
 
 const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
   throwError("Missing Google client secret");
@@ -32,6 +33,7 @@ const myApp = app({
     createServerRoute,
     serverRoute,
     createLocationRoute,
+    locationsRoute,
   ],
   port: 4000,
   errorPages: {

@@ -1,29 +1,23 @@
-import { Layout } from "@comp/layout/Layout.tsx";
 import { createRoute } from "@kalena/framework";
-import { Text } from "@comp/content/Text.tsx";
-import { throwError } from "@package/common";
-import { hasAccessToServer } from "@permissions/index.ts";
-import { serverAndUser } from "@queries/serverAndUser.ts";
-import { db, type InferSelectModel, schema } from "@package/database";
-import { Modal } from "@comp/overlay/modal/Modal.tsx";
+import { isAdminOfServer } from "@permissions/index.ts";
+import { Layout } from "@comp/layout/Layout.tsx";
 import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
+import { Modal } from "@comp/overlay/modal/Modal.tsx";
 import { Form } from "@comp/inputs/form/Form.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
-import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
+import { Text } from "@comp/content/Text.tsx";
+import { db, schema } from "@package/database";
+import { Textarea } from "@comp/inputs/form/Textarea.tsx";
+import { Input } from "@comp/inputs/form/Input.tsx";
 
-const AdminDashboard = async (
-  { server }: { server: InferSelectModel<typeof schema.server> },
-) => {
-  const context = serverRoute.context();
+const Locations = async () => {
+  const context = locationsRoute.context();
   const serverId = context.req.param("serverId");
-
   const assets = await db.select().from(schema.asset);
 
   return (
-    <>
-      <Text variant="h2">Server Status</Text>
+    <Layout title="Locations">
       <ModalButton modalRef="createLocationModal">
         Create Location
       </ModalButton>
@@ -70,47 +64,17 @@ const AdminDashboard = async (
           </Button>
         </Form>
       </Modal>
-      <Text>Status: {server.online ? "Online" : "Offline"}</Text>
-    </>
-  );
-};
-
-const PlayerDashboard = () => {
-  return (
-    <>
-      <Text>Welcome to the server</Text>
-    </>
-  );
-};
-
-const Server = async () => {
-  const context = await serverRoute.customContext();
-  const server = context.server;
-  const user = context.user;
-
-  return (
-    <Layout title={server.name}>
-      <Text variant="h1" className="mb-8">{server.name}</Text>
-      {user.type === "admin"
-        ? <AdminDashboard server={server} />
-        : <PlayerDashboard />}
     </Layout>
   );
 };
 
-export const serverRoute = createRoute({
-  path: "/servers/:serverId",
-  component: Server,
+export const locationsRoute = createRoute({
+  path: "/servers/:serverId/locations",
+  component: Locations,
   permission: {
-    check: hasAccessToServer,
+    check: isAdminOfServer,
     redirectPath: "/servers",
   },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
-  customContext: (c) => {
-    const serverId = c.req.param("serverId");
-    const email = c.var.email ?? throwError("Email not found");
-
-    return serverAndUser(serverId, email);
-  },
 });

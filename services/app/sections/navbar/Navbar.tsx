@@ -4,17 +4,30 @@ import { Menu } from "@comp/navigation/Menu.tsx";
 import { NavButton } from "@comp/navigation/NavButton.tsx";
 import { Select } from "@comp/navigation/Select.tsx";
 import { getGlobalContext } from "@kalena/framework";
+import { serverAndUser } from "@queries/serverAndUser.ts";
 
-export const Navbar = () => {
+export const Navbar = async () => {
   const context = getGlobalContext();
+  const serverId = context.req.param("serverId");
+  const email = context.var.email;
+
+  const data = serverId && email ? await serverAndUser(serverId, email) : null;
+
+  const isServer = !!data;
+  const isAdmin = isServer && data.user.type === "admin";
 
   return (
     <Header id="section-navbar">
-      {context.var.isLoggedIn && (
-        <Menu>
+      <Menu>
+        {context.var.isLoggedIn && isAdmin && (
+          <Link href={`/servers/${serverId}/locations`} variant="dropdownLink">
+            Locations
+          </Link>
+        )}
+        {context.var.isLoggedIn && (
           <Link href="/servers" variant="dropdownLink">Servers</Link>
-        </Menu>
-      )}
+        )}
+      </Menu>
 
       <Menu x-data="themeData">
         <NavButton
