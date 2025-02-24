@@ -1,6 +1,7 @@
 ---
 description: Rules for creating API endpoints that handle HTMX requests and server-side operations
-globs: *.tsx
+globs: **/api/**/*.tsx
+alwaysApply: false
 ---
 # API Rules
 

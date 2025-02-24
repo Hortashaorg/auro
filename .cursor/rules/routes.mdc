@@ -1,6 +1,6 @@
 ---
 description: How to do routing
-globs: *.tsx
+globs: **/{api,pages}/**/*.tsx
 alwaysApply: false
 ---
  # Route Rules
