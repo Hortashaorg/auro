@@ -64,6 +64,13 @@
       "when": 1740308864674,
       "tag": "0008_bouncy_captain_britain",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1740415750089,
+      "tag": "0009_round_gauntlet",
+      "breakpoints": true
     }
   ]
 }

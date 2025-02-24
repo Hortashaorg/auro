@@ -84,7 +84,62 @@ async function seedAssets() {
       name: "Village 2",
       url: "https://hortashaorg.github.io/assets/village2.png",
     },
-  ]);
+    {
+      type: "resource",
+      name: "Coins 1",
+      url: "https://hortashaorg.github.io/assets/coins1.png",
+    },
+    {
+      type: "resource",
+      name: "Iron 1",
+      url: "https://hortashaorg.github.io/assets/iron1.png",
+    },
+    {
+      type: "item",
+      name: "Sword 1",
+      url: "https://hortashaorg.github.io/assets/sword1.png",
+    },
+    {
+      type: "item",
+      name: "Mace 1",
+      url: "https://hortashaorg.github.io/assets/mace1.png",
+    },
+    {
+      type: "item",
+      name: "Armor 1",
+      url: "https://hortashaorg.github.io/assets/armor1.png",
+    },
+    {
+      type: "item",
+      name: "Sword 2",
+      url: "https://hortashaorg.github.io/assets/sword2.png",
+    },
+    {
+      type: "item",
+      name: "Sword 3",
+      url: "https://hortashaorg.github.io/assets/sword3.png",
+    },
+    {
+      type: "item",
+      name: "Sword 4",
+      url: "https://hortashaorg.github.io/assets/sword4.png",
+    },
+    {
+      type: "item",
+      name: "Sword 5",
+      url: "https://hortashaorg.github.io/assets/sword5.png",
+    },
+    {
+      type: "resource",
+      name: "Wood 1",
+      url: "https://hortashaorg.github.io/assets/wood1.png",
+    },
+    {
+      type: "resource",
+      name: "Wood 2",
+      url: "https://hortashaorg.github.io/assets/wood2.png",
+    },
+  ]).onConflictDoNothing();
 }
 
 // Main seeding function

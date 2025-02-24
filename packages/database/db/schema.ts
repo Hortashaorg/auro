@@ -34,6 +34,8 @@ export const assetCategory = pgEnum("assetcategory", [
   "creature",
   "action",
   "location",
+  "item",
+  "resource",
 ]);
 
 export const asset = pgTable("asset", {
