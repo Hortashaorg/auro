@@ -7,7 +7,7 @@ import { Form } from "@comp/inputs/form/Form.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
 import { Text } from "@comp/content/Text.tsx";
-import { db, schema } from "@package/database";
+import { db, eq, schema } from "@package/database";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { LocationGrid } from "@sections/views/LocationGrid.tsx";
@@ -15,7 +15,9 @@ import { LocationGrid } from "@sections/views/LocationGrid.tsx";
 const Locations = async () => {
   const context = locationsRoute.context();
   const serverId = context.req.param("serverId");
-  const assets = await db.select().from(schema.asset);
+  const assets = await db.select().from(schema.asset).where(
+    eq(schema.asset.type, "location"),
+  );
 
   return (
     <Layout title="Locations">
