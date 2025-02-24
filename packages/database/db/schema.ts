@@ -38,6 +38,14 @@ export const assetCategory = pgEnum("assetcategory", [
   "resource",
 ]);
 
+export const rarity = pgEnum("rarity", [
+  "common",
+  "uncommon",
+  "rare",
+  "epic",
+  "legendary",
+]);
+
 export const asset = pgTable("asset", {
   id: uuid("id").primaryKey().defaultRandom(),
   type: assetCategory().notNull(),
@@ -119,5 +127,39 @@ export const action = pgTable(
   },
   (table) => [
     unique("unique_action_name_per_server").on(table.serverId, table.name),
+  ],
+);
+
+export const item = pgTable(
+  "item",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    serverId: uuid("server_id").references(() => server.id).notNull(),
+    assetId: uuid("asset_id").references(() => asset.id).notNull(),
+    name: varchar("name", { length: 50 }).notNull(),
+    description: varchar("description", { length: 500 }),
+    rarity: rarity().notNull().default("common"),
+    stackable: boolean("stackable").notNull(),
+    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+  },
+  (table) => [
+    unique("unique_item_name_per_server").on(table.serverId, table.name),
+  ],
+);
+
+export const resource = pgTable(
+  "resource",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    serverId: uuid("server_id").references(() => server.id).notNull(),
+    assetId: uuid("asset_id").references(() => asset.id).notNull(),
+    name: varchar("name", { length: 50 }).notNull(),
+    description: varchar("description", { length: 500 }),
+    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+  },
+  (table) => [
+    unique("unique_resource_name_per_server").on(table.serverId, table.name),
   ],
 );
