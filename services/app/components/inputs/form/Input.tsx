@@ -48,6 +48,7 @@ type Props = JSX.IntrinsicElements["input"] & InputVariants;
  * Input component with consistent styling and variants
  *
  * Supports different sizes and states, with proper dark mode support.
+ * Automatically detects error state from parent FormControl component via Alpine.js.
  *
  * @example
  * <Input
@@ -56,19 +57,30 @@ type Props = JSX.IntrinsicElements["input"] & InputVariants;
  *   placeholder="Enter your email"
  *   required
  *   size="default"
- *   state={hasError ? "error" : "default"}
  * />
  */
 export const Input: FC<Props> = ({
   className,
   size,
-  state,
+  state = "default",
+  name,
   ...props
 }: Props) => {
+  // Base classes that are always applied
+  const baseClasses = cn(inputVariants({ size, state }), className);
+
+  // Error state classes to be conditionally applied
+  const errorClasses = cn(
+    inputVariants({ size, state: "error" }),
+    className,
+  );
+
   return (
     <input
       {...props}
-      className={cn(inputVariants({ size, state }), className)}
+      name={name}
+      className={baseClasses}
+      x-bind:class={`errors && errors['${name}'] ? '${errorClasses}' : '${baseClasses}'`}
     />
   );
 };

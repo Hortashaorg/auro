@@ -14,6 +14,7 @@ type Props = JSX.IntrinsicElements["div"] & {
  * - Automatic error display tied to the input name
  * - Optional hint text below the input
  * - Proper spacing and layout
+ * - Alpine.js integration for error state management
  *
  * @example
  * <FormControl inputName="email" hint="We'll never share your email">
@@ -47,7 +48,7 @@ export const FormControl: FC<Props> = ({
       <Text
         variant="error"
         className="mt-1 text-sm"
-        x-show={`errors['${inputName}']`}
+        x-show={`errors && errors['${inputName}']`}
         x-text={`errors['${inputName}']`}
       />
     </div>

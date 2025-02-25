@@ -19,7 +19,7 @@ const textareaVariants = cva([
   "disabled:opacity-50",
   "disabled:cursor-not-allowed",
   "w-full",
-  "resize-none",
+  "resize-y",
 ], {
   variants: {
     size: {
@@ -49,27 +49,39 @@ type Props = JSX.IntrinsicElements["textarea"] & TextareaVariants;
  * Textarea component with consistent styling and variants
  *
  * Supports different sizes and states, with proper dark mode support.
- * By default, resize is disabled but can be overridden with className.
+ * Automatically detects error state from parent FormControl component via Alpine.js.
  *
  * @example
  * <Textarea
  *   name="description"
  *   placeholder="Enter a description"
  *   rows={4}
+ *   required
  *   size="default"
- *   state={hasError ? "error" : "default"}
  * />
  */
 export const Textarea: FC<Props> = ({
   className,
   size,
-  state,
+  state = "default",
+  name,
   ...props
 }: Props) => {
+  // Base classes that are always applied
+  const baseClasses = cn(textareaVariants({ size, state }), className);
+
+  // Error state classes to be conditionally applied
+  const errorClasses = cn(
+    textareaVariants({ size, state: "error" }),
+    className,
+  );
+
   return (
     <textarea
       {...props}
-      className={cn(textareaVariants({ size, state }), className)}
+      name={name}
+      className={baseClasses}
+      x-bind:class={`errors && errors['${name}'] ? '${errorClasses}' : '${baseClasses}'`}
     />
   );
 };

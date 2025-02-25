@@ -4,7 +4,6 @@ import { cva } from "class-variance-authority";
 import type { FC, JSX } from "@kalena/framework";
 
 const selectVariants = cva([
-  "w-full",
   "rounded-md",
   "border",
   "dark:border-background-700",
@@ -19,6 +18,7 @@ const selectVariants = cva([
   "dark:focus:ring-primary-400",
   "disabled:opacity-50",
   "disabled:cursor-not-allowed",
+  "w-full",
 ], {
   variants: {
     size: {
@@ -42,50 +42,67 @@ const selectVariants = cva([
 });
 
 type SelectVariants = NonNullableProps<typeof selectVariants>;
-type Props = JSX.IntrinsicElements["select"] & SelectVariants & {
-  options: Array<{
-    value: string;
-    label: string;
-  }>;
-  placeholder?: string;
+
+type Option = {
+  value: string;
+  label: string;
 };
 
+type Props =
+  & Omit<JSX.IntrinsicElements["select"], "children">
+  & SelectVariants
+  & {
+    options: Option[];
+    placeholder?: string;
+  };
+
 /**
- * SelectInput component for dropdown selection with consistent styling
+ * SelectInput component for dropdown selection
  *
  * Features:
  * - Accepts an array of options with value and label
- * - Optional placeholder option
- * - Different size variants
+ * - Optional placeholder
+ * - Different size variants (small, default, large)
  * - Error state styling
- * - Proper dark mode support
+ * - Dark mode support
+ * - Automatically detects error state from parent FormControl component via Alpine.js
  *
  * @example
  * <SelectInput
- *   name="category"
- *   placeholder="Select a category"
+ *   name="country"
  *   options={[
- *     { value: "electronics", label: "Electronics" },
- *     { value: "clothing", label: "Clothing" },
- *     { value: "books", label: "Books" }
+ *     { value: "us", label: "United States" },
+ *     { value: "ca", label: "Canada" },
+ *     { value: "mx", label: "Mexico" }
  *   ]}
- *   required
+ *   placeholder="Select a country"
  *   size="default"
- *   state={hasError ? "error" : "default"}
  * />
  */
 export const SelectInput: FC<Props> = ({
   className,
   size,
-  state,
+  state = "default",
   options,
   placeholder,
+  name,
   ...props
 }: Props) => {
+  // Base classes that are always applied
+  const baseClasses = cn(selectVariants({ size, state }), className);
+
+  // Error state classes to be conditionally applied
+  const errorClasses = cn(
+    selectVariants({ size, state: "error" }),
+    className,
+  );
+
   return (
     <select
       {...props}
-      className={cn(selectVariants({ size, state }), className)}
+      name={name}
+      className={baseClasses}
+      x-bind:class={`errors && errors['${name}'] ? '${errorClasses}' : '${baseClasses}'`}
     >
       {placeholder && (
         <option value="" disabled selected>
