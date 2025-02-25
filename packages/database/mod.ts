@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./db/schema.ts";
+import pg from "postgres";
 
 export const db = drizzle({
   connection: "postgresql://root:root@localhost:5432/root",
@@ -9,6 +10,7 @@ export const db = drizzle({
 
 export * as schema from "./db/schema.ts";
 
-export { sql } from "drizzle-orm";
-export { and, eq, exists, gt, lt, or } from "drizzle-orm";
+export { and, eq, exists, gt, lt, or, sql } from "drizzle-orm";
 export type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+
+export const PostgresError = pg.PostgresError;

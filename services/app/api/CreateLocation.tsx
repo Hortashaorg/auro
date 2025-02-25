@@ -1,5 +1,5 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, schema } from "@package/database";
+import { db, PostgresError, schema } from "@package/database";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
@@ -33,23 +33,46 @@ const CreateLocation = async () => {
 
   const serverId = context.req.param("serverId");
 
-  await db.insert(schema.location)
-    .values({
-      name: result.output.name,
-      description: result.output.description,
-      serverId,
-      assetId: result.output.assetId,
-    });
+  try {
+    await db.insert(schema.location)
+      .values({
+        name: result.output.name,
+        description: result.output.description,
+        serverId,
+        assetId: result.output.assetId,
+      });
 
-  context.header(
-    "HX-Trigger",
-    createEvents([
-      { name: "close-dialog", values: { value: true } },
-      { name: "clear-form", values: { value: true } },
-    ]),
-  );
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        { name: "close-dialog", values: { value: true } },
+        { name: "clear-form", values: { value: true } },
+      ]),
+    );
 
-  return <LocationGrid hx-swap-oob="true" />;
+    return <LocationGrid hx-swap-oob="true" />;
+  } catch (error) {
+    if (error instanceof PostgresError) {
+      if (
+        error.constraint_name === "unique_location_name_per_server"
+      ) {
+        // Unique constraint violation
+        context.header(
+          "HX-Trigger",
+          createEvents([
+            {
+              name: "form-error",
+              values: {
+                name: "A location with this name already exists on this server",
+              },
+            },
+          ]),
+        );
+        return <p>Failure</p>;
+      }
+    }
+    throw error;
+  }
 };
 
 const CreateLocationSchema = v.object({
