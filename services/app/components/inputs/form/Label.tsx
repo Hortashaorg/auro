@@ -33,6 +33,20 @@ type Props = JSX.IntrinsicElements["label"] & LabelVariants & {
   htmlFor?: string;
 };
 
+/**
+ * Label component for form inputs with consistent styling
+ *
+ * Features:
+ * - Automatic required field indicator (asterisk)
+ * - Different size variants
+ * - Proper dark mode support
+ *
+ * @example
+ * <Label htmlFor="email" required size="default">
+ *   Email Address
+ * </Label>
+ * <Input id="email" name="email" type="email" required />
+ */
 export const Label: FC<Props> = ({
   className,
   required,

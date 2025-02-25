@@ -44,6 +44,21 @@ const inputVariants = cva([
 type InputVariants = NonNullableProps<typeof inputVariants>;
 type Props = JSX.IntrinsicElements["input"] & InputVariants;
 
+/**
+ * Input component with consistent styling and variants
+ *
+ * Supports different sizes and states, with proper dark mode support.
+ *
+ * @example
+ * <Input
+ *   name="email"
+ *   type="email"
+ *   placeholder="Enter your email"
+ *   required
+ *   size="default"
+ *   state={hasError ? "error" : "default"}
+ * />
+ */
 export const Input: FC<Props> = ({
   className,
   size,

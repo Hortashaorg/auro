@@ -50,6 +50,30 @@ type Props = JSX.IntrinsicElements["select"] & SelectVariants & {
   placeholder?: string;
 };
 
+/**
+ * SelectInput component for dropdown selection with consistent styling
+ *
+ * Features:
+ * - Accepts an array of options with value and label
+ * - Optional placeholder option
+ * - Different size variants
+ * - Error state styling
+ * - Proper dark mode support
+ *
+ * @example
+ * <SelectInput
+ *   name="category"
+ *   placeholder="Select a category"
+ *   options={[
+ *     { value: "electronics", label: "Electronics" },
+ *     { value: "clothing", label: "Clothing" },
+ *     { value: "books", label: "Books" }
+ *   ]}
+ *   required
+ *   size="default"
+ *   state={hasError ? "error" : "default"}
+ * />
+ */
 export const SelectInput: FC<Props> = ({
   className,
   size,

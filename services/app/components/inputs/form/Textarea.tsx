@@ -45,6 +45,21 @@ const textareaVariants = cva([
 type TextareaVariants = NonNullableProps<typeof textareaVariants>;
 type Props = JSX.IntrinsicElements["textarea"] & TextareaVariants;
 
+/**
+ * Textarea component with consistent styling and variants
+ *
+ * Supports different sizes and states, with proper dark mode support.
+ * By default, resize is disabled but can be overridden with className.
+ *
+ * @example
+ * <Textarea
+ *   name="description"
+ *   placeholder="Enter a description"
+ *   rows={4}
+ *   size="default"
+ *   state={hasError ? "error" : "default"}
+ * />
+ */
 export const Textarea: FC<Props> = ({
   className,
   size,

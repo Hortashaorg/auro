@@ -56,6 +56,31 @@ type Props = Omit<JSX.IntrinsicElements["input"], "children"> & {
   required?: boolean;
 };
 
+/**
+ * ImageGridInput component for selecting an image from a grid of options
+ *
+ * Features:
+ * - Visual grid of selectable images
+ * - Highlights the selected image
+ * - Uses Alpine.js for state management
+ * - Stores the selected asset ID in a hidden input
+ * - Proper dark mode support with visual feedback
+ *
+ * @example
+ * <FormControl inputName="assetId">
+ *   <Label htmlFor="asset-select" required>Select an Image</Label>
+ *   <ImageGridInput
+ *     name="assetId"
+ *     id="asset-select"
+ *     assets={[
+ *       { id: "asset1", url: "/images/asset1.jpg" },
+ *       { id: "asset2", url: "/images/asset2.jpg" },
+ *       { id: "asset3", url: "/images/asset3.jpg" }
+ *     ]}
+ *     required
+ *   />
+ * </FormControl>
+ */
 export const ImageGridInput: FC<Props> = ({
   className,
   assets,

@@ -7,6 +7,20 @@ type Props = JSX.IntrinsicElements["div"] & {
   hint?: string; // Optional helper text
 };
 
+/**
+ * FormControl wraps form inputs with consistent styling and error handling
+ *
+ * It provides:
+ * - Automatic error display tied to the input name
+ * - Optional hint text below the input
+ * - Proper spacing and layout
+ *
+ * @example
+ * <FormControl inputName="email" hint="We'll never share your email">
+ *   <Label htmlFor="email" required>Email Address</Label>
+ *   <Input id="email" name="email" type="email" required />
+ * </FormControl>
+ */
 export const FormControl: FC<Props> = ({
   className,
   children,
