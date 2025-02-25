@@ -41,6 +41,9 @@ export const Navbar = async () => {
             >
               Resources
             </Link>
+            <Link href={`/servers/${serverId}/items`} variant="dropdownLink">
+              Items
+            </Link>
           </>
         )}
       </Menu>
