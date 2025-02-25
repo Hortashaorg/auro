@@ -1,7 +1,7 @@
 import { Form } from "@comp/inputs/form/Form.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Label } from "@comp/inputs/form/Label.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { SelectInput } from "@comp/inputs/form/SelectInput.tsx";
@@ -36,8 +36,9 @@ export const CreateActionForm = async () => {
     >
       <div className="space-y-4">
         <div>
-          <Text variant="body" className="mb-2">Action Name</Text>
+          <Label htmlFor="action-name" required>Action Name</Label>
           <Input
+            id="action-name"
             name="name"
             type="text"
             required
@@ -46,8 +47,9 @@ export const CreateActionForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Description</Text>
+          <Label htmlFor="action-description">Description</Label>
           <Textarea
+            id="action-description"
             name="description"
             type="text"
             placeholder="Enter action description"
@@ -55,8 +57,9 @@ export const CreateActionForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Action Asset</Text>
+          <Label htmlFor="action-asset" required>Action Asset</Label>
           <ImageGridInput
+            id="action-asset"
             name="assetId"
             assets={assets}
             required
@@ -64,8 +67,9 @@ export const CreateActionForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Location (Optional)</Text>
+          <Label htmlFor="action-location">Location (Optional)</Label>
           <SelectInput
+            id="action-location"
             name="locationId"
             options={locations.map((location) => ({
               value: location.id,
@@ -76,8 +80,9 @@ export const CreateActionForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Cooldown (Minutes)</Text>
+          <Label htmlFor="action-cooldown" required>Cooldown (Minutes)</Label>
           <Input
+            id="action-cooldown"
             name="cooldownMinutes"
             type="number"
             min="0"
@@ -87,8 +92,9 @@ export const CreateActionForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Repeatable</Text>
+          <Label htmlFor="action-repeatable" required>Repeatable</Label>
           <SelectInput
+            id="action-repeatable"
             name="repeatable"
             required
             options={[

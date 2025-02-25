@@ -1,7 +1,7 @@
 import { Form } from "@comp/inputs/form/Form.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Label } from "@comp/inputs/form/Label.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { db, eq, schema } from "@package/database";
@@ -27,8 +27,9 @@ export const CreateLocationForm = async () => {
     >
       <div className="space-y-4">
         <div>
-          <Text variant="body" className="mb-2">Location Name</Text>
+          <Label htmlFor="location-name" required>Location Name</Label>
           <Input
+            id="location-name"
             name="name"
             type="text"
             required
@@ -37,8 +38,9 @@ export const CreateLocationForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Description</Text>
+          <Label htmlFor="location-description">Description</Label>
           <Textarea
+            id="location-description"
             name="description"
             type="text"
             placeholder="Enter location description"
@@ -46,8 +48,9 @@ export const CreateLocationForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Location Asset</Text>
+          <Label htmlFor="location-asset" required>Location Asset</Label>
           <ImageGridInput
+            id="location-asset"
             name="assetId"
             assets={assets}
             required

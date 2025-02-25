@@ -1,7 +1,7 @@
 import { Form } from "@comp/inputs/form/Form.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Label } from "@comp/inputs/form/Label.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { db, eq, schema } from "@package/database";
@@ -27,8 +27,9 @@ export const CreateResourceForm = async () => {
     >
       <div className="space-y-4">
         <div>
-          <Text variant="body" className="mb-2">Resource Name</Text>
+          <Label htmlFor="resource-name" required>Resource Name</Label>
           <Input
+            id="resource-name"
             name="name"
             type="text"
             required
@@ -37,8 +38,9 @@ export const CreateResourceForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Description</Text>
+          <Label htmlFor="resource-description">Description</Label>
           <Textarea
+            id="resource-description"
             name="description"
             type="text"
             placeholder="Enter resource description"
@@ -46,8 +48,9 @@ export const CreateResourceForm = async () => {
         </div>
 
         <div>
-          <Text variant="body" className="mb-2">Resource Asset</Text>
+          <Label htmlFor="resource-asset" required>Resource Asset</Label>
           <ImageGridInput
+            id="resource-asset"
             name="assetId"
             assets={assets}
             required

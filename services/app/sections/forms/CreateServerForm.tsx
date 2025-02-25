@@ -1,6 +1,6 @@
 import { Form } from "@comp/inputs/form/Form.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Label } from "@comp/inputs/form/Label.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 
 export const CreateServerForm = () => {
@@ -11,8 +11,9 @@ export const CreateServerForm = () => {
     >
       <div className="space-y-4">
         <div>
-          <Text variant="body" className="mb-2">Server Name</Text>
+          <Label htmlFor="server-name" required>Server Name</Label>
           <Input
+            id="server-name"
             name="name"
             type="text"
             required
