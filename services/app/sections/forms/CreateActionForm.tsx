@@ -5,6 +5,7 @@ import { Label } from "@comp/inputs/form/Label.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { SelectInput } from "@comp/inputs/form/SelectInput.tsx";
+import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
@@ -35,7 +36,10 @@ export const CreateActionForm = async () => {
       hx-swap="none"
     >
       <div className="space-y-4">
-        <div>
+        <FormControl
+          inputName="name"
+          hint="Choose a descriptive name for this action"
+        >
           <Label htmlFor="action-name" required>Action Name</Label>
           <Input
             id="action-name"
@@ -44,9 +48,12 @@ export const CreateActionForm = async () => {
             required
             placeholder="Enter action name"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="description"
+          hint="Describe what this action does"
+        >
           <Label htmlFor="action-description">Description</Label>
           <Textarea
             id="action-description"
@@ -54,9 +61,12 @@ export const CreateActionForm = async () => {
             type="text"
             placeholder="Enter action description"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="assetId"
+          hint="Select an image for this action"
+        >
           <Label htmlFor="action-asset" required>Action Asset</Label>
           <ImageGridInput
             id="action-asset"
@@ -64,9 +74,12 @@ export const CreateActionForm = async () => {
             assets={assets}
             required
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="locationId"
+          hint="Where this action can be performed"
+        >
           <Label htmlFor="action-location">Location</Label>
           <SelectInput
             id="action-location"
@@ -77,9 +90,12 @@ export const CreateActionForm = async () => {
             }))}
             placeholder="Select location"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="cooldownMinutes"
+          hint="Time before action can be used again"
+        >
           <Label htmlFor="action-cooldown" required>Cooldown (Minutes)</Label>
           <Input
             id="action-cooldown"
@@ -89,9 +105,12 @@ export const CreateActionForm = async () => {
             required
             value={0}
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="repeatable"
+          hint="Can this action be used multiple times?"
+        >
           <Label htmlFor="action-repeatable" required>Repeatable</Label>
           <SelectInput
             id="action-repeatable"
@@ -103,7 +122,7 @@ export const CreateActionForm = async () => {
             ]}
             defaultValue="true"
           />
-        </div>
+        </FormControl>
       </div>
 
       <Button type="submit" variant="primary" className="mt-4">

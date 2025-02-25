@@ -5,6 +5,7 @@ import { Label } from "@comp/inputs/form/Label.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { SelectInput } from "@comp/inputs/form/SelectInput.tsx";
+import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
@@ -27,7 +28,10 @@ export const CreateItemForm = async () => {
       hx-swap="none"
     >
       <div className="space-y-4">
-        <div>
+        <FormControl
+          inputName="name"
+          hint="Enter a unique name for this item"
+        >
           <Label htmlFor="item-name" required>Item Name</Label>
           <Input
             id="item-name"
@@ -36,9 +40,12 @@ export const CreateItemForm = async () => {
             required
             placeholder="Enter item name"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="description"
+          hint="Describe what this item does or how it can be used"
+        >
           <Label htmlFor="item-description">Description</Label>
           <Textarea
             id="item-description"
@@ -46,9 +53,12 @@ export const CreateItemForm = async () => {
             type="text"
             placeholder="Enter item description"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="rarity"
+          hint="Select how rare this item is"
+        >
           <Label htmlFor="item-rarity" required>Rarity</Label>
           <SelectInput
             id="item-rarity"
@@ -62,9 +72,12 @@ export const CreateItemForm = async () => {
               { value: "legendary", label: "Legendary" },
             ]}
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="assetId"
+          hint="Choose an image to represent this item"
+        >
           <Label htmlFor="item-asset" required>Item Asset</Label>
           <ImageGridInput
             id="item-asset"
@@ -72,7 +85,7 @@ export const CreateItemForm = async () => {
             assets={assets}
             required
           />
-        </div>
+        </FormControl>
       </div>
 
       <Button type="submit" variant="primary" className="mt-4">

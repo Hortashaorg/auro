@@ -2,7 +2,6 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { FC, JSX } from "@kalena/framework";
-import { Text } from "@comp/content/Text.tsx";
 
 const textareaVariants = cva([
   "rounded-md",
@@ -53,17 +52,9 @@ export const Textarea: FC<Props> = ({
   ...props
 }: Props) => {
   return (
-    <>
-      <textarea
-        {...props}
-        className={cn(textareaVariants({ size, state }), className)}
-      />
-      <Text
-        variant="error"
-        className="mt-1 text-sm"
-        x-show={`errors['${props.name}']`}
-        x-text={`errors['${props.name}']`}
-      />
-    </>
+    <textarea
+      {...props}
+      className={cn(textareaVariants({ size, state }), className)}
+    />
   );
 };

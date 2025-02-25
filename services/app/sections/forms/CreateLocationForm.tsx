@@ -4,6 +4,7 @@ import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
 import { Label } from "@comp/inputs/form/Label.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
+import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
@@ -26,7 +27,10 @@ export const CreateLocationForm = async () => {
       hx-swap="none"
     >
       <div className="space-y-4">
-        <div>
+        <FormControl
+          inputName="name"
+          hint="Enter a unique name for this location"
+        >
           <Label htmlFor="location-name" required>Location Name</Label>
           <Input
             id="location-name"
@@ -35,9 +39,12 @@ export const CreateLocationForm = async () => {
             required
             placeholder="Enter location name"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="description"
+          hint="Describe this location and its features"
+        >
           <Label htmlFor="location-description">Description</Label>
           <Textarea
             id="location-description"
@@ -45,9 +52,12 @@ export const CreateLocationForm = async () => {
             type="text"
             placeholder="Enter location description"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="assetId"
+          hint="Choose an image to represent this location"
+        >
           <Label htmlFor="location-asset" required>Location Asset</Label>
           <ImageGridInput
             id="location-asset"
@@ -55,7 +65,7 @@ export const CreateLocationForm = async () => {
             assets={assets}
             required
           />
-        </div>
+        </FormControl>
       </div>
 
       <Button type="submit" variant="primary" className="mt-4">

@@ -2,7 +2,6 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { FC, JSX } from "@kalena/framework";
-import { Text } from "@comp/content/Text.tsx";
 
 const selectVariants = cva([
   "w-full",
@@ -60,28 +59,20 @@ export const SelectInput: FC<Props> = ({
   ...props
 }: Props) => {
   return (
-    <>
-      <select
-        {...props}
-        className={cn(selectVariants({ size, state }), className)}
-      >
-        {placeholder && (
-          <option value="" disabled selected>
-            {placeholder}
-          </option>
-        )}
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <Text
-        variant="error"
-        className="mt-1 text-sm"
-        x-show={`errors['${props.name}']`}
-        x-text={`errors['${props.name}']`}
-      />
-    </>
+    <select
+      {...props}
+      className={cn(selectVariants({ size, state }), className)}
+    >
+      {placeholder && (
+        <option value="" disabled selected>
+          {placeholder}
+        </option>
+      )}
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
   );
 };

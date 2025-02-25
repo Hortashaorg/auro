@@ -2,7 +2,6 @@ import { cn } from "@comp/utils/tailwind.ts";
 import { cva } from "class-variance-authority";
 import type { FC, JSX } from "@kalena/framework";
 import { Img } from "@comp/content/Img.tsx";
-import { Text } from "@comp/content/Text.tsx";
 
 const imageGridVariants = cva([
   "cursor-pointer",
@@ -99,12 +98,6 @@ export const ImageGridInput: FC<Props> = ({
           ))}
         </div>
       </div>
-      <Text
-        variant="error"
-        className="mt-1 text-sm"
-        x-show={`errors['${props.name}']`}
-        x-text={`errors['${props.name}']`}
-      />
     </div>
   );
 };

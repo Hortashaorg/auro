@@ -4,6 +4,7 @@ import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
 import { Label } from "@comp/inputs/form/Label.tsx";
 import { Textarea } from "@comp/inputs/form/Textarea.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
+import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
@@ -26,18 +27,24 @@ export const CreateResourceForm = async () => {
       hx-swap="none"
     >
       <div className="space-y-4">
-        <div>
+        <FormControl
+          inputName="name"
+          hint="Choose a unique name for your resource"
+        >
           <Label htmlFor="resource-name" required>Resource Name</Label>
           <Input
             id="resource-name"
             name="name"
             type="text"
             required
-            placeholder="Enter resource name (e.g., Wood, Iron, Gold)"
+            placeholder="Enter resource name"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="description"
+          hint="Provide details about this resource and its uses"
+        >
           <Label htmlFor="resource-description">Description</Label>
           <Textarea
             id="resource-description"
@@ -45,9 +52,12 @@ export const CreateResourceForm = async () => {
             type="text"
             placeholder="Enter resource description"
           />
-        </div>
+        </FormControl>
 
-        <div>
+        <FormControl
+          inputName="assetId"
+          hint="Select an image to represent this resource"
+        >
           <Label htmlFor="resource-asset" required>Resource Asset</Label>
           <ImageGridInput
             id="resource-asset"
@@ -55,7 +65,7 @@ export const CreateResourceForm = async () => {
             assets={assets}
             required
           />
-        </div>
+        </FormControl>
       </div>
 
       <Button type="submit" variant="primary" className="mt-4">
