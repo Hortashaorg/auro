@@ -1,5 +1,5 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, schema } from "@package/database";
+import { db, PostgresError, schema } from "@package/database";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
@@ -31,50 +31,55 @@ const CreateServer = async () => {
     return <p>Failure</p>;
   }
 
-  await db.transaction(async (tx) => {
-    const [server] = await tx.insert(schema.server)
-      .values({
-        name: result.output.name,
-      })
-      .returning();
+  try {
+    await db.transaction(async (tx) => {
+      const [server] = await tx.insert(schema.server)
+        .values({
+          name: result.output.name,
+        })
+        .returning();
 
-    await tx.insert(schema.user)
-      .values({
-        accountId: customContext.account?.id ?? throwError("No account found"),
-        serverId: server?.id ?? throwError("No server id"),
-        name: "Admin",
-        type: "admin",
-      });
-  });
+      await tx.insert(schema.user)
+        .values({
+          accountId: customContext.account?.id ??
+            throwError("No account found"),
+          serverId: server?.id ?? throwError("No server id"),
+          name: "Admin",
+          type: "admin",
+        });
+    });
 
-  context.header(
-    "HX-Trigger",
-    createEvents([
-      { name: "close-dialog", values: { value: true } },
-      { name: "clear-form", values: { value: true } },
-    ]),
-  );
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        { name: "close-dialog", values: { value: true } },
+        { name: "clear-form", values: { value: true } },
+      ]),
+    );
 
-  context.header(
-    "HX-Trigger",
-    createEvents([
-      {
-        name: "close-dialog",
-        values: {
-          value: true,
-        },
-      },
-      {
-        name: "clear-form",
-        values: {
-          value: true,
-        },
-      },
-    ]),
-  );
-
-  // Return the updated server list using ServerGrid component
-  return <ServerGrid hx-swap-oob="true" />;
+    return <ServerGrid hx-swap-oob="true" />;
+  } catch (error) {
+    if (error instanceof PostgresError) {
+      if (
+        error.constraint_name === "unique_server_name"
+      ) {
+        // Unique constraint violation
+        context.header(
+          "HX-Trigger",
+          createEvents([
+            {
+              name: "form-error",
+              values: {
+                name: "A server with this name already exists",
+              },
+            },
+          ]),
+        );
+        return <p>Failure</p>;
+      }
+    }
+    throw error;
+  }
 };
 
 const CreateServerSchema = v.object({

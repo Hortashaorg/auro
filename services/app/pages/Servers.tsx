@@ -5,10 +5,7 @@ import { ServerGrid } from "@sections/views/ServerGrid.tsx";
 import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";
 import { db } from "@package/database";
-import { Form } from "@comp/inputs/form/Form.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { Button } from "@comp/inputs/Button.tsx";
+import { CreateServerForm } from "@sections/forms/CreateServerForm.tsx";
 
 const Servers = async () => {
   const customContext = await serversRoute.customContext();
@@ -23,26 +20,7 @@ const Servers = async () => {
           </ModalButton>
 
           <Modal title="Create New Server" modalRef="createServerModal">
-            <Form
-              hx-post="/api/create-server"
-              hx-swap="none"
-            >
-              <div>
-                <Text variant="body" className="mb-2">Server Name</Text>
-                <Input
-                  name="name"
-                  type="text"
-                  required
-                  minLength={3}
-                  maxLength={50}
-                  placeholder="Enter server name"
-                />
-              </div>
-
-              <Button type="submit" variant="primary">
-                Create Server
-              </Button>
-            </Form>
+            <CreateServerForm />
           </Modal>
         </>
       )}

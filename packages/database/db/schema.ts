@@ -57,7 +57,7 @@ export const asset = pgTable("asset", {
 
 export const server = pgTable("server", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar({ length: 50 }).notNull(),
+  name: varchar({ length: 50 }).notNull().unique("unique_server_name"),
   online: boolean().notNull().default(false),
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   createdAt: temporalTimestamp().notNull().default(sql`now()`),
