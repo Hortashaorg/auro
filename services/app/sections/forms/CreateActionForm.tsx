@@ -42,7 +42,7 @@ export const CreateActionForm = async () => {
             name="name"
             type="text"
             required
-            placeholder="Enter action name (e.g., Fishing, Mining, Smelting)"
+            placeholder="Enter action name"
           />
         </div>
 
@@ -67,7 +67,7 @@ export const CreateActionForm = async () => {
         </div>
 
         <div>
-          <Label htmlFor="action-location">Location (Optional)</Label>
+          <Label htmlFor="action-location">Location</Label>
           <SelectInput
             id="action-location"
             name="locationId"
@@ -87,7 +87,7 @@ export const CreateActionForm = async () => {
             type="number"
             min="0"
             required
-            defaultValue="0"
+            value={0}
           />
         </div>
 

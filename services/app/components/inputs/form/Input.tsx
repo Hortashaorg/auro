@@ -19,6 +19,7 @@ const inputVariants = cva([
   "dark:focus:ring-primary-400",
   "disabled:opacity-50",
   "disabled:cursor-not-allowed",
+  "w-full",
 ], {
   variants: {
     size: {
