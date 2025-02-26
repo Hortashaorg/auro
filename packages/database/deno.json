@@ -2,8 +2,8 @@
   "name": "@package/database",
   "exports": "./mod.ts",
   "imports": {
-    "drizzle-kit": "npm:drizzle-kit@^0.30.4",
-    "drizzle-orm": "npm:drizzle-orm@^0.39.3",
+    "drizzle-kit": "npm:drizzle-kit@^0.30.5",
+    "drizzle-orm": "npm:drizzle-orm@^0.40.0",
     "postgres": "npm:postgres@^3.4.5"
   },
   "tasks": {
