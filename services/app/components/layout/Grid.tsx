@@ -39,6 +39,26 @@ const gridVariants = cva("grid", {
 type GridVariants = NonNullableProps<typeof gridVariants>;
 type Props = JSX.IntrinsicElements["div"] & GridVariants;
 
+/**
+ * Grid component for creating responsive grid layouts
+ *
+ * Features:
+ * - Predefined content sizes (small, medium, large)
+ * - Configurable gap spacing
+ * - Control over item alignment and justification
+ * - Responsive by default with auto-fill behavior
+ *
+ * @example
+ * <Grid
+ *   content="medium"
+ *   gap="md"
+ *   items="center"
+ * >
+ *   <div>Grid item 1</div>
+ *   <div>Grid item 2</div>
+ *   <div>Grid item 3</div>
+ * </Grid>
+ */
 export const Grid: FC<Props> = ({
   className,
   content,

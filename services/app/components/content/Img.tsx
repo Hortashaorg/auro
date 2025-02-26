@@ -32,6 +32,30 @@ const imgVariants = cva([
 type ImgVariants = NonNullableProps<typeof imgVariants>;
 type Props = JSX.IntrinsicElements["img"] & ImgVariants;
 
+/**
+ * Image component with consistent styling and object-fit options
+ *
+ * Features:
+ * - Multiple object-fit options (contain, cover, fill, none, scaleDown)
+ * - Border radius variants (none, sm, md, lg, full)
+ * - Responsive by default (max-width: 100%, height: auto)
+ * - Default empty alt text for accessibility
+ *
+ * @example
+ * <Img
+ *   src="/path/to/image.jpg"
+ *   fit="cover"
+ *   rounded="lg"
+ *   alt="Description of the image"
+ * />
+ *
+ * <Img
+ *   src="/path/to/avatar.jpg"
+ *   fit="cover"
+ *   rounded="full"
+ *   alt="User avatar"
+ * />
+ */
 export const Img: FC<Props> = ({
   className,
   fit,

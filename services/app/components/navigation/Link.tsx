@@ -23,6 +23,24 @@ type LinkVariants = NonNullableProps<typeof linkVariants, "variant">;
 
 type Props = JSX.IntrinsicElements["a"] & LinkVariants;
 
+/**
+ * Link component for navigation with consistent styling
+ *
+ * Features:
+ * - Multiple variants (navLink, dropdownLink)
+ * - Consistent padding and hover states
+ * - Wraps content in Text component for typography consistency
+ * - Group hover effects for child elements
+ *
+ * @example
+ * <Link href="/dashboard" variant="navLink">
+ *   Dashboard
+ * </Link>
+ *
+ * <Link href="/settings" variant="dropdownLink">
+ *   Settings
+ * </Link>
+ */
 export const Link: FC<Props> = (
   { className, variant, children, ...rest }: Props,
 ) => {

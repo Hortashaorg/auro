@@ -51,6 +51,33 @@ type Props =
     content: string;
   };
 
+/**
+ * Tooltip component for displaying additional information on hover
+ *
+ * Features:
+ * - Multiple variants (dark, light)
+ * - Positioning options (top, bottom, left, right)
+ * - Smooth transition animations
+ * - Alpine.js integration for show/hide behavior
+ * - Accessible with proper ARIA role
+ *
+ * @example
+ * <Tooltip
+ *   content="This is a helpful tooltip"
+ *   position="top"
+ *   variant="dark"
+ * >
+ *   <Button>Hover Me</Button>
+ * </Tooltip>
+ *
+ * <Tooltip
+ *   content="More information"
+ *   position="right"
+ *   variant="light"
+ * >
+ *   <Icon name="info" />
+ * </Tooltip>
+ */
 export const Tooltip: FC<Props> = ({
   className,
   variant,

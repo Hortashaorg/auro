@@ -9,6 +9,41 @@ type Props = JSX.IntrinsicElements["dialog"] & {
   modalRef: string;
 };
 
+/**
+ * Modal component for displaying content in an overlay dialog
+ *
+ * Features:
+ * - Built on native dialog element for accessibility
+ * - Backdrop with semi-transparent background
+ * - Title and close button in header
+ * - Alpine.js integration for open/close behavior
+ * - Responsive sizing with max-width
+ * - Dark mode support
+ * - Listens for close-dialog events
+ *
+ * @example
+ * <Modal
+ *   title="Confirm Action"
+ *   modalRef="confirmModal"
+ * >
+ *   <Text variant="body">Are you sure you want to proceed?</Text>
+ *   <Flex justify="end" gap="md">
+ *     <Button
+ *       variant="outline"
+ *       x-on:click="$refs.confirmModal.close()"
+ *     >
+ *       Cancel
+ *     </Button>
+ *     <Button
+ *       variant="primary"
+ *       hx-post="/api/confirm"
+ *       hx-swap="none"
+ *     >
+ *       Confirm
+ *     </Button>
+ *   </Flex>
+ * </Modal>
+ */
 export const Modal: FC<Props> = ({
   title,
   children,

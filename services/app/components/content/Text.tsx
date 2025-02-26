@@ -65,6 +65,28 @@ type TextVariants = NonNullableProps<typeof textVariants>;
 
 type Props = JSX.IntrinsicElements["div"] & TextVariants;
 
+/**
+ * Text component for consistent typography with predefined styles
+ *
+ * Features:
+ * - Multiple variants (h1, h2, h3, body, error)
+ * - Consistent styling with proper dark mode support
+ * - Text alignment options
+ * - Automatically uses semantic HTML tags based on variant
+ *
+ * @example
+ * <Text variant="h1" alignment="center">
+ *   Page Title
+ * </Text>
+ *
+ * <Text variant="body">
+ *   Regular paragraph text with consistent styling.
+ * </Text>
+ *
+ * <Text variant="error">
+ *   Error message with appropriate styling.
+ * </Text>
+ */
 export const Text: FC<Props> = (
   { variant, className, alignment = "left", children, ...rest }: Props,
 ) => {

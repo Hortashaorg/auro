@@ -46,6 +46,37 @@ const infoVariants = cva([
 type InfoVariants = NonNullableProps<typeof infoVariants>;
 type Props = JSX.IntrinsicElements["div"] & InfoVariants;
 
+/**
+ * Info component for displaying contextual messages and alerts
+ *
+ * Features:
+ * - Multiple variants (info, warning, success, danger)
+ * - Appropriate icons for each variant
+ * - Consistent styling with proper dark mode support
+ * - Accessible with role="alert"
+ * - Flexible content area
+ *
+ * @example
+ * // Information message
+ * <Info variant="info">
+ *   This is an informational message.
+ * </Info>
+ *
+ * // Warning message
+ * <Info variant="warning">
+ *   Please be careful with this action.
+ * </Info>
+ *
+ * // Success message
+ * <Info variant="success">
+ *   Your changes have been saved successfully.
+ * </Info>
+ *
+ * // Error message
+ * <Info variant="danger">
+ *   An error occurred while processing your request.
+ * </Info>
+ */
 export const Info: FC<Props> = (
   { className, variant, children, ...props }: Props,
 ) => {

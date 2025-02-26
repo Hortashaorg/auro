@@ -62,6 +62,26 @@ const badgeVariants = cva([
 type BadgeVariants = NonNullableProps<typeof badgeVariants>;
 type Props = JSX.IntrinsicElements["span"] & BadgeVariants;
 
+/**
+ * Badge component for displaying status, labels, or counts
+ *
+ * Features:
+ * - Multiple color variants (default, secondary, success, danger, warning)
+ * - Three size options (sm, default, lg)
+ * - Consistent styling with proper dark mode support
+ * - Focus states for accessibility
+ *
+ * @example
+ * <Badge>Default</Badge>
+ *
+ * <Badge variant="success" size="sm">
+ *   Completed
+ * </Badge>
+ *
+ * <Badge variant="danger" size="lg">
+ *   Critical
+ * </Badge>
+ */
 export const Badge: FC<Props> = ({ className, variant, size, ...props }) => {
   return (
     <span

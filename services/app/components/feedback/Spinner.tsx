@@ -27,6 +27,29 @@ const spinnerVariants = cva([
 type SpinnerVariants = NonNullableProps<typeof spinnerVariants>;
 type Props = JSX.IntrinsicElements["div"] & SpinnerVariants;
 
+/**
+ * Spinner component for indicating loading states
+ *
+ * Features:
+ * - Multiple size options (sm, default, lg, xl)
+ * - Smooth animation with CSS
+ * - Accessible with proper ARIA attributes
+ * - Consistent styling with proper dark mode support
+ * - Minimal and clean design
+ *
+ * @example
+ * // Default size spinner
+ * <Spinner />
+ *
+ * // Large spinner
+ * <Spinner size="lg" />
+ *
+ * // Inside a button with loading state
+ * <button disabled>
+ *   <Spinner size="sm" className="mr-2" />
+ *   Loading...
+ * </button>
+ */
 export const Spinner: FC<Props> = ({ size, className, ...rest }: Props) => {
   return (
     <div

@@ -52,6 +52,26 @@ const flexVariants = cva("flex", {
 type FlexVariants = NonNullableProps<typeof flexVariants>;
 type Props = JSX.IntrinsicElements["div"] & FlexVariants;
 
+/**
+ * Flex component for creating flexible layouts with consistent styling
+ *
+ * Features:
+ * - Configurable flex direction (row, column, reverse)
+ * - Alignment control for items and justification
+ * - Predefined gap spacing options
+ * - Flex wrapping behavior
+ *
+ * @example
+ * <Flex
+ *   direction="col"
+ *   items="center"
+ *   justify="between"
+ *   gap="md"
+ * >
+ *   <div>First item</div>
+ *   <div>Second item</div>
+ * </Flex>
+ */
 export const Flex: FC<Props> = ({
   className,
   direction,
