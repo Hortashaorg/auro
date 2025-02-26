@@ -23,3 +23,6 @@ CI/CD
 
 Bugs:
 - Handle duplicate name constraints.
+- A problem with useContext is that it is not persistant for children of async components.
+- But we can store a global variable in the runtime that store context globally and cleanup after a request.
+- We would need to figure out how to be able to query for global context though.
