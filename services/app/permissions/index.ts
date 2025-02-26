@@ -1,4 +1,4 @@
-import type { Context } from "@kalena/framework";
+import type { GlobalContext } from "@kalena/framework";
 import { and, db, eq, schema, sql } from "@package/database";
 
 export const isPublic = (): boolean => {
@@ -10,7 +10,7 @@ export const isDenied = (): boolean => {
 };
 
 export const hasAccessToServer = async (
-  c: Context,
+  c: GlobalContext,
 ): Promise<boolean> => {
   const serverId = c.req.param("serverId");
 
@@ -35,9 +35,13 @@ export const hasAccessToServer = async (
   return isLoggedInAndServerAccessable || isServerAdmin;
 };
 
-export const isAdminOfServer = async (c: Context): Promise<boolean> => {
+export const isAdminOfServer = async (c: GlobalContext): Promise<boolean> => {
   const serverId = c.req.param("serverId");
   const email = c.var.email;
+
+  if (!serverId || !email) {
+    return false;
+  }
 
   const [data] = await db.select().from(schema.user).innerJoin(
     schema.server,
@@ -53,4 +57,8 @@ export const isAdminOfServer = async (c: Context): Promise<boolean> => {
   );
 
   return !!data && data.user.type === "admin" && data.server.id === serverId;
+};
+
+export const isLoggedIn = (c: GlobalContext): boolean => {
+  return !!c.var.isLoggedIn;
 };

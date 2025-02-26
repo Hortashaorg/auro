@@ -2,15 +2,21 @@ import { createContext, useContext } from "@hono/hono/jsx";
 import type { Context } from "@hono/hono";
 import type { Variables } from "../common/index.ts";
 
-export const GlobalContext = createContext<
-  Context<{
-    Variables: Variables;
-  }> | null
->(null);
+/**
+ * The type definition for the global context
+ */
+export type GlobalContextType = Context<{
+  Variables: Variables;
+}>;
+
+/**
+ * The global context
+ */
+export const GlobalContext = createContext<GlobalContextType | null>(null);
 
 /**
  * Get the global context
- * @returns {Context<{Variables: Variables}>} The global context
+ * @returns {GlobalContextType} The global context
  */
 export const getGlobalContext = (): Context<{
   Variables: Variables;

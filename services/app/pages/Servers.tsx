@@ -3,7 +3,7 @@ import { Modal } from "@comp/overlay/modal/Modal.tsx";
 import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
 import { createRoute } from "@kalena/framework";
-import { isPublic } from "@permissions/index.ts";
+import { isLoggedIn } from "@permissions/index.ts";
 import { db } from "@package/database";
 import { CreateServerForm } from "@sections/forms/CreateServerForm.tsx";
 
@@ -34,7 +34,7 @@ export const serversRoute = createRoute({
   path: "/servers",
   component: Servers,
   permission: {
-    check: isPublic,
+    check: isLoggedIn,
     redirectPath: "/",
   },
   partial: false,

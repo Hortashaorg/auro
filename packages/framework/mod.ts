@@ -8,3 +8,4 @@ export {
   type ExtractContextFromRoute,
   type ExtractCustomContextFromRoute,
 } from "./routing/create-route.tsx";
+export type { GlobalContextType as GlobalContext } from "./context/global-context.tsx";
