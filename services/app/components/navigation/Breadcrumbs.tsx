@@ -24,10 +24,9 @@ type Props = {
  * @example
  * <Breadcrumbs />
  */
-export const Breadcrumbs: FC<Props> = async ({
+export const Breadcrumbs: FC<Props> = ({
   className,
 }) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
   const context = getGlobalContext();
   const currentPath = context.req.path;
   const pathSegments = currentPath.split("/");
