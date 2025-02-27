@@ -3,9 +3,7 @@
 import { type Context, Hono } from "@hono/hono";
 import { validator } from "@hono/hono/validator";
 import * as v from "@valibot/valibot";
-import { createContext, useContext } from "@hono/hono/jsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
-import { GlobalContext } from "../context/global-context.tsx";
 import {
   hmrScript,
   INTERNAL_APP,
@@ -14,6 +12,7 @@ import {
   type Variables,
 } from "../common/index.ts";
 import { SpanStatusCode } from "@opentelemetry/api";
+import { AsyncLocalStorage } from "node:async_hooks";
 
 // Valibot unknown schema.
 type BaseSchema = v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>;
@@ -174,7 +173,7 @@ export const createRoute = <
   const app = new Hono();
 
   // Create a context for the route.
-  const RouteContext = createContext<
+  const routeContext = new AsyncLocalStorage<
     RouteContext<
       TPath,
       TFormValidation,
@@ -183,8 +182,8 @@ export const createRoute = <
       TJsonValidation,
       TParamValidation,
       TQueryValidation
-    > | null
-  >(null);
+    >
+  >();
 
   const {
     formValidationSchema,
@@ -227,6 +226,7 @@ export const createRoute = <
       )
       : undefined,
   ].filter((v) => v !== undefined) as ReturnType<typeof validator>[];
+
   // Create a new route with the given path.
   app.all(
     config.path,
@@ -255,29 +255,28 @@ export const createRoute = <
 
           span.addEvent("render");
 
-          const html = await c.html(
-            <RouteContext.Provider
-              value={c as unknown as RouteContext<
-                TPath,
-                TFormValidation,
-                TCookieValidation,
-                THeaderValidation,
-                TJsonValidation,
-                TParamValidation,
-                TQueryValidation
-              >}
-            >
-              <GlobalContext.Provider
-                value={c as Context}
-              >
-                <RenderChild children={config.component} />
-                {(!config.partial && config.hmr) && (
-                  <script
-                    dangerouslySetInnerHTML={{ __html: hmrScript }}
-                  />
-                )}
-              </GlobalContext.Provider>
-            </RouteContext.Provider>,
+          const html = await routeContext.run(
+            c as unknown as RouteContext<
+              TPath,
+              TFormValidation,
+              TCookieValidation,
+              THeaderValidation,
+              TJsonValidation,
+              TParamValidation,
+              TQueryValidation
+            >,
+            async () => {
+              return await c.html(
+                <>
+                  <RenderChild children={config.component} />
+                  {(!config.partial && config.hmr) && (
+                    <script
+                      dangerouslySetInnerHTML={{ __html: hmrScript }}
+                    />
+                  )}
+                </>,
+              );
+            },
           );
 
           span.setStatus({
@@ -303,7 +302,7 @@ export const createRoute = <
     [INTERNAL_APP]: app,
     // Helper to extract context from route
     context: () => {
-      const ctx = useContext(RouteContext);
+      const ctx = routeContext.getStore();
       if (!ctx) throw new Error("Unable to generate context");
       return ctx as RouteContext<
         TPath,
@@ -317,7 +316,7 @@ export const createRoute = <
     },
     // Helper to extract custom context from route, defined by package user
     customContext: () => {
-      const ctx = useContext(RouteContext);
+      const ctx = routeContext.getStore();
       if (!ctx) throw new Error("Unable to generate context");
       const res = config.customContext
         ? config.customContext(

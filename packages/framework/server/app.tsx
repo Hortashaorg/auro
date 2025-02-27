@@ -1,6 +1,6 @@
 // deno-lint-ignore-file jsx-no-children-prop
 
-import { type Context, Hono } from "@hono/hono";
+import { Hono } from "@hono/hono";
 import { serveStatic, upgradeWebSocket } from "@hono/hono/deno";
 import * as v from "@valibot/valibot";
 import type { createRoute } from "../routing/create-route.tsx";
@@ -18,7 +18,7 @@ import {
 import { decode } from "@hono/hono/jwt";
 import { getCookie, setCookie } from "@hono/hono/cookie";
 import type { BlankSchema } from "@hono/hono/types";
-import { GlobalContext } from "../context/global-context.tsx";
+import { globalContext } from "../context/global-context.tsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
 import { SpanStatusCode } from "@opentelemetry/api";
 
@@ -479,7 +479,9 @@ export const app = <TProvider extends "google">(
         // Set email if available
         c.set("email", email);
       }
-      await next();
+      await globalContext.run(c, async () => {
+        return await next();
+      });
     });
   }
 
@@ -495,12 +497,12 @@ export const app = <TProvider extends "google">(
 
         if (settings.errorPages?.serverError) {
           return c.html(
-            <GlobalContext.Provider value={c as Context}>
+            <>
               <RenderChild children={settings.errorPages.serverError} />
               <script
                 dangerouslySetInnerHTML={{ __html: hmrScript }}
               />
-            </GlobalContext.Provider>,
+            </>,
             500,
           );
         }
@@ -526,13 +528,13 @@ export const app = <TProvider extends "google">(
       try {
         if (settings.errorPages?.notFound) {
           return c.html(
-            <GlobalContext.Provider value={c as Context}>
+            <>
               // deno-lint-ignore jsx-no-children-prop
               <RenderChild children={settings.errorPages.notFound} />
               <script
                 dangerouslySetInnerHTML={{ __html: hmrScript }}
               />
-            </GlobalContext.Provider>,
+            </>,
             404,
           );
         }
