@@ -7,12 +7,17 @@ import type { FC, JSX } from "@kalena/framework";
 const linkVariants = cva(["py-3"], {
   variants: {
     variant: {
-      navLink: ["group", "px-5"],
+      navLink: [
+        "group",
+        "dark:hover:bg-background-600",
+        "hover:bg-background-200",
+        "active:bg-background-300",
+      ],
       dropdownLink: [
         "block",
-        "text-center",
         "px-5",
-        "dark:hover:bg-background-700",
+        "text-center",
+        "dark:hover:bg-background-600",
         "hover:bg-background-200",
       ],
     },

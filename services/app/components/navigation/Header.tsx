@@ -7,7 +7,7 @@ export const Header: FC<Props> = ({ className, children, ...rest }: Props) => {
   return (
     <header
       {...rest}
-      className={cn("flex w-full items-center justify-between mb-5", className)}
+      className={cn("flex w-full items-center justify-between", className)}
       x-data="{ name:'' }"
     >
       {children}

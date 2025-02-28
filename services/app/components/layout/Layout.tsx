@@ -14,8 +14,8 @@ export const Layout = ({
 }: Props) => {
   return (
     <BaseLayout title={title}>
-      <div className="container mx-auto p-4 px-10 dark:scheme-dark scheme-normal">
-        <Navbar />
+      <Navbar />
+      <div className="container mx-auto dark:scheme-dark scheme-normal">
         <Flex
           className={cn("w-full", className)}
           direction="col"

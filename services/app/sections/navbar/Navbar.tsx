@@ -22,74 +22,79 @@ export const Navbar = async () => {
   const breadcrumbSegments = await calculateBreadcrumbSegments();
 
   return (
-    <div className="flex flex-col">
-      <Header
-        id="section-navbar"
-        className="border-b border-border-200 dark:border-border-700 shadow-sm"
-      >
-        <Menu>
-          {context.var.isLoggedIn && isServer && (
-            <Link href={`/servers/${serverId}`} variant="dropdownLink">
-              Overview
-            </Link>
-          )}
-          {context.var.isLoggedIn && isAdmin && (
-            <>
-              <Link
-                href={`/servers/${serverId}/locations`}
-                variant="dropdownLink"
-              >
-                Locations
-              </Link>
-              <Link
-                href={`/servers/${serverId}/actions`}
-                variant="dropdownLink"
-              >
-                Actions
-              </Link>
-              <Link
-                href={`/servers/${serverId}/resources`}
-                variant="dropdownLink"
-              >
-                Resources
-              </Link>
-              <Link href={`/servers/${serverId}/items`} variant="dropdownLink">
-                Items
-              </Link>
-            </>
-          )}
-        </Menu>
-
-        <Menu x-data="themeData">
-          <NavButton
-            x-on:click="themeToggle"
-            x-text="isDarkMode ? 'Light Theme' : 'Dark Theme'"
-            className="mr-2"
-          />
-          {context.var.isLoggedIn
-            ? (
-              <Select name="Profile" variant="single" flow="left">
-                <Link href="/servers" variant="dropdownLink">
-                  Servers
+    <div className="flex flex-col w-full">
+      <div className="bg-background-900 text-text-50 border-b border-border-700">
+        <div className="container mx-auto">
+          <Header id="section-navbar" className="h-14 flex items-center">
+            <Menu className="h-full">
+              {context.var.isLoggedIn && isServer && (
+                <Link href={`/servers/${serverId}`} variant="navLink">
+                  Overview
                 </Link>
-                <Link href={context.var.logoutUrl} variant="dropdownLink">
-                  Logout
-                </Link>
-              </Select>
-            )
-            : (
-              <Link
-                href={context.var.loginUrl}
-                variant="dropdownLink"
-              >
-                Login
-              </Link>
-            )}
-        </Menu>
-      </Header>
+              )}
+              {context.var.isLoggedIn && isAdmin && (
+                <>
+                  <Link
+                    href={`/servers/${serverId}/locations`}
+                    variant="navLink"
+                  >
+                    Locations
+                  </Link>
+                  <Link
+                    href={`/servers/${serverId}/actions`}
+                    variant="navLink"
+                  >
+                    Actions
+                  </Link>
+                  <Link
+                    href={`/servers/${serverId}/resources`}
+                    variant="navLink"
+                  >
+                    Resources
+                  </Link>
+                  <Link
+                    href={`/servers/${serverId}/items`}
+                    variant="navLink"
+                  >
+                    Items
+                  </Link>
+                </>
+              )}
+            </Menu>
 
-      <div className="bg-background-50 dark:bg-background-900 py-2 px-4 border-b border-border-200 dark:border-border-700">
-        <Breadcrumbs segments={breadcrumbSegments} />
+            <Menu x-data="themeData" className="h-full">
+              <NavButton
+                x-on:click="themeToggle"
+                x-text="isDarkMode ? 'Light Theme' : 'Dark Theme'"
+              />
+              {context.var.isLoggedIn
+                ? (
+                  <Select name="Profile" variant="single" flow="left">
+                    <Link href="/servers" variant="dropdownLink">
+                      Servers
+                    </Link>
+                    <Link href={context.var.logoutUrl} variant="dropdownLink">
+                      Logout
+                    </Link>
+                  </Select>
+                )
+                : (
+                  <Link
+                    href={context.var.loginUrl}
+                    variant="dropdownLink"
+                  >
+                    Login
+                  </Link>
+                )}
+            </Menu>
+          </Header>
+        </div>
+      </div>
+
+      <div className="w-full bg-background-800 text-text-200 border-b border-border-700">
+        <div className="container mx-auto py-2.5">
+          <Breadcrumbs segments={breadcrumbSegments} />
+        </div>
       </div>
     </div>
   );

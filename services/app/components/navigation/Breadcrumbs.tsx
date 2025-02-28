@@ -37,44 +37,49 @@ export const Breadcrumbs: FC<Props> = ({
   segments,
 }) => {
   return (
-    <div className={cn("flex items-center", className)}>
-      {segments.map((segment, index) => (
-        <div key={segment.href} className="flex items-center">
-          {index > 0 && (
-            <svg
-              className="mx-1.5 h-3.5 w-3.5 flex-shrink-0 text-text-400 dark:text-text-500"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
-
-          {segment.isLink
-            ? (
-              <a
-                href={segment.href}
-                className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 transition-colors"
+    <nav
+      aria-label="Breadcrumb"
+      className={cn("flex items-center text-sm", className)}
+    >
+      <ol className="flex flex-wrap items-center">
+        {segments.map((segment, index) => (
+          <li key={segment.href} className="flex items-center">
+            {index > 0 && (
+              <svg
+                className="mx-2 h-3 w-3 flex-shrink-0 text-text-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
               >
-                {segment.label}
-              </a>
-            )
-            : (
-              <span
-                className="font-medium text-text-800 dark:text-text-200"
-                aria-current="page"
-              >
-                {segment.label}
-              </span>
+                <path
+                  fillRule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clipRule="evenodd"
+                />
+              </svg>
             )}
-        </div>
-      ))}
-    </div>
+
+            {segment.isLink
+              ? (
+                <a
+                  href={segment.href}
+                  className="text-primary-400 hover:text-primary-300 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded px-1"
+                >
+                  {segment.label}
+                </a>
+              )
+              : (
+                <span
+                  className="font-medium text-text-100 px-1"
+                  aria-current="page"
+                >
+                  {segment.label}
+                </span>
+              )}
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 };

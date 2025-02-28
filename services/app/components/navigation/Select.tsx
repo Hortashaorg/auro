@@ -12,7 +12,9 @@ const selectVariants = cva(
     "z-20",
     "bg-primary-50",
     "rounded-lg",
-    "dark:bg-background-800",
+    "dark:bg-background-700",
+    "dark:border-background-900",
+    "dark:border-2",
     "bg-background-100",
   ],
   {
