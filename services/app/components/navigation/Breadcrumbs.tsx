@@ -1,72 +1,41 @@
-import { getGlobalContext } from "@kalena/framework";
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
+import type { BreadcrumbSegment } from "@queries/breadcrumbs.ts";
 
 type Props = {
   /**
    * Optional className for styling
    */
   className?: string;
+  /**
+   * Breadcrumb segments to display
+   */
+  segments: BreadcrumbSegment[];
 };
 
 /**
  * Breadcrumbs component for displaying navigation hierarchy
  *
  * Features:
- * - Automatically generates breadcrumbs from the current path
- * - Proper href aggregation for nested routes
  * - Visually distinct design with chevron separators
  * - Accessible with proper ARIA attributes
- * - Special handling for home page to avoid redundancy
- * - Always displays at least the Home item for consistent layout
  * - Designed to work well within the application's navigation structure
  *
  * @example
- * <Breadcrumbs />
+ * // Using with the utility function from queries
+ * import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
+ * <Breadcrumbs segments={calculateBreadcrumbSegments()} />
+ *
+ * // Or with custom segments
+ * <Breadcrumbs segments={[
+ *   { label: "Home", href: "/", canNavigate: false },
+ *   { label: "Products", href: "/products", canNavigate: true }
+ * ]} />
  */
 export const Breadcrumbs: FC<Props> = ({
   className,
+  segments,
 }) => {
-  const context = getGlobalContext();
-  const currentPath = context.req.path;
-  const pathSegments = currentPath.split("/");
-
-  // Check if we're on the home page
-  const isHomePage = currentPath === "/" || currentPath === "";
-
-  const match = context.req.matchedRoutes.find((route) => route.path !== "/*");
-  if (!match) throw new Error("No match found");
-
-  // Create segments with properly aggregated hrefs
-  let segments = match.path.split("/").map((segment, index) => {
-    // Build the href by joining all segments up to this point
-    const href = index === 0
-      ? "/"
-      : "/" + pathSegments.slice(1, index + 1).join("/");
-
-    return {
-      label: segment === ""
-        ? "Home"
-        : segment.charAt(0).toUpperCase() + segment.slice(1),
-      href,
-      isActive: index === match.path.split("/").length - 1,
-    };
-  });
-
-  // If we're on the home page, only show one "Home" item
-  if (isHomePage && segments.length > 1) {
-    segments = segments.slice(0, 1);
-  }
-
-  // Always ensure we have at least the Home item
-  if (segments.length === 0) {
-    segments = [{
-      label: "Home",
-      href: "/",
-      isActive: true,
-    }];
-  }
-
   return (
     <div className={cn("flex items-center", className)}>
       {segments.map((segment, index) => (
@@ -87,22 +56,22 @@ export const Breadcrumbs: FC<Props> = ({
             </svg>
           )}
 
-          {segment.isActive
+          {segment.isLink
             ? (
-              <span
-                className="font-medium text-text-800 dark:text-text-200"
-                aria-current="page"
-              >
-                {segment.label}
-              </span>
-            )
-            : (
               <a
                 href={segment.href}
                 className="text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 transition-colors"
               >
                 {segment.label}
               </a>
+            )
+            : (
+              <span
+                className="font-medium text-text-800 dark:text-text-200"
+                aria-current="page"
+              >
+                {segment.label}
+              </span>
             )}
         </div>
       ))}

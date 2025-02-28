@@ -6,6 +6,7 @@ import { Select } from "@comp/navigation/Select.tsx";
 import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
 import { Breadcrumbs } from "@comp/navigation/Breadcrumbs.tsx";
+import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
 
 export const Navbar = async () => {
   const context = getGlobalContext();
@@ -16,6 +17,9 @@ export const Navbar = async () => {
 
   const isServer = !!data;
   const isAdmin = isServer && data.user.type === "admin";
+
+  // Calculate breadcrumb segments for navigation
+  const breadcrumbSegments = await calculateBreadcrumbSegments();
 
   return (
     <>
@@ -80,7 +84,7 @@ export const Navbar = async () => {
         </Menu>
       </Header>
 
-      <Breadcrumbs />
+      <Breadcrumbs segments={breadcrumbSegments} />
     </>
   );
 };
