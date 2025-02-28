@@ -22,8 +22,11 @@ export const Navbar = async () => {
   const breadcrumbSegments = await calculateBreadcrumbSegments();
 
   return (
-    <>
-      <Header id="section-navbar">
+    <div className="flex flex-col">
+      <Header
+        id="section-navbar"
+        className="border-b border-border-200 dark:border-border-700 shadow-sm"
+      >
         <Menu>
           {context.var.isLoggedIn && isServer && (
             <Link href={`/servers/${serverId}`} variant="dropdownLink">
@@ -61,6 +64,7 @@ export const Navbar = async () => {
           <NavButton
             x-on:click="themeToggle"
             x-text="isDarkMode ? 'Light Theme' : 'Dark Theme'"
+            className="mr-2"
           />
           {context.var.isLoggedIn
             ? (
@@ -84,7 +88,9 @@ export const Navbar = async () => {
         </Menu>
       </Header>
 
-      <Breadcrumbs segments={breadcrumbSegments} />
-    </>
+      <div className="bg-background-50 dark:bg-background-900 py-2 px-4 border-b border-border-200 dark:border-border-700">
+        <Breadcrumbs segments={breadcrumbSegments} />
+      </div>
+    </div>
   );
 };

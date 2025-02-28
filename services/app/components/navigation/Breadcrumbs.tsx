@@ -28,8 +28,8 @@ type Props = {
  *
  * // Or with custom segments
  * <Breadcrumbs segments={[
- *   { label: "Home", href: "/", canNavigate: false },
- *   { label: "Products", href: "/products", canNavigate: true }
+ *   { label: "Home", href: "/", isLink: true },
+ *   { label: "Products", href: "/products", isLink: false }
  * ]} />
  */
 export const Breadcrumbs: FC<Props> = ({

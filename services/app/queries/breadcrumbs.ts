@@ -46,7 +46,7 @@ export const calculateBreadcrumbSegments = async (): Promise<
 
   const segments = await Promise.all(pathSegments
     .map(async (segment, index) => {
-      const href = "/" + urlSegments.slice(1, index + 1).join("/");
+      const href = "/" + urlSegments.slice(0, index + 1).join("/");
 
       let label = segment === "" ? "Home" : segment;
 
