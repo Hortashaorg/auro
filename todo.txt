@@ -17,6 +17,8 @@ UI:
 - Making lightmode work, currently darkmode seem to be the only one that look somewhat consistant.
 - Component Testing
 - Introducing icons. It could be really helpful.
+- Make UI to generate an action: https://v0.dev/chat/rpg-action-configurator-xqEhY8sH0gz
+- Component for title + description in the top left. Buttions to the right.
 
 Technical:
 Workflow - typecheck, linting and formatting
