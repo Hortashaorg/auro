@@ -87,10 +87,7 @@ export const Info: FC<Props> = (
       {...props}
     >
       <div className="shrink-0 flex items-center">
-        {variant === "info" && (
-          <i data-lucide="info">
-          </i>
-        )}
+        {variant === "info" && <i data-lucide="info"></i>}
         {variant === "warning" && <i data-lucide="alert-triangle"></i>}
         {variant === "success" && <i data-lucide="check-circle"></i>}
         {variant === "danger" && <i data-lucide="x-circle"></i>}
