@@ -1,7 +1,7 @@
 Administrator:
-- As administrator on a server, I can modify actions available to players.
-- As administrator on a server, I can modify locations.
-- As administrator on a server, I can modify items on the server.
+- As administrator on a server, I can modify/delete actions available to players.
+- As administrator on a server, I can modify/delete locations.
+- As administrator on a server, I can modify/delete items on the server.
 - As administrator on a server, I can set up rewards for executing an action.
 - As administrator on a server, I can set up costs for executing an action.
 
