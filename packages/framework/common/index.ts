@@ -24,8 +24,8 @@ const ws = new WebSocket('ws://' + location.host + '/ws');
 ws.onclose = () => setInterval(() => location.reload(), 200);
 `;
 
-export const tracer = trace.getTracer("@kalena/framework", "0.1.11");
-const meter = metrics.getMeter("@kalena/framework", "0.1.11");
+export const tracer = trace.getTracer("@kalena/framework", "0.2.0");
+const meter = metrics.getMeter("@kalena/framework", "0.2.0");
 
 export const requestCounter = meter.createCounter("route.requests", {
   description: "Counts the number of requests to routes",
