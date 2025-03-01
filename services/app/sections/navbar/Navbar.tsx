@@ -30,23 +30,23 @@ export const Navbar = async () => {
       <div className="bg-background-900 text-text-50 px-5">
         <Header id="section-navbar" className="h-14 flex items-center">
           <Menu className="h-full">
+            {!isServer && (
+              <Link
+                href="/"
+                variant="navLink"
+                active={currentPath === "/"}
+              >
+                Home
+              </Link>
+            )}
             {context.var.isLoggedIn && !isServer && (
-              <>
-                <Link
-                  href="/"
-                  variant="navLink"
-                  active={currentPath === "/"}
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/servers"
-                  variant="navLink"
-                  active={currentPath === "/servers"}
-                >
-                  Servers
-                </Link>
-              </>
+              <Link
+                href="/servers"
+                variant="navLink"
+                active={currentPath === "/servers"}
+              >
+                Servers
+              </Link>
             )}
             {context.var.isLoggedIn && isServer && (
               <Link
