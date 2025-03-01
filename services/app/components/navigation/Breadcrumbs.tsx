@@ -45,19 +45,7 @@ export const Breadcrumbs: FC<Props> = ({
         {segments.map((segment, index) => (
           <li key={segment.href} className="flex items-center">
             {index > 0 && (
-              <svg
-                className="mx-2 h-3 w-3 flex-shrink-0 text-text-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <i data-lucide="chevron-right" width={16} height={16}></i>
             )}
 
             {segment.isLink

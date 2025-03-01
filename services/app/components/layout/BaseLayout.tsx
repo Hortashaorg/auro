@@ -26,6 +26,10 @@ export const BaseLayout: FC<Props> = ({
           src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"
         >
         </script>
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script>
+          lucide.createIcons();
+        </script>
         <script src="/public/darkmode.js"></script>
       </body>
     </html>

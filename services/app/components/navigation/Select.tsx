@@ -53,22 +53,7 @@ export const Select: FC<Props> = (
               className="flex items-center justify-between gap-3 dark:group-hover:text-text-300 group-hover:text-text-500"
             >
               {name}
-
-              <svg
-                className="w-2"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 6"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
+              <i data-lucide="chevron-down" width={16} height={16}></i>
             </Text>
           </button>
         }

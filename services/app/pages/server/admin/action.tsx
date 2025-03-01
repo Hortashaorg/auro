@@ -80,52 +80,21 @@ const ActionDetail = async () => {
               <Text variant="h3">Properties</Text>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="warning" className="flex items-center gap-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 6v6l4 2" />
-                  </svg>
+                  <i data-lucide="clock" width={16} height={16}></i>
                   {action.cooldownMinutes}m cooldown
                 </Badge>
                 <Badge
                   variant={action.repeatable ? "success" : "danger"}
                   className="flex items-center gap-1"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    {action.repeatable
-                      ? (
-                        <path d="M17 2l4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3" />
-                      )
-                      : <path d="M18 6L6 18M6 6l12 12" />}
-                  </svg>
+                  {action.repeatable
+                    ? <i data-lucide="repeat" width={16} height={16}></i>
+                    : <i data-lucide="x" width={16} height={16}></i>}
                   {action.repeatable ? "Repeatable" : "One-time"}
                 </Badge>
                 {action.locationName && (
                   <Badge variant="default" className="flex items-center gap-1">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-4 h-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
+                    <i data-lucide="map-pin" width={16} height={16}></i>
                     {action.locationName}
                   </Badge>
                 )}

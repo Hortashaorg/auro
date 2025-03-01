@@ -88,71 +88,12 @@ export const Info: FC<Props> = (
     >
       <div className="shrink-0 flex items-center">
         {variant === "info" && (
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 8v5M12 16h.01"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
+          <i data-lucide="info">
+          </i>
         )}
-        {variant === "warning" && (
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M12 8v5M12 16h.01"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M12 3l9 16H3L12 3z"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-          </svg>
-        )}
-        {variant === "success" && (
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-            <path
-              d="M8 12l3 3 5-5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        )}
-        {variant === "danger" && (
-          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-            <circle
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="2"
-            />
-            <path
-              d="M15 9l-6 6M9 9l6 6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        )}
+        {variant === "warning" && <i data-lucide="alert-triangle"></i>}
+        {variant === "success" && <i data-lucide="check-circle"></i>}
+        {variant === "danger" && <i data-lucide="x-circle"></i>}
       </div>
       <div className="w-full">{children}</div>
     </div>
