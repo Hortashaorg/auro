@@ -139,7 +139,7 @@ const ActionDetail = async () => {
 };
 
 export const actionDetailRoute = createRoute({
-  path: "/servers/:serverId/action/:actionId",
+  path: "/servers/:serverId/actions/:actionId",
   component: ActionDetail,
   permission: {
     check: isAdminOfServer,

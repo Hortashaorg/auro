@@ -63,6 +63,18 @@ export const calculateBreadcrumbSegments = async (): Promise<
 
           break;
         }
+
+        case ":actionId": {
+          const actionId = urlSegments[index] ??
+            throwError("Action ID not found");
+
+          const [action] = await db.select().from(schema.action).where(
+            eq(schema.action.id, actionId),
+          );
+
+          label = action?.name ?? throwError("Action not found");
+          break;
+        }
       }
 
       return {
