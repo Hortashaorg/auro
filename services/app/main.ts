@@ -10,6 +10,7 @@ import { serverRoute } from "@pages/server/Server.tsx";
 import { createLocationRoute } from "@api/CreateLocation.tsx";
 import { locationsRoute } from "@pages/server/admin/locations.tsx";
 import { actionsRoute } from "@pages/server/admin/actions.tsx";
+import { actionDetailRoute } from "@pages/server/admin/action.tsx";
 import { createActionRoute } from "@api/CreateAction.tsx";
 import { resourcesRoute } from "@pages/server/admin/resources.tsx";
 import { createResourceRoute } from "@api/CreateResource.tsx";
@@ -41,6 +42,7 @@ const myApp = app({
     createLocationRoute,
     locationsRoute,
     actionsRoute,
+    actionDetailRoute,
     createActionRoute,
     resourcesRoute,
     createResourceRoute,

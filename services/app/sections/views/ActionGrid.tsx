@@ -8,6 +8,7 @@ import { Badge } from "@comp/content/Badge.tsx";
 import { Img } from "@comp/content/Img.tsx";
 import { Flex } from "@comp/layout/Flex.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
+import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 type Props = JSX.IntrinsicElements["div"];
 
 export const ActionGrid = async ({ ...props }: Props) => {
@@ -41,6 +42,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
               ...action,
               description: action.description || undefined,
             }}
+            serverId={serverId}
           />
         ))}
       </Grid>
@@ -48,7 +50,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
   );
 };
 
-const ActionCard = ({ action }: {
+const ActionCard = ({ action, serverId }: {
   action: {
     id: string;
     name: string;
@@ -58,6 +60,7 @@ const ActionCard = ({ action }: {
     assetUrl: string;
     locationName: string | null;
   };
+  serverId: string;
 }) => {
   return (
     <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
@@ -138,6 +141,14 @@ const ActionCard = ({ action }: {
             </Badge>
           )}
         </div>
+
+        <ButtonLink
+          href={`/servers/${serverId}/action/${action.id}`}
+          variant="primary"
+          width="full"
+        >
+          Configure
+        </ButtonLink>
       </div>
     </Card>
   );
