@@ -1,6 +1,7 @@
 import {
   boolean,
   customType,
+  index,
   integer,
   pgEnum,
   pgTable,
@@ -47,7 +48,7 @@ export const rarity = pgEnum("rarity", [
 ]);
 
 export const asset = pgTable("asset", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: uuid().primaryKey().defaultRandom(),
   type: assetCategory().notNull(),
   name: varchar({ length: 50 }).notNull().unique(),
   url: varchar({ length: 500 }).notNull().unique(),
@@ -56,7 +57,7 @@ export const asset = pgTable("asset", {
 });
 
 export const server = pgTable("server", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: uuid().primaryKey().defaultRandom(),
   name: varchar({ length: 50 }).notNull().unique("unique_server_name"),
   online: boolean().notNull().default(false),
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
@@ -64,7 +65,7 @@ export const server = pgTable("server", {
 });
 
 export const account = pgTable("account", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: uuid().primaryKey().defaultRandom(),
   email: varchar({ length: 100 }).notNull().unique(),
   canCreateServer: boolean().notNull().default(false),
   createdAt: temporalTimestamp().notNull().default(sql`now()`),
@@ -81,7 +82,7 @@ export const session = pgTable("session", {
 export const user = pgTable(
   "user",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: uuid().primaryKey().defaultRandom(),
     accountId: uuid().references(() => account.id).notNull(),
     serverId: uuid().references(() => server.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
@@ -98,13 +99,13 @@ export const user = pgTable(
 export const location = pgTable(
   "location",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    serverId: uuid("server_id").references(() => server.id).notNull(),
-    assetId: uuid("asset_id").references(() => asset.id).notNull(),
-    name: varchar("name", { length: 50 }).notNull(),
-    description: varchar("description", { length: 500 }),
-    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
-    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+    id: uuid().primaryKey().defaultRandom(),
+    serverId: uuid().references(() => server.id).notNull(),
+    assetId: uuid().references(() => asset.id).notNull(),
+    name: varchar({ length: 50 }).notNull(),
+    description: varchar({ length: 500 }),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
     unique("unique_location_name_per_server").on(table.serverId, table.name),
@@ -114,16 +115,16 @@ export const location = pgTable(
 export const action = pgTable(
   "action",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    serverId: uuid("server_id").references(() => server.id).notNull(),
-    assetId: uuid("asset_id").references(() => asset.id).notNull(),
-    locationId: uuid("location_id").references(() => location.id),
-    name: varchar("name", { length: 50 }).notNull(),
-    description: varchar("description", { length: 500 }),
-    cooldownMinutes: integer("cooldown_minutes").notNull().default(0),
-    repeatable: boolean("repeatable").notNull().default(true),
-    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
-    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+    id: uuid().primaryKey().defaultRandom(),
+    serverId: uuid().references(() => server.id).notNull(),
+    assetId: uuid().references(() => asset.id).notNull(),
+    locationId: uuid().references(() => location.id),
+    name: varchar({ length: 50 }).notNull(),
+    description: varchar({ length: 500 }),
+    cooldownMinutes: integer().notNull().default(0),
+    repeatable: boolean().notNull().default(true),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
     unique("unique_action_name_per_server").on(table.serverId, table.name),
@@ -133,15 +134,15 @@ export const action = pgTable(
 export const item = pgTable(
   "item",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    serverId: uuid("server_id").references(() => server.id).notNull(),
-    assetId: uuid("asset_id").references(() => asset.id).notNull(),
-    name: varchar("name", { length: 50 }).notNull(),
-    description: varchar("description", { length: 500 }),
+    id: uuid().primaryKey().defaultRandom(),
+    serverId: uuid().references(() => server.id).notNull(),
+    assetId: uuid().references(() => asset.id).notNull(),
+    name: varchar({ length: 50 }).notNull(),
+    description: varchar({ length: 500 }),
     rarity: rarity().notNull().default("common"),
     stackable: boolean("stackable").notNull(),
-    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
-    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
     unique("unique_item_name_per_server").on(table.serverId, table.name),
@@ -151,15 +152,46 @@ export const item = pgTable(
 export const resource = pgTable(
   "resource",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
-    serverId: uuid("server_id").references(() => server.id).notNull(),
-    assetId: uuid("asset_id").references(() => asset.id).notNull(),
-    name: varchar("name", { length: 50 }).notNull(),
-    description: varchar("description", { length: 500 }),
-    createdAt: temporalTimestamp("created_at").notNull().default(sql`now()`),
-    updatedAt: temporalTimestamp("updated_at").notNull().default(sql`now()`),
+    id: uuid().primaryKey().defaultRandom(),
+    serverId: uuid().references(() => server.id).notNull(),
+    assetId: uuid().references(() => asset.id).notNull(),
+    name: varchar({ length: 50 }).notNull(),
+    description: varchar({ length: 500 }),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
     unique("unique_resource_name_per_server").on(table.serverId, table.name),
   ],
 );
+
+export const actionResourceReward = pgTable(
+  "actionResourceReward",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    actionId: uuid().references(() => action.id).notNull(),
+    resourceId: uuid().references(() => resource.id).notNull(),
+    quantity: integer().notNull().default(1),
+    chance: integer().notNull().default(100),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
+  },
+  (table) => [
+    unique("unique_action_resource_reward").on(
+      table.actionId,
+      table.resourceId,
+    ),
+    index("action_resource_reward_action_id_idx").on(table.actionId),
+  ],
+);
+
+export const actionItemReward = pgTable("actionItemReward", {
+  id: uuid().primaryKey().defaultRandom(),
+  actionId: uuid().references(() => action.id).notNull(),
+  itemId: uuid().references(() => item.id).notNull(),
+  createdAt: temporalTimestamp().notNull().default(sql`now()`),
+  updatedAt: temporalTimestamp().notNull().default(sql`now()`),
+}, (table) => [
+  unique("unique_action_item_reward").on(table.actionId, table.itemId),
+  index("action_item_reward_action_id_idx").on(table.actionId),
+]);
