@@ -1,4 +1,4 @@
-import { Layout } from "@comp/layout/Layout.tsx";
+import { Layout } from "@sections/layout/Layout.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { Info } from "@comp/feedback/Info.tsx";
 import { Tooltip } from "@comp/overlay/Tooltip.tsx";

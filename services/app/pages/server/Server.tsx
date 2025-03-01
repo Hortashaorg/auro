@@ -1,4 +1,4 @@
-import { Layout } from "@comp/layout/Layout.tsx";
+import { Layout } from "@sections/layout/Layout.tsx";
 import { createRoute } from "@kalena/framework";
 import { Text } from "@comp/content/Text.tsx";
 import { throwError } from "@package/common";
