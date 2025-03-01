@@ -15,9 +15,9 @@ export const Layout = ({
   return (
     <BaseLayout title={title}>
       <Navbar />
-      <div className="container mx-auto dark:scheme-dark scheme-normal">
+      <div className="container mx-auto dark:scheme-dark scheme-light">
         <Flex
-          className={cn("w-full", className)}
+          className={cn("w-full pt-5", className)}
           direction="col"
           gap="xl"
           {...props}

@@ -64,7 +64,7 @@ export const Breadcrumbs: FC<Props> = ({
               ? (
                 <a
                   href={segment.href}
-                  className="text-primary-400 hover:text-primary-300 transition-colors hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded px-1"
+                  className="dark:text-primary-100 dark:hover:text-primary-300 transition-colors underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded px-1"
                 >
                   {segment.label}
                 </a>
