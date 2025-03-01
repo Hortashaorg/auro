@@ -11,18 +11,16 @@ Player:
 - As a player on a server, I recive energy to spend on doing actions.
 
 UI:
-- Control Group for forms.
-- Use label that focus input.
-- Breadcrumbs would be a useful navigation tool.
-- Maybe buttons where you can do certain things should be located on top in its own component?!
-- Component Layout includes Navbar section. Components should not include project specific component. Maybe we should place layout as a section?!
+- Create a pattern where a section of action buttons are located together in a consistant and easy to understand way.
+- Aria attributes
+- Loading states / Optimistic updates pattern
+- Making lightmode work, currently darkmode seem to be the only one that look somewhat consistant.
+- Component Testing
+- Introducing icons. It could be really helpful.
 
 Technical:
 Workflow - typecheck, linting and formatting
 CI/CD
-
-Bugs:
-- Handle duplicate name constraints.
-- A problem with useContext is that it is not persistant for children of async components.
-- But we can store a global variable in the runtime that store context globally and cleanup after a request.
-- We would need to figure out how to be able to query for global context though.
+- Introducing Testing
+- Analyze tools (accessability, bad conding practices, security etc)
+- Typecheck, formatting, linting
