@@ -1,4 +1,4 @@
-import { ErrorLayout } from "@comp/layout/ErrorLayout.tsx";
+import { ErrorLayout } from "@sections/layout/ErrorLayout.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 import { Flex } from "@comp/layout/Flex.tsx";

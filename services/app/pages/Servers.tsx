@@ -1,4 +1,4 @@
-import { Layout } from "@comp/layout/Layout.tsx";
+import { Layout } from "@sections/layout/Layout.tsx";
 import { Modal } from "@comp/overlay/modal/Modal.tsx";
 import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
