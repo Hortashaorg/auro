@@ -31,7 +31,7 @@ const Server = async () => {
   const user = context.user;
 
   return (
-    <Layout title={server.name}>
+    <Layout title={`Server - ${server.name}`}>
       <Text variant="h1" className="mb-8">{server.name}</Text>
       {user.type === "admin"
         ? <AdminDashboard server={server} />

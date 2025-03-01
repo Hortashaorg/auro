@@ -8,7 +8,7 @@ import { CreateItemForm } from "@sections/forms/CreateItemForm.tsx";
 
 const Items = () => {
   return (
-    <Layout title="Items">
+    <Layout title="Admin - Items">
       <ModalButton modalRef="createItemModal">
         Create Item
       </ModalButton>

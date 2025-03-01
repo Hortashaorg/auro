@@ -10,7 +10,7 @@ import { isPublic } from "@permissions/index.ts";
 
 const Home = () => {
   return (
-    <Layout title="Deno Hot Dude">
+    <Layout title="Home">
       <Text variant="h1" className="mb-8">Home page</Text>
 
       <Info variant="warning" className="mb-8">

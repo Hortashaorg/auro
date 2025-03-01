@@ -8,7 +8,7 @@ import { CreateLocationForm } from "@sections/forms/CreateLocationForm.tsx";
 
 const Locations = () => {
   return (
-    <Layout title="Locations">
+    <Layout title="Admin - Locations">
       <ModalButton modalRef="createLocationModal">
         Create Location
       </ModalButton>

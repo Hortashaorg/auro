@@ -8,7 +8,7 @@ import { CreateResourceForm } from "@sections/forms/CreateResourceForm.tsx";
 
 const Resources = () => {
   return (
-    <Layout title="Resources">
+    <Layout title="Admin - Resources">
       <ModalButton modalRef="createResourceModal">
         Create Resource
       </ModalButton>

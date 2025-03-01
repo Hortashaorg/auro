@@ -12,7 +12,7 @@ const Servers = async () => {
   const canCreateServer = customContext.account?.canCreateServer ?? false;
 
   return (
-    <Layout title="Select Server">
+    <Layout title="Server Selection">
       {canCreateServer && (
         <>
           <ModalButton modalRef="createServerModal" className="mb-4">

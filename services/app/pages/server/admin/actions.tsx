@@ -8,7 +8,7 @@ import { CreateActionForm } from "@sections/forms/CreateActionForm.tsx";
 
 const Actions = () => {
   return (
-    <Layout title="Actions">
+    <Layout title="Admin - Actions">
       <ModalButton modalRef="createActionModal">
         Create Action
       </ModalButton>
