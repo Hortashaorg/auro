@@ -40,8 +40,8 @@ export const TableRow: FC<TableRowProps> = ({
           ? "border-b border-background-300 dark:border-background-700"
           : "border-b border-background-200 dark:border-background-800",
         zebra && !isHeader && index % 2 === 1 &&
-          "bg-background-50 dark:bg-background-900",
-        hoverable && "hover:bg-background-100 dark:hover:bg-background-800",
+          "bg-background-50 dark:bg-background-800",
+        hoverable && "hover:bg-background-100 dark:hover:bg-background-950",
         active && "bg-primary-50 dark:bg-primary-900",
         className,
       )}

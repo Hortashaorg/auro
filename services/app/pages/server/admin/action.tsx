@@ -96,14 +96,14 @@ const TabsSection = ({ actionName }: { actionName: string }) => {
 
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow isHeader>
                 <TableCell isHeader>Item</TableCell>
                 <TableCell isHeader>Drop Rate (%)</TableCell>
                 <TableCell isHeader align="right">Actions</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody colSpan={3}>
-              <TableRow hoverable>
+              <TableRow hoverable zebra index={0}>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <span role="img" aria-label="Sword">⚔️</span>
@@ -132,7 +132,7 @@ const TabsSection = ({ actionName }: { actionName: string }) => {
                   </button>
                 </TableCell>
               </TableRow>
-              <TableRow hoverable>
+              <TableRow hoverable zebra index={1}>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <span role="img" aria-label="Coin">🪙</span>
@@ -322,18 +322,17 @@ const TabsSection = ({ actionName }: { actionName: string }) => {
         <div className="space-y-6">
           <Switch
             name="enableAction"
-            initialState={true}
+            initialState
             label="Enable Action"
             variant="success"
           />
           <Switch
             name="requireVerification"
-            initialState={false}
             label="Require Verification"
           />
           <Switch
             name="sendNotifications"
-            initialState={true}
+            initialState
             label="Send Notifications"
             variant="success"
           />
