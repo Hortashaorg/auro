@@ -2,23 +2,14 @@ import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
 import { Text } from "@comp/content/Text.tsx";
-import { Card } from "@comp/layout/Card.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { Badge } from "@comp/content/Badge.tsx";
-import { Img } from "@comp/content/Img.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
-
-type ActionDetails = {
-  id: string;
-  name: string;
-  description: string | null;
-  cooldownMinutes: number;
-  repeatable: boolean;
-  assetUrl: string;
-  locationName: string | null;
-};
+import { Tab } from "@comp/layout/tabs/Tab.tsx";
+import { Tabs } from "@comp/layout/tabs/Tabs.tsx";
+import { TabsList } from "@comp/layout/tabs/TabsList.tsx";
+import { TabsTrigger } from "@comp/layout/tabs/TabsTrigger.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -43,9 +34,7 @@ const ActionDetail = async () => {
       eq(schema.action.id, actionId),
     );
 
-  if (!actions.length) throwError("Action not found");
-
-  const action = actions[0] as ActionDetails;
+  const action = actions[0] ?? throwError("Action not found");
 
   return (
     <Layout title={`Action - ${action.name}`}>
@@ -53,57 +42,94 @@ const ActionDetail = async () => {
         Back to Actions
       </ButtonLink>
 
-      <Card className="p-6 space-y-6">
-        <Flex gap="lg">
-          <div className="w-48 h-48 overflow-hidden rounded-md">
-            <Img
-              src={action.assetUrl}
-              alt={action.name}
-              className="w-full h-full object-cover"
-            />
+      <TabsSection />
+    </Layout>
+  );
+};
+
+const TabsSection = () => {
+  return (
+    <Tabs initialTabId="stats">
+      <TabsList className="mb-6">
+        <TabsTrigger tabId="stats">Statistics</TabsTrigger>
+        <TabsTrigger tabId="history">Usage History</TabsTrigger>
+        <TabsTrigger tabId="settings">Settings</TabsTrigger>
+      </TabsList>
+      <Tab tabId="stats">
+        <Text variant="h3" className="text-xl font-bold mb-6">
+          Action Statistics
+        </Text>
+        <div className="space-y-4">
+          <div className="flex justify-between py-3 border-b border-background-700">
+            <Text variant="body">Total Uses</Text>
+            <Text variant="body" className="font-semibold">1,245</Text>
           </div>
-
-          <div className="space-y-4 flex-1">
-            <div>
-              <Text variant="h2" className="mb-2">Details</Text>
-              {action.description && (
-                <Text
-                  variant="body"
-                  className="text-text-500 dark:text-text-400"
-                >
-                  {action.description}
+          <div className="flex justify-between py-3 border-b border-background-700">
+            <Text variant="body">Unique Users</Text>
+            <Text variant="body" className="font-semibold">328</Text>
+          </div>
+          <div className="flex justify-between py-3 border-b border-background-700">
+            <Text variant="body">
+              Average Daily Uses
+            </Text>
+            <Text variant="body" className="font-semibold">42</Text>
+          </div>
+          <div className="flex justify-between py-3">
+            <Text variant="body">Last Used</Text>
+            <Text variant="body" className="font-semibold">2 hours ago</Text>
+          </div>
+        </div>
+      </Tab>
+      <Tab tabId="history">
+        <Text variant="h3" className="text-xl font-bold mb-6">
+          Recent Activity
+        </Text>
+        <div className="space-y-4">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div
+              key={i}
+              className="flex justify-between items-center py-3 border-b border-background-700"
+            >
+              <div>
+                <Text variant="body" className="font-medium">User #{i}</Text>
+                <Text variant="body" className="text-sm text-background-300">
+                  {i} hour{i !== 1 ? "s" : ""} ago
                 </Text>
-              )}
+              </div>
+              <Badge variant="default">Completed</Badge>
             </div>
-
-            <div className="space-y-2">
-              <Text variant="h3">Properties</Text>
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="warning" className="flex items-center gap-1">
-                  <i data-lucide="clock" width={16} height={16}></i>
-                  {action.cooldownMinutes}m cooldown
-                </Badge>
-                <Badge
-                  variant={action.repeatable ? "success" : "danger"}
-                  className="flex items-center gap-1"
-                >
-                  {action.repeatable
-                    ? <i data-lucide="repeat" width={16} height={16}></i>
-                    : <i data-lucide="x" width={16} height={16}></i>}
-                  {action.repeatable ? "Repeatable" : "One-time"}
-                </Badge>
-                {action.locationName && (
-                  <Badge variant="default" className="flex items-center gap-1">
-                    <i data-lucide="map-pin" width={16} height={16}></i>
-                    {action.locationName}
-                  </Badge>
-                )}
+          ))}
+        </div>
+      </Tab>
+      <Tab tabId="settings">
+        <Text variant="h3" className="text-xl font-bold mb-6">
+          Action Settings
+        </Text>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Text variant="body">Enable Action</Text>
+            <div className="w-12 h-6 bg-success-500 rounded-full relative cursor-pointer">
+              <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full">
               </div>
             </div>
           </div>
-        </Flex>
-      </Card>
-    </Layout>
+          <div className="flex items-center justify-between">
+            <Text variant="body">Require Verification</Text>
+            <div className="w-12 h-6 bg-border-300 rounded-full relative cursor-pointer">
+              <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full">
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <Text variant="body">Send Notifications</Text>
+            <div className="w-12 h-6 bg-success-500 rounded-full relative cursor-pointer">
+              <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full">
+              </div>
+            </div>
+          </div>
+        </div>
+      </Tab>
+    </Tabs>
   );
 };
 
