@@ -10,7 +10,6 @@ import { Tab } from "@comp/layout/tabs/Tab.tsx";
 import { Tabs } from "@comp/layout/tabs/Tabs.tsx";
 import { TabsList } from "@comp/layout/tabs/TabsList.tsx";
 import { TabsTrigger } from "@comp/layout/tabs/TabsTrigger.tsx";
-import { StatItem } from "@comp/content/StatItem.tsx";
 import { Switch } from "@comp/inputs/Switch.tsx";
 import { Table } from "@comp/data/Table.tsx";
 import { TableHeader } from "@comp/data/TableHeader.tsx";
@@ -58,24 +57,10 @@ const TabsSection = ({ actionName }: { actionName: string }) => {
   return (
     <Tabs initialTabId="overview">
       <TabsList className="mb-6">
-        <TabsTrigger tabId="overview">Overview</TabsTrigger>
         <TabsTrigger tabId="rewards">Rewards</TabsTrigger>
         <TabsTrigger tabId="history">History</TabsTrigger>
         <TabsTrigger tabId="settings">Settings</TabsTrigger>
       </TabsList>
-
-      {/* Overview Tab */}
-      <Tab tabId="overview">
-        <Text variant="h3" className="text-xl font-bold mb-6">
-          {actionName} Overview
-        </Text>
-        <div className="space-y-4">
-          <StatItem label="Total Uses" value="1,245" />
-          <StatItem label="Unique Users" value="328" />
-          <StatItem label="Average Daily Uses" value="42" />
-          <StatItem label="Last Used" value="2 hours ago" bordered={false} />
-        </div>
-      </Tab>
 
       {/* Rewards Tab */}
       <Tab tabId="rewards">
