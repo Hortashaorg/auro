@@ -49,7 +49,6 @@ const myApp = app({
     itemsRoute,
     createItemRoute,
   ],
-  port: 4000,
   errorPages: {
     notFound: ErrorPage404,
     serverError: ErrorPage500,
