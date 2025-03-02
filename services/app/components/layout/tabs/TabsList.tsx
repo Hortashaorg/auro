@@ -28,7 +28,7 @@ export const TabsList: FC<TabsListProps> = ({
     <div
       className={cn(
         "inline-flex p-1.5 rounded-lg",
-        "bg-background-100 dark:bg-background-800",
+        "bg-background-50 dark:bg-background-900",
         className,
       )}
       {...props}

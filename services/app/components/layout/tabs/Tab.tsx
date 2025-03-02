@@ -34,8 +34,7 @@ export const Tab: FC<TabProps> = ({
       id={tabId}
       className={cn(
         "p-6 rounded-lg",
-        "bg-white dark:bg-background-900/95 dark:text-white",
-        "border border-background-200 dark:border-background-800",
+        "bg-background-50 dark:bg-background-900 dark:text-text-50",
         "animate-fadeIn",
         className,
       )}

@@ -10,6 +10,8 @@ import { Tab } from "@comp/layout/tabs/Tab.tsx";
 import { Tabs } from "@comp/layout/tabs/Tabs.tsx";
 import { TabsList } from "@comp/layout/tabs/TabsList.tsx";
 import { TabsTrigger } from "@comp/layout/tabs/TabsTrigger.tsx";
+import { StatItem } from "@comp/content/StatItem.tsx";
+import { Switch } from "@comp/inputs/Switch.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -60,24 +62,10 @@ const TabsSection = () => {
           Action Statistics
         </Text>
         <div className="space-y-4">
-          <div className="flex justify-between py-3 border-b border-background-700">
-            <Text variant="body">Total Uses</Text>
-            <Text variant="body" className="font-semibold">1,245</Text>
-          </div>
-          <div className="flex justify-between py-3 border-b border-background-700">
-            <Text variant="body">Unique Users</Text>
-            <Text variant="body" className="font-semibold">328</Text>
-          </div>
-          <div className="flex justify-between py-3 border-b border-background-700">
-            <Text variant="body">
-              Average Daily Uses
-            </Text>
-            <Text variant="body" className="font-semibold">42</Text>
-          </div>
-          <div className="flex justify-between py-3">
-            <Text variant="body">Last Used</Text>
-            <Text variant="body" className="font-semibold">2 hours ago</Text>
-          </div>
+          <StatItem label="Total Uses" value="1,245" />
+          <StatItem label="Unique Users" value="328" />
+          <StatItem label="Average Daily Uses" value="42" />
+          <StatItem label="Last Used" value="2 hours ago" bordered={false} />
         </div>
       </Tab>
       <Tab tabId="history">
@@ -85,14 +73,18 @@ const TabsSection = () => {
           Recent Activity
         </Text>
         <div className="space-y-4">
+          {/* This would be replaced with actual data in a real implementation */}
           {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
-              className="flex justify-between items-center py-3 border-b border-background-700"
+              className="flex justify-between items-center py-3 border-b border-background-300 dark:border-background-700"
             >
               <div>
                 <Text variant="body" className="font-medium">User #{i}</Text>
-                <Text variant="body" className="text-sm text-background-300">
+                <Text
+                  variant="body"
+                  className="text-sm text-background-600 dark:text-background-300"
+                >
                   {i} hour{i !== 1 ? "s" : ""} ago
                 </Text>
               </div>
@@ -106,27 +98,23 @@ const TabsSection = () => {
           Action Settings
         </Text>
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <Text variant="body">Enable Action</Text>
-            <div className="w-12 h-6 bg-success-500 rounded-full relative cursor-pointer">
-              <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full">
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <Text variant="body">Require Verification</Text>
-            <div className="w-12 h-6 bg-border-300 rounded-full relative cursor-pointer">
-              <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full">
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <Text variant="body">Send Notifications</Text>
-            <div className="w-12 h-6 bg-success-500 rounded-full relative cursor-pointer">
-              <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full">
-              </div>
-            </div>
-          </div>
+          <Switch
+            name="enableAction"
+            initialState={true}
+            label="Enable Action"
+            variant="success"
+          />
+          <Switch
+            name="requireVerification"
+            initialState={false}
+            label="Require Verification"
+          />
+          <Switch
+            name="sendNotifications"
+            initialState={true}
+            label="Send Notifications"
+            variant="success"
+          />
         </div>
       </Tab>
     </Tabs>

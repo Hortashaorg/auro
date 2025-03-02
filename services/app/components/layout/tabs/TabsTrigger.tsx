@@ -30,11 +30,11 @@ export const TabsTrigger: FC<TabsTriggerProps> = ({
       className={cn(
         "px-4 py-2 text-sm font-medium rounded-md transition-all",
         "focus:outline-none focus:ring-1 focus:ring-background-300 dark:focus:ring-background-600",
-        "text-text-600 hover:text-text-900 dark:text-background-300 dark:hover:text-white hover:bg-background-50 dark:hover:bg-background-700",
+        "text-text-600 hover:text-text-900 dark:text-background-300 dark:hover:text-text-50 hover:bg-background-50 dark:hover:bg-background-700",
         className,
       )}
       x-bind:class={`activeTab === '${tabId}' 
-        ? 'bg-white dark:bg-background-900 dark:text-white shadow-sm' 
+        ? 'bg-background-50 dark:bg-background-700 dark:text-text-50 shadow-sm' 
         : ''`}
       x-on:click={`activeTab = '${tabId}'`}
       x-trigger
