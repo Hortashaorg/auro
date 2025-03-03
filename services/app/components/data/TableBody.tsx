@@ -31,7 +31,6 @@ export const TableBody: FC<TableBodyProps> = ({
   loading = false,
   isEmpty = false,
   emptyText = "No data available",
-  colSpan = 1,
   ...props
 }: TableBodyProps) => {
   return (
@@ -45,10 +44,7 @@ export const TableBody: FC<TableBodyProps> = ({
       {isEmpty
         ? (
           <tr>
-            <td
-              colSpan={colSpan}
-              className="px-4 py-4 text-center text-text-500 dark:text-text-400"
-            >
+            <td className="px-4 py-4 text-center text-text-500 dark:text-text-400">
               {emptyText}
             </td>
           </tr>
