@@ -17,6 +17,7 @@ import { createResourceRoute } from "@api/CreateResource.tsx";
 import { itemsRoute } from "@pages/server/admin/items.tsx";
 import { createItemRoute } from "@api/CreateItem.tsx";
 import { changeActionResourceRewardsRoute } from "@api/action/ChangeActionResourceRewards.tsx";
+import { addActionResourceRewardsRoute } from "@api/action/AddActionResourceRewards.tsx";
 
 const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
   throwError("Missing Google client secret");
@@ -50,6 +51,7 @@ const myApp = app({
     itemsRoute,
     createItemRoute,
     changeActionResourceRewardsRoute,
+    addActionResourceRewardsRoute,
   ],
   errorPages: {
     notFound: ErrorPage404,

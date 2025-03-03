@@ -15,10 +15,11 @@ export const AddResourceToActionForm = async () => {
 
   return (
     <Form
-      hx-post={`/api/servers/${serverId}/actions/${actionId}/resources/add`}
+      hx-post={`/api/servers/${serverId}/actions/${actionId}/resource-rewards/add`}
+      hx-swap="none"
     >
       <RadioGroup
-        name="resource"
+        name="resourceId"
         options={availableResources.map((resource) => ({
           label: resource.name,
           value: resource.id,

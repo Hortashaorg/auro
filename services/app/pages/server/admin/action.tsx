@@ -8,16 +8,12 @@ import { Tab } from "@comp/layout/tabs/Tab.tsx";
 import { Tabs } from "@comp/layout/tabs/Tabs.tsx";
 import { TabsList } from "@comp/layout/tabs/TabsList.tsx";
 import { TabsTrigger } from "@comp/layout/tabs/TabsTrigger.tsx";
-import { Table } from "@comp/data/Table.tsx";
-import { TableHeader } from "@comp/data/TableHeader.tsx";
-import { TableBody } from "@comp/data/TableBody.tsx";
-import { TableRow } from "@comp/data/TableRow.tsx";
-import { TableCell } from "@comp/data/TableCell.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { Modal } from "@comp/overlay/modal/Modal.tsx";
-import { ModalIcon } from "@comp/overlay/modal/ModalIcon.tsx";
+import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
+import { Flex } from "@comp/layout/Flex.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -70,7 +66,10 @@ const TabsSection = (
           {actionName}
         </Text>
 
-        <div>
+        <div
+          x-data="{ formIsDirty: false }"
+          x-on:form-change="formIsDirty = true"
+        >
           <div className="mb-4">
             <Text variant="h3" className="text-lg font-semibold">
               Resource Rewards
@@ -80,41 +79,25 @@ const TabsSection = (
             </Text>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell isHeader>Resource</TableCell>
-                <TableCell isHeader>Drop Rate (%)</TableCell>
-                <TableCell isHeader>Min Quantity</TableCell>
-                <TableCell isHeader>Max Quantity</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <ModifyResourceOfActionForm />
-              <TableRow>
-                <TableCell colSpan={4} className="text-center py-4">
-                  <ModalIcon
-                    modalRef="addResourceModal"
-                    icon="plus"
-                    label="Add resource"
-                    className="mx-auto"
-                  />
-                  <Modal modalRef="addResourceModal" title="Add Resource">
-                    <AddResourceToActionForm />
-                  </Modal>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <ModifyResourceOfActionForm />
 
-          <Button
-            variant="primary"
-            size="small"
-            type="submit"
-            form="modify-resource-of-action-form"
-          >
-            Save Resources
-          </Button>
+          <Modal modalRef="addResourceModal" title="Add Resource">
+            <AddResourceToActionForm />
+          </Modal>
+
+          <Flex gap="md">
+            <ModalButton modalRef="addResourceModal">Add Resource</ModalButton>
+            <Button
+              variant="primary"
+              size="small"
+              type="submit"
+              form="modify-resource-of-action-form"
+              x-bind:disabled="!formIsDirty"
+              hx-indicator="#resources-saving"
+            >
+              Save Resources
+            </Button>
+          </Flex>
         </div>
       </Tab>
 
