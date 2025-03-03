@@ -89,11 +89,9 @@ const TabsSection = (
             <ModalButton modalRef="addResourceModal">Add Resource</ModalButton>
             <Button
               variant="primary"
-              size="small"
               type="submit"
               form="modify-resource-of-action-form"
               x-bind:disabled="!formIsDirty"
-              hx-indicator="#resources-saving"
             >
               Save Resources
             </Button>
@@ -105,14 +103,12 @@ const TabsSection = (
         <Text variant="h3" className="text-xl font-bold mb-6">
           Usage History for {actionName}
         </Text>
-        {/* History tab content */}
       </Tab>
 
       <Tab tabId="settings">
         <Text variant="h3" className="text-xl font-bold mb-6">
           {actionName} Settings
         </Text>
-        {/* Settings tab content */}
       </Tab>
     </Tabs>
   );

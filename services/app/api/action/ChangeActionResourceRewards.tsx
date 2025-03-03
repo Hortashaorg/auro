@@ -49,7 +49,6 @@ const ChangeActionResourceRewards = async () => {
     }
     return acc;
   }, {} as Record<string, Record<string, string>>);
-
   // Define schema for a single resource entry
   const resourcesSchema = v.array(v.object({
     id: v.pipe(v.string(), v.uuid()),
@@ -78,6 +77,31 @@ const ChangeActionResourceRewards = async () => {
   }));
 
   const parsedResult = v.parse(resourcesSchema, Object.values(res));
+
+  // If maxQuantity is less than minQuantity, return an error for both min and max fields.
+  const errorEvents: Record<string, string> = {};
+  for (const entry of parsedResult) {
+    if (entry.max < entry.min) {
+      errorEvents[`resource_${entry.id}_max`] =
+        "Max quantity cannot be less than min quantity";
+      errorEvents[`resource_${entry.id}_min`] =
+        "Max quantity cannot be less than min quantity";
+    }
+  }
+
+  context.header(
+    "HX-Trigger",
+    createEvents([
+      {
+        name: "form-error",
+        values: errorEvents,
+      },
+    ]),
+  );
+
+  if (Object.keys(errorEvents).length > 0) {
+    return <p>Invalid form data</p>;
+  }
 
   try {
     // Query
