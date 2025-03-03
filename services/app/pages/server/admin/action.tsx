@@ -16,6 +16,11 @@ import { TableHeader } from "@comp/data/TableHeader.tsx";
 import { TableBody } from "@comp/data/TableBody.tsx";
 import { TableRow } from "@comp/data/TableRow.tsx";
 import { TableCell } from "@comp/data/TableCell.tsx";
+import { Range } from "@comp/inputs/form/Range.tsx";
+import { Input } from "@comp/inputs/form/Input.tsx";
+import { FormControl } from "@comp/inputs/form/FormControl.tsx";
+import { Form } from "@comp/inputs/form/Form.tsx";
+import { Button } from "@comp/inputs/Button.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -48,14 +53,24 @@ const ActionDetail = async () => {
         Back to Actions
       </ButtonLink>
 
-      <TabsSection actionName={action.name} />
+      <TabsSection
+        actionName={action.name}
+        serverId={serverId}
+        actionId={actionId}
+      />
     </Layout>
   );
 };
 
-const TabsSection = ({ actionName }: { actionName: string }) => {
+type TabsSectionProps = {
+  actionName: string;
+  serverId: string;
+  actionId: string;
+};
+
+const TabsSection = ({ actionName, serverId, actionId }: TabsSectionProps) => {
   return (
-    <Tabs initialTabId="overview">
+    <Tabs initialTabId="rewards">
       <TabsList className="mb-6">
         <TabsTrigger tabId="rewards">Rewards</TabsTrigger>
         <TabsTrigger tabId="history">History</TabsTrigger>
@@ -79,75 +94,78 @@ const TabsSection = ({ actionName }: { actionName: string }) => {
             </Text>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow isHeader>
-                <TableCell isHeader>Item</TableCell>
-                <TableCell isHeader>Drop Rate (%)</TableCell>
-                <TableCell isHeader align="right">Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody colSpan={3}>
-              <TableRow hoverable zebra index={0}>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <span role="img" aria-label="Sword">⚔️</span>
-                    <span>Wooden Sword</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      defaultValue="25"
-                      className="w-full h-2 bg-background-200 rounded-lg appearance-none dark:bg-background-700"
-                    />
-                    <span className="w-12 text-right">25%</span>
-                  </div>
-                </TableCell>
-                <TableCell align="right">
-                  <button
-                    type="button"
-                    className="text-danger-500 hover:text-danger-700"
-                  >
-                    <span aria-hidden="true">🗑️</span>
-                    <span className="sr-only">Delete</span>
-                  </button>
-                </TableCell>
-              </TableRow>
-              <TableRow hoverable zebra index={1}>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <span role="img" aria-label="Coin">🪙</span>
-                    <span>Gold Coin</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      defaultValue="100"
-                      className="w-full h-2 bg-background-200 rounded-lg appearance-none dark:bg-background-700"
-                    />
-                    <span className="w-12 text-right">100%</span>
-                  </div>
-                </TableCell>
-                <TableCell align="right">
-                  <button
-                    type="button"
-                    className="text-danger-500 hover:text-danger-700"
-                  >
-                    <span aria-hidden="true">🗑️</span>
-                    <span className="sr-only">Delete</span>
-                  </button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <Form
+            hx-post={`/api/servers/${serverId}/actions/${actionId}/rewards`}
+            hx-swap="none"
+          >
+            <Table>
+              <TableHeader>
+                <TableRow isHeader>
+                  <TableCell isHeader>Item</TableCell>
+                  <TableCell isHeader>Drop Rate (%)</TableCell>
+                  <TableCell isHeader align="right">Actions</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody colSpan={3}>
+                <TableRow hoverable zebra index={0}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <span role="img" aria-label="Sword">⚔️</span>
+                      <span>Wooden Sword</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <FormControl inputName="woodenSwordDropRate">
+                      <Range
+                        name="woodenSwordDropRate"
+                        min={0}
+                        max={100}
+                        defaultValue={25}
+                        unitSuffix="%"
+                      />
+                    </FormControl>
+                  </TableCell>
+                  <TableCell align="right">
+                    <button
+                      type="button"
+                      className="text-danger-500 hover:text-danger-700"
+                    >
+                      <span aria-hidden="true">🗑️</span>
+                      <span className="sr-only">Delete</span>
+                    </button>
+                  </TableCell>
+                </TableRow>
+                <TableRow hoverable zebra index={1}>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <span role="img" aria-label="Coin">🪙</span>
+                      <span>Gold Coin</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <FormControl inputName="goldCoinDropRate">
+                      <Range
+                        name="goldCoinDropRate"
+                        min={0}
+                        max={100}
+                        defaultValue={100}
+                        unitSuffix="%"
+                      />
+                    </FormControl>
+                  </TableCell>
+                  <TableCell align="right">
+                    <button
+                      type="button"
+                      className="text-danger-500 hover:text-danger-700"
+                    >
+                      <span aria-hidden="true">🗑️</span>
+                      <span className="sr-only">Delete</span>
+                    </button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Form>
 
           <div className="mt-4">
             <button
@@ -170,73 +188,148 @@ const TabsSection = ({ actionName }: { actionName: string }) => {
             </Text>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell isHeader>Resource</TableCell>
-                <TableCell isHeader>Drop Rate (%)</TableCell>
-                <TableCell isHeader>Min Quantity</TableCell>
-                <TableCell isHeader>Max Quantity</TableCell>
-                <TableCell isHeader align="right">Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody colSpan={5}>
-              <TableRow hoverable>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <span role="img" aria-label="Wood">🪵</span>
-                    <span>Wood</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      defaultValue="75"
-                      className="w-full h-2 bg-background-200 rounded-lg appearance-none dark:bg-background-700"
-                    />
-                    <span className="w-12 text-right">75%</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <input
-                    type="number"
-                    defaultValue="1"
-                    min="1"
-                    className="w-full p-2 border border-background-300 dark:border-background-700 rounded bg-background-50 dark:bg-background-800"
-                  />
-                </TableCell>
-                <TableCell>
-                  <input
-                    type="number"
-                    defaultValue="3"
-                    min="1"
-                    className="w-full p-2 border border-background-300 dark:border-background-700 rounded bg-background-50 dark:bg-background-800"
-                  />
-                </TableCell>
-                <TableCell align="right">
-                  <button
-                    type="button"
-                    className="text-danger-500 hover:text-danger-700"
-                  >
-                    <span aria-hidden="true">🗑️</span>
-                    <span className="sr-only">Delete</span>
-                  </button>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <Form
+            hx-post={`/api/servers/${serverId}/actions/${actionId}/resources`}
+            hx-swap="none"
+          >
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell isHeader>Resource</TableCell>
+                  <TableCell isHeader>Drop Rate (%)</TableCell>
+                  <TableCell isHeader>Min Quantity</TableCell>
+                  <TableCell isHeader>Max Quantity</TableCell>
+                  <TableCell isHeader align="right">Actions</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody colSpan={5}>
+                <TableRow hoverable>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <span role="img" aria-label="Wood">🪵</span>
+                      <span>Wood</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <FormControl inputName="woodDropRate">
+                      <Range
+                        name="woodDropRate"
+                        min={0}
+                        max={100}
+                        defaultValue={75}
+                        unitSuffix="%"
+                      />
+                    </FormControl>
+                  </TableCell>
+                  <TableCell>
+                    <div x-data="{ value: 1 }">
+                      <FormControl inputName="woodMinQuantity">
+                        <Input
+                          type="number"
+                          name="woodMinQuantity"
+                          min={1}
+                          x-model="value"
+                          size="small"
+                        />
+                      </FormControl>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div x-data="{ value: 3 }">
+                      <FormControl inputName="woodMaxQuantity">
+                        <Input
+                          type="number"
+                          name="woodMaxQuantity"
+                          min={1}
+                          size="small"
+                          x-model="value"
+                        />
+                      </FormControl>
+                    </div>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button variant="danger" size="small">Delete</Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Form>
 
-          <div className="mt-4">
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400"
-            >
-              <span>+</span> Add Resource Reward
-            </button>
+          <div className="mt-8 mb-4">
+            <Text variant="h3" className="text-lg font-semibold">
+              Rewards
+            </Text>
+            <Text variant="body" className="text-text-500 dark:text-text-400">
+              Rewards that players can earn from this action
+            </Text>
           </div>
+
+          <Form
+            hx-post={`/api/servers/${serverId}/actions/${actionId}/rewards`}
+            hx-swap="none"
+          >
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell isHeader>Type</TableCell>
+                  <TableCell isHeader>Drop Rate (%)</TableCell>
+                  <TableCell isHeader>Min Amount</TableCell>
+                  <TableCell isHeader>Max Amount</TableCell>
+                  <TableCell isHeader align="right">Actions</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody colSpan={5}>
+                <TableRow hoverable>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <span role="img" aria-label="Experience">⭐</span>
+                      <span>Experience</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <FormControl inputName="expDropRate">
+                      <Range
+                        name="expDropRate"
+                        min={0}
+                        max={100}
+                        defaultValue={75}
+                        unitSuffix="%"
+                      />
+                    </FormControl>
+                  </TableCell>
+                  <TableCell>
+                    <div x-data="{ value: 50 }">
+                      <FormControl inputName="expMinAmount">
+                        <Input
+                          type="number"
+                          name="expMinAmount"
+                          min={1}
+                          x-model="value"
+                          size="small"
+                        />
+                      </FormControl>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div x-data="{ value: 100 }">
+                      <FormControl inputName="expMaxAmount">
+                        <Input
+                          type="number"
+                          name="expMaxAmount"
+                          min={1}
+                          x-model="value"
+                          size="small"
+                        />
+                      </FormControl>
+                    </div>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Button variant="danger" size="small">Delete</Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Form>
         </div>
       </Tab>
 

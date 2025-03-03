@@ -29,13 +29,12 @@ const checkboxGroupVariants = cva(
 
 type CheckboxGroupVariants = NonNullableProps<typeof checkboxGroupVariants>;
 type CheckboxGroupProps =
-  & Omit<JSX.IntrinsicElements["div"], "onChange">
+  & JSX.IntrinsicElements["div"]
   & CheckboxGroupVariants
   & {
     name: string;
     options: Option[];
     values?: string[];
-    onChange?: (values: string[]) => void;
     label?: string;
     hint?: string;
     required?: boolean;
@@ -63,22 +62,11 @@ export const CheckboxGroup: FC<CheckboxGroupProps> = ({
   name,
   options,
   values = [],
-  onChange,
   label,
   hint,
   orientation,
   required,
 }: CheckboxGroupProps) => {
-  const handleChange = (value: string, checked: boolean) => {
-    if (!onChange) return;
-
-    if (checked) {
-      onChange([...values, value]);
-    } else {
-      onChange(values.filter((v) => v !== value));
-    }
-  };
-
   return (
     <FormControl inputName={name} hint={hint} className={className}>
       {label && (
@@ -102,7 +90,6 @@ export const CheckboxGroup: FC<CheckboxGroupProps> = ({
                   name={`${name}[]`}
                   value={option.value}
                   checked={isChecked}
-                  onChange={() => handleChange(option.value, !isChecked)}
                   className="h-4 w-4 cursor-pointer rounded border-border text-primary focus:ring-1 focus:ring-primary focus:ring-offset-1"
                 />
               </div>

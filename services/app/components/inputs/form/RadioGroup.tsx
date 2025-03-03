@@ -1,8 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC, JSX } from "@kalena/framework";
-import { FormControl } from "./FormControl.tsx";
+import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { Text } from "@comp/content/Text.tsx";
-import { Label } from "./Label.tsx";
+import { Label } from "@comp/inputs/form/Label.tsx";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 
@@ -29,13 +29,12 @@ const radioGroupVariants = cva(
 
 type RadioGroupVariants = NonNullableProps<typeof radioGroupVariants>;
 type RadioGroupProps =
-  & Omit<JSX.IntrinsicElements["div"], "onChange">
+  & JSX.IntrinsicElements["div"]
   & RadioGroupVariants
   & {
     name: string;
     options: Option[];
     value?: string;
-    onChange?: (value: string) => void;
     label?: string;
     hint?: string;
     required?: boolean;
@@ -63,7 +62,6 @@ export const RadioGroup: FC<RadioGroupProps> = ({
   name,
   options,
   value,
-  onChange,
   label,
   hint,
   orientation,
@@ -89,7 +87,6 @@ export const RadioGroup: FC<RadioGroupProps> = ({
                 name={name}
                 value={option.value}
                 checked={value === option.value}
-                onChange={onChange ? () => onChange(option.value) : undefined}
                 className="h-4 w-4 cursor-pointer rounded-full border-border text-primary focus:ring-1 focus:ring-primary focus:ring-offset-1"
               />
             </div>

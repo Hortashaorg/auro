@@ -42,7 +42,7 @@ const inputVariants = cva([
 });
 
 type InputVariants = NonNullableProps<typeof inputVariants>;
-type Props = JSX.IntrinsicElements["input"] & InputVariants;
+type Props = Omit<JSX.IntrinsicElements["input"], "size"> & InputVariants;
 
 /**
  * Input component with consistent styling and variants
