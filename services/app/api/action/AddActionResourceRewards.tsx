@@ -40,6 +40,14 @@ const AddActionResourceRewards = async () => {
       quantityMin: 1,
     });
 
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        { name: "close-dialog", values: { value: true } },
+        { name: "clear-form", values: { value: true } },
+      ]),
+    );
+
     return <ModifyResourceOfActionForm hx-swap-oob="true" />;
   } catch (error) {
     if (error instanceof PostgresError) {

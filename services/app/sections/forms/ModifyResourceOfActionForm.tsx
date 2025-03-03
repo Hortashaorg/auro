@@ -45,6 +45,7 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
     <Form
       {...props}
       hx-post={`/api/servers/${serverId}/actions/${actionId}/resource-rewards/change`}
+      hx-swap="none"
       id="modify-resource-of-action-form"
       x-on:input="$dispatch('form-change'); formIsDirty = true"
     >
@@ -83,7 +84,7 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
                   <Input
                     type="number"
                     name={`resource_${resourceReward.resourceId}_min`}
-                    defaultValue={resourceReward.quantityMin}
+                    value={resourceReward.quantityMin}
                     min={1}
                   />
                 </FormControl>
@@ -95,7 +96,7 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
                   <Input
                     type="number"
                     name={`resource_${resourceReward.resourceId}_max`}
-                    defaultValue={resourceReward.quantityMax}
+                    value={resourceReward.quantityMax}
                     min={1}
                   />
                 </FormControl>
