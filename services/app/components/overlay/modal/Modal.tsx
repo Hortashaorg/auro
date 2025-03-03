@@ -72,6 +72,7 @@ export const Modal: FC<Props> = ({
         <div className="flex items-center justify-between w-full">
           <Text variant="h1" className="text-xl">{title}</Text>
           <Button
+            type="button"
             variant="outline"
             className="p-2 border-0 hover:bg-background-200 dark:hover:bg-background-700 rounded-full"
             x-on:click={`$refs.${modalRef}.close()`}

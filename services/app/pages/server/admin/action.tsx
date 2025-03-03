@@ -19,6 +19,8 @@ import { Input } from "@comp/inputs/form/Input.tsx";
 import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { Form } from "@comp/inputs/form/Form.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
+import { ModalIcon } from "@comp/overlay/modal/ModalIcon.tsx";
+import { Modal } from "@comp/overlay/modal/Modal.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -138,43 +140,31 @@ const TabsSection = async (
                     </TableCell>
                   </TableRow>;
                 })}
-                <TableRow hoverable>
+                <TableRow>
                   <TableCell>
-                    Add
+                    <ModalIcon
+                      modalRef="addResourceModal"
+                      icon="plus"
+                      label="Add resource"
+                      className="mx-auto"
+                    />
+                    <Modal modalRef="addResourceModal" title="Hello world">
+                      hello world
+                    </Modal>
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
 
-            <div className="flex justify-between items-center">
-              <Button
-                variant="secondary"
-                size="small"
-                type="button"
-                hx-post={`/api/servers/${serverId}/actions/${actionId}/resources/add`}
-                hx-swap="beforeend"
-                hx-target="tbody"
-              >
-                Add Resource
-              </Button>
-
-              <div className="flex items-center gap-2">
-                <div
-                  id="resources-saving"
-                  className="htmx-indicator text-sm text-text-500"
-                >
-                  Saving changes...
-                </div>
-                <Button
-                  variant="primary"
-                  size="small"
-                  type="submit"
-                  hx-indicator="#resources-saving"
-                >
-                  Save Resources
-                </Button>
-              </div>
-            </div>
+            <Button
+              variant="primary"
+              size="small"
+              type="submit"
+              hx-indicator="#resources-saving"
+              disabled={resourceRewards.length === 0}
+            >
+              Save Resources
+            </Button>
           </Form>
         </div>
       </Tab>
