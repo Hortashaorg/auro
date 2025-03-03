@@ -7,7 +7,7 @@
     "jsr:@std/fs@^1.0.13": "1.0.13",
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
-    "jsr:@valibot/valibot@1.0.0-rc.2": "1.0.0-rc.2",
+    "jsr:@valibot/valibot@1.0.0-rc.3": "1.0.0-rc.3",
     "npm:@opentelemetry/api@^1.9.0": "1.9.0",
     "npm:@types/node@*": "22.5.4",
     "npm:class-variance-authority@0.7.1": "0.7.1",
@@ -50,8 +50,8 @@
     "@std/path@1.0.8": {
       "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
     },
-    "@valibot/valibot@1.0.0-rc.2": {
-      "integrity": "f612774092c0c98c15e514c385f4cc0a720c317a5ca6dcfea8fc9bc4538fd431"
+    "@valibot/valibot@1.0.0-rc.3": {
+      "integrity": "1855217144474d4b798b585368a2ebad331c984a704241b9eee8c57e79d0be10"
     }
   },
   "npm": {
@@ -518,7 +518,7 @@
       "packages/framework": {
         "dependencies": [
           "jsr:@hono/hono@4.7.2",
-          "jsr:@valibot/valibot@1.0.0-rc.2",
+          "jsr:@valibot/valibot@1.0.0-rc.3",
           "npm:@opentelemetry/api@^1.9.0"
         ]
       },
