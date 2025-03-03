@@ -4,7 +4,6 @@ import { Layout } from "@sections/layout/Layout.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
-import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 import { Tab } from "@comp/layout/tabs/Tab.tsx";
 import { Tabs } from "@comp/layout/tabs/Tabs.tsx";
 import { TabsList } from "@comp/layout/tabs/TabsList.tsx";
@@ -14,13 +13,11 @@ import { TableHeader } from "@comp/data/TableHeader.tsx";
 import { TableBody } from "@comp/data/TableBody.tsx";
 import { TableRow } from "@comp/data/TableRow.tsx";
 import { TableCell } from "@comp/data/TableCell.tsx";
-import { Range } from "@comp/inputs/form/Range.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { FormControl } from "@comp/inputs/form/FormControl.tsx";
-import { Form } from "@comp/inputs/form/Form.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
-import { ModalIcon } from "@comp/overlay/modal/ModalIcon.tsx";
 import { Modal } from "@comp/overlay/modal/Modal.tsx";
+import { ModalIcon } from "@comp/overlay/modal/ModalIcon.tsx";
+import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
+import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -42,10 +39,6 @@ const ActionDetail = async () => {
 
   return (
     <Layout title={`Action - ${action.name}`}>
-      <ButtonLink href={`/servers/${serverId}/actions`} variant="outline">
-        Back to Actions
-      </ButtonLink>
-
       <TabsSection
         actionName={action.name}
         serverId={serverId}
@@ -61,14 +54,9 @@ type TabsSectionProps = {
   actionId: string;
 };
 
-const TabsSection = async (
-  { actionName, serverId, actionId }: TabsSectionProps,
+const TabsSection = (
+  { actionName }: TabsSectionProps,
 ) => {
-  const resourceRewards = await db.select().from(schema.actionResourceReward)
-    .where(
-      eq(schema.actionResourceReward.actionId, actionId),
-    );
-
   return (
     <Tabs initialTabId="rewards">
       <TabsList className="mb-6">
@@ -92,80 +80,41 @@ const TabsSection = async (
             </Text>
           </div>
 
-          <Form
-            hx-post={`/api/servers/${serverId}/actions/${actionId}/resource-rewards/change`}
-            hx-swap="none"
-          >
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableCell isHeader>Resource</TableCell>
-                  <TableCell isHeader>Drop Rate (%)</TableCell>
-                  <TableCell isHeader>Min Quantity</TableCell>
-                  <TableCell isHeader>Max Quantity</TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {resourceRewards.map((resourceReward) => {
-                  <TableRow hoverable>
-                    <TableCell>
-                      {resourceReward.resourceId}
-                    </TableCell>
-                    <TableCell>
-                      <FormControl inputName="chance">
-                        <Range
-                          name="chance"
-                          min={0}
-                          max={100}
-                          defaultValue={resourceReward.chance}
-                          unitSuffix="%"
-                        />
-                      </FormControl>
-                    </TableCell>
-                    <TableCell>
-                      <FormControl inputName="quantityMin">
-                        <Input
-                          type="number"
-                          name={resourceReward.quantityMin}
-                        />
-                      </FormControl>
-                    </TableCell>
-                    <TableCell>
-                      <FormControl inputName="quantityMax">
-                        <Input
-                          type="number"
-                          name={resourceReward.quantityMax}
-                        />
-                      </FormControl>
-                    </TableCell>
-                  </TableRow>;
-                })}
-                <TableRow>
-                  <TableCell>
-                    <ModalIcon
-                      modalRef="addResourceModal"
-                      icon="plus"
-                      label="Add resource"
-                      className="mx-auto"
-                    />
-                    <Modal modalRef="addResourceModal" title="Hello world">
-                      hello world
-                    </Modal>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableCell isHeader>Resource</TableCell>
+                <TableCell isHeader>Drop Rate (%)</TableCell>
+                <TableCell isHeader>Min Quantity</TableCell>
+                <TableCell isHeader>Max Quantity</TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <ModifyResourceOfActionForm />
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-4">
+                  <ModalIcon
+                    modalRef="addResourceModal"
+                    icon="plus"
+                    label="Add resource"
+                    className="mx-auto"
+                  />
+                  <Modal modalRef="addResourceModal" title="Add Resource">
+                    <AddResourceToActionForm />
+                  </Modal>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
 
-            <Button
-              variant="primary"
-              size="small"
-              type="submit"
-              hx-indicator="#resources-saving"
-              disabled={resourceRewards.length === 0}
-            >
-              Save Resources
-            </Button>
-          </Form>
+          <Button
+            variant="primary"
+            size="small"
+            type="submit"
+            form="modify-resource-of-action-form"
+          >
+            Save Resources
+          </Button>
         </div>
       </Tab>
 
@@ -173,14 +122,14 @@ const TabsSection = async (
         <Text variant="h3" className="text-xl font-bold mb-6">
           Usage History for {actionName}
         </Text>
-        {/* History tab content will go here */}
+        {/* History tab content */}
       </Tab>
 
       <Tab tabId="settings">
         <Text variant="h3" className="text-xl font-bold mb-6">
           {actionName} Settings
         </Text>
-        {/* Settings tab content will go here */}
+        {/* Settings tab content */}
       </Tab>
     </Tabs>
   );
