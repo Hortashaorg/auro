@@ -20,6 +20,7 @@ type Props = JSX.IntrinsicElements["dialog"] & {
  * - Responsive sizing with max-width
  * - Dark mode support
  * - Listens for close-dialog events
+ * - Closes on blur (clicking outside the modal)
  *
  * @example
  * <Modal
@@ -52,6 +53,7 @@ export const Modal: FC<Props> = ({
   ...props
 }: Props) => {
   props["x-on:close-dialog.window"] = `$refs.${modalRef}.close()`;
+  props["x-on:click"] = `$event.target === $el && $refs.${modalRef}.close()`;
 
   return (
     <dialog

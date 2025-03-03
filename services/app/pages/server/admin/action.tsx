@@ -79,7 +79,7 @@ const TabsSection = async (
 
       <Tab tabId="rewards">
         <Text variant="h3" className="text-xl font-bold mb-6">
-          {actionName} Resources
+          {actionName}
         </Text>
 
         <div>
