@@ -66,10 +66,7 @@ const TabsSection = (
           {actionName}
         </Text>
 
-        <div
-          x-data="{ formIsDirty: false }"
-          x-on:form-change="formIsDirty = true"
-        >
+        <div x-data="{ formIsDirty: false }">
           <div className="mb-4">
             <Text variant="h3" className="text-lg font-semibold">
               Resource Rewards

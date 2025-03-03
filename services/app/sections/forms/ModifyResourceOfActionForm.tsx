@@ -47,7 +47,8 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
       hx-post={`/api/servers/${serverId}/actions/${actionId}/resource-rewards/change`}
       hx-swap="none"
       id="modify-resource-of-action-form"
-      x-on:input="$dispatch('form-change'); formIsDirty = true"
+      x-on:input="formIsDirty = true"
+      x-on:submit="formIsDirty = false"
     >
       <Table>
         <TableHeader>
