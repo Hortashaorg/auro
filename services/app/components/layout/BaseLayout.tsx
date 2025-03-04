@@ -18,7 +18,7 @@ export const BaseLayout: FC<Props> = ({
         />
         <title>{title}</title>
       </head>
-      <body className="dark:bg-background-950 bg-background-50" x-data="{}">
+      <body className="dark:bg-surface-dark bg-surface" x-data="{}">
         {children}
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
         <script

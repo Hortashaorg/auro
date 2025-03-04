@@ -113,8 +113,6 @@ const ActionCard = ({ action, serverId }: {
 
         <ButtonLink
           href={`/servers/${serverId}/actions/${action.id}`}
-          variant="primary"
-          width="full"
         >
           Configure
         </ButtonLink>

@@ -72,9 +72,6 @@ const ServerCard = ({ server }: {
       </Flex>
       <ButtonLink
         href={`/servers/${server.id}`}
-        variant="primary"
-        width="full"
-        disabled={!server.online}
       >
         Enter
       </ButtonLink>
