@@ -75,7 +75,7 @@ export const Modal: FC<Props> = ({
           <Text variant="h1" className="text-xl">{title}</Text>
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             className="p-2 border-0 hover:bg-background-200 dark:hover:bg-background-700 rounded-full"
             x-on:click={`$refs.${modalRef}.close()`}
           >

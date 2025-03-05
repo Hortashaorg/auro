@@ -3,10 +3,10 @@ import { throwError } from "@package/common";
 import { db, eq, schema } from "@package/database";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/layout/Card.tsx";
+import { Card } from "@comp/display/card/Card.tsx";
+import { CardContent } from "@comp/display/card/CardContent.tsx";
+import { CardImage } from "@comp/display/card/CardImage.tsx";
 import { Text } from "@comp/content/Text.tsx";
-import { Img } from "@comp/content/Img.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -46,23 +46,12 @@ const LocationCard = ({ location }: {
 }) => {
   return (
     <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
-      <div className="aspect-square overflow-hidden">
-        <Img
-          src={location.url}
-          alt={location.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      <div className="p-4">
-        <Flex justify="between" items="start" gap="md">
-          <div className="flex-1">
-            <Text variant="h1" className="text-xl font-bold truncate">
-              {location.name}
-            </Text>
-          </div>
-        </Flex>
-      </div>
+      <CardImage src={location.url} alt={location.name} />
+      <CardContent title={location.name}>
+        <Text variant="h1" className="text-xl font-bold truncate">
+          {location.name}
+        </Text>
+      </CardContent>
     </Card>
   );
 };

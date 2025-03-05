@@ -1,12 +1,12 @@
 import { Nav } from "@comp/navigation/Nav.tsx";
 import { Link } from "@comp/navigation/Link.tsx";
 import { Menu } from "@comp/navigation/Menu.tsx";
-import { NavButton } from "@comp/navigation/NavButton.tsx";
 import { Select } from "@comp/navigation/Select.tsx";
 import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
 import { Breadcrumbs } from "@comp/navigation/Breadcrumbs.tsx";
 import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
+import { Text } from "@comp/content/Text.tsx";
 
 export const Navbar = async () => {
   const context = getGlobalContext();
@@ -90,11 +90,17 @@ export const Navbar = async () => {
           )}
         </Menu>
 
-        <Menu x-data="themeData" className="h-full">
-          <NavButton
+        <Menu x-data="themeData" className="h-full gap-2">
+          <button
+            type="button"
             x-on:click="themeToggle"
-            x-text="isDarkMode ? 'Light Theme' : 'Dark Theme'"
-          />
+            className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
+          >
+            <Text>
+              <i data-lucide="sun" x-show="isDarkMode" x-cloak></i>
+              <i data-lucide="moon" x-show="!isDarkMode" x-cloak></i>
+            </Text>
+          </button>
           {context.var.isLoggedIn
             ? (
               <Select name="Profile" variant="single" flow="left">
@@ -106,7 +112,7 @@ export const Navbar = async () => {
             : (
               <Link
                 href={context.var.loginUrl}
-                variant="dropdownLink"
+                variant="navLink"
               >
                 Login
               </Link>

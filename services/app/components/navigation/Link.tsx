@@ -20,8 +20,10 @@ const linkVariants = cva("py-3", {
         "block",
         "px-5",
         "text-center",
-        "dark:hover:bg-background-600",
-        "hover:bg-background-200",
+        "dark:bg-surface-dark-alt",
+        "bg-surface-alt",
+        "dark:hover:bg-surface-dark-alt/50",
+        "hover:bg-surface-alt/50",
       ],
     },
   },
@@ -64,13 +66,7 @@ export const Link: FC<Props> = (
       data-active={active}
       className={cn(linkVariants({ variant }), className)}
     >
-      <Text
-        variant="body"
-        className={cn(
-          "group-hover:text-text-200",
-          active && "font-medium text-accent-300 dark:text-accent-200",
-        )}
-      >
+      <Text variant="body">
         {children}
       </Text>
     </a>

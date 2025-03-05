@@ -1,11 +1,11 @@
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Card } from "@comp/layout/Card.tsx";
+import { Card } from "@comp/display/card/Card.tsx";
+import { CardContent } from "@comp/display/card/CardContent.tsx";
+import { CardImage } from "@comp/display/card/CardImage.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
 import { Text } from "@comp/content/Text.tsx";
-import { Img } from "@comp/content/Img.tsx";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 
 type Props = {
@@ -48,24 +48,13 @@ const ResourceCard = ({ resource }: {
   };
 }) => {
   return (
-    <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
-      <div className="aspect-square overflow-hidden">
-        <Img
-          src={resource.url}
-          alt={resource.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      <div className="p-4">
-        <Flex justify="between" items="start" gap="md">
-          <div className="flex-1">
-            <Text variant="h1" className="text-xl font-bold truncate">
-              {resource.name}
-            </Text>
-          </div>
-        </Flex>
-      </div>
+    <Card>
+      <CardImage src={resource.url} alt={resource.name} />
+      <CardContent title={resource.name}>
+        <Text variant="h1" className="text-xl font-bold truncate">
+          {resource.name}
+        </Text>
+      </CardContent>
     </Card>
   );
 };

@@ -2,11 +2,11 @@ import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { db, eq, schema } from "@package/database";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
-import { Card } from "@comp/layout/Card.tsx";
+import { Card } from "@comp/display/card/Card.tsx";
+import { CardContent } from "@comp/display/card/CardContent.tsx";
+import { CardImage } from "@comp/display/card/CardImage.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
-import { Img } from "@comp/content/Img.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 type Props = JSX.IntrinsicElements["div"];
@@ -63,32 +63,18 @@ const ActionCard = ({ action, serverId }: {
   serverId: string;
 }) => {
   return (
-    <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
-      <div className="aspect-square overflow-hidden">
-        <Img
-          src={action.assetUrl}
-          alt={action.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
+    <Card>
+      <CardImage src={action.assetUrl} alt={action.name} />
 
-      <div className="p-4 space-y-4">
-        <Flex justify="between" items="start" className="gap-4">
-          <div className="space-y-2 flex-1">
-            <Text variant="h1" className="text-xl font-bold truncate">
-              {action.name}
-            </Text>
-            {action.description && (
-              <Text
-                variant="body"
-                className="text-sm text-text-500 dark:text-text-400 line-clamp-2"
-              >
-                {action.description}
-              </Text>
-            )}
-          </div>
-        </Flex>
-
+      <CardContent title={action.name}>
+        {action.description && (
+          <Text
+            variant="body"
+            className="text-sm text-text-500 dark:text-text-400 line-clamp-2"
+          >
+            {action.description}
+          </Text>
+        )}
         <div className="flex flex-wrap gap-2">
           <Badge variant="warning" className="flex items-center gap-1">
             <i data-lucide="clock" width={16} height={16}></i>
@@ -116,7 +102,7 @@ const ActionCard = ({ action, serverId }: {
         >
           Configure
         </ButtonLink>
-      </div>
+      </CardContent>
     </Card>
   );
 };

@@ -1,10 +1,10 @@
 import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/layout/Card.tsx";
+import { Card } from "@comp/display/card/Card.tsx";
+import { CardContent } from "@comp/display/card/CardContent.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 import { getGlobalContext, type JSX } from "@kalena/framework";
-import { Flex } from "@comp/layout/Flex.tsx";
 import { visableServersForUser } from "@queries/servers.ts";
 import { throwError } from "@package/common";
 import { Section } from "@comp/layout/Section.tsx";
@@ -57,11 +57,8 @@ const ServerCard = ({ server }: {
   };
 }) => {
   return (
-    <Card className="p-4 space-y-4">
-      <Flex justify="between" items="start">
-        <Text variant="h1" className="text-xl truncate mr-2">
-          {server.name}
-        </Text>
+    <Card>
+      <CardContent title={server.name}>
         <Badge
           variant={server.online ? "success" : "danger"}
           size="sm"
@@ -69,12 +66,12 @@ const ServerCard = ({ server }: {
         >
           {server.online ? "Online" : "Offline"}
         </Badge>
-      </Flex>
-      <ButtonLink
-        href={`/servers/${server.id}`}
-      >
-        Enter
-      </ButtonLink>
+        <ButtonLink
+          href={`/servers/${server.id}`}
+        >
+          Enter
+        </ButtonLink>
+      </CardContent>
     </Card>
   );
 };
