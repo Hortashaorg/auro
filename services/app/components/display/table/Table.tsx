@@ -32,7 +32,7 @@ export const Table: FC<TableProps> = ({
   const tableComponent = (
     <table
       className={cn(
-        "w-full border-collapse",
+        "w-full text-left text-sm text-on-surface dark:text-on-surface-dark",
         className,
       )}
       {...props}
@@ -43,7 +43,7 @@ export const Table: FC<TableProps> = ({
 
   return responsive
     ? (
-      <div className="w-full overflow-x-auto">
+      <div className="overflow-hidden w-full overflow-x-auto rounded-radius border border-outline dark:border-outline-dark">
         {tableComponent}
       </div>
     )

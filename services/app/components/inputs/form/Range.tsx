@@ -3,39 +3,22 @@ import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { FC, JSX } from "@kalena/framework";
 
-const rangeVariants = cva([
-  "w-full",
-  "h-2",
-  "bg-background-200",
-  "dark:bg-background-700",
-  "rounded-lg",
-  "appearance-none",
-  "cursor-pointer",
-  "focus:outline-none",
-  "focus:ring-2",
-  "focus:ring-primary-500",
-  "dark:focus:ring-primary-400",
-  "disabled:opacity-50",
-  "disabled:cursor-not-allowed",
-], {
-  variants: {
-    size: {
-      default: ["h-2"],
-      small: ["h-1.5"],
-      large: ["h-3"],
+const rangeVariants = cva(
+  "h-2 w-full appearance-none bg-on-surface/15 focus:outline-primary dark:bg-on-surface-dark/15 dark:focus:outline-primary-dark [&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:bg-primary dark:[&::-moz-range-thumb]:bg-primary-dark active:[&::-moz-range-thumb]:scale-110 [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:border-none [&::-webkit-slider-thumb]:bg-primary active:[&::-webkit-slider-thumb]:scale-110 dark:[&::-webkit-slider-thumb]:bg-primary-dark [&::-moz-range-thumb]:rounded-full [&::-webkit-slider-thumb]:rounded-full rounded-full",
+  {
+    variants: {
+      state: {
+        default: [],
+        error: [
+          "focus:ring-danger-500",
+        ],
+      },
     },
-    state: {
-      default: [],
-      error: [
-        "focus:ring-danger-500",
-      ],
+    defaultVariants: {
+      state: "default",
     },
   },
-  defaultVariants: {
-    size: "default",
-    state: "default",
-  },
-});
+);
 
 type RangeVariants = NonNullableProps<typeof rangeVariants>;
 
@@ -68,7 +51,6 @@ type Props = Omit<JSX.IntrinsicElements["input"], "type"> & RangeVariants & {
  */
 export const Range: FC<Props> = ({
   className,
-  size,
   state = "default",
   name,
   unitSuffix = "",
@@ -77,11 +59,11 @@ export const Range: FC<Props> = ({
   ...props
 }: Props) => {
   // Base classes that are always applied
-  const baseClasses = cn(rangeVariants({ size, state }), className);
+  const baseClasses = cn(rangeVariants({ state }), className);
 
   // Error state classes to be conditionally applied
   const errorClasses = cn(
-    rangeVariants({ size, state: "error" }),
+    rangeVariants({ state: "error" }),
     className,
   );
 

@@ -1,17 +1,10 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC, JSX } from "@kalena/framework";
 
-type TableHeaderProps = JSX.IntrinsicElements["thead"] & {
-  variant?: "default" | "minimal" | "separated";
-};
+type TableHeaderProps = JSX.IntrinsicElements["thead"];
 
 /**
  * TableHeader component for the header section of tables
- *
- * Features:
- * - Multiple styling variants
- * - Consistent design system integration
- * - Composable with Table and TableRow
  *
  * @example
  * <TableHeader>
@@ -24,15 +17,12 @@ type TableHeaderProps = JSX.IntrinsicElements["thead"] & {
 export const TableHeader: FC<TableHeaderProps> = ({
   children,
   className,
-  variant = "default",
   ...props
 }: TableHeaderProps) => {
   return (
     <thead
       className={cn(
-        variant === "default" && "bg-background-50 dark:bg-background-900",
-        variant === "separated" &&
-          "border-b-2 border-background-300 dark:border-background-700",
+        "border-b border-outline bg-surface-alt text-sm text-on-surface-strong dark:border-outline-dark dark:bg-surface-dark-alt dark:text-on-surface-dark-strong",
         className,
       )}
       {...props}
