@@ -1,12 +1,12 @@
-import { Header } from "@comp/navigation/Header.tsx";
+import { Nav } from "@comp/navigation/Nav.tsx";
 import { Link } from "@comp/navigation/Link.tsx";
 import { Menu } from "@comp/navigation/Menu.tsx";
-import { NavButton } from "@comp/navigation/NavButton.tsx";
 import { Select } from "@comp/navigation/Select.tsx";
 import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
 import { Breadcrumbs } from "@comp/navigation/Breadcrumbs.tsx";
 import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
+import { Text } from "@comp/content/Text.tsx";
 
 export const Navbar = async () => {
   const context = getGlobalContext();
@@ -26,99 +26,103 @@ export const Navbar = async () => {
   const isActive = (path: string) => currentPath.includes(path);
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="bg-background-900 text-text-50 px-5">
-        <Header id="section-navbar" className="h-14 flex items-center">
-          <Menu className="h-full">
-            {!isServer && (
+    <header className="flex flex-col">
+      <Nav id="section-navbar" className="h-14 flex items-center">
+        <Menu className="h-full">
+          {!isServer && (
+            <Link
+              href="/"
+              variant="navLink"
+              active={currentPath === "/"}
+            >
+              Home
+            </Link>
+          )}
+          {context.var.isLoggedIn && !isServer && (
+            <Link
+              href="/servers"
+              variant="navLink"
+              active={currentPath === "/servers"}
+            >
+              Servers
+            </Link>
+          )}
+          {context.var.isLoggedIn && isServer && (
+            <Link
+              href={`/servers/${serverId}`}
+              variant="navLink"
+              active={currentPath === `/servers/${serverId}`}
+            >
+              Overview
+            </Link>
+          )}
+          {context.var.isLoggedIn && isAdmin && (
+            <>
               <Link
-                href="/"
+                href={`/servers/${serverId}/locations`}
                 variant="navLink"
-                active={currentPath === "/"}
+                active={isActive(`/servers/${serverId}/locations`)}
               >
-                Home
+                Locations
               </Link>
-            )}
-            {context.var.isLoggedIn && !isServer && (
               <Link
-                href="/servers"
+                href={`/servers/${serverId}/actions`}
                 variant="navLink"
-                active={currentPath === "/servers"}
+                active={isActive(`/servers/${serverId}/actions`)}
               >
-                Servers
+                Actions
               </Link>
-            )}
-            {context.var.isLoggedIn && isServer && (
               <Link
-                href={`/servers/${serverId}`}
+                href={`/servers/${serverId}/resources`}
                 variant="navLink"
-                active={currentPath === `/servers/${serverId}`}
+                active={isActive(`/servers/${serverId}/resources`)}
               >
-                Overview
+                Resources
               </Link>
-            )}
-            {context.var.isLoggedIn && isAdmin && (
-              <>
-                <Link
-                  href={`/servers/${serverId}/locations`}
-                  variant="navLink"
-                  active={isActive(`/servers/${serverId}/locations`)}
-                >
-                  Locations
-                </Link>
-                <Link
-                  href={`/servers/${serverId}/actions`}
-                  variant="navLink"
-                  active={isActive(`/servers/${serverId}/actions`)}
-                >
-                  Actions
-                </Link>
-                <Link
-                  href={`/servers/${serverId}/resources`}
-                  variant="navLink"
-                  active={isActive(`/servers/${serverId}/resources`)}
-                >
-                  Resources
-                </Link>
-                <Link
-                  href={`/servers/${serverId}/items`}
-                  variant="navLink"
-                  active={isActive(`/servers/${serverId}/items`)}
-                >
-                  Items
-                </Link>
-              </>
-            )}
-          </Menu>
+              <Link
+                href={`/servers/${serverId}/items`}
+                variant="navLink"
+                active={isActive(`/servers/${serverId}/items`)}
+              >
+                Items
+              </Link>
+            </>
+          )}
+        </Menu>
 
-          <Menu x-data="themeData" className="h-full">
-            <NavButton
-              x-on:click="themeToggle"
-              x-text="isDarkMode ? 'Light Theme' : 'Dark Theme'"
-            />
-            {context.var.isLoggedIn
-              ? (
-                <Select name="Profile" variant="single" flow="left">
-                  <Link href={context.var.logoutUrl} variant="dropdownLink">
-                    Logout
-                  </Link>
-                </Select>
-              )
-              : (
-                <Link
-                  href={context.var.loginUrl}
-                  variant="dropdownLink"
-                >
-                  Login
+        <Menu x-data="themeData" className="h-full gap-2">
+          <button
+            type="button"
+            x-on:click="themeToggle"
+            className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
+          >
+            <Text>
+              <i data-lucide="sun" x-show="isDarkMode" x-cloak></i>
+              <i data-lucide="moon" x-show="!isDarkMode" x-cloak></i>
+            </Text>
+          </button>
+          {context.var.isLoggedIn
+            ? (
+              <Select name="Profile" variant="single" flow="left">
+                <Link href={context.var.logoutUrl} variant="dropdownLink">
+                  Logout
                 </Link>
-              )}
-          </Menu>
-        </Header>
-      </div>
+              </Select>
+            )
+            : (
+              <Link
+                href={context.var.loginUrl}
+                variant="navLink"
+              >
+                Login
+              </Link>
+            )}
+        </Menu>
+      </Nav>
 
-      <div className="w-full bg-background-800 text-text-200 py-2.5 px-5">
+      <div className="w-full py-2.5 px-5">
         <Breadcrumbs segments={breadcrumbSegments} />
       </div>
-    </div>
+    </header>
   );
 };

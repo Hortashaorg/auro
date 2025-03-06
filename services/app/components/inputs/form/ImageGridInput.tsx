@@ -1,7 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { cva } from "class-variance-authority";
 import type { FC, JSX } from "@kalena/framework";
-import { Img } from "@comp/content/Img.tsx";
 
 const imageGridVariants = cva([
   "cursor-pointer",
@@ -112,7 +111,7 @@ export const ImageGridInput: FC<Props> = ({
                 imageGridVariants({ state: "selected" })
               }' : '${imageGridVariants({ state: "default" })}'`}
             >
-              <Img
+              <img
                 src={asset.url}
                 alt={`Asset ${asset.id}`}
                 className="h-full w-full"

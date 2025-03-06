@@ -11,7 +11,7 @@ export const ErrorPage500 = () => {
         <Text variant="body" alignment="center">
           Something went wrong on our end. Please try again later.
         </Text>
-        <ButtonLink href="/" variant="primary">
+        <ButtonLink href="/">
           Return Home
         </ButtonLink>
       </Flex>

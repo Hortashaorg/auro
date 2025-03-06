@@ -10,12 +10,7 @@ const selectVariants = cva(
     "grid",
     "rounded-sm",
     "z-20",
-    "bg-primary-50",
     "rounded-lg",
-    "dark:bg-background-700",
-    "dark:border-background-900",
-    "dark:border-2",
-    "bg-background-100",
   ],
   {
     variants: {
@@ -47,10 +42,13 @@ export const Select: FC<Props> = (
     <div {...rest} className={cn("relative", className)}>
       <div x-on:click={`name = name == "${name}" ? "" : "${name}"`}>
         {
-          <button className="group cursor-pointer py-3 px-5" type="button">
+          <button
+            className="hover:bg-surface dark:hover:bg-surface-dark cursor-pointer px-4 relative py-3"
+            type="button"
+          >
             <Text
               variant="body"
-              className="flex items-center justify-between gap-3 dark:group-hover:text-text-300 group-hover:text-text-500"
+              className="flex items-center justify-between gap-3"
             >
               {name}
               <i data-lucide="chevron-down" width={16} height={16}></i>

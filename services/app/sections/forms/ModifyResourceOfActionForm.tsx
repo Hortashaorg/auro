@@ -2,13 +2,13 @@ import { Form } from "@comp/inputs/form/Form.tsx";
 import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { Input } from "@comp/inputs/form/Input.tsx";
 import { Range } from "@comp/inputs/form/Range.tsx";
-import { TableRow } from "@comp/data/TableRow.tsx";
-import { TableCell } from "@comp/data/TableCell.tsx";
+import { TableRow } from "@comp/display/table/TableRow.tsx";
+import { TableCell } from "@comp/display/table/TableCell.tsx";
 import { db, eq, schema } from "@package/database";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
-import { Table } from "@comp/data/Table.tsx";
-import { TableHeader } from "@comp/data/TableHeader.tsx";
-import { TableBody } from "@comp/data/TableBody.tsx";
+import { Table } from "@comp/display/table/Table.tsx";
+import { TableHeader } from "@comp/display/table/TableHeader.tsx";
+import { TableBody } from "@comp/display/table/TableBody.tsx";
 
 type Props = JSX.IntrinsicElements["form"];
 /**

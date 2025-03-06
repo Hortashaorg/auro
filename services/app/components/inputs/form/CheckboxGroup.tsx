@@ -90,18 +90,15 @@ export const CheckboxGroup: FC<CheckboxGroupProps> = ({
                   name={`${name}[]`}
                   value={option.value}
                   checked={isChecked}
-                  className="h-4 w-4 cursor-pointer rounded border-border text-primary focus:ring-1 focus:ring-primary focus:ring-offset-1"
+                  className="before:content[''] peer relative size-4 appearance-none overflow-hidden rounded-sm border border-outline bg-surface-alt before:absolute before:inset-0 checked:border-primary checked:before:bg-primary focus:outline-2 focus:outline-offset-2 focus:outline-outline-strong checked:focus:outline-primary active:outline-offset-0 disabled:cursor-not-allowed dark:border-outline-dark dark:bg-surface-dark-alt dark:checked:border-primary-dark dark:checked:before:bg-primary-dark dark:focus:outline-outline-dark-strong dark:checked:focus:outline-primary-dark"
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <Text
-                  variant="body"
-                  className="text-sm font-medium group-hover:text-primary"
-                >
+                <Text variant="body">
                   {option.label}
                 </Text>
                 {option.description && (
-                  <Text variant="body" className="mt-1 text-xs">
+                  <Text variant="body">
                     {option.description}
                   </Text>
                 )}

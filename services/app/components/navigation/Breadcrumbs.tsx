@@ -38,12 +38,15 @@ export const Breadcrumbs: FC<Props> = ({
 }) => {
   return (
     <nav
-      aria-label="Breadcrumb"
-      className={cn("flex items-center text-sm", className)}
+      aria-label="breadcrumb"
+      className={cn(
+        "text-sm font-medium text-on-surface dark:text-on-surface-dark",
+        className,
+      )}
     >
-      <ol className="flex flex-wrap items-center">
+      <ol className="flex flex-wrap items-center gap-1">
         {segments.map((segment, index) => (
-          <li key={segment.href} className="flex items-center">
+          <li key={segment.href} className="flex items-center gap-1">
             {index > 0 && (
               <i data-lucide="chevron-right" width={16} height={16}></i>
             )}
@@ -52,14 +55,14 @@ export const Breadcrumbs: FC<Props> = ({
               ? (
                 <a
                   href={segment.href}
-                  className="dark:text-primary-100 dark:hover:text-primary-300 transition-colors underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded px-1"
+                  className="hover:text-on-surface-strong dark:hover:text-on-surface-dark-strong"
                 >
                   {segment.label}
                 </a>
               )
               : (
                 <span
-                  className="font-medium text-text-100 px-1"
+                  className="text-on-surface-strong font-bold dark:text-on-surface-dark-strong"
                   aria-current="page"
                 >
                   {segment.label}

@@ -28,13 +28,11 @@ export const TabsTrigger: FC<TabsTriggerProps> = ({
     <button
       type="button"
       className={cn(
-        "px-4 py-2 text-sm font-medium rounded-md transition-all",
-        "focus:outline-none focus:ring-1 focus:ring-background-300 dark:focus:ring-background-600",
-        "text-text-600 hover:text-text-900 dark:text-background-300 dark:hover:text-text-50 hover:bg-background-50 dark:hover:bg-background-700",
+        "text-on-surface font-medium dark:text-on-surface-dark dark:hover:border-b-outline-dark-strong dark:hover:text-on-surface-dark-strong hover:border-b-2 hover:border-b-outline-strong hover:text-on-surface-strong px-2 py-4",
         className,
       )}
       x-bind:class={`activeTab === '${tabId}' 
-        ? 'bg-background-50 dark:bg-background-700 dark:text-text-50 shadow-sm' 
+        ? 'font-bold text-primary border-b-2 border-primary dark:border-primary-dark dark:text-primary-dark' 
         : ''`}
       x-on:click={`activeTab = '${tabId}'`}
       x-trigger
