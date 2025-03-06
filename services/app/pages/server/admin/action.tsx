@@ -55,7 +55,7 @@ const TabsSection = (
 ) => {
   return (
     <Tabs initialTabId="rewards">
-      <TabsList className="mb-6">
+      <TabsList>
         <TabsTrigger tabId="rewards">Rewards</TabsTrigger>
         <TabsTrigger tabId="history">History</TabsTrigger>
         <TabsTrigger tabId="settings">Settings</TabsTrigger>

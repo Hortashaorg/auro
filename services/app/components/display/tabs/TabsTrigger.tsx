@@ -28,7 +28,7 @@ export const TabsTrigger: FC<TabsTriggerProps> = ({
     <button
       type="button"
       className={cn(
-        "text-on-surface font-medium dark:text-on-surface-dark dark:hover:border-b-outline-dark-strong dark:hover:text-on-surface-dark-strong hover:border-b-2 hover:border-b-outline-strong hover:text-on-surface-strong",
+        "text-on-surface font-medium dark:text-on-surface-dark dark:hover:border-b-outline-dark-strong dark:hover:text-on-surface-dark-strong hover:border-b-2 hover:border-b-outline-strong hover:text-on-surface-strong px-2 py-4",
         className,
       )}
       x-bind:class={`activeTab === '${tabId}' 

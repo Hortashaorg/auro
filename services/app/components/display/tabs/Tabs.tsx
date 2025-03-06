@@ -33,7 +33,8 @@ export const Tabs: FC<TabsProps> = ({
   return (
     <div
       className={cn(
-        "px-2 py-4 text-on-surface dark:text-on-surface-dark",
+        "text-on-surface dark:text-on-surface-dark border rounded-sm border-outline dark:border-outline-dark w-full",
+        "bg-surface-alt dark:bg-surface-dark-alt",
         className,
       )}
       x-data={`{ 
