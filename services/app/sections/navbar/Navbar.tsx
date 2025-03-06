@@ -120,7 +120,7 @@ export const Navbar = async () => {
         </Menu>
       </Nav>
 
-      <div className="w-full py-2.5 px-5 border-b border-t border-outline dark:border-outline-dark">
+      <div className="w-full py-2.5 px-5">
         <Breadcrumbs segments={breadcrumbSegments} />
       </div>
     </header>
