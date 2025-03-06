@@ -32,7 +32,10 @@ export const Tabs: FC<TabsProps> = ({
 }: TabsProps) => {
   return (
     <div
-      className={cn("w-full", className)}
+      className={cn(
+        "px-2 py-4 text-on-surface dark:text-on-surface-dark",
+        className,
+      )}
       x-data={`{ 
         activeTab: '${initialTabId}',
       }`}
