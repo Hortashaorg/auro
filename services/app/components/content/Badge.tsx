@@ -4,12 +4,13 @@ import type { FC, JSX } from "@kalena/framework";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 
 const badgeVariants = cva([
-  "inline-flex",
-  "items-center",
-  "rounded-full",
+  "rounded-radius",
+  "w-fit",
+  "border",
+  "px-2",
+  "py-1",
+  "text-xs",
   "font-medium",
-  "transition-colors",
-  "focus:outline-none",
   "focus:ring-2",
   "focus:ring-primary-400",
   "focus:ring-offset-2",
@@ -17,45 +18,73 @@ const badgeVariants = cva([
   variants: {
     variant: {
       default: [
-        "bg-primary-100",
-        "text-primary-800",
-        "dark:bg-primary-800",
-        "dark:text-primary-100",
+        "border-outline",
+        "bg-surface-alt",
+        "text-on-surface",
+        "dark:border-outline-dark",
+        "dark:bg-surface-dark-alt",
+        "dark:text-on-surface-dark",
+      ],
+      inverse: [
+        "border-outline-dark",
+        "bg-surface-dark-alt",
+        "text-on-surface-dark",
+        "dark:border-outline",
+        "dark:bg-surface-alt",
+        "dark:text-on-surface",
+      ],
+      primary: [
+        "border-primary",
+        "bg-primary",
+        "text-on-primary",
+        "dark:border-primary-dark",
+        "dark:bg-primary-dark",
+        "dark:text-on-primary-dark",
       ],
       secondary: [
-        "bg-secondary-100",
-        "text-secondary-800",
-        "dark:bg-secondary-800",
-        "dark:text-secondary-100",
+        "border-secondary",
+        "bg-secondary",
+        "text-on-secondary",
+        "dark:border-secondary-dark",
+        "dark:bg-secondary-dark",
+        "dark:text-on-secondary-dark",
+      ],
+      info: [
+        "border-info",
+        "bg-info",
+        "text-on-info",
+        "dark:border-info",
+        "dark:bg-info",
+        "dark:text-on-info",
       ],
       success: [
-        "bg-success-100",
-        "text-success-800",
-        "dark:bg-success-800",
-        "dark:text-success-100",
-      ],
-      danger: [
-        "bg-danger-100",
-        "text-danger-800",
-        "dark:bg-danger-800",
-        "dark:text-danger-100",
+        "border-success",
+        "bg-success",
+        "text-on-success",
+        "dark:border-success",
+        "dark:bg-success",
+        "dark:text-on-success",
       ],
       warning: [
-        "bg-warning-100",
-        "text-warning-800",
-        "dark:bg-warning-800",
-        "dark:text-warning-100",
+        "border-warning",
+        "bg-warning",
+        "text-on-warning",
+        "dark:border-warning",
+        "dark:bg-warning",
+        "dark:text-on-warning",
       ],
-    },
-    size: {
-      sm: "px-2.5 py-0.5 text-xs",
-      default: "px-3 py-1 text-sm",
-      lg: "px-4 py-1.5 text-base",
+      danger: [
+        "border-danger",
+        "bg-danger",
+        "text-on-danger",
+        "dark:border-danger",
+        "dark:bg-danger",
+        "dark:text-on-danger",
+      ],
     },
   },
   defaultVariants: {
     variant: "default",
-    size: "default",
   },
 });
 
@@ -67,25 +96,24 @@ type Props = JSX.IntrinsicElements["span"] & BadgeVariants;
  *
  * Features:
  * - Multiple color variants (default, secondary, success, danger, warning)
- * - Three size options (sm, default, lg)
  * - Consistent styling with proper dark mode support
  * - Focus states for accessibility
  *
  * @example
  * <Badge>Default</Badge>
  *
- * <Badge variant="success" size="sm">
+ * <Badge variant="success">
  *   Completed
  * </Badge>
  *
- * <Badge variant="danger" size="lg">
+ * <Badge variant="danger">
  *   Critical
  * </Badge>
  */
-export const Badge: FC<Props> = ({ className, variant, size, ...props }) => {
+export const Badge: FC<Props> = ({ className, variant, ...props }) => {
   return (
     <span
-      className={cn(badgeVariants({ variant, size }), className)}
+      className={cn(badgeVariants({ variant }), className)}
       {...props}
     />
   );

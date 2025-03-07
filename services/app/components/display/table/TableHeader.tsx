@@ -22,7 +22,7 @@ export const TableHeader: FC<TableHeaderProps> = ({
   return (
     <thead
       className={cn(
-        "border-b border-outline bg-primary text-sm text-on-primary dark:border-outline-dark dark:bg-primary-dark dark:text-on-primary-dark",
+        "border-b border-outline text-sm text-on-surface-strong dark:border-outline-dark dark:text-on-surface-dark-strong",
         className,
       )}
       {...props}

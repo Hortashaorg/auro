@@ -28,7 +28,7 @@ export const TableBody: FC<TableBodyProps> = ({
   return (
     <tbody
       className={cn(
-        "divide-y divide-outline dark:divide-outline-dark bg-surface dark:bg-surface-dark",
+        "divide-y divide-outline dark:divide-outline-dark",
         className,
       )}
       {...props}
