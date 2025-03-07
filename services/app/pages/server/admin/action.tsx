@@ -68,10 +68,10 @@ const TabsSection = (
 
         <div x-data="{ formIsDirty: false }">
           <div className="mb-4">
-            <Text variant="h3" className="text-lg font-semibold">
+            <Text variant="h3">
               Resource Rewards
             </Text>
-            <Text variant="body" className="text-text-500 dark:text-text-400">
+            <Text variant="body">
               Resources that players can gather from this action
             </Text>
           </div>
@@ -97,13 +97,13 @@ const TabsSection = (
       </Tab>
 
       <Tab tabId="history">
-        <Text variant="h3" className="text-xl font-bold mb-6">
+        <Text variant="h3">
           Usage History for {actionName}
         </Text>
       </Tab>
 
       <Tab tabId="settings">
-        <Text variant="h3" className="text-xl font-bold mb-6">
+        <Text variant="h3">
           {actionName} Settings
         </Text>
       </Tab>
