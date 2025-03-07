@@ -1,6 +1,6 @@
 import { Layout } from "@sections/layout/Layout.tsx";
 import { Text } from "@comp/content/Text.tsx";
-import { Info } from "@comp/feedback/Info.tsx";
+import { Alert } from "@comp/feedback/Alert.tsx";
 import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";
 
@@ -9,9 +9,9 @@ const Home = () => {
     <Layout title="Home">
       <Text variant="h1" className="mb-8">Home page</Text>
 
-      <Info variant="warning" className="mb-8">
-        <Text>This is a warning</Text>
-      </Info>
+      <Alert variant="warning" title="This is a warning">
+        This is some warning text stuff
+      </Alert>
     </Layout>
   );
 };

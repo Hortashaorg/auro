@@ -7,7 +7,7 @@ const textVariants = cva([], {
   variants: {
     variant: {
       h1: [
-        "text-5xl",
+        "text-3xl",
         "font-bold",
         "dark:text-on-surface-dark-strong",
         "text-on-surface-strong",
@@ -15,7 +15,7 @@ const textVariants = cva([], {
         "tracking-normal",
       ],
       h2: [
-        "text-4xl",
+        "text-2xl",
         "font-bold",
         "dark:text-on-surface-dark-strong",
         "text-on-surface-strong",
@@ -23,7 +23,7 @@ const textVariants = cva([], {
         "tracking-normal",
       ],
       h3: [
-        "text-3xl",
+        "text-lg",
         "font-semibold",
         "dark:text-on-surface-dark-strong",
         "text-on-surface-strong",
