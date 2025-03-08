@@ -34,7 +34,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="action-section">
-      <Grid gap="lg" content="medium">
+      <Grid gap="lg" content="small">
         {actions.map((action) => (
           <ActionCard
             key={action.id}

@@ -27,7 +27,5 @@ CI/CD
 
 Components To refactor:
 All Form Components + Inputs (Done with Button + Range)
-All the layout components. Are we happy with them?
-Modal components
 Tooltip
 Scrollbar nice and thin/rounded

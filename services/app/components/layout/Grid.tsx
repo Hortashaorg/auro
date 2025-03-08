@@ -6,9 +6,9 @@ import type { FC, JSX } from "@kalena/framework";
 const gridVariants = cva("grid", {
   variants: {
     content: {
-      large: "grid-cols-[repeat(auto-fill,minmax(24rem,1fr))]",
-      medium: "grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]",
-      small: "grid-cols-[repeat(auto-fill,minmax(12rem,1fr))]",
+      large: "grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+      medium: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+      small: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
     },
     gap: {
       sm: "gap-2",

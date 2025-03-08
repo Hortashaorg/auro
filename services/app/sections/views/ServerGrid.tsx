@@ -29,7 +29,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
       {adminServers.length > 0 && (
         <Section>
           <Text variant="h2">My Servers</Text>
-          <Grid gap="md" content="medium">
+          <Grid gap="md" content="small">
             {adminServers.map((server) => (
               <ServerCard key={server.id} server={server} />
             ))}
@@ -39,7 +39,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
 
       <Section>
         <Text variant="h2">Available Servers</Text>
-        <Grid gap="md" content="medium">
+        <Grid gap="md" content="small">
           {publicServers.map((server) => (
             <ServerCard key={server.id} server={server} />
           ))}

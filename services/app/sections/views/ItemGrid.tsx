@@ -33,7 +33,7 @@ export const ItemGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="item-section">
-      <Grid gap="lg" content="medium">
+      <Grid gap="lg" content="small">
         {items.map((item) => (
           <ItemCard
             key={item.id}
