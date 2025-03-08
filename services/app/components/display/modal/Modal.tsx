@@ -3,8 +3,32 @@ import { Flex } from "@comp/layout/Flex.tsx";
 import { Button } from "@comp/inputs/Button.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import type { FC, JSX } from "@kalena/framework";
+import { cva } from "class-variance-authority";
+import type { NonNullableProps } from "@comp/utils/types.ts";
 
-type Props = JSX.IntrinsicElements["dialog"] & {
+const modalVariants = cva([
+  "fixed inset-0 m-auto",
+  "w-full",
+  "rounded-lg",
+  "dark:bg-surface-dark-alt",
+  "bg-surface-alt",
+], {
+  variants: {
+    maxWidth: {
+      sm: "max-w-sm",
+      md: "max-w-md",
+      lg: "max-w-lg",
+      xl: "max-w-xl",
+    },
+  },
+  defaultVariants: {
+    maxWidth: "md",
+  },
+});
+
+type ModalVariants = NonNullableProps<typeof modalVariants>;
+
+type Props = JSX.IntrinsicElements["dialog"] & ModalVariants & {
   title: string;
   modalRef: string;
 };
@@ -50,6 +74,7 @@ export const Modal: FC<Props> = ({
   children,
   className,
   modalRef,
+  maxWidth,
   ...props
 }: Props) => {
   props["x-on:close-dialog.window"] = `$refs.${modalRef}.close()`;
@@ -58,13 +83,7 @@ export const Modal: FC<Props> = ({
   return (
     <dialog
       className={cn(
-        "fixed inset-0 m-auto",
-        "backdrop:bg-background-950/50",
-        "w-full max-w-md",
-        "rounded-lg",
-        "dark:bg-background-800 bg-background-100",
-        "border dark:border-background-700 border-background-300",
-        "shadow-lg",
+        modalVariants({ maxWidth }),
         className,
       )}
       x-ref={modalRef}
@@ -75,8 +94,8 @@ export const Modal: FC<Props> = ({
           <Text variant="h1" className="text-xl">{title}</Text>
           <Button
             type="button"
-            variant="secondary"
-            className="p-2 border-0 hover:bg-background-200 dark:hover:bg-background-700 rounded-full"
+            variant="inverse"
+            buttonSize="sm"
             x-on:click={`$refs.${modalRef}.close()`}
           >
             <i data-lucide="x"></i>

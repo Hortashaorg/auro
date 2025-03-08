@@ -26,7 +26,6 @@ CI/CD
 - Typecheck, formatting, linting
 
 Components To refactor:
-Spinner
 All Form Components + Inputs (Done with Button + Range)
 All the layout components. Are we happy with them?
 Modal components

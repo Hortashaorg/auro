@@ -39,7 +39,7 @@ export const FormControl: FC<Props> = ({
       {hint && (
         <Text
           variant="body"
-          className="mt-1 text-sm text-text-500 dark:text-text-400"
+          className="mt-1 text-sm text-on-surface dark:text-on-surface-dark"
         >
           {hint}
         </Text>

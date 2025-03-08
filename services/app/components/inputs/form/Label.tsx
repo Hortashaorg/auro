@@ -7,14 +7,14 @@ const labelVariants = cva([
   "block",
   "text-base",
   "font-normal",
-  "dark:text-text-200",
-  "text-text-800",
-  "font-body",
+  "dark:text-on-surface-dark-strong",
+  "text-on-surface-strong",
+  "font-bold",
   "mb-2",
 ], {
   variants: {
     required: {
-      true: ["after:content-['*']", "after:ml-0.5", "after:text-danger-500"],
+      true: ["after:content-['*']", "after:ml-0.5", "after:text-danger"],
     },
     size: {
       default: ["text-base"],
