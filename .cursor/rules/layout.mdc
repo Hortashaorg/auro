@@ -1,6 +1,7 @@
 ---
 description: How to work with layout type components
-globs: *.tsx
+globs: 
+alwaysApply: false
 ---
 - Use consistent spacing scales
 - Implement responsive patterns

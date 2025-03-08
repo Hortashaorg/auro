@@ -1,6 +1,7 @@
 ---
 description: Typescript is strictly enfroced and we have some repeating typescript patterns.
 globs: 
+alwaysApply: false
 ---
 # TypeScript Rules
 

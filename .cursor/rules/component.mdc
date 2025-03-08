@@ -1,6 +1,6 @@
 ---
 description: Patterns that are important to follow  when creating components
-globs: **/components/**/*.tsx
+globs: 
 alwaysApply: false
 ---
 # Component Rules

@@ -1,6 +1,6 @@
 ---
 description: Pages that users can navigate to and how you can build one.
-globs: **/pages/**/*.tsx
+globs: 
 alwaysApply: false
 ---
 # Page rules
