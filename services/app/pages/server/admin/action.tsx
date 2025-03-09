@@ -4,16 +4,17 @@ import { Layout } from "@sections/layout/Layout.tsx";
 import { Text } from "@comp/content/Text.tsx";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
-import { Tab } from "@comp/layout/tabs/Tab.tsx";
-import { Tabs } from "@comp/layout/tabs/Tabs.tsx";
-import { TabsList } from "@comp/layout/tabs/TabsList.tsx";
-import { TabsTrigger } from "@comp/layout/tabs/TabsTrigger.tsx";
-import { Button } from "@comp/inputs/Button.tsx";
-import { Modal } from "@comp/overlay/modal/Modal.tsx";
-import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
+import { Tab } from "@comp/display/tabs/Tab.tsx";
+import { Tabs } from "@comp/display/tabs/Tabs.tsx";
+import { TabsList } from "@comp/display/tabs/TabsList.tsx";
+import { TabsTrigger } from "@comp/display/tabs/TabsTrigger.tsx";
+import { Modal } from "@comp/display/modal/Modal.tsx";
+import { ModalButton } from "@comp/display/modal/ModalButton.tsx";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
 import { Flex } from "@comp/layout/Flex.tsx";
+import { FormContext } from "@comp/inputs/form/FormContext.tsx";
+import { FormButton } from "@comp/inputs/form/FormButton.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -37,8 +38,6 @@ const ActionDetail = async () => {
     <Layout title={`Action - ${action.name}`}>
       <TabsSection
         actionName={action.name}
-        serverId={serverId}
-        actionId={actionId}
       />
     </Layout>
   );
@@ -46,8 +45,6 @@ const ActionDetail = async () => {
 
 type TabsSectionProps = {
   actionName: string;
-  serverId: string;
-  actionId: string;
 };
 
 const TabsSection = (
@@ -55,7 +52,7 @@ const TabsSection = (
 ) => {
   return (
     <Tabs initialTabId="rewards">
-      <TabsList className="mb-6">
+      <TabsList>
         <TabsTrigger tabId="rewards">Rewards</TabsTrigger>
         <TabsTrigger tabId="history">History</TabsTrigger>
         <TabsTrigger tabId="settings">Settings</TabsTrigger>
@@ -66,44 +63,44 @@ const TabsSection = (
           {actionName}
         </Text>
 
-        <div x-data="{ formIsDirty: false }">
+        <FormContext formId="modify-resource-of-action-form">
           <div className="mb-4">
-            <Text variant="h3" className="text-lg font-semibold">
+            <Text variant="h3">
               Resource Rewards
             </Text>
-            <Text variant="body" className="text-text-500 dark:text-text-400">
+            <Text variant="body">
               Resources that players can gather from this action
             </Text>
           </div>
 
           <ModifyResourceOfActionForm />
 
+          <Flex gap="md">
+            <ModalButton modalRef="addResourceModal">Add Resource</ModalButton>
+            <FormButton
+              formId="modify-resource-of-action-form"
+              variant="primary"
+              disableWhenClean
+              disableDuringSubmit
+            >
+              Save Resources
+            </FormButton>
+          </Flex>
+
           <Modal modalRef="addResourceModal" title="Add Resource">
             <AddResourceToActionForm />
           </Modal>
-
-          <Flex gap="md">
-            <ModalButton modalRef="addResourceModal">Add Resource</ModalButton>
-            <Button
-              variant="primary"
-              type="submit"
-              form="modify-resource-of-action-form"
-              x-bind:disabled="!formIsDirty"
-            >
-              Save Resources
-            </Button>
-          </Flex>
-        </div>
+        </FormContext>
       </Tab>
 
       <Tab tabId="history">
-        <Text variant="h3" className="text-xl font-bold mb-6">
+        <Text variant="h3">
           Usage History for {actionName}
         </Text>
       </Tab>
 
       <Tab tabId="settings">
-        <Text variant="h3" className="text-xl font-bold mb-6">
+        <Text variant="h3">
           {actionName} Settings
         </Text>
       </Tab>

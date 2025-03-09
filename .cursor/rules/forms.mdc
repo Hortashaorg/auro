@@ -1,6 +1,6 @@
 ---
 description: Writing forms
-globs: *.tsx
+globs: 
 alwaysApply: false
 ---
  # Form Rules

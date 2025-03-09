@@ -33,9 +33,7 @@ export const Tab: FC<TabProps> = ({
     <div
       id={tabId}
       className={cn(
-        "p-6 rounded-lg",
-        "bg-background-50 dark:bg-background-900 dark:text-text-50",
-        "animate-fadeIn",
+        "px-2 py-4",
         className,
       )}
       x-show={`activeTab === '${tabId}'`}

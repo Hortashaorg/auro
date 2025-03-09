@@ -1,8 +1,8 @@
 import { createRoute } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { ModalButton } from "@comp/overlay/modal/ModalButton.tsx";
-import { Modal } from "@comp/overlay/modal/Modal.tsx";
+import { ModalButton } from "@comp/display/modal/ModalButton.tsx";
+import { Modal } from "@comp/display/modal/Modal.tsx";
 import { LocationGrid } from "@sections/views/LocationGrid.tsx";
 import { CreateLocationForm } from "@sections/forms/CreateLocationForm.tsx";
 

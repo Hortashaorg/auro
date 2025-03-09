@@ -32,7 +32,11 @@ export const Tabs: FC<TabsProps> = ({
 }: TabsProps) => {
   return (
     <div
-      className={cn("w-full", className)}
+      className={cn(
+        "text-on-surface dark:text-on-surface-dark border rounded-sm border-outline dark:border-outline-dark w-full",
+        "bg-surface-alt dark:bg-surface-dark-alt",
+        className,
+      )}
       x-data={`{ 
         activeTab: '${initialTabId}',
       }`}

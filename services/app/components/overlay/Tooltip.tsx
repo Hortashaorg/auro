@@ -17,16 +17,16 @@ const tooltipVariants = cva([
   variants: {
     variant: {
       dark: [
-        "bg-background-800",
-        "text-text-100",
-        "dark:bg-background-700",
-        "dark:text-text-100",
+        "bg-surface-dark",
+        "text-on-surface-dark-strong",
+        "dark:bg-surface-dark-alt",
+        "dark:text-on-surface-dark-strong",
       ],
       light: [
-        "bg-background-100",
-        "text-text-800",
-        "dark:bg-background-200",
-        "dark:text-text-800",
+        "bg-surface-alt",
+        "text-on-surface-strong",
+        "dark:bg-surface-alt",
+        "dark:text-on-surface-strong",
       ],
     },
     position: {

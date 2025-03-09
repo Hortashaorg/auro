@@ -1,6 +1,7 @@
 ---
 description: Global Context and route specific context
-globs: *.tsx
+globs: 
+alwaysApply: false
 ---
 # Context Types in the Framework
 

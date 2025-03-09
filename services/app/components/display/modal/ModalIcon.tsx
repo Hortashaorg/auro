@@ -17,8 +17,8 @@ const modalIconVariants = cva(
     variants: {
       variant: {
         default: [
-          "hover:bg-background-200",
-          "dark:hover:bg-background-700",
+          "hover:bg-surface-alt",
+          "dark:hover:bg-surface-dark-alt",
         ],
       },
     },
@@ -73,7 +73,7 @@ export const ModalIcon: FC<Props> = (
       {...props}
     >
       <i data-lucide={icon}></i>
-      <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-background-800 dark:bg-background-700 text-text-100 px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+      <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-surface-dark dark:bg-surface-dark-alt text-on-surface-dark-strong px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
         {label}
       </span>
     </button>

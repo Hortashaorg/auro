@@ -1,18 +1,18 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC, JSX } from "@kalena/framework";
 
-type Props = JSX.IntrinsicElements["nav"];
+type Props = JSX.IntrinsicElements["ul"];
 
 export const Menu: FC<Props> = ({ className, children, ...rest }: Props) => {
   return (
-    <nav
+    <div
       {...rest}
       className={cn(
-        "flex font-medium gap-5",
+        "hidden items-center md:flex",
         className,
       )}
     >
       {children}
-    </nav>
+    </div>
   );
 };

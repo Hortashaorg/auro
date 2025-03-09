@@ -1,6 +1,7 @@
 ---
 description: Important for client side behaviour of components
-globs: *.tsx
+globs: 
+alwaysApply: false
 ---
 # Alpine.js State Management Rules
 

@@ -89,17 +89,16 @@ const ChangeActionResourceRewards = async () => {
     }
   }
 
-  context.header(
-    "HX-Trigger",
-    createEvents([
-      {
-        name: "form-error",
-        values: errorEvents,
-      },
-    ]),
-  );
-
   if (Object.keys(errorEvents).length > 0) {
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        {
+          name: "form-error",
+          values: errorEvents,
+        },
+      ]),
+    );
     return <p>Invalid form data</p>;
   }
 
@@ -128,6 +127,18 @@ const ChangeActionResourceRewards = async () => {
       ],
     });
 
+    // Trigger events to update the UI using the correct format
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        {
+          name: "clear-form",
+          values: { value: true },
+        },
+      ]),
+    );
+
+    // Return the updated form content
     return <ModifyResourceOfActionForm hx-swap-oob="true" />;
   } catch (error) {
     console.error("Error updating resources:", error);

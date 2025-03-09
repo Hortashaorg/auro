@@ -11,7 +11,7 @@ export const ErrorPage404 = () => {
         <Text variant="body" alignment="center">
           The page you're looking for doesn't exist or has been moved.
         </Text>
-        <ButtonLink href="/" variant="primary">
+        <ButtonLink href="/">
           Return Home
         </ButtonLink>
       </Flex>
