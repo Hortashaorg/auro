@@ -26,6 +26,12 @@ CI/CD
 - Typecheck, formatting, linting
 
 Components To refactor:
-All Form Components + Inputs (Done with Button + Range)
+FormSection
+ImageGridInput
+Input
+Range
+Textarea
+SelectInput
+
 Tooltip
 Scrollbar nice and thin/rounded

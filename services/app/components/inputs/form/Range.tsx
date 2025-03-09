@@ -10,7 +10,7 @@ const rangeVariants = cva(
       state: {
         default: [],
         error: [
-          "focus:ring-danger-500",
+          "focus:ring-danger",
         ],
       },
     },
