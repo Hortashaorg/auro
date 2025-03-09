@@ -78,21 +78,22 @@ const TabsSection = (
 
           <ModifyResourceOfActionForm />
 
-          <Modal modalRef="addResourceModal" title="Add Resource">
-            <AddResourceToActionForm />
-          </Modal>
-
           <Flex gap="md">
             <ModalButton modalRef="addResourceModal">Add Resource</ModalButton>
             <Button
+              id="modify-resource-of-action-button"
               variant="primary"
               type="submit"
-              form="modify-resource-of-action-form"
               x-bind:disabled="!formIsDirty"
+              form="modify-resource-of-action-form"
             >
               Save Resources
             </Button>
           </Flex>
+
+          <Modal modalRef="addResourceModal" title="Add Resource">
+            <AddResourceToActionForm />
+          </Modal>
         </div>
       </Tab>
 

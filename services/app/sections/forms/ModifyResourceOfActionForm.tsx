@@ -48,7 +48,7 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
       hx-swap="none"
       id="modify-resource-of-action-form"
       x-on:input="formIsDirty = true"
-      x-on:submit="formIsDirty = false"
+      hx-disabled-elt="#modify-resource-of-action-button"
     >
       <Table>
         <TableHeader>
