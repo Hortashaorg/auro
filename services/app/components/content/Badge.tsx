@@ -12,7 +12,7 @@ const badgeVariants = cva([
   "text-xs",
   "font-medium",
   "focus:ring-2",
-  "focus:ring-primary-400",
+  "focus:ring-primary",
   "focus:ring-offset-2",
 ], {
   variants: {

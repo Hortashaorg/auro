@@ -68,10 +68,7 @@ const ActionCard = ({ action, serverId }: {
 
       <CardContent title={action.name}>
         {action.description && (
-          <Text
-            variant="body"
-            className="text-sm text-text-500 dark:text-text-400 line-clamp-2"
-          >
+          <Text variant="body">
             {action.description}
           </Text>
         )}

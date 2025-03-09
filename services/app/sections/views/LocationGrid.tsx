@@ -45,7 +45,7 @@ const LocationCard = ({ location }: {
   };
 }) => {
   return (
-    <Card className="group hover:ring-2 hover:ring-primary-500 transition-all">
+    <Card>
       <CardImage src={location.url} alt={location.name} />
       <CardContent title={location.name}>
         <Text variant="h1" className="text-xl font-bold truncate">
