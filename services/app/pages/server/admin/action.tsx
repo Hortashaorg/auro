@@ -8,12 +8,13 @@ import { Tab } from "@comp/display/tabs/Tab.tsx";
 import { Tabs } from "@comp/display/tabs/Tabs.tsx";
 import { TabsList } from "@comp/display/tabs/TabsList.tsx";
 import { TabsTrigger } from "@comp/display/tabs/TabsTrigger.tsx";
-import { Button } from "@comp/inputs/Button.tsx";
 import { Modal } from "@comp/display/modal/Modal.tsx";
 import { ModalButton } from "@comp/display/modal/ModalButton.tsx";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
 import { Flex } from "@comp/layout/Flex.tsx";
+import { FormContext } from "@comp/inputs/form/FormContext.tsx";
+import { FormButton } from "@comp/inputs/form/FormButton.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -37,8 +38,6 @@ const ActionDetail = async () => {
     <Layout title={`Action - ${action.name}`}>
       <TabsSection
         actionName={action.name}
-        serverId={serverId}
-        actionId={actionId}
       />
     </Layout>
   );
@@ -46,8 +45,6 @@ const ActionDetail = async () => {
 
 type TabsSectionProps = {
   actionName: string;
-  serverId: string;
-  actionId: string;
 };
 
 const TabsSection = (
@@ -66,7 +63,7 @@ const TabsSection = (
           {actionName}
         </Text>
 
-        <div x-data="{ formIsDirty: false }">
+        <FormContext formId="modify-resource-of-action-form">
           <div className="mb-4">
             <Text variant="h3">
               Resource Rewards
@@ -80,21 +77,20 @@ const TabsSection = (
 
           <Flex gap="md">
             <ModalButton modalRef="addResourceModal">Add Resource</ModalButton>
-            <Button
-              id="modify-resource-of-action-button"
+            <FormButton
+              formId="modify-resource-of-action-form"
               variant="primary"
-              type="submit"
-              x-bind:disabled="!formIsDirty"
-              form="modify-resource-of-action-form"
+              disableWhenClean
+              disableDuringSubmit
             >
               Save Resources
-            </Button>
+            </FormButton>
           </Flex>
 
           <Modal modalRef="addResourceModal" title="Add Resource">
             <AddResourceToActionForm />
           </Modal>
-        </div>
+        </FormContext>
       </Tab>
 
       <Tab tabId="history">

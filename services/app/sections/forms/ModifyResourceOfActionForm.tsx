@@ -18,6 +18,7 @@ type Props = JSX.IntrinsicElements["form"];
  * - Renders table rows for each resource
  * - Handles resource rewards editing
  * - Provides form controls for each field
+ * - Works with FormContext for state management
  */
 export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
   const globalContext = getGlobalContext();
@@ -47,8 +48,6 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
       hx-post={`/api/servers/${serverId}/actions/${actionId}/resource-rewards/change`}
       hx-swap="none"
       id="modify-resource-of-action-form"
-      x-on:input="formIsDirty = true"
-      hx-disabled-elt="#modify-resource-of-action-button"
     >
       <Table>
         <TableHeader>
