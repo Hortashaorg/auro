@@ -9,8 +9,8 @@ const formSectionVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-border-200",
-        subtle: "border-border-100",
+        default: "border-outline",
+        subtle: "border-outline/50",
         none: "border-transparent",
       },
       spacingBottom: {
@@ -77,7 +77,7 @@ export const FormSection: FC<FormSectionProps> = ({
       )}
 
       {description && (
-        <Text variant="body" className="mb-4 text-text-500">
+        <Text variant="body" className="mb-4 text-on-surface">
           {description}
         </Text>
       )}

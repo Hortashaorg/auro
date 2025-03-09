@@ -18,23 +18,23 @@ const imageGridVariants = cva([
       default: [
         "border-2",
         "border-transparent",
-        "hover:border-primary-400",
-        "dark:hover:border-primary-600",
+        "hover:border-primary",
+        "dark:hover:border-primary-dark",
         "hover:ring-2",
-        "hover:ring-primary-400/20",
-        "dark:hover:ring-primary-600/20",
+        "hover:ring-primary/20",
+        "dark:hover:ring-primary-dark/20",
       ],
       selected: [
         "border-2",
-        "border-primary-500",
-        "dark:border-primary-400",
+        "border-primary",
+        "dark:border-primary-dark",
         "ring-4",
-        "ring-primary-500/30",
-        "dark:ring-primary-400/30",
+        "ring-primary/30",
+        "dark:ring-primary-dark/30",
         "outline",
         "outline-2",
-        "outline-primary-500",
-        "dark:outline-primary-400",
+        "outline-primary",
+        "dark:outline-primary-dark",
       ],
     },
   },
@@ -98,7 +98,7 @@ export const ImageGridInput: FC<Props> = ({
         {...props}
         x-model="selectedAsset"
       />
-      <div className="max-h-64 overflow-y-auto rounded-md border border-background-300 dark:border-background-700 p-4">
+      <div className="max-h-64 overflow-y-auto rounded-md border border-outline dark:border-outline-dark p-4">
         <div className="grid grid-cols-3 gap-4 justify-items-center">
           {assets.map((asset) => (
             <div

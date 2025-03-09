@@ -82,7 +82,7 @@ export const Range: FC<Props> = ({
       />
       {showValue && (
         <span
-          className="w-12 text-right text-sm text-text-700 dark:text-text-300"
+          className="w-12 text-right text-sm text-on-surface dark:text-on-surface-dark"
           x-text={`value + '${unitSuffix}'`}
         />
       )}
