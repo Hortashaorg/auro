@@ -77,7 +77,7 @@ const TabsSection = (
 
           <ButtonGroup className="mt-4">
             <ModalButton
-              variant="secondary"
+              variant="inverse"
               modalRef="addResourceModal"
               className="flex items-center gap-2"
             >

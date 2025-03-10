@@ -32,7 +32,7 @@ export const TabsTrigger: FC<TabsTriggerProps> = ({
         className,
       )}
       x-bind:class={`activeTab === '${tabId}' 
-        ? 'font-bold text-primary border-b-2 border-primary dark:border-primary-dark dark:text-primary-dark' 
+        ? 'font-bold text-on-surface-strong border-b-2 border-primary dark:border-primary-dark dark:text-on-surface-dark-strong' 
         : ''`}
       x-on:click={`activeTab = '${tabId}'`}
       x-trigger
