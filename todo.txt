@@ -3,6 +3,7 @@ Administrator:
 - As administrator on a server, I can modify/delete locations.
 - As administrator on a server, I can modify/delete items on the server.
 - As administrator on a server, I can set up costs for executing an action.
+- As administrator on a server, I can make server go online / offline
 
 Player:
 - As a player on a server, I can see what actions are available to me.
@@ -10,13 +11,8 @@ Player:
 - As a player on a server, I recive energy to spend on doing actions.
 
 UI:
-- Create a pattern where a section of action buttons are located together in a consistant and easy to understand way.
-- Aria attributes
 - Loading states / Optimistic updates pattern
-- Making lightmode work, currently darkmode seem to be the only one that look somewhat consistant.
 - Component Testing
-- Make UI to generate an action: https://v0.dev/chat/rpg-action-configurator-xqEhY8sH0gz
-- Component for title + description in the top left. Buttions to the right.
 
 Technical:
 Workflow - typecheck, linting and formatting

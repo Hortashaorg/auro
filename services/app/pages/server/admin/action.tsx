@@ -76,8 +76,12 @@ const TabsSection = (
           <ModifyResourceOfActionForm />
 
           <ButtonGroup className="mt-4">
-            <ModalButton variant="secondary" modalRef="addResourceModal">
-              Add Resource
+            <ModalButton
+              variant="secondary"
+              modalRef="addResourceModal"
+              className="flex items-center gap-2"
+            >
+              <i data-lucide="plus" width={16} height={16} />Add Resource
             </ModalButton>
             <FormButton
               formId="modify-resource-of-action-form"
