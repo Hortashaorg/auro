@@ -3,6 +3,7 @@ import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["button"] & {
   modalRef: string;
+  variant?: Parameters<typeof Button>[0]["variant"];
 };
 
 /**

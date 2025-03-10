@@ -12,9 +12,9 @@ import { Modal } from "@comp/display/modal/Modal.tsx";
 import { ModalButton } from "@comp/display/modal/ModalButton.tsx";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
 import { FormContext } from "@comp/inputs/form/FormContext.tsx";
 import { FormButton } from "@comp/inputs/form/FormButton.tsx";
+import { ButtonGroup } from "@comp/inputs/ButtonGroup.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -75,8 +75,10 @@ const TabsSection = (
 
           <ModifyResourceOfActionForm />
 
-          <Flex gap="md">
-            <ModalButton modalRef="addResourceModal">Add Resource</ModalButton>
+          <ButtonGroup className="mt-4">
+            <ModalButton variant="secondary" modalRef="addResourceModal">
+              Add Resource
+            </ModalButton>
             <FormButton
               formId="modify-resource-of-action-form"
               variant="primary"
@@ -85,7 +87,7 @@ const TabsSection = (
             >
               Save Resources
             </FormButton>
-          </Flex>
+          </ButtonGroup>
 
           <Modal modalRef="addResourceModal" title="Add Resource">
             <AddResourceToActionForm />

@@ -7,6 +7,7 @@ type Props = ButtonProps & {
   formId: string;
   disableWhenClean?: boolean;
   disableDuringSubmit?: boolean;
+  variant?: Parameters<typeof Button>[0]["variant"];
 };
 
 /**
