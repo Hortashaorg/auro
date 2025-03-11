@@ -27,7 +27,8 @@ const ActionDetail = async () => {
   const actions = await db.select({
     id: schema.action.id,
     name: schema.action.name,
-  }).from(schema.action)
+  })
+    .from(schema.action)
     .where(
       eq(schema.action.id, actionId),
     );

@@ -1,4 +1,4 @@
-import { db } from "../mod.ts";
+import { db, schema } from "../mod.ts";
 import { asset } from "../db/schema.ts";
 
 async function seedAssets() {
@@ -142,12 +142,20 @@ async function seedAssets() {
   ]).onConflictDoNothing();
 }
 
+export const setAdminUser = async () => {
+  await db.insert(schema.account).values({
+    email: "eidemartin_303@hotmail.com",
+    nickname: "Martin",
+    canCreateServer: true,
+  }).onConflictDoNothing();
+};
+
 // Main seeding function
 async function main() {
   console.log("🌱 Starting database seed...");
 
   await seedAssets();
-
+  await setAdminUser();
   console.log("✨ Database seeding complete!");
   Deno.exit(0);
 }

@@ -1,5 +1,5 @@
 {
-  "id": "f25eb849-e2d4-4c8f-beb0-addff429003e",
+  "id": "f275e653-7c75-410f-b787-1f77c0252eb2",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -21,11 +21,111 @@
           "primaryKey": false,
           "notNull": true
         },
-        "current_server_id": {
-          "name": "current_server_id",
+        "nickname": {
+          "name": "nickname",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "can_create_server": {
+          "name": "can_create_server",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "account_email_unique": {
+          "name": "account_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        },
+        "account_nickname_unique": {
+          "name": "account_nickname_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "nickname"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.action": {
+      "name": "action",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "server_id": {
+          "name": "server_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "asset_id": {
+          "name": "asset_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location_id": {
+          "name": "location_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cooldown_minutes": {
+          "name": "cooldown_minutes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "repeatable": {
+          "name": "repeatable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
         },
         "created_at": {
           "name": "created_at",
@@ -44,12 +144,38 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "account_current_server_id_server_id_fk": {
-          "name": "account_current_server_id_server_id_fk",
-          "tableFrom": "account",
+        "action_server_id_server_id_fk": {
+          "name": "action_server_id_server_id_fk",
+          "tableFrom": "action",
           "tableTo": "server",
           "columnsFrom": [
-            "current_server_id"
+            "server_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "action_asset_id_asset_id_fk": {
+          "name": "action_asset_id_asset_id_fk",
+          "tableFrom": "action",
+          "tableTo": "asset",
+          "columnsFrom": [
+            "asset_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "action_location_id_location_id_fk": {
+          "name": "action_location_id_location_id_fk",
+          "tableFrom": "action",
+          "tableTo": "location",
+          "columnsFrom": [
+            "location_id"
           ],
           "columnsTo": [
             "id"
@@ -60,11 +186,232 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "account_email_unique": {
-          "name": "account_email_unique",
+        "unique_action_name_per_server": {
+          "name": "unique_action_name_per_server",
           "nullsNotDistinct": false,
           "columns": [
-            "email"
+            "server_id",
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.action_item_reward": {
+      "name": "action_item_reward",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "action_id": {
+          "name": "action_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "item_id": {
+          "name": "item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chance": {
+          "name": "chance",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "action_item_reward_action_id_idx": {
+          "name": "action_item_reward_action_id_idx",
+          "columns": [
+            {
+              "expression": "action_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "action_item_reward_action_id_action_id_fk": {
+          "name": "action_item_reward_action_id_action_id_fk",
+          "tableFrom": "action_item_reward",
+          "tableTo": "action",
+          "columnsFrom": [
+            "action_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "action_item_reward_item_id_item_id_fk": {
+          "name": "action_item_reward_item_id_item_id_fk",
+          "tableFrom": "action_item_reward",
+          "tableTo": "item",
+          "columnsFrom": [
+            "item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "unique_action_item_reward": {
+          "name": "unique_action_item_reward",
+          "nullsNotDistinct": false,
+          "columns": [
+            "action_id",
+            "item_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.action_resource_reward": {
+      "name": "action_resource_reward",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "action_id": {
+          "name": "action_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "resource_id": {
+          "name": "resource_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity_min": {
+          "name": "quantity_min",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity_max": {
+          "name": "quantity_max",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chance": {
+          "name": "chance",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "action_resource_reward_action_id_idx": {
+          "name": "action_resource_reward_action_id_idx",
+          "columns": [
+            {
+              "expression": "action_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "action_resource_reward_action_id_action_id_fk": {
+          "name": "action_resource_reward_action_id_action_id_fk",
+          "tableFrom": "action_resource_reward",
+          "tableTo": "action",
+          "columnsFrom": [
+            "action_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "action_resource_reward_resource_id_resource_id_fk": {
+          "name": "action_resource_reward_resource_id_resource_id_fk",
+          "tableFrom": "action_resource_reward",
+          "tableTo": "resource",
+          "columnsFrom": [
+            "resource_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "unique_action_resource_reward": {
+          "name": "unique_action_resource_reward",
+          "nullsNotDistinct": false,
+          "columns": [
+            "action_id",
+            "resource_id"
           ]
         }
       },
@@ -102,15 +449,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "updated_at": {
-          "name": "updated_at",
+        "created_at": {
+          "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
         },
-        "created_at": {
-          "name": "created_at",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
@@ -133,174 +480,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "url"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.auth": {
-      "name": "auth",
-      "schema": "",
-      "columns": {
-        "account_id": {
-          "name": "account_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "refresh_token_hash": {
-          "name": "refresh_token_hash",
-          "type": "varchar(500)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "refresh_token_expires": {
-          "name": "refresh_token_expires",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "access_token_hash": {
-          "name": "access_token_hash",
-          "type": "varchar(500)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "access_token_expires": {
-          "name": "access_token_expires",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "auth_account_id_account_id_fk": {
-          "name": "auth_account_id_account_id_fk",
-          "tableFrom": "auth",
-          "tableTo": "account",
-          "columnsFrom": [
-            "account_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "auth_refreshTokenHash_unique": {
-          "name": "auth_refreshTokenHash_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "refresh_token_hash"
-          ]
-        },
-        "auth_accessTokenHash_unique": {
-          "name": "auth_accessTokenHash_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "access_token_hash"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.currency": {
-      "name": "currency",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "server_id": {
-          "name": "server_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "asset_id": {
-          "name": "asset_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(500)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "currency_server_id_server_id_fk": {
-          "name": "currency_server_id_server_id_fk",
-          "tableFrom": "currency",
-          "tableTo": "server",
-          "columnsFrom": [
-            "server_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "currency_asset_id_asset_id_fk": {
-          "name": "currency_asset_id_asset_id_fk",
-          "tableFrom": "currency",
-          "tableTo": "asset",
-          "columnsFrom": [
-            "asset_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "unique_currency_name_per_server": {
-          "name": "unique_currency_name_per_server",
-          "nullsNotDistinct": false,
-          "columns": [
-            "server_id",
-            "name"
           ]
         }
       },
@@ -343,17 +522,17 @@
           "primaryKey": false,
           "notNull": false
         },
-        "type": {
-          "name": "type",
-          "type": "itemtype",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
         "rarity": {
           "name": "rarity",
           "type": "rarity",
           "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'common'"
+        },
+        "stackable": {
+          "name": "stackable",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": true
         },
@@ -451,26 +630,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "available": {
-          "name": "available",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "cooldown_minutes": {
-          "name": "cooldown_minutes",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "repeatable": {
-          "name": "repeatable",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -530,512 +689,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.location_npc": {
-      "name": "location_npc",
-      "schema": "",
-      "columns": {
-        "location_id": {
-          "name": "location_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "npc_id": {
-          "name": "npc_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "count": {
-          "name": "count",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "location_npc_location_id_location_id_fk": {
-          "name": "location_npc_location_id_location_id_fk",
-          "tableFrom": "location_npc",
-          "tableTo": "location",
-          "columnsFrom": [
-            "location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "location_npc_npc_id_npc_id_fk": {
-          "name": "location_npc_npc_id_npc_id_fk",
-          "tableFrom": "location_npc",
-          "tableTo": "npc",
-          "columnsFrom": [
-            "npc_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "unique_location_npc_per_location": {
-          "name": "unique_location_npc_per_location",
-          "nullsNotDistinct": false,
-          "columns": [
-            "location_id",
-            "npc_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.location_req_item": {
-      "name": "location_req_item",
-      "schema": "",
-      "columns": {
-        "location_id": {
-          "name": "location_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "item_id": {
-          "name": "item_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "location_req_item_location_id_location_id_fk": {
-          "name": "location_req_item_location_id_location_id_fk",
-          "tableFrom": "location_req_item",
-          "tableTo": "location",
-          "columnsFrom": [
-            "location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "location_req_item_item_id_item_id_fk": {
-          "name": "location_req_item_item_id_item_id_fk",
-          "tableFrom": "location_req_item",
-          "tableTo": "item",
-          "columnsFrom": [
-            "item_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "unique_location_req_item_per_location": {
-          "name": "unique_location_req_item_per_location",
-          "nullsNotDistinct": false,
-          "columns": [
-            "location_id",
-            "item_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.location_req_skill": {
-      "name": "location_req_skill",
-      "schema": "",
-      "columns": {
-        "location_id": {
-          "name": "location_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "skill_id": {
-          "name": "skill_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "xp": {
-          "name": "xp",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "location_req_skill_location_id_location_id_fk": {
-          "name": "location_req_skill_location_id_location_id_fk",
-          "tableFrom": "location_req_skill",
-          "tableTo": "location",
-          "columnsFrom": [
-            "location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "location_req_skill_skill_id_skill_id_fk": {
-          "name": "location_req_skill_skill_id_skill_id_fk",
-          "tableFrom": "location_req_skill",
-          "tableTo": "skill",
-          "columnsFrom": [
-            "skill_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "unique_location_req_skill_per_location": {
-          "name": "unique_location_req_skill_per_location",
-          "nullsNotDistinct": false,
-          "columns": [
-            "location_id",
-            "skill_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.location_reward_currency": {
-      "name": "location_reward_currency",
-      "schema": "",
-      "columns": {
-        "location_id": {
-          "name": "location_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "currency_id": {
-          "name": "currency_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "chance": {
-          "name": "chance",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "min": {
-          "name": "min",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "max": {
-          "name": "max",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "location_reward_currency_location_id_location_id_fk": {
-          "name": "location_reward_currency_location_id_location_id_fk",
-          "tableFrom": "location_reward_currency",
-          "tableTo": "location",
-          "columnsFrom": [
-            "location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "location_reward_currency_currency_id_currency_id_fk": {
-          "name": "location_reward_currency_currency_id_currency_id_fk",
-          "tableFrom": "location_reward_currency",
-          "tableTo": "currency",
-          "columnsFrom": [
-            "currency_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "unique_location_reward_currency_per_location": {
-          "name": "unique_location_reward_currency_per_location",
-          "nullsNotDistinct": false,
-          "columns": [
-            "location_id",
-            "currency_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.location_reward_item": {
-      "name": "location_reward_item",
-      "schema": "",
-      "columns": {
-        "location_id": {
-          "name": "location_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "item_id": {
-          "name": "item_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "chance": {
-          "name": "chance",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "location_reward_item_location_id_location_id_fk": {
-          "name": "location_reward_item_location_id_location_id_fk",
-          "tableFrom": "location_reward_item",
-          "tableTo": "location",
-          "columnsFrom": [
-            "location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "location_reward_item_item_id_item_id_fk": {
-          "name": "location_reward_item_item_id_item_id_fk",
-          "tableFrom": "location_reward_item",
-          "tableTo": "item",
-          "columnsFrom": [
-            "item_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "unique_location_reward_item_per_location": {
-          "name": "unique_location_reward_item_per_location",
-          "nullsNotDistinct": false,
-          "columns": [
-            "location_id",
-            "item_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.location_reward_skill": {
-      "name": "location_reward_skill",
-      "schema": "",
-      "columns": {
-        "location_id": {
-          "name": "location_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "skill_id": {
-          "name": "skill_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "chance": {
-          "name": "chance",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "min": {
-          "name": "min",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "max": {
-          "name": "max",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "location_reward_skill_location_id_location_id_fk": {
-          "name": "location_reward_skill_location_id_location_id_fk",
-          "tableFrom": "location_reward_skill",
-          "tableTo": "location",
-          "columnsFrom": [
-            "location_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "location_reward_skill_skill_id_skill_id_fk": {
-          "name": "location_reward_skill_skill_id_skill_id_fk",
-          "tableFrom": "location_reward_skill",
-          "tableTo": "skill",
-          "columnsFrom": [
-            "skill_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "unique_location_reward_skill_per_location": {
-          "name": "unique_location_reward_skill_per_location",
-          "nullsNotDistinct": false,
-          "columns": [
-            "location_id",
-            "skill_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.npc": {
-      "name": "npc",
+    "public.resource": {
+      "name": "resource",
       "schema": "",
       "columns": {
         "id": {
@@ -1047,6 +702,12 @@
         },
         "server_id": {
           "name": "server_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "asset_id": {
+          "name": "asset_id",
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
@@ -1063,30 +724,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "health": {
-          "name": "health",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "attack": {
-          "name": "attack",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "defense": {
-          "name": "defense",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "speed": {
-          "name": "speed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -1104,12 +741,25 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "npc_server_id_server_id_fk": {
-          "name": "npc_server_id_server_id_fk",
-          "tableFrom": "npc",
+        "resource_server_id_server_id_fk": {
+          "name": "resource_server_id_server_id_fk",
+          "tableFrom": "resource",
           "tableTo": "server",
           "columnsFrom": [
             "server_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "resource_asset_id_asset_id_fk": {
+          "name": "resource_asset_id_asset_id_fk",
+          "tableFrom": "resource",
+          "tableTo": "asset",
+          "columnsFrom": [
+            "asset_id"
           ],
           "columnsTo": [
             "id"
@@ -1120,8 +770,8 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "unique_npc_name_per_server": {
-          "name": "unique_npc_name_per_server",
+        "unique_resource_name_per_server": {
+          "name": "unique_resource_name_per_server",
           "nullsNotDistinct": false,
           "columns": [
             "server_id",
@@ -1175,63 +825,56 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "unique_server_name": {
+          "name": "unique_server_name",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.skill": {
-      "name": "skill",
+    "public.session": {
+      "name": "session",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
+        "account_id": {
+          "name": "account_id",
           "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "primaryKey": false,
+          "notNull": true
         },
-        "description": {
-          "name": "description",
+        "refresh_token_hash": {
+          "name": "refresh_token_hash",
           "type": "varchar(500)",
           "primaryKey": false,
           "notNull": false
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(50)",
+        "access_token_hash": {
+          "name": "access_token_hash",
+          "type": "varchar(500)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "server_id": {
-          "name": "server_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
+        "expire": {
+          "name": "expire",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "skill_server_id_server_id_fk": {
-          "name": "skill_server_id_server_id_fk",
-          "tableFrom": "skill",
-          "tableTo": "server",
+        "session_account_id_account_id_fk": {
+          "name": "session_account_id_account_id_fk",
+          "tableFrom": "session",
+          "tableTo": "account",
           "columnsFrom": [
-            "server_id"
+            "account_id"
           ],
           "columnsTo": [
             "id"
@@ -1242,12 +885,18 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "unique_skill_name_per_server": {
-          "name": "unique_skill_name_per_server",
+        "session_refreshTokenHash_unique": {
+          "name": "session_refreshTokenHash_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "server_id",
-            "name"
+            "refresh_token_hash"
+          ]
+        },
+        "session_accessTokenHash_unique": {
+          "name": "session_accessTokenHash_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "access_token_hash"
           ]
         }
       },
@@ -1282,7 +931,7 @@
           "name": "name",
           "type": "varchar(50)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "actions": {
           "name": "actions",
@@ -1357,218 +1006,6 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
-    },
-    "public.user_currency": {
-      "name": "user_currency",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "currency_id": {
-          "name": "currency_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "amount": {
-          "name": "amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_currency_user_id_user_id_fk": {
-          "name": "user_currency_user_id_user_id_fk",
-          "tableFrom": "user_currency",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "user_currency_currency_id_currency_id_fk": {
-          "name": "user_currency_currency_id_currency_id_fk",
-          "tableFrom": "user_currency",
-          "tableTo": "currency",
-          "columnsFrom": [
-            "currency_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.user_item": {
-      "name": "user_item",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "item_id": {
-          "name": "item_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_item_user_id_user_id_fk": {
-          "name": "user_item_user_id_user_id_fk",
-          "tableFrom": "user_item",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "user_item_item_id_item_id_fk": {
-          "name": "user_item_item_id_item_id_fk",
-          "tableFrom": "user_item",
-          "tableTo": "item",
-          "columnsFrom": [
-            "item_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.user_skill": {
-      "name": "user_skill",
-      "schema": "",
-      "columns": {
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "skill_id": {
-          "name": "skill_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "xp": {
-          "name": "xp",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "user_skill_user_id_user_id_fk": {
-          "name": "user_skill_user_id_user_id_fk",
-          "tableFrom": "user_skill",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "user_skill_skill_id_skill_id_fk": {
-          "name": "user_skill_skill_id_skill_id_fk",
-          "tableFrom": "user_skill",
-          "tableTo": "skill",
-          "columnsFrom": [
-            "skill_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -1576,29 +1013,12 @@
       "name": "assetcategory",
       "schema": "public",
       "values": [
-        "avatar",
-        "weapon",
-        "armor",
-        "accessory",
-        "consumable",
+        "character",
+        "creature",
+        "action",
+        "location",
         "item",
-        "icon",
-        "companion",
-        "structure",
-        "currency"
-      ]
-    },
-    "public.itemtype": {
-      "name": "itemtype",
-      "schema": "public",
-      "values": [
-        "weapon",
-        "armor",
-        "accessory",
-        "consumable",
-        "item",
-        "companion",
-        "structure"
+        "resource"
       ]
     },
     "public.rarity": {
@@ -1609,8 +1029,7 @@
         "uncommon",
         "rare",
         "epic",
-        "legendary",
-        "ancient"
+        "legendary"
       ]
     },
     "public.usertype": {
