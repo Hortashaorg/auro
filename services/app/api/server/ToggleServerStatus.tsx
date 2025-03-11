@@ -3,7 +3,7 @@ import { db, schema } from "@package/database";
 import { eq } from "@package/database";
 import { throwError } from "@package/common";
 import { isAdminOfServer } from "@permissions/index.ts";
-import { Switch } from "@comp/inputs/Switch.tsx";
+import { AdminDashboard } from "@sections/views/AdminDashboard.tsx";
 
 /**
  * API endpoint to toggle a server's online status
@@ -27,18 +27,12 @@ const ToggleServerStatus = async () => {
     .update(schema.server)
     .set({ online: !server.online })
     .where(eq(schema.server.id, serverId))
-    .returning({ id: schema.server.id, online: schema.server.online });
+    .returning();
 
   const serverData = updatedServer[0] ??
     throwError("Failed to update server status");
 
-  return (
-    <Switch
-      initialState={serverData.online}
-      hx-trigger="click"
-      hx-post={`/api/servers/${server.id}/toggle-status`}
-    />
-  );
+  return <AdminDashboard server={serverData} />;
 };
 
 export const toggleServerStatusRoute = createRoute({

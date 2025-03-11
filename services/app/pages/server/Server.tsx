@@ -4,22 +4,7 @@ import { Text } from "@comp/content/Text.tsx";
 import { throwError } from "@package/common";
 import { hasAccessToServer } from "@permissions/index.ts";
 import { serverAndUser } from "@queries/serverAndUser.ts";
-import type { InferSelectModel, schema } from "@package/database";
-import { Switch } from "@comp/inputs/Switch.tsx";
-
-const AdminDashboard = (
-  { server }: { server: InferSelectModel<typeof schema.server> },
-) => {
-  return (
-    <>
-      <Switch
-        initialState={server.online}
-        hx-trigger="click"
-        hx-post={`/api/servers/${server.id}/toggle-status`}
-      />
-    </>
-  );
-};
+import { AdminDashboard } from "@sections/views/AdminDashboard.tsx";
 
 const PlayerDashboard = () => {
   return (
