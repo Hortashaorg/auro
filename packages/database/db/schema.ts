@@ -67,6 +67,7 @@ export const server = pgTable("server", {
 export const account = pgTable("account", {
   id: uuid().primaryKey().defaultRandom(),
   email: varchar({ length: 100 }).notNull().unique(),
+  nickname: varchar({ length: 50 }).unique(),
   canCreateServer: boolean().notNull().default(false),
   createdAt: temporalTimestamp().notNull().default(sql`now()`),
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
@@ -85,7 +86,7 @@ export const user = pgTable(
     id: uuid().primaryKey().defaultRandom(),
     accountId: uuid().references(() => account.id).notNull(),
     serverId: uuid().references(() => server.id).notNull(),
-    name: varchar({ length: 50 }).notNull(),
+    name: varchar({ length: 50 }),
     actions: integer().notNull().default(15),
     type: userType().notNull().default("player"),
     createdAt: temporalTimestamp().notNull().default(sql`now()`),
@@ -166,7 +167,7 @@ export const resource = pgTable(
 );
 
 export const actionResourceReward = pgTable(
-  "actionResourceReward",
+  "action_resource_reward",
   {
     id: uuid("id").primaryKey().defaultRandom(),
     actionId: uuid().references(() => action.id).notNull(),
@@ -186,7 +187,7 @@ export const actionResourceReward = pgTable(
   ],
 );
 
-export const actionItemReward = pgTable("actionItemReward", {
+export const actionItemReward = pgTable("action_item_reward", {
   id: uuid().primaryKey().defaultRandom(),
   actionId: uuid().references(() => action.id).notNull(),
   itemId: uuid().references(() => item.id).notNull(),

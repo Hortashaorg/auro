@@ -26,7 +26,7 @@ export const serverAndUser = async (serverId: string, email: string) => {
       serverId,
       type: "player",
       accountId: account.id,
-      name: "New User",
+      name: account.nickname,
     });
   }
   const user = userData?.user ?? throwError("User not found");
