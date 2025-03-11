@@ -5,14 +5,18 @@ import { throwError } from "@package/common";
 import { hasAccessToServer } from "@permissions/index.ts";
 import { serverAndUser } from "@queries/serverAndUser.ts";
 import type { InferSelectModel, schema } from "@package/database";
+import { Switch } from "@comp/inputs/Switch.tsx";
 
 const AdminDashboard = (
   { server }: { server: InferSelectModel<typeof schema.server> },
 ) => {
   return (
     <>
-      <Text variant="h2">Server Status</Text>
-      <Text>Status: {server.online ? "Online" : "Offline"}</Text>
+      <Switch
+        initialState={server.online}
+        hx-trigger="click"
+        hx-post={`/api/servers/${server.id}/toggle-status`}
+      />
     </>
   );
 };

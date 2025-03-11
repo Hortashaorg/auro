@@ -5,7 +5,7 @@ import { Text } from "@comp/content/Text.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
 import { getGlobalContext, type JSX } from "@kalena/framework";
-import { visableServersForUser } from "@queries/servers.ts";
+import { onlineServers, serversWhereUserIsAdmin } from "@queries/servers.ts";
 import { throwError } from "@package/common";
 import { Section } from "@comp/layout/Section.tsx";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
@@ -16,13 +16,10 @@ export const ServerGrid = async ({ ...props }: Props) => {
   const globalContext = getGlobalContext();
 
   const email = globalContext.var.email ?? throwError("No email");
-  const servers = await visableServersForUser(email);
 
   // Split servers into admin and public sections
-  const adminServers = servers.filter((server) => server.userIsAdmin);
-  const publicServers = servers.filter((server) =>
-    server.online && !server.userIsAdmin
-  );
+  const adminServers = await serversWhereUserIsAdmin(email);
+  const publicServers = await onlineServers();
 
   return (
     <HtmxWrapper {...props} id="server-section">

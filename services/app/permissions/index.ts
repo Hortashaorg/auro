@@ -22,10 +22,13 @@ export const hasAccessToServer = async (
     updatedAt: schema.server.updatedAt,
     createdAt: schema.server.createdAt,
     userIsAdmin: sql<boolean>`${eq(schema.user.type, "admin")}`,
-  }).from(schema.server).leftJoin(
-    schema.user,
-    eq(schema.server.id, schema.user.serverId),
-  ).where(eq(schema.server.id, serverId));
+  })
+    .from(schema.server)
+    .leftJoin(
+      schema.user,
+      eq(schema.server.id, schema.user.serverId),
+    )
+    .where(eq(schema.server.id, serverId));
 
   const isLoggedInAndServerAccessable = !!server && server.online &&
     !!c.var.isLoggedIn;
