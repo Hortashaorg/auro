@@ -19,3 +19,4 @@ CI/CD
 - Introducing Testing
 - Analyze tools (accessability, bad conding practices, security etc)
 - Typecheck, formatting, linting
+- We should move BasicLayout and maybe other project specific component somewhere else in the repo.

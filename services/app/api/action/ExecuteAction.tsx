@@ -1,14 +1,20 @@
 import { createRoute } from "@kalena/framework";
 import { isPlayerOfServer } from "@permissions/index.ts";
 
-const DoAction = () => {
+const ExecuteAction = () => {
   console.log("hello world");
+  // Data:
+  // Action
+  // Resources on action
+  // Calculate odds + amount
+  // Populate resource on player
+  // Rerender UI that shows resources
   return <p>hello world</p>;
 };
 
-export const doActionRoute = createRoute({
+export const executeActionRoute = createRoute({
   path: "/api/servers/:serverId/actions/:actionId/execute",
-  component: DoAction,
+  component: ExecuteAction,
   permission: {
     check: isPlayerOfServer,
     redirectPath: "/servers",
