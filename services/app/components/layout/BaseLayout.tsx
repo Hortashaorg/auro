@@ -13,7 +13,7 @@ export const BaseLayout: FC<Props> = ({
         <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
         <link
-          href={`/public/main.css`}
+          href="/public/main.css"
           rel="stylesheet"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -36,7 +36,8 @@ export const BaseLayout: FC<Props> = ({
           src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"
         >
         </script>
-        <script src="https://unpkg.com/lucide@latest"></script>
+        <script src="/public/lucide.js">
+        </script>
         <script>
           lucide.createIcons();
         </script>
