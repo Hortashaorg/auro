@@ -8,7 +8,6 @@ Player:
 - As a player on a server, I can see what actions are available to me.
 - As a player on a server, I can do an action and be rewarded accordingly.
 - As a player on a server, I recive energy to spend on doing actions.
-- As a new player on a server, a user should be created automatically as i enter a server for the first time. (This is currently scuffed)
 
 UI:
 - Loading states / Optimistic updates pattern

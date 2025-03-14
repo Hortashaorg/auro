@@ -1,6 +1,5 @@
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { db, eq, schema } from "@package/database";
 import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 import { Card } from "@comp/display/card/Card.tsx";
 import { CardContent } from "@comp/display/card/CardContent.tsx";
@@ -9,6 +8,7 @@ import { Text } from "@comp/content/Text.tsx";
 import { Badge } from "@comp/content/Badge.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";
 import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
+import { getServerActions } from "../../queries/serverActions.ts";
 type Props = JSX.IntrinsicElements["div"];
 
 export const ActionGrid = async ({ ...props }: Props) => {
@@ -17,20 +17,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
 
   if (!serverId) throwError("No serverId");
 
-  const actions = await db.select({
-    id: schema.action.id,
-    name: schema.action.name,
-    description: schema.action.description,
-    cooldownMinutes: schema.action.cooldownMinutes,
-    repeatable: schema.action.repeatable,
-    assetUrl: schema.asset.url,
-    locationName: schema.location.name,
-  }).from(schema.action)
-    .innerJoin(schema.asset, eq(schema.action.assetId, schema.asset.id))
-    .leftJoin(schema.location, eq(schema.action.locationId, schema.location.id))
-    .where(
-      eq(schema.action.serverId, serverId),
-    );
+  const actions = await getServerActions(serverId);
 
   return (
     <HtmxWrapper {...props} id="action-section">
