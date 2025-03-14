@@ -25,7 +25,12 @@ export const PlayerDashboard = async (
               <CardImage src={action.assetUrl} alt={action.name} />
               <CardContent>
                 <Text>{action.name}</Text>
-                <Button>Do it!</Button>
+                <Button
+                  hx-post={`/api/servers/${server.id}/actions/${action.id}/execute`}
+                  hx-swap="none"
+                >
+                  Do it!
+                </Button>
               </CardContent>
             </Card>
           ))}

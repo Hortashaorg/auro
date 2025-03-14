@@ -38,6 +38,30 @@ export const hasAccessToServer = async (
   return isLoggedInAndServerAccessable || isServerAdmin;
 };
 
+export const isPlayerOfServer = async (c: GlobalContext): Promise<boolean> => {
+  const serverId = c.req.param("serverId");
+  const email = c.var.email;
+
+  if (!serverId || !email) {
+    return false;
+  }
+
+  const [data] = await db.select().from(schema.user).innerJoin(
+    schema.server,
+    eq(schema.user.serverId, schema.server.id),
+  ).innerJoin(
+    schema.account,
+    eq(schema.user.accountId, schema.account.id),
+  ).where(
+    and(
+      eq(schema.server.id, serverId),
+      eq(schema.account.email, email),
+    ),
+  );
+
+  return !!data && data.user.type === "player" && data.server.id === serverId;
+};
+
 export const isAdminOfServer = async (c: GlobalContext): Promise<boolean> => {
   const serverId = c.req.param("serverId");
   const email = c.var.email;
