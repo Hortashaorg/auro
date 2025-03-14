@@ -14,7 +14,9 @@ export const PlayerDashboard = async (
   const actions = await getServerActions(server.id);
   return (
     <>
-      <Text>Welcome to {server.name}</Text>
+      <Text>
+        Welcome to {server.name}
+      </Text>
 
       <Section>
         <Text variant="h2">Actions</Text>

@@ -6,10 +6,6 @@
   "files.associations": {
     "main.css": "tailwindcss"
   },
-  "tailwindCSS.experimental.classRegex": [
-    ["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ],
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "javascript.preferences.importModuleSpecifier": "non-relative"
 }
