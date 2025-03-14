@@ -15,21 +15,24 @@ export const serverAndUser = async (serverId: string, email: string) => {
       ),
     );
 
-  if (!userData) {
+  let user = userData?.user;
+
+  if (!user) {
     const [accountData] = await db.select().from(schema.account).where(
       eq(schema.account.email, email),
     );
 
     const account = accountData ?? throwError("Account not found");
 
-    await db.insert(schema.user).values({
+    const [userData] = await db.insert(schema.user).values({
       serverId,
       type: "player",
       accountId: account.id,
       name: account.nickname,
-    });
+    }).returning();
+
+    user = userData ?? throwError("User not found");
   }
-  const user = userData?.user ?? throwError("User not found");
 
   const server = serverData ?? throwError("Server not found");
 
