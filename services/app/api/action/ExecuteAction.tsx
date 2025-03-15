@@ -3,6 +3,7 @@ import { isPlayerOfServer } from "@permissions/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { getUserByEmail } from "@queries/getUserByEmail.ts";
+import { ResourcesTable } from "@sections/views/ResourcesTable.tsx";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -75,7 +76,7 @@ const ExecuteAction = async () => {
   });
 
   // Return the rewards for UI updates
-  return <div>did reward user</div>;
+  return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
 };
 
 export const executeActionRoute = createRoute({

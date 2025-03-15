@@ -11,11 +11,11 @@ type Props = {
   serverId: string;
 };
 
-export const ResourcesTable = async ({ serverId }: Props) => {
+export const ResourcesTable = async ({ serverId, ...props }: Props) => {
   const resources = await getUserResources(serverId);
 
   return (
-    <Section id="player-resources">
+    <Section id="player-resources" {...props}>
       <Text variant="h2">Resources</Text>
       <Table>
         <TableHeader>
