@@ -6,8 +6,10 @@ import { getUserByEmail } from "@queries/getUserByEmail.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
-  const actionId = context.req.param("actionId");
-  const serverId = context.req.param("serverId");
+  const actionId = context.req.param("actionId") ??
+    throwError("Missing actionId");
+  const serverId = context.req.param("serverId") ??
+    throwError("Missing serverId");
   const userEmail = context.var.email ?? throwError("Missing user email");
 
   const possibleRewards = await db.select()
