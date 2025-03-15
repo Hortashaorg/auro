@@ -1,4 +1,4 @@
-import { createRoute } from "@kalena/framework";
+import { createRoute, v } from "@kalena/framework";
 import { isPlayerOfServer } from "@permissions/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
@@ -6,10 +6,11 @@ import { getUserByEmail } from "@queries/getUserByEmail.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
-  const actionId = context.req.param("actionId") ??
-    throwError("Missing actionId");
-  const serverId = context.req.param("serverId") ??
-    throwError("Missing serverId");
+  const params = context.req.valid("param");
+  const { actionId, serverId } = params.success
+    ? params.output
+    : throwError("Invalid params");
+
   const userEmail = context.var.email ?? throwError("Missing user email");
 
   const possibleRewards = await db.select()
@@ -84,6 +85,10 @@ export const executeActionRoute = createRoute({
     check: isPlayerOfServer,
     redirectPath: "/servers",
   },
+  paramValidationSchema: v.object({
+    serverId: v.pipe(v.string(), v.uuid()),
+    actionId: v.pipe(v.string(), v.uuid()),
+  }),
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
 });
