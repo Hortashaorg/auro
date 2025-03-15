@@ -1,7 +1,6 @@
 import { createRoute } from "@kalena/framework";
 import { isPlayerOfServer } from "@permissions/index.ts";
 import { db, eq, schema } from "@package/database";
-import { getAction } from "@queries/action.ts";
 import { throwError } from "@package/common";
 import { getUserByEmail } from "@queries/getUserByEmail.ts";
 
@@ -10,10 +9,6 @@ const ExecuteAction = async () => {
   const actionId = context.req.param("actionId");
   const serverId = context.req.param("serverId");
   const userEmail = context.var.email ?? throwError("Missing user email");
-
-  const action = await getAction(actionId);
-  console.log(action);
-  // We probebly need to check if player can execute this action, but we implement that later.
 
   const possibleRewards = await db.select()
     .from(schema.actionResourceReward)
@@ -28,10 +23,13 @@ const ExecuteAction = async () => {
     return roll <= reward.action_resource_reward.chance;
   });
 
-  // Calculate quantities and prepare updates
   const rewardUpdates = earnedRewards.map(
     (reward) => {
-      // Calculate random quantity between min and max
+      if (
+        reward.action_resource_reward.quantityMin >
+          reward.action_resource_reward.quantityMax
+      ) throwError("Invalid quantity range");
+
       const quantity = Math.floor(
         Math.random() *
           (reward.action_resource_reward.quantityMax -
