@@ -198,3 +198,33 @@ export const actionItemReward = pgTable("action_item_reward", {
   unique("unique_action_item_reward").on(table.actionId, table.itemId),
   index("action_item_reward_action_id_idx").on(table.actionId),
 ]);
+
+export const userResource = pgTable(
+  "user_resource",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    userId: uuid().references(() => user.id).notNull(),
+    resourceId: uuid().references(() => resource.id).notNull(),
+    quantity: integer().notNull().default(0),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
+  },
+  (table) => [
+    unique("unique_user_resource").on(table.userId, table.resourceId),
+    index("user_resource_user_id_idx").on(table.userId),
+  ],
+);
+
+export const userItem = pgTable(
+  "user_item",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    userId: uuid().references(() => user.id).notNull(),
+    itemId: uuid().references(() => item.id).notNull(),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
+  },
+  (table) => [
+    index("user_item_user_id_idx").on(table.userId),
+  ],
+);
