@@ -1,5 +1,4 @@
-import { InferSelectModel } from "@package/database";
-import { schema } from "@package/database";
+import type { InferSelectModel, schema } from "@package/database";
 import { Text } from "@comp/content/Text.tsx";
 import { Section } from "@comp/layout/Section.tsx";
 import { Grid } from "@comp/layout/Grid.tsx";

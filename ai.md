@@ -12,7 +12,7 @@
    - When adding new information, consider its level of abstraction
    - Do not make changes in File Maintenance Guidelines
    - Place architectural decisions near the top
-   - Place specific implementation patterns near bottom
+   - Place-specific implementation patterns near bottom
    - Add dates to significant updates using format: `[YYYY-MM-DD]`
 
 3. Quality Guidelines
@@ -26,7 +26,7 @@
    - Use consistent terminology
    - Keep sections atomic and well-labeled
    - Include relevant type definitions
-   - Reference specific files and line numbers when possible
+   - Reference-specific files and line numbers when possible
 
 ## Overview
 
@@ -86,7 +86,7 @@ modern component architecture.
 ### HTMX Integration [2024-03-15]
 
 1. Section IDs
-   - Sections that may be updated via HTMX should have unique IDs
+   - Sections intended for HTMX updates should have unique IDs
    - IDs should be descriptive and follow a consistent pattern
    ```typescript
    <Section id="player-resources">
