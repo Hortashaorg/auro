@@ -35,7 +35,7 @@
     "noImplicitThis": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "precompile",
-    "jsxImportSource": "jsr:@hono/hono@4.7.4/jsx"
+    "jsxImportSource": "jsr:@hono/hono@4.7.5/jsx"
   },
   "imports": {
     "@std/fs": "jsr:@std/fs@^1.0.14",

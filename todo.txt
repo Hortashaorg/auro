@@ -5,8 +5,6 @@ Administrator:
 - As administrator on a server, I can set up costs for executing an action.
 
 Player:
-- As a player on a server, I can see what actions are available to me.
-- As a player on a server, I can do an action and be rewarded accordingly.
 - As a player on a server, I recive energy to spend on doing actions.
 
 UI:
@@ -17,6 +15,5 @@ Technical:
 Workflow - typecheck, linting and formatting
 CI/CD
 - Introducing Testing
-- Analyze tools (accessability, bad conding practices, security etc)
 - Typecheck, formatting, linting
 - We should move BasicLayout and maybe other project specific component somewhere else in the repo.
