@@ -65,5 +65,5 @@ const myApp = app({
 
 Deno.serve({
   port: 4000,
-  hostname: "127.0.0.1",
+  hostname: "0.0.0.0",
 }, myApp.fetch);
