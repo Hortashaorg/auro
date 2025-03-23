@@ -422,10 +422,10 @@ export const app = <TProvider extends "google" | "keycloak">(
                   refresh_token: refreshToken,
                 });
 
-                const googleBaseUrl =
+                const keycloakBaseUrl =
                   "https://login.kalena.site/realms/notzure/protocol/openid-connect";
                 const res = await fetch(
-                  `${googleBaseUrl}/token`,
+                  `${keycloakBaseUrl}/token`,
                   {
                     headers: {
                       "Content-Type": "application/x-www-form-urlencoded",
