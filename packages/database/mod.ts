@@ -3,7 +3,8 @@ import * as schema from "./db/schema.ts";
 import pg from "postgres";
 
 export const db = drizzle({
-  connection: "postgresql://root:root@localhost:5432/root",
+  connection: Deno.env.get("POSTGRES_URL") ??
+    "postgresql://root:root@localhost:5432/root",
   schema,
   casing: "snake_case",
 });
