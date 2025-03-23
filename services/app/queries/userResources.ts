@@ -1,6 +1,9 @@
 import { and, db, eq, gt, schema } from "@package/database";
+import { currentUser } from "@queries/currentUser.ts";
 
 export const getUserResources = async (serverId: string) => {
+  const user = await currentUser(serverId);
+
   const resources = await db.select()
     .from(schema.userResource)
     .innerJoin(
@@ -19,6 +22,7 @@ export const getUserResources = async (serverId: string) => {
       and(
         eq(schema.user.serverId, serverId),
         gt(schema.userResource.quantity, 0),
+        eq(schema.user.id, user.id),
       ),
     );
 
