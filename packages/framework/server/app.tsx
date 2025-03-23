@@ -22,8 +22,8 @@ import { globalContext } from "../context/global-context.tsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
 import { SpanStatusCode } from "@opentelemetry/api";
 
-type AfterLoginHookTypes<T extends "google" | "keycloak"> = T extends "google"
-  ? {
+type AfterLoginHookMap = {
+  google: {
     success: true;
     accessToken: string;
     refreshToken: string;
@@ -33,16 +33,56 @@ type AfterLoginHookTypes<T extends "google" | "keycloak"> = T extends "google"
   } | {
     success: false;
     error: unknown;
-  }
-  : never;
+  };
 
-type BeforeLogoutHookTypes<T extends "google" | "keycloak"> = T extends "google"
-  ? {
+  keycloak: {
+    success: true;
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+    expires_in: number;
+    refresh_token_expires_in: number;
+  } | {
+    success: false;
+    error: unknown;
+  };
+};
+
+type AfterLoginHookTypes<T extends keyof AfterLoginHookMap> =
+  AfterLoginHookMap[T];
+
+type BeforeLogoutHookMap = {
+  google: {
     refreshToken: string;
     accessToken: string;
     email: string;
-  }
-  : never;
+  };
+
+  keycloak: {
+    refreshToken: string;
+    accessToken: string;
+    email: string;
+  };
+};
+
+type BeforeLogoutHookTypes<T extends keyof BeforeLogoutHookMap> =
+  BeforeLogoutHookMap[T];
+
+type ValidateHookMap = {
+  google: {
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+  };
+
+  keycloak: {
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+  };
+};
+
+type ValidateHookTypes<T extends keyof ValidateHookMap> = ValidateHookMap[T];
 
 type RefreshHookMap = {
   google: {
@@ -70,13 +110,6 @@ type RefreshHookMap = {
 };
 
 type RefreshHookTypes<T extends keyof RefreshHookMap> = RefreshHookMap[T];
-
-type ValidateHookTypes<T extends "google" | "keycloak"> = T extends "google" ? {
-    accessToken: string;
-    refreshToken: string;
-    email: string;
-  }
-  : never;
 
 /**
  * Init Framework App
@@ -626,6 +659,67 @@ export const app = <TProvider extends "google" | "keycloak">(
         async (span) => {
           try {
             if (authProvider.name === "google") {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
+
+              if (accessToken && refreshToken && email) {
+                try {
+                  const isValid = await authProvider.validateHook?.({
+                    accessToken,
+                    refreshToken,
+                    email,
+                  } as ValidateHookTypes<TProvider>);
+
+                  if (isValid === false) {
+                    // Clear all auth cookies if validation fails
+                    setCookie(c, "access_token", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    setCookie(c, "refresh_token", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    setCookie(c, "email", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    return c.redirect(authProvider.redirectPathAfterLogout);
+                  }
+                } catch (error) {
+                  console.error("Error in validate hook:", error);
+                  // Clear cookies on error and redirect
+                  setCookie(c, "access_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "refresh_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "email", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  return c.redirect(authProvider.redirectPathAfterLogout);
+                }
+              }
+            }
+
+            if (authProvider.name === "keycloak") {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
               const email = getCookie(c, "email");
