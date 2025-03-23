@@ -511,13 +511,6 @@ export const app = <TProvider extends "google" | "keycloak">(
                     sameSite: "Lax",
                   });
 
-                  setCookie(c, "access_token", result.accessToken, {
-                    maxAge: result.expires_in,
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: "Lax",
-                  });
-
                   await authProvider.refreshHook?.(
                     result as RefreshHookTypes<TProvider>,
                   );
