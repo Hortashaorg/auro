@@ -20,6 +20,7 @@
     "fmt": "deno fmt .",
     "tailwind": "./tailwindcli -i ./main.css -o ./public/main.css --minify --watch",
     "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --allow-net --allow-read --allow-env --watch ./main.ts",
+    "start": "doppler run -- deno run --unstable-otel --unstable-temporal --allow-net --allow-read --allow-env --watch ./main.ts",
     "comp:build": "deno run --allow-read --allow-write components/createStructure.ts"
   },
   "exclude": ["public/main.css"]

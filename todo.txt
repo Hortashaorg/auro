@@ -16,4 +16,7 @@ Workflow - typecheck, linting and formatting
 CI/CD
 - Introducing Testing
 - Typecheck, formatting, linting
-- We should move BasicLayout and maybe other project specific component somewhere else in the repo.
+- We should move BasicLayout and maybe other project specific component somewhere else in the repo
+
+Bugs:
+Can't properly log out. The keyclaok provider should probebly actually log out and not just delete stuff.

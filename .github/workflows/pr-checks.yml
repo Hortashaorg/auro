@@ -1,0 +1,29 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      
+      - name: Check formatting
+        run: deno task all:fmt --check
+      
+      - name: Run linter
+        run: deno task all:lint
+      
+      - name: Run type checking
+        run: deno task all:typecheck 

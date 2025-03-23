@@ -27,3 +27,20 @@ FROM base AS local
 RUN apt-get update && \
     apt-get install -y git && \
     rm -rf /var/lib/apt/lists/*
+
+# Production image for Argo
+FROM base AS production
+
+# Copy application files
+COPY . .
+
+# Cache the dependencies
+RUN deno cache services/app/main.ts
+
+# Copy and make the entrypoint script executable
+COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Set the entrypoint and command
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["deno", "task", "app:start"]
