@@ -29,7 +29,7 @@ const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
 
 const myApp = app({
   authProvider: {
-    name: "google",
+    name: "keycloak",
     clientId,
     clientSecret,
     redirectPathAfterLogin: "/",
