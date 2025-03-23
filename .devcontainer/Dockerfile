@@ -34,6 +34,8 @@ FROM base AS production
 # Copy application files
 COPY . .
 
+EXPOSE 4000
+
 # Cache the dependencies
 RUN deno cache services/app/main.ts
 
