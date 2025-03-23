@@ -82,7 +82,7 @@ const CreateActionSchema = v.object({
   name: v.pipe(v.string(), v.minLength(3), v.maxLength(50)),
   description: v.optional(v.pipe(
     v.string(),
-    v.transform((val) => {
+    v.transform((val: string) => {
       return val.trim() === "" ? undefined : val;
     }),
   )),
@@ -90,7 +90,7 @@ const CreateActionSchema = v.object({
   locationId: v.optional(v.pipe(v.string(), v.uuid())),
   cooldownMinutes: v.pipe(
     v.string(),
-    v.transform((val) => parseInt(val, 10)),
+    v.transform((val: string) => parseInt(val, 10)),
     v.number(),
     v.minValue(0),
   ),

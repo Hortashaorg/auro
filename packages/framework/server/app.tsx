@@ -22,7 +22,8 @@ import { globalContext } from "../context/global-context.tsx";
 import type { HtmlEscapedString } from "@hono/hono/utils/html";
 import { SpanStatusCode } from "@opentelemetry/api";
 
-type AfterLoginHookTypes<T extends "google"> = T extends "google" ? {
+type AfterLoginHookMap = {
+  google: {
     success: true;
     accessToken: string;
     refreshToken: string;
@@ -32,17 +33,59 @@ type AfterLoginHookTypes<T extends "google"> = T extends "google" ? {
   } | {
     success: false;
     error: unknown;
-  }
-  : never;
+  };
 
-type BeforeLogoutHookTypes<T extends "google"> = T extends "google" ? {
+  keycloak: {
+    success: true;
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+    expires_in: number;
+    refresh_token_expires_in: number;
+  } | {
+    success: false;
+    error: unknown;
+  };
+};
+
+type AfterLoginHookTypes<T extends keyof AfterLoginHookMap> =
+  AfterLoginHookMap[T];
+
+type BeforeLogoutHookMap = {
+  google: {
     refreshToken: string;
     accessToken: string;
     email: string;
-  }
-  : never;
+  };
 
-type RefreshHookTypes<T extends "google"> = T extends "google" ? {
+  keycloak: {
+    refreshToken: string;
+    accessToken: string;
+    email: string;
+  };
+};
+
+type BeforeLogoutHookTypes<T extends keyof BeforeLogoutHookMap> =
+  BeforeLogoutHookMap[T];
+
+type ValidateHookMap = {
+  google: {
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+  };
+
+  keycloak: {
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+  };
+};
+
+type ValidateHookTypes<T extends keyof ValidateHookMap> = ValidateHookMap[T];
+
+type RefreshHookMap = {
+  google: {
     success: true;
     accessToken: string;
     refreshToken: string;
@@ -51,15 +94,22 @@ type RefreshHookTypes<T extends "google"> = T extends "google" ? {
   } | {
     success: false;
     error: unknown;
-  }
-  : never;
+  };
 
-type ValidateHookTypes<T extends "google"> = T extends "google" ? {
+  keycloak: {
+    success: true;
     accessToken: string;
     refreshToken: string;
     email: string;
-  }
-  : never;
+    expires_in: number;
+    refresh_token_expires_in: number;
+  } | {
+    success: false;
+    error: unknown;
+  };
+};
+
+type RefreshHookTypes<T extends keyof RefreshHookMap> = RefreshHookMap[T];
 
 /**
  * Init Framework App
@@ -69,7 +119,7 @@ type ValidateHookTypes<T extends "google"> = T extends "google" ? {
  * @param settings.errorPages - The error pages for 404 and 500 errors
  * @returns {Hono<{Variables: Variables}, BlankSchema, "/">} The framework app
  */
-export const app = <TProvider extends "google">(
+export const app = <TProvider extends "google" | "keycloak">(
   settings: {
     authProvider?: {
       name: TProvider;
@@ -208,6 +258,101 @@ export const app = <TProvider extends "google">(
               return c.redirect(authProvider.redirectPathAfterLogin);
             }
           }
+
+          if (authProvider.name === "keycloak") {
+            try {
+              const url = new URL(c.req.url);
+              const code = url.searchParams.get("code");
+
+              if (!code) throw new Error("Missing auth code");
+
+              const params = new URLSearchParams({
+                client_id: authProvider.clientId,
+                redirect_uri: `${url.origin}/auth/login`,
+                client_secret: authProvider.clientSecret,
+                scope: "openid",
+                grant_type: "authorization_code",
+                code,
+              });
+
+              const keycloakBaseUrl =
+                "https://login.kalena.site/realms/notzure/protocol/openid-connect";
+
+              const res = await fetch(
+                `${keycloakBaseUrl}/token`,
+                {
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  method: "POST",
+                  body: params,
+                },
+              );
+
+              if (res.ok) {
+                const responseSchema = v.object({
+                  access_token: v.string(),
+                  refresh_token: v.string(),
+                  id_token: v.string(),
+                  expires_in: v.number(),
+                });
+
+                const responseData = await res.json();
+
+                const tokens = v.parse(responseSchema, responseData);
+
+                const email = v.parse(
+                  v.string(),
+                  decode(tokens.id_token).payload.email,
+                );
+
+                const result = {
+                  success: true,
+                  accessToken: tokens.access_token,
+                  refreshToken: tokens.refresh_token,
+                  email,
+                  expires_in: tokens.expires_in,
+                  refresh_token_expires_in: 3600 * 72, // 3 days
+                };
+
+                setCookie(c, "access_token", result.accessToken, {
+                  maxAge: result.expires_in,
+                  httpOnly: true,
+                  secure: true,
+                  sameSite: "Lax",
+                });
+                setCookie(c, "refresh_token", result.refreshToken, {
+                  maxAge: result.refresh_token_expires_in,
+                  httpOnly: true,
+                  secure: true,
+                  sameSite: "Lax",
+                });
+                setCookie(c, "email", result.email, {
+                  maxAge: result.refresh_token_expires_in,
+                  httpOnly: true,
+                  secure: true,
+                  sameSite: "Lax",
+                });
+
+                await authProvider.afterLoginHook?.(
+                  result as AfterLoginHookTypes<TProvider>,
+                );
+
+                return c.redirect(authProvider.redirectPathAfterLogin);
+              }
+              throw new Error("Failed to login");
+            } catch (error) {
+              const result = {
+                error,
+                success: false,
+              } as AfterLoginHookTypes<TProvider>;
+
+              await authProvider.afterLoginHook?.(result);
+
+              return c.redirect(authProvider.redirectPathAfterLogin);
+            }
+          }
+
           throw new Error("Invalid auth provider");
         } catch (error) {
           span.setStatus({
@@ -294,6 +439,104 @@ export const app = <TProvider extends "google">(
               await authProvider.refreshHook?.(result);
             }
           }
+
+          if (authProvider.name === "keycloak") {
+            try {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
+
+              if (!accessToken && refreshToken && email) {
+                refreshCounter.add(1);
+                const params = new URLSearchParams({
+                  client_id: authProvider.clientId,
+                  client_secret: authProvider.clientSecret,
+                  grant_type: "refresh_token",
+                  refresh_token: refreshToken,
+                });
+
+                const keycloakBaseUrl =
+                  "https://login.kalena.site/realms/notzure/protocol/openid-connect";
+                const res = await fetch(
+                  `${keycloakBaseUrl}/token`,
+                  {
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    method: "POST",
+                    body: params,
+                  },
+                );
+
+                if (res.ok) {
+                  const responseSchema = v.object({
+                    access_token: v.string(),
+                    refresh_token: v.string(),
+                    id_token: v.string(),
+                    expires_in: v.number(),
+                  });
+
+                  const tokens = v.parse(responseSchema, await res.json());
+
+                  const email = v.parse(
+                    v.string(),
+                    decode(tokens.id_token).payload.email,
+                  );
+
+                  const result = {
+                    success: true,
+                    accessToken: tokens.access_token,
+                    refreshToken: tokens.refresh_token,
+                    email,
+                    expires_in: tokens.expires_in,
+                    refresh_token_expires_in: 3600 * 72, // 3 days
+                  };
+
+                  setCookie(c, "access_token", result.accessToken, {
+                    maxAge: result.expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "refresh_token", result.refreshToken, {
+                    maxAge: result.refresh_token_expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "email", result.email, {
+                    maxAge: result.refresh_token_expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+
+                  setCookie(c, "access_token", result.accessToken, {
+                    maxAge: result.expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+
+                  await authProvider.refreshHook?.(
+                    result as RefreshHookTypes<TProvider>,
+                  );
+                } else {
+                  const result = {
+                    success: false,
+                    error: new Error("Failed to refresh token"),
+                  } as RefreshHookTypes<TProvider>;
+                  await authProvider.refreshHook?.(result);
+                }
+              }
+            } catch (error) {
+              const result = {
+                success: false,
+                error,
+              } as RefreshHookTypes<TProvider>;
+              await authProvider.refreshHook?.(result);
+            }
+          }
         } catch (error) {
           span.setStatus({
             code: SpanStatusCode.ERROR,
@@ -312,6 +555,49 @@ export const app = <TProvider extends "google">(
         logoutCounter.add(1);
         try {
           if (authProvider.name === "google") {
+            try {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
+
+              if (!refreshToken || !accessToken || !email) {
+                throw new Error("Missing tokens or email");
+              }
+
+              await authProvider.beforeLogoutHook?.({
+                refreshToken,
+                accessToken,
+                email,
+              } as BeforeLogoutHookTypes<TProvider>);
+
+              // Clear cookies
+              setCookie(c, "access_token", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+              setCookie(c, "refresh_token", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+              setCookie(c, "email", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+
+              return c.redirect(authProvider.redirectPathAfterLogout);
+            } catch (error) {
+              console.error("Error during logout:", error);
+              return c.redirect(authProvider.redirectPathAfterLogout);
+            }
+          }
+
+          if (authProvider.name === "keycloak") {
             try {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
@@ -432,6 +718,67 @@ export const app = <TProvider extends "google">(
                 }
               }
             }
+
+            if (authProvider.name === "keycloak") {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
+
+              if (accessToken && refreshToken && email) {
+                try {
+                  const isValid = await authProvider.validateHook?.({
+                    accessToken,
+                    refreshToken,
+                    email,
+                  } as ValidateHookTypes<TProvider>);
+
+                  if (isValid === false) {
+                    // Clear all auth cookies if validation fails
+                    setCookie(c, "access_token", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    setCookie(c, "refresh_token", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    setCookie(c, "email", "", {
+                      maxAge: 0,
+                      httpOnly: true,
+                      secure: true,
+                      sameSite: "Lax",
+                    });
+                    return c.redirect(authProvider.redirectPathAfterLogout);
+                  }
+                } catch (error) {
+                  console.error("Error in validate hook:", error);
+                  // Clear cookies on error and redirect
+                  setCookie(c, "access_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "refresh_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "email", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  return c.redirect(authProvider.redirectPathAfterLogout);
+                }
+              }
+            }
             return;
           } catch (error) {
             span.setStatus({
@@ -466,6 +813,28 @@ export const app = <TProvider extends "google">(
         c.set(
           "loginUrl",
           `https://accounts.google.com/o/oauth2/v2/auth?client_id=${authProvider.clientId}&redirect_uri=${url.origin}/auth/login&response_type=code&scope=email&access_type=offline&prompt=consent`,
+        );
+
+        // Set logout URL
+        c.set("logoutUrl", "/auth/logout");
+
+        // Set isLoggedIn
+        c.set("isLoggedIn", !!(refreshToken && email));
+
+        // Set email if available
+        c.set("email", email);
+      }
+
+      if (authProvider.name === "keycloak") {
+        const refreshToken = getCookie(c, "refresh_token");
+        const email = getCookie(c, "email");
+
+        const url = new URL(c.req.url);
+
+        // Set login URL
+        c.set(
+          "loginUrl",
+          `https://login.kalena.site/realms/notzure/protocol/openid-connect/auth?client_id=${authProvider.clientId}&redirect_uri=${url.origin}/auth/login&response_type=code&scope=openid`,
         );
 
         // Set logout URL

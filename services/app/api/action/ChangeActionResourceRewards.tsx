@@ -54,7 +54,7 @@ const ChangeActionResourceRewards = async () => {
     id: v.pipe(v.string(), v.uuid()),
     chance: v.pipe(
       v.string(),
-      v.transform((val) => parseInt(val, 10)),
+      v.transform((val: string) => parseInt(val, 10)),
       v.number(),
       v.integer(),
       v.minValue(0),
@@ -62,14 +62,14 @@ const ChangeActionResourceRewards = async () => {
     ),
     min: v.pipe(
       v.string(),
-      v.transform((val) => parseInt(val, 10)),
+      v.transform((val: string) => parseInt(val, 10)),
       v.number(),
       v.integer(),
       v.minValue(1),
     ),
     max: v.pipe(
       v.string(),
-      v.transform((val) => parseInt(val, 10)),
+      v.transform((val: string) => parseInt(val, 10)),
       v.number(),
       v.integer(),
       v.minValue(1),

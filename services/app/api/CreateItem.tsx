@@ -81,7 +81,7 @@ const CreateItemSchema = v.object({
   name: v.pipe(v.string(), v.minLength(3), v.maxLength(50)),
   description: v.optional(v.pipe(
     v.string(),
-    v.transform((val) => {
+    v.transform((val: string) => {
       return val.trim() === "" ? undefined : val;
     }),
   )),

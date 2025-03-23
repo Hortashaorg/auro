@@ -21,15 +21,15 @@ import { addActionResourceRewardsRoute } from "@api/action/AddActionResourceRewa
 import { toggleServerStatusRoute } from "@api/server/ToggleServerStatus.tsx";
 import { executeActionRoute } from "@api/action/ExecuteAction.tsx";
 
-const clientSecret = Deno.env.get("GOOGLE_CLIENT_SECRET") ??
-  throwError("Missing Google client secret");
+const clientSecret = Deno.env.get("AUTH_CLIENT_SECRET") ??
+  throwError("Missing auth client secret");
 
-const clientId = Deno.env.get("GOOGLE_CLIENT_ID") ??
-  throwError("Missing Google client ID");
+const clientId = Deno.env.get("AUTH_CLIENT_ID") ??
+  throwError("Missing auth client ID");
 
 const myApp = app({
   authProvider: {
-    name: "google",
+    name: "keycloak",
     clientId,
     clientSecret,
     redirectPathAfterLogin: "/",
