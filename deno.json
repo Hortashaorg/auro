@@ -17,6 +17,7 @@
     "all:fmt": "deno run -A scripts/task.ts '@*/*' fmt",
     "framework:publish": "deno run -A scripts/task.ts '@kalena/framework' publish",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
+    "app:start": "deno run -A scripts/task.ts '@service/app' start",
     "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
     "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
