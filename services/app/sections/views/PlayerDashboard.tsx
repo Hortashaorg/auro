@@ -32,16 +32,25 @@ const calculateTimeUntilNextAction = (
   const minUntilNextAction = minutes[actionRecoveryInterval] -
     current.minute % minutes[actionRecoveryInterval];
 
-  if (minUntilNextAction === 1 && current.second > 0) {
-    return "less than a minute";
+  const timeLeft = Temporal.Now.plainDateTimeISO().until(
+    Temporal.Now.plainDateTimeISO().add({
+      minutes: minUntilNextAction,
+    }),
+  );
+
+  if (timeLeft.hours > 1) {
+    return `${timeLeft.hours} hours`;
   }
 
-  if (minUntilNextAction <= 60) {
-    return `${minUntilNextAction} minute${minUntilNextAction > 1 ? "s" : ""}`;
+  if (timeLeft.hours === 1 && timeLeft.minutes > 0) {
+    return `${timeLeft.hours} hour`;
   }
 
-  const hoursUntilNextAction = Math.floor(minUntilNextAction / 60);
-  return `${hoursUntilNextAction} hour${hoursUntilNextAction > 1 ? "s" : ""}`;
+  if (timeLeft.minutes > 1) {
+    return `${timeLeft.minutes} minutes`;
+  }
+
+  return "less than a minute";
 };
 
 export const PlayerDashboard = async (
