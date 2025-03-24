@@ -14,6 +14,13 @@ const ExecuteAction = async () => {
 
   const userEmail = context.var.email ?? throwError("Missing user email");
 
+  const user = await getUserByEmail(userEmail, serverId);
+
+  if (user.availableActions <= 0) {
+    // TODO: Event to notify user that they have no actions left
+    return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
+  }
+
   const possibleRewards = await db.select()
     .from(schema.actionResourceReward)
     .innerJoin(
@@ -46,8 +53,6 @@ const ExecuteAction = async () => {
       };
     },
   );
-
-  const user = await getUserByEmail(userEmail, serverId);
 
   const currentResources = await db.select()
     .from(schema.userResource)
