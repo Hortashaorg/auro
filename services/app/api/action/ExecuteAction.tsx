@@ -4,6 +4,7 @@ import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { getUserByEmail } from "@queries/getUserByEmail.ts";
 import { ResourcesTable } from "@sections/views/ResourcesTable.tsx";
+import { createEvents } from "@comp/utils/events.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -17,7 +18,18 @@ const ExecuteAction = async () => {
   const user = await getUserByEmail(userEmail, serverId);
 
   if (user.availableActions <= 0) {
-    // TODO: Event to notify user that they have no actions left
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        {
+          name: "show-toast",
+          values: {
+            message: "You have no actions left",
+            variant: "danger",
+          },
+        },
+      ]),
+    );
     return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
   }
 
@@ -78,6 +90,12 @@ const ExecuteAction = async () => {
         });
       }
     }
+
+    await tx.update(schema.user)
+      .set({
+        availableActions: user.availableActions - 1,
+      })
+      .where(eq(schema.user.id, user.id));
   });
 
   // Return the rewards for UI updates

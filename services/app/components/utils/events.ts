@@ -8,6 +8,11 @@ type events = {
   "form-error": {
     [field: string]: string;
   };
+  "show-toast": {
+    message: string;
+    variant: "info" | "warning" | "success" | "danger";
+    title: string;
+  };
 };
 
 export const createEvents = <T extends keyof events>(
