@@ -10,6 +10,7 @@ export const currentUser = async (serverId: string) => {
     id: schema.user.id,
     email: schema.account.email,
     name: schema.user.name,
+    availableActions: schema.user.availableActions,
   })
     .from(schema.user)
     .innerJoin(schema.account, eq(schema.user.accountId, schema.account.id))
