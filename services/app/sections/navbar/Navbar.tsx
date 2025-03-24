@@ -17,6 +17,7 @@ export const Navbar = async () => {
 
   const isServer = !!data;
   const isAdmin = isServer && data.user.type === "admin";
+  const isPlayer = isServer && data.user.type === "player";
 
   // Calculate breadcrumb segments for navigation
   const breadcrumbSegments = await calculateBreadcrumbSegments();
@@ -54,6 +55,15 @@ export const Navbar = async () => {
               active={currentPath === `/servers/${serverId}`}
             >
               Overview
+            </Link>
+          )}
+          {context.var.isLoggedIn && isPlayer && (
+            <Link
+              href={`/servers/${serverId}/leaderboard`}
+              variant="navLink"
+              active={currentPath === `/servers/${serverId}/leaderboard`}
+            >
+              Leaderboard
             </Link>
           )}
           {context.var.isLoggedIn && isAdmin && (
