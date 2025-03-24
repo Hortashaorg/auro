@@ -111,6 +111,24 @@ type RefreshHookMap = {
 
 type RefreshHookTypes<T extends keyof RefreshHookMap> = RefreshHookMap[T];
 
+type ProviderConfigMap = {
+  google: {
+    clientId: string;
+    clientSecret: string;
+    provider: "google";
+  };
+
+  keycloak: {
+    provider: "keycloak";
+    clientId: string;
+    clientSecret: string;
+    realm: string;
+    baseUrl: string;
+  };
+};
+type ProviderConfigTypes<T extends keyof ProviderConfigMap> =
+  ProviderConfigMap[T];
+
 /**
  * Init Framework App
  * @param settings - The settings for the app
@@ -122,9 +140,7 @@ type RefreshHookTypes<T extends keyof RefreshHookMap> = RefreshHookMap[T];
 export const app = <TProvider extends "google" | "keycloak">(
   settings: {
     authProvider?: {
-      name: TProvider;
-      clientId: string;
-      clientSecret: string;
+      providerConfig: ProviderConfigTypes<TProvider>;
       redirectPathAfterLogin: string;
       redirectPathAfterLogout: string;
       afterLoginHook?: (
@@ -164,7 +180,7 @@ export const app = <TProvider extends "google" | "keycloak">(
       return tracer.startActiveSpan("login", async (span) => {
         loginCounter.add(1);
         try {
-          if (authProvider.name === "google") {
+          if (authProvider.providerConfig.provider === "google") {
             try {
               const url = new URL(c.req.url);
               const code = url.searchParams.get("code");
@@ -172,9 +188,9 @@ export const app = <TProvider extends "google" | "keycloak">(
               if (!code) throw new Error("Missing auth code");
 
               const params = new URLSearchParams({
-                client_id: authProvider.clientId,
+                client_id: authProvider.providerConfig.clientId,
                 redirect_uri: `${url.origin}/auth/login`,
-                client_secret: authProvider.clientSecret,
+                client_secret: authProvider.providerConfig.clientSecret,
                 scope: "email",
                 grant_type: "authorization_code",
                 access_type: "offline",
@@ -259,7 +275,7 @@ export const app = <TProvider extends "google" | "keycloak">(
             }
           }
 
-          if (authProvider.name === "keycloak") {
+          if (authProvider.providerConfig.provider === "keycloak") {
             try {
               const url = new URL(c.req.url);
               const code = url.searchParams.get("code");
@@ -267,16 +283,16 @@ export const app = <TProvider extends "google" | "keycloak">(
               if (!code) throw new Error("Missing auth code");
 
               const params = new URLSearchParams({
-                client_id: authProvider.clientId,
+                client_id: authProvider.providerConfig.clientId,
                 redirect_uri: `${url.origin}/auth/login`,
-                client_secret: authProvider.clientSecret,
+                client_secret: authProvider.providerConfig.clientSecret,
                 scope: "openid",
                 grant_type: "authorization_code",
                 code,
               });
 
               const keycloakBaseUrl =
-                "https://login.kalena.site/realms/notzure/protocol/openid-connect";
+                `${authProvider.providerConfig.baseUrl}/realms/${authProvider.providerConfig.realm}/protocol/openid-connect`;
 
               const res = await fetch(
                 `${keycloakBaseUrl}/token`,
@@ -369,7 +385,7 @@ export const app = <TProvider extends "google" | "keycloak">(
     app.use("/*", async (c, next) => {
       await tracer.startActiveSpan("refresh", async (span) => {
         try {
-          if (authProvider.name === "google") {
+          if (authProvider.providerConfig.provider === "google") {
             try {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
@@ -378,8 +394,8 @@ export const app = <TProvider extends "google" | "keycloak">(
               if (!accessToken && refreshToken && email) {
                 refreshCounter.add(1);
                 const params = new URLSearchParams({
-                  client_id: authProvider.clientId,
-                  client_secret: authProvider.clientSecret,
+                  client_id: authProvider.providerConfig.clientId,
+                  client_secret: authProvider.providerConfig.clientSecret,
                   grant_type: "refresh_token",
                   refresh_token: refreshToken,
                 });
@@ -440,7 +456,7 @@ export const app = <TProvider extends "google" | "keycloak">(
             }
           }
 
-          if (authProvider.name === "keycloak") {
+          if (authProvider.providerConfig.provider === "keycloak") {
             try {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
@@ -449,14 +465,14 @@ export const app = <TProvider extends "google" | "keycloak">(
               if (!accessToken && refreshToken && email) {
                 refreshCounter.add(1);
                 const params = new URLSearchParams({
-                  client_id: authProvider.clientId,
-                  client_secret: authProvider.clientSecret,
+                  client_id: authProvider.providerConfig.clientId,
+                  client_secret: authProvider.providerConfig.clientSecret,
                   grant_type: "refresh_token",
                   refresh_token: refreshToken,
                 });
 
                 const keycloakBaseUrl =
-                  "https://login.kalena.site/realms/notzure/protocol/openid-connect";
+                  `${authProvider.providerConfig.baseUrl}/realms/${authProvider.providerConfig.realm}/protocol/openid-connect`;
                 const res = await fetch(
                   `${keycloakBaseUrl}/token`,
                   {
@@ -547,7 +563,7 @@ export const app = <TProvider extends "google" | "keycloak">(
       return tracer.startActiveSpan("logout", async (span) => {
         logoutCounter.add(1);
         try {
-          if (authProvider.name === "google") {
+          if (authProvider.providerConfig.provider === "google") {
             try {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
@@ -590,7 +606,7 @@ export const app = <TProvider extends "google" | "keycloak">(
             }
           }
 
-          if (authProvider.name === "keycloak") {
+          if (authProvider.providerConfig.provider === "keycloak") {
             try {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
@@ -605,6 +621,21 @@ export const app = <TProvider extends "google" | "keycloak">(
                 accessToken,
                 email,
               } as BeforeLogoutHookTypes<TProvider>);
+
+              const keycloakLogoutUrl =
+                `${authProvider.providerConfig.baseUrl}/realms/${authProvider.providerConfig.realm}/protocol/openid-connect/logout`;
+
+              await fetch(keycloakLogoutUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  client_id: authProvider.providerConfig.clientId,
+                  client_secret: authProvider.providerConfig.clientSecret,
+                  refresh_token: refreshToken,
+                }),
+              });
 
               // Clear cookies
               setCookie(c, "access_token", "", {
@@ -651,7 +682,7 @@ export const app = <TProvider extends "google" | "keycloak">(
         "validate",
         async (span) => {
           try {
-            if (authProvider.name === "google") {
+            if (authProvider.providerConfig.provider === "google") {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
               const email = getCookie(c, "email");
@@ -712,7 +743,7 @@ export const app = <TProvider extends "google" | "keycloak">(
               }
             }
 
-            if (authProvider.name === "keycloak") {
+            if (authProvider.providerConfig.provider === "keycloak") {
               const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
               const email = getCookie(c, "email");
@@ -796,7 +827,7 @@ export const app = <TProvider extends "google" | "keycloak">(
     /** Context Variables */
     app.use("/*", async (c, next) => {
       requestCounter.add(1);
-      if (authProvider.name === "google") {
+      if (authProvider.providerConfig.provider === "google") {
         const refreshToken = getCookie(c, "refresh_token");
         const email = getCookie(c, "email");
 
@@ -805,7 +836,7 @@ export const app = <TProvider extends "google" | "keycloak">(
         // Set login URL
         c.set(
           "loginUrl",
-          `https://accounts.google.com/o/oauth2/v2/auth?client_id=${authProvider.clientId}&redirect_uri=${url.origin}/auth/login&response_type=code&scope=email&access_type=offline&prompt=consent`,
+          `https://accounts.google.com/o/oauth2/v2/auth?client_id=${authProvider.providerConfig.clientId}&redirect_uri=${url.origin}/auth/login&response_type=code&scope=email&access_type=offline&prompt=consent`,
         );
 
         // Set logout URL
@@ -818,7 +849,7 @@ export const app = <TProvider extends "google" | "keycloak">(
         c.set("email", email);
       }
 
-      if (authProvider.name === "keycloak") {
+      if (authProvider.providerConfig.provider === "keycloak") {
         const refreshToken = getCookie(c, "refresh_token");
         const email = getCookie(c, "email");
 
@@ -827,7 +858,7 @@ export const app = <TProvider extends "google" | "keycloak">(
         // Set login URL
         c.set(
           "loginUrl",
-          `https://login.kalena.site/realms/notzure/protocol/openid-connect/auth?client_id=${authProvider.clientId}&redirect_uri=${url.origin}/auth/login&response_type=code&scope=openid`,
+          `${authProvider.providerConfig.baseUrl}/realms/${authProvider.providerConfig.realm}/protocol/openid-connect/auth?client_id=${authProvider.providerConfig.clientId}&redirect_uri=${url.origin}/auth/login&response_type=code&scope=openid`,
         );
 
         // Set logout URL

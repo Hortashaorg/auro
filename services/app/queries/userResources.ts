@@ -18,6 +18,7 @@ export const getUserResources = async (serverId: string) => {
       schema.user,
       eq(schema.userResource.userId, schema.user.id),
     )
+    .orderBy(schema.resource.name)
     .where(
       and(
         eq(schema.user.serverId, serverId),

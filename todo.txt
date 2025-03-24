@@ -19,4 +19,8 @@ CI/CD
 - We should move BasicLayout and maybe other project specific component somewhere else in the repo
 
 Bugs:
-Can't properly log out. The keyclaok provider should probebly actually log out and not just delete stuff.
+Smaller pictures? Use the pixel art
+Introduce limited actions that fill up
+
+Potential issues:
+Kalena keycloak is hardcoded, maybe url should be provided by user of app?!

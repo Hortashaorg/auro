@@ -11,7 +11,7 @@ export const db = drizzle({
 
 export * as schema from "./db/schema.ts";
 
-export { and, eq, exists, gt, lt, or, sql } from "drizzle-orm";
+export { and, desc, eq, exists, gt, lt, or, sql } from "drizzle-orm";
 export type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 export const PostgresError = pg.PostgresError;

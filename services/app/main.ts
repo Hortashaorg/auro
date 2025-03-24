@@ -29,9 +29,13 @@ const clientId = Deno.env.get("AUTH_CLIENT_ID") ??
 
 const myApp = app({
   authProvider: {
-    name: "keycloak",
-    clientId,
-    clientSecret,
+    providerConfig: {
+      provider: "keycloak",
+      clientId,
+      clientSecret,
+      realm: "notzure",
+      baseUrl: "https://login.kalena.site",
+    },
     redirectPathAfterLogin: "/",
     redirectPathAfterLogout: "/",
     afterLoginHook,
