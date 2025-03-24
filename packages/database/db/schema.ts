@@ -174,6 +174,7 @@ export const resource = pgTable(
     assetId: uuid().references(() => asset.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
     description: varchar({ length: 500 }),
+    leaderboard: boolean().notNull().default(false),
     createdAt: temporalTimestamp().notNull().default(sql`now()`),
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },

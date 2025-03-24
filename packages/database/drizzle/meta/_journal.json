@@ -29,6 +29,13 @@
       "when": 1742836592285,
       "tag": "0003_young_rockslide",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1742849815435,
+      "tag": "0004_lethal_annihilus",
+      "breakpoints": true
     }
   ]
 }

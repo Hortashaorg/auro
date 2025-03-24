@@ -1,0 +1,1 @@
+ALTER TABLE "resource" ADD COLUMN "leaderboard" boolean DEFAULT false NOT NULL;

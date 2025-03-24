@@ -40,6 +40,7 @@ const CreateResource = async () => {
         description: result.output.description,
         serverId,
         assetId: result.output.assetId,
+        leaderboard: result.output.leaderboard,
       });
 
     context.header(
@@ -83,6 +84,10 @@ const CreateResourceSchema = v.object({
       return val.trim() === "" ? undefined : val;
     }),
   )),
+  leaderboard: v.pipe(
+    v.optional(v.string()),
+    v.transform((val) => val === "on" ? true : false),
+  ),
   assetId: v.pipe(v.string(), v.uuid()),
 });
 
