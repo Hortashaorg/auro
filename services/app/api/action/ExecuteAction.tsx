@@ -25,6 +25,7 @@ const ExecuteAction = async () => {
           name: "show-toast",
           values: {
             message: "You have no actions left",
+            title: "No Actions Left",
             variant: "danger",
           },
         },
