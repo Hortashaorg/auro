@@ -10,7 +10,6 @@ export const BaseLayout: FC<Props> = ({
     <html lang="en" id="page">
       <head>
         <meta charset="UTF-8" />
-        <meta name="description" content="Astro description" />
         <meta name="viewport" content="width=device-width" />
         <link
           href="/public/main.css"
