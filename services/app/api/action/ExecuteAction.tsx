@@ -99,7 +99,19 @@ const ExecuteAction = async () => {
       .where(eq(schema.user.id, user.id));
   });
 
-  // Return the rewards for UI updates
+  context.header(
+    "HX-Trigger",
+    createEvents([
+      {
+        name: "show-toast",
+        values: {
+          message: "You have successfully executed the action",
+          title: "Success",
+          variant: "success",
+        },
+      },
+    ]),
+  );
   return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
 };
 

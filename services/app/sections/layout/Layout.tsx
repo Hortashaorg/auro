@@ -8,6 +8,7 @@ import { ToastNotificationContainer } from "../../components/feedback/ToastNotif
 type Props = JSX.IntrinsicElements["div"] & {
   title: string;
 };
+
 export const Layout = ({
   title,
   children,
