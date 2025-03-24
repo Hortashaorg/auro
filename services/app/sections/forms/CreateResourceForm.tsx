@@ -8,6 +8,7 @@ import { FormControl } from "@comp/inputs/form/FormControl.tsx";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
+import { Switch } from "@comp/inputs/Switch.tsx";
 
 export const CreateResourceForm = async () => {
   const globalContext = getGlobalContext();
@@ -52,6 +53,14 @@ export const CreateResourceForm = async () => {
             type="text"
             placeholder="Enter resource description"
           />
+        </FormControl>
+
+        <FormControl
+          inputName="leaderboard"
+          hint="Enable leaderboard for this resource"
+        >
+          <Label htmlFor="leaderboard">Leaderboard</Label>
+          <Switch name="leaderboard" />
         </FormControl>
 
         <FormControl

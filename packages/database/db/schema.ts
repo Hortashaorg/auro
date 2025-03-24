@@ -47,6 +47,18 @@ export const rarity = pgEnum("rarity", [
   "legendary",
 ]);
 
+export const intervals = pgEnum("intervals", [
+  "5min",
+  "15min",
+  "30min",
+  "1hour",
+  "2hour",
+  "4hour",
+  "8hour",
+  "12hour",
+  "1day",
+]);
+
 export const asset = pgTable("asset", {
   id: uuid().primaryKey().defaultRandom(),
   type: assetCategory().notNull(),
@@ -58,6 +70,10 @@ export const asset = pgTable("asset", {
 
 export const server = pgTable("server", {
   id: uuid().primaryKey().defaultRandom(),
+  actionRecoveryInterval: intervals().notNull().default("1hour"),
+  actionRecoveryAmount: integer().notNull().default(1),
+  maxAvailableActions: integer().notNull().default(100),
+  startingAvailableActions: integer().notNull().default(15),
   name: varchar({ length: 50 }).notNull().unique("unique_server_name"),
   online: boolean().notNull().default(false),
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
@@ -87,7 +103,7 @@ export const user = pgTable(
     accountId: uuid().references(() => account.id).notNull(),
     serverId: uuid().references(() => server.id).notNull(),
     name: varchar({ length: 50 }),
-    actions: integer().notNull().default(15),
+    availableActions: integer().notNull(),
     type: userType().notNull().default("player"),
     createdAt: temporalTimestamp().notNull().default(sql`now()`),
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
@@ -158,6 +174,7 @@ export const resource = pgTable(
     assetId: uuid().references(() => asset.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
     description: varchar({ length: 500 }),
+    leaderboard: boolean().notNull().default(false),
     createdAt: temporalTimestamp().notNull().default(sql`now()`),
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },

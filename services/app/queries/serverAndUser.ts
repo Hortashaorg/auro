@@ -6,6 +6,8 @@ export const serverAndUser = async (serverId: string, email: string) => {
     eq(schema.server.id, serverId),
   );
 
+  const server = serverData ?? throwError("Server not found");
+
   const [userData] = await db.select().from(schema.user)
     .innerJoin(schema.account, eq(schema.user.accountId, schema.account.id))
     .where(
@@ -29,12 +31,11 @@ export const serverAndUser = async (serverId: string, email: string) => {
       type: "player",
       accountId: account.id,
       name: account.nickname,
+      availableActions: server.startingAvailableActions,
     }).returning();
 
     user = userData ?? throwError("User not found");
   }
-
-  const server = serverData ?? throwError("Server not found");
 
   return { server, user };
 };

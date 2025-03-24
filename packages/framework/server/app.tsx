@@ -54,13 +54,11 @@ type AfterLoginHookTypes<T extends keyof AfterLoginHookMap> =
 type BeforeLogoutHookMap = {
   google: {
     refreshToken: string;
-    accessToken: string;
     email: string;
   };
 
   keycloak: {
     refreshToken: string;
-    accessToken: string;
     email: string;
   };
 };
@@ -565,17 +563,15 @@ export const app = <TProvider extends "google" | "keycloak">(
         try {
           if (authProvider.providerConfig.provider === "google") {
             try {
-              const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
               const email = getCookie(c, "email");
 
-              if (!refreshToken || !accessToken || !email) {
-                throw new Error("Missing tokens or email");
+              if (!refreshToken || !email) {
+                throw new Error("Missing refresh token or email");
               }
 
               await authProvider.beforeLogoutHook?.({
                 refreshToken,
-                accessToken,
                 email,
               } as BeforeLogoutHookTypes<TProvider>);
 
@@ -608,17 +604,15 @@ export const app = <TProvider extends "google" | "keycloak">(
 
           if (authProvider.providerConfig.provider === "keycloak") {
             try {
-              const accessToken = getCookie(c, "access_token");
               const refreshToken = getCookie(c, "refresh_token");
               const email = getCookie(c, "email");
 
-              if (!refreshToken || !accessToken || !email) {
-                throw new Error("Missing tokens or email");
+              if (!refreshToken || !email) {
+                throw new Error("Missing refresh token or email");
               }
 
               await authProvider.beforeLogoutHook?.({
                 refreshToken,
-                accessToken,
                 email,
               } as BeforeLogoutHookTypes<TProvider>);
 

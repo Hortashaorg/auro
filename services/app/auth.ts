@@ -46,7 +46,6 @@ export const refreshHook = async (
 
 export const beforeLogoutHook = async (logoutInfo: {
   refreshToken: string;
-  accessToken: string;
   email: string;
 }) => {
   await deleteAuth(logoutInfo.refreshToken);

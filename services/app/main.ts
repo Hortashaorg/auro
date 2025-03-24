@@ -20,6 +20,8 @@ import { changeActionResourceRewardsRoute } from "@api/action/ChangeActionResour
 import { addActionResourceRewardsRoute } from "@api/action/AddActionResourceRewards.tsx";
 import { toggleServerStatusRoute } from "@api/server/ToggleServerStatus.tsx";
 import { executeActionRoute } from "@api/action/ExecuteAction.tsx";
+import { increaseAvailableActions } from "@queries/increaseAvailableActions.ts";
+import { leaderboardRoute } from "@pages/server/player/Leaderboard.tsx";
 
 const clientSecret = Deno.env.get("AUTH_CLIENT_SECRET") ??
   throwError("Missing auth client secret");
@@ -60,11 +62,16 @@ const myApp = app({
     addActionResourceRewardsRoute,
     toggleServerStatusRoute,
     executeActionRoute,
+    leaderboardRoute,
   ],
   errorPages: {
     notFound: ErrorPage404,
     serverError: ErrorPage500,
   },
+});
+
+Deno.cron("Job", "*/5 * * * *", async () => {
+  await increaseAvailableActions();
 });
 
 Deno.serve({

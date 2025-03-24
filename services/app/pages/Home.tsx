@@ -9,8 +9,8 @@ const Home = () => {
     <Layout title="Home">
       <Text variant="h1" className="mb-8">Home page</Text>
 
-      <Alert variant="warning" title="This is a warning">
-        This is some warning text stuff
+      <Alert variant="warning" title="Warning! No game music">
+        Do not expect any game music here. I suggest using spotify. Ok Li?
       </Alert>
     </Layout>
   );

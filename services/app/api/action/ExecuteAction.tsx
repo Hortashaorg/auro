@@ -4,6 +4,7 @@ import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { getUserByEmail } from "@queries/getUserByEmail.ts";
 import { ResourcesTable } from "@sections/views/ResourcesTable.tsx";
+import { createEvents } from "@comp/utils/events.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -13,6 +14,25 @@ const ExecuteAction = async () => {
     : throwError("Invalid params");
 
   const userEmail = context.var.email ?? throwError("Missing user email");
+
+  const user = await getUserByEmail(userEmail, serverId);
+
+  if (user.availableActions <= 0) {
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        {
+          name: "show-toast",
+          values: {
+            message: "You have no actions left",
+            title: "No Actions Left",
+            variant: "danger",
+          },
+        },
+      ]),
+    );
+    return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
+  }
 
   const possibleRewards = await db.select()
     .from(schema.actionResourceReward)
@@ -47,8 +67,6 @@ const ExecuteAction = async () => {
     },
   );
 
-  const user = await getUserByEmail(userEmail, serverId);
-
   const currentResources = await db.select()
     .from(schema.userResource)
     .where(eq(schema.userResource.userId, user.id));
@@ -73,9 +91,27 @@ const ExecuteAction = async () => {
         });
       }
     }
+
+    await tx.update(schema.user)
+      .set({
+        availableActions: user.availableActions - 1,
+      })
+      .where(eq(schema.user.id, user.id));
   });
 
-  // Return the rewards for UI updates
+  context.header(
+    "HX-Trigger",
+    createEvents([
+      {
+        name: "show-toast",
+        values: {
+          message: "You have successfully executed the action",
+          title: "Success",
+          variant: "success",
+        },
+      },
+    ]),
+  );
   return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
 };
 
