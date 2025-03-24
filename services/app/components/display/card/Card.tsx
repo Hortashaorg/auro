@@ -25,7 +25,7 @@ export const Card: FC<Props> = (
   return (
     <article
       className={cn(
-        "group flex rounded-radius max-w-sm flex-col overflow-hidden border border-outline bg-surface-alt text-on-surface dark:border-outline-dark dark:bg-surface-dark-alt dark:text-on-surface-dark",
+        "group flex rounded-radius max-w-3xs flex-col overflow-hidden border border-outline bg-surface-alt text-on-surface dark:border-outline-dark dark:bg-surface-dark-alt dark:text-on-surface-dark",
         className,
       )}
       {...props}
