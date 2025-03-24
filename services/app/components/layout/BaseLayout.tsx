@@ -16,6 +16,7 @@ export const BaseLayout: FC<Props> = ({
           href="/public/main.css"
           rel="stylesheet"
         />
+        <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
