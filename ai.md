@@ -3,18 +3,28 @@
 ## Table of Contents
 
 - [File Maintenance Guidelines](#file-maintenance-guidelines)
+  - [Document Structure](#document-structure)
+  - [Update Principles](#update-principles)
+  - [Quality Standards](#quality-standards)
+  - [AI-Optimization](#ai-optimization)
 - [Overview](#overview)
 - [Core Architecture](#core-architecture)
   - [Technology Stack](#technology-stack)
   - [Project Structure](#project-structure)
   - [Routing System](#routing-system)
   - [Authentication](#authentication)
+  - [TypeScript Patterns](#typescript-patterns)
+  - [Query Architecture](#query-architecture)
 - [UI Architecture](#ui-architecture)
   - [Component Organization](#component-organization)
   - [HTMX Integration](#htmx-integration)
   - [Alpine.js Patterns](#alpinejs-patterns)
 - [Data Flow](#data-flow)
   - [Query Patterns](#query-patterns)
+- [Implementation Patterns](#implementation-patterns)
+  - [Component Data Dependencies](#component-data-dependencies)
+  - [Empty State Patterns](#empty-state-patterns)
+  - [HTMX Section ID Patterns](#htmx-section-id-patterns)
 
 ## File Maintenance Guidelines
 
@@ -143,6 +153,99 @@ dependencies.
    - All routes registered in `services/app/main.ts`
    - Routes follow URL structure in filepath
    - Partial routes for HTMX endpoints
+
+### Authentication
+
+1. Provider Architecture
+   - Currently supports Google OAuth
+   - Authentication hook system for extensibility
+   - Token refresh and validation built-in
+
+2. Implementation Patterns
+   - Auth providers configured in `services/app/main.ts`
+   - Protected routes use permission checks
+   - Token management handled by framework
+   - Custom hooks for post-authentication actions
+
+   ```typescript
+   // Auth configuration example
+   const myApp = app({
+     authProvider: {
+       name: "google",
+       clientId,
+       clientSecret,
+       redirectPathAfterLogin: "/",
+       redirectPathAfterLogout: "/",
+       afterLoginHook,
+       beforeLogoutHook,
+       refreshHook,
+     },
+     // ... other configuration
+   });
+   ```
+
+### TypeScript Patterns
+
+TypeScript helps catch errors early and provides better developer experience.
+These patterns are fundamental to our architecture.
+
+1. Data Safety
+   - Use non-null assertions only when data is guaranteed to exist
+   - Handle undefined/null cases explicitly through type narrowing
+   - Prefer early returns with type guards
+   - Example:
+   ```typescript
+   // Good
+   const data = await getData();
+   if (!data) {
+     return <EmptyState />;
+   }
+   // TypeScript now knows data is non-null
+   return <Content data={data} />;
+
+   // Avoid
+   const data = await getData();
+   return <Content data={data!} />; // Using non-null assertion
+   ```
+
+### Query Architecture
+
+1. Type Definition Pattern
+   - Export types for query results to ensure type safety
+   - Document the shape of returned data
+   - Handle nullable fields explicitly in the type definition
+   - Example:
+   ```typescript
+   export type ResourceLeaderboardEntry = {
+     user: {
+       id: string;
+       name: string;
+     };
+     resource: {
+       id: string;
+       name: string;
+     };
+     user_resource: {
+       quantity: number;
+     };
+     asset: {
+       url: string;
+     };
+   };
+
+   // Function should specify return type
+   export async function getResourceLeaderboard(
+     resourceId: string,
+   ): Promise<ResourceLeaderboardEntry[]> {
+     // ...
+   }
+   ```
+
+2. Framework Query Patterns
+   - Queries should be reusable and focused on a single responsibility
+   - Use dedicated query files for complex or reusable queries
+   - Implement proper error handling and tracing
+   - Follow type-safe query building practices
 
 ### Authentication
 
@@ -316,3 +419,72 @@ dependencies.
    - Database errors should be logged with tracing
    - Use structured error responses for API endpoints
    - Handle authentication errors consistently across routes
+
+## Implementation Patterns
+
+These patterns represent project-specific implementations and best practices
+that emerged from real development experience.
+
+### Component Data Dependencies
+
+Components should be self-contained units that manage their own data fetching
+and state handling. This ensures components are reusable and maintainable.
+
+1. Data Fetching Pattern
+   - Components should fetch all required data independently
+   - Use separate queries for different data needs (e.g., resource info vs
+     leaderboard data)
+   - Handle empty/loading states explicitly
+   - Example pattern:
+   ```typescript
+   export const MyComponent = async ({ id }: Props) => {
+     const [mainData, relatedData] = await Promise.all([
+       getMainData(id),
+       getRelatedData(id),
+     ]);
+
+     if (!mainData) {
+       return <EmptyState message="No data available" />;
+     }
+
+     return <ComponentContent data={mainData} related={relatedData} />;
+   };
+   ```
+
+### Empty State Patterns
+
+Empty states are crucial for good UX. They should be informative and guide users
+on what to do next.
+
+1. Component Empty States
+   - Every component should handle its empty state explicitly
+   - Empty states should be informative and actionable
+   - Use consistent empty state messaging across the application
+   - Consider the context when showing empty states (e.g., "Be the first!" vs
+     "No data available")
+
+2. Loading States
+   - Components should handle loading states gracefully
+   - Consider using skeleton loaders for better UX
+   - Loading states should prevent layout shifts
+
+### HTMX Section ID Patterns
+
+Section IDs are crucial for HTMX to target the correct elements for updates.
+Follow these patterns for consistent and maintainable IDs.
+
+1. ID Structure
+   - IDs should follow the pattern: `${feature}-${subfeature}-${identifier}`
+   - For lists/tables, include the item ID: `resource-leaderboard-${resourceId}`
+   - Ensure IDs are unique across the page when multiple instances exist
+   ```typescript
+   // Good
+   <Section id={`resource-leaderboard-${resourceId}`}>
+
+   // Avoid
+   <Section id="leaderboard">
+   ```
+
+These patterns emerged from real implementation experience and help maintain
+consistency and type safety across the codebase. They should be followed when
+implementing new features or modifying existing ones.
