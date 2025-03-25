@@ -1,26 +1,8 @@
 import { and, db, desc, eq, schema } from "@package/database";
 
-export type ResourceLeaderboardEntry = {
-  user: {
-    id: string;
-    name: string;
-  };
-  resource: {
-    id: string;
-    name: string;
-    description: string | null;
-  };
-  asset: {
-    url: string;
-  };
-  user_resource: {
-    quantity: number;
-  };
-};
-
 export async function getResourceLeaderboard(
   resourceId: string,
-): Promise<ResourceLeaderboardEntry[]> {
+) {
   const results = await db
     .select({
       user: {

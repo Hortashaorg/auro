@@ -157,7 +157,7 @@ dependencies.
 ### Authentication
 
 1. Provider Architecture
-   - Currently supports Google OAuth
+   - Currently supports Google and Keycloak.
    - Authentication hook system for extensibility
    - Token refresh and validation built-in
 
@@ -171,9 +171,13 @@ dependencies.
    // Auth configuration example
    const myApp = app({
      authProvider: {
-       name: "google",
-       clientId,
-       clientSecret,
+       providerConfig: {
+         provider: "keycloak",
+         clientId,
+         clientSecret,
+         realm: "notzure",
+         baseUrl: "https://login.kalena.site",
+       },
        redirectPathAfterLogin: "/",
        redirectPathAfterLogout: "/",
        afterLoginHook,
@@ -190,12 +194,13 @@ TypeScript helps catch errors early and provides better developer experience.
 These patterns are fundamental to our architecture.
 
 1. Data Safety
-   - Use non-null assertions only when data is guaranteed to exist
+   - Never use non-null assertions (value!)
+   - Use throwError utility for values that must exist
    - Handle undefined/null cases explicitly through type narrowing
    - Prefer early returns with type guards
    - Example:
    ```typescript
-   // Good
+   // Good - Using type narrowing
    const data = await getData();
    if (!data) {
      return <EmptyState />;
@@ -203,54 +208,97 @@ These patterns are fundamental to our architecture.
    // TypeScript now knows data is non-null
    return <Content data={data} />;
 
+   // Good - Using throwError for required values
+   import { throwError } from "@package/common";
+
+   const data = await getData() ?? throwError("Data should exist");
+   // TypeScript now knows data is non-null and we'll get proper error logging
+   return <Content data={data} />;
+
    // Avoid
    const data = await getData();
-   return <Content data={data!} />; // Using non-null assertion
+   return <Content data={data!} />; // Never use non-null assertions
    ```
 
 ### Query Architecture
 
-1. Type Definition Pattern
-   - Export types for query results to ensure type safety
-   - Document the shape of returned data
-   - Handle nullable fields explicitly in the type definition
+1. Type Inference Pattern
+   - Leverage Drizzle schema types instead of duplicating type definitions
+   - Let TypeScript infer return types from database schema
+   - Handle nullable fields through the schema definition
    - Example:
    ```typescript
-   export type ResourceLeaderboardEntry = {
-     user: {
-       id: string;
-       name: string;
-     };
-     resource: {
-       id: string;
-       name: string;
-     };
-     user_resource: {
-       quantity: number;
-     };
-     asset: {
-       url: string;
-     };
-   };
+   import { and, db, desc, eq, schema } from "@package/database";
 
-   // Function should specify return type
-   export async function getResourceLeaderboard(
-     resourceId: string,
-   ): Promise<ResourceLeaderboardEntry[]> {
-     // ...
+   // Function leverages schema types for return type inference
+   export async function getResourceLeaderboard(resourceId: string) {
+     const results = await db
+       .select({
+         user: {
+           id: schema.user.id,
+           name: schema.user.name,
+         },
+         resource: {
+           id: schema.resource.id,
+           name: schema.resource.name,
+         },
+         asset: {
+           url: schema.asset.url,
+         },
+         user_resource: {
+           quantity: schema.userResource.quantity,
+         },
+       })
+       .from(schema.userResource)
+       .where(eq(schema.resource.id, resourceId));
+     // ...rest of query
+
+     return results;
+   }
+
+   // Example of using InferSelectModel to get types from schema
+   import { type InferSelectModel } from "@package/database";
+
+   // Get the type of a resource from the schema
+   type ResourceType = InferSelectModel<typeof schema.resource>;
+
+   // This can be used for type-safe function parameters or return types
+   function processResource(resource: ResourceType) {
+     // TypeScript knows all properties of ResourceType
+     return resource.name;
    }
    ```
 
 2. Framework Query Patterns
    - Queries should be reusable and focused on a single responsibility
    - Use dedicated query files for complex or reusable queries
-   - Implement proper error handling and tracing
-   - Follow type-safe query building practices
+   - Let exceptions propagate to global error handlers rather than catching them
+     locally
+   - Throw errors when operations fail rather than returning error states
+   - Follow type-safe query building practices using schema definitions
+   - Example:
+   ```typescript
+   // Good: Let errors propagate to global handlers
+   export const increaseAvailableActions = async () => {
+     const serversToUpdate = await db.select().from(schema.server).where(
+       and(
+         inArray(schema.server.actionRecoveryInterval, intervals),
+         eq(schema.server.online, true),
+       ),
+     );
+
+     // No try/catch here - errors will be caught by framework
+     for (const server of serversToUpdate) {
+       await db.update(schema.user)
+         .set({/* ... */});
+     }
+   };
+   ```
 
 ### Authentication
 
 1. Provider Architecture
-   - Currently supports Google OAuth
+   - Currently supports Keycloak and Google authentication
    - Authentication hook system for extensibility
    - Token refresh and validation built-in
 
@@ -264,9 +312,13 @@ These patterns are fundamental to our architecture.
    // Auth configuration example
    const myApp = app({
      authProvider: {
-       name: "google",
-       clientId,
-       clientSecret,
+       providerConfig: {
+         provider: "keycloak",
+         clientId,
+         clientSecret,
+         realm: "notzure",
+         baseUrl: "https://login.kalena.site",
+       },
        redirectPathAfterLogin: "/",
        redirectPathAfterLogout: "/",
        afterLoginHook,
