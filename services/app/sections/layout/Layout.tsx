@@ -3,6 +3,7 @@ import { cn } from "@comp/utils/tailwind.ts";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
 import type { JSX } from "@kalena/framework";
 import { Flex } from "@comp/layout/Flex.tsx";
+import { ToastNotificationContainer } from "@comp/feedback/ToastNotificationContainer.tsx";
 type Props = JSX.IntrinsicElements["div"] & {
   title: string;
 };
@@ -25,6 +26,7 @@ export const Layout = ({
           {children}
         </Flex>
       </div>
+      <ToastNotificationContainer />
     </BaseLayout>
   );
 };
