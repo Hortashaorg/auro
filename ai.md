@@ -19,6 +19,8 @@
   - [Component Organization](#component-organization)
   - [HTMX Integration](#htmx-integration)
   - [Alpine.js Patterns](#alpinejs-patterns)
+  - [Component Variants Pattern](#component-variants-pattern)
+  - [Semantic HTML Patterns](#semantic-html-patterns)
 - [Data Flow](#data-flow)
   - [Query Patterns](#query-patterns)
 - [Implementation Patterns](#implementation-patterns)
@@ -252,36 +254,6 @@ These patterns are fundamental to our architecture.
    - Implement proper error handling and tracing
    - Follow type-safe query building practices
 
-### Authentication
-
-1. Provider Architecture
-   - Currently supports Google OAuth
-   - Authentication hook system for extensibility
-   - Token refresh and validation built-in
-
-2. Implementation Patterns
-   - Auth providers configured in `services/app/main.ts`
-   - Protected routes use permission checks
-   - Token management handled by framework
-   - Custom hooks for post-authentication actions
-
-   ```typescript
-   // Auth configuration example
-   const myApp = app({
-     authProvider: {
-       name: "google",
-       clientId,
-       clientSecret,
-       redirectPathAfterLogin: "/",
-       redirectPathAfterLogout: "/",
-       afterLoginHook,
-       beforeLogoutHook,
-       refreshHook,
-     },
-     // ... other configuration
-   });
-   ```
-
 ## UI Architecture
 
 ### Component Organization
@@ -398,6 +370,111 @@ These patterns are fundamental to our architecture.
    - Keep Alpine.js state serializable
    - Prefer server-driven state for complex data
    - Use x-effect for side effects
+
+### Component Variants Pattern
+
+1. Class Variance Authority (cva)
+   - Use cva for defining component variants
+   - Define variants in a separate constant before the component
+   - Group related styling options under a single variant name
+   - Provide clear default variants
+   - Example:
+   ```typescript
+   const cardVariants = cva(
+     "base classes here",
+     {
+       variants: {
+         width: {
+           grow: "w-full",
+           fit: "w-fit",
+         },
+         shadow: {
+           none: "",
+           sm: "shadow-sm",
+           md: "shadow",
+           lg: "shadow-md",
+         },
+       },
+       defaultVariants: {
+         width: "grow",
+         shadow: "none",
+       },
+     },
+   );
+   ```
+
+2. Type Safety
+   - Extract type information from variant definitions
+   - Combine with JSX.IntrinsicElements for proper HTML attribute types
+   - Example:
+   ```typescript
+   type CardVariants = NonNullableProps<typeof cardVariants>;
+
+   type Props = JSX.IntrinsicElements["div"] & CardVariants & {
+     // Additional component-specific props
+     as?: ElementType;
+   };
+   ```
+
+3. Component API Design
+   - Default behavior should be the most common use case
+   - Variants should be named based on their visual or behavioral
+     characteristics
+   - Avoid leaking implementation details in prop names
+   - Example:
+   ```typescript
+   // Good - named based on visual appearance
+   <Button variant="primary" size="lg" />
+
+   // Avoid - leaking implementation details
+   <Button tailwindClasses="bg-blue-500 text-white p-4" />
+   ```
+
+### Semantic HTML Patterns
+
+1. Component Semantics
+   - Use appropriate HTML elements for components based on their purpose
+   - Provide an `as` prop to allow consumers to customize the element when
+     needed
+   - Limit element choices to appropriate semantic options
+   - Example:
+   ```typescript
+   export type ElementType = "article" | "section" | "div";
+
+   type Props = {
+     as?: ElementType;
+   };
+
+   export const Card = ({ as: Element = "div", ...props }: Props) => {
+     return <Element {...props}>{children}</Element>;
+   };
+   ```
+
+2. Semantic Guidelines
+   - `<article>`: Self-contained content that would make sense on its own
+   - `<section>`: Thematic grouping of content with a heading
+   - `<div>`: Generic container with no semantic meaning
+   - `<nav>`: Section containing navigation links
+   - `<aside>`: Content tangentially related to surrounding content
+   - Example usage contexts:
+     - Product card → `<article>`
+     - Dashboard section → `<section>`
+     - Layout container → `<div>`
+
+3. Accessibility Integration
+   - Add appropriate ARIA attributes for interactive components
+   - Ensure keyboard navigation works as expected
+   - Maintain proper heading hierarchy
+   - Example:
+   ```typescript
+   <Card
+     as="section"
+     aria-labelledby="card-title"
+   >
+     <Text as="h2" id="card-title">Card Title</Text>
+     <Text>Card content goes here.</Text>
+   </Card>;
+   ```
 
 ## Data Flow
 
