@@ -23,8 +23,6 @@ import { executeActionRoute } from "@api/action/ExecuteAction.tsx";
 import { increaseAvailableActions } from "@queries/increaseAvailableActions.ts";
 import { leaderboardRoute } from "@pages/server/player/Leaderboard.tsx";
 import { profileRoute } from "@pages/Profile.tsx";
-import { updateAccountNicknameRoute } from "@api/UpdateAccountNickname.tsx";
-import { updateServerUsernameRoute } from "@api/UpdateServerUsername.tsx";
 
 const clientSecret = Deno.env.get("AUTH_CLIENT_SECRET") ??
   throwError("Missing auth client secret");
@@ -67,8 +65,6 @@ const myApp = app({
     executeActionRoute,
     leaderboardRoute,
     profileRoute,
-    updateAccountNicknameRoute,
-    updateServerUsernameRoute,
   ],
   errorPages: {
     notFound: ErrorPage404,

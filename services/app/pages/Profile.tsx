@@ -3,8 +3,7 @@ import { isLoggedIn } from "@permissions/index.ts";
 import { Text } from "@comp/content/Text.tsx";
 import { Card } from "@comp/display/card/Card.tsx";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { ProfileNicknameForm } from "@sections/profile/ProfileNicknameForm.tsx";
-import { ServerNamesList } from "@sections/profile/ServerNamesList.tsx";
+import { ProfileNicknameForm } from "@sections/forms/ProfileNicknameForm.tsx";
 import { throwError } from "@package/common";
 import { getAccountWithUsers } from "@queries/getAccountWithUsers.ts";
 import { CardContent } from "@comp/display/card/CardContent.tsx";
@@ -15,7 +14,7 @@ const Profile = async () => {
   const email = context.var.email ??
     throwError("Email not found despite user being logged in");
 
-  const { account, userServers } = await getAccountWithUsers(email);
+  const { account } = await getAccountWithUsers(email);
 
   return (
     <Layout title="Profile Settings">
@@ -43,10 +42,8 @@ const Profile = async () => {
           <Text variant="body">
             Customize your name for each server you belong to.
           </Text>
-          <ServerNamesList
-            userServers={userServers}
-            defaultNickname={account.nickname || ""}
-          />
+
+          {/* TODO: Add server names list */}
         </CardContent>
       </Card>
     </Layout>
