@@ -1,5 +1,5 @@
-import { Text } from "@comp/content/Text.tsx";
-import { Section } from "@comp/layout/Section.tsx";
+import { Text } from "@comp/typography/index.ts";
+import { Section } from "@comp/wrappers/index.ts";
 import { getLeaderboardResources } from "@queries/resourceLeaderboard.ts";
 import { ResourceLeaderboard } from "@sections/views/ResourceLeaderboard.tsx";
 import { createRoute, v } from "@kalena/framework";

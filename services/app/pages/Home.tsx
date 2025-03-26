@@ -1,5 +1,5 @@
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Text } from "@comp/typography/index.ts";
 import { Alert } from "@comp/feedback/Alert.tsx";
 import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";

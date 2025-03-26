@@ -1,12 +1,11 @@
-import { Nav } from "@comp/navigation/Nav.tsx";
-import { Link } from "@comp/navigation/Link.tsx";
-import { Menu } from "@comp/navigation/Menu.tsx";
-import { Select } from "@comp/navigation/Select.tsx";
+import { Menu, Nav } from "@comp/wrappers/index.ts";
+import { Link } from "@comp/buttons/index.ts";
+import { MenuSelect } from "@comp/form/index.ts";
 import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
-import { Breadcrumbs } from "@comp/navigation/Breadcrumbs.tsx";
+import { Breadcrumbs } from "@comp/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
-import { Text } from "@comp/content/Text.tsx";
+import { Text } from "@comp/typography/index.ts";
 
 export const Navbar = async () => {
   const context = getGlobalContext();
@@ -113,14 +112,14 @@ export const Navbar = async () => {
           </button>
           {context.var.isLoggedIn
             ? (
-              <Select name="Account" variant="single" flow="left">
+              <MenuSelect name="Account" variant="single" flow="left">
                 <Link href="/profile" variant="dropdownLink">
                   Profile
                 </Link>
                 <Link href={context.var.logoutUrl} variant="dropdownLink">
                   Logout
                 </Link>
-              </Select>
+              </MenuSelect>
             )
             : (
               <Link

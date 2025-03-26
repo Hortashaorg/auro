@@ -1,8 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC, JSX } from "@kalena/framework";
-import { FormControl } from "@comp/inputs/form/FormControl.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { Label } from "@comp/inputs/form/Label.tsx";
+import { FormControl } from "./FormControl.tsx";
+import { Text } from "@comp/typography/Text.tsx";
+import { Label } from "./Label.tsx";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 

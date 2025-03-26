@@ -1,10 +1,12 @@
-import { JSX } from "@kalena/framework";
-import { Form } from "@comp/inputs/form/Form.tsx";
-import { FormControl } from "@comp/inputs/form/FormControl.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { Label } from "@comp/inputs/form/Label.tsx";
-import { FormButton } from "@comp/inputs/form/FormButton.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import type { JSX } from "@kalena/framework";
+import {
+  Form,
+  FormButton,
+  FormControl,
+  Input,
+  Label,
+} from "@comp/form/index.ts";
+import { Text } from "@comp/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["div"] & {
   account: {

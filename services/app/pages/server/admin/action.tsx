@@ -1,20 +1,15 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Text } from "@comp/typography/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
-import { Tab } from "@comp/display/tabs/Tab.tsx";
-import { Tabs } from "@comp/display/tabs/Tabs.tsx";
-import { TabsList } from "@comp/display/tabs/TabsList.tsx";
-import { TabsTrigger } from "@comp/display/tabs/TabsTrigger.tsx";
-import { Modal } from "@comp/display/modal/Modal.tsx";
-import { ModalButton } from "@comp/display/modal/ModalButton.tsx";
+import { Tab, Tabs, TabsList, TabsTrigger } from "@comp/tabs/index.ts";
+import { Modal, ModalButton } from "@comp/modal/index.ts";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
-import { FormContext } from "@comp/inputs/form/FormContext.tsx";
-import { FormButton } from "@comp/inputs/form/FormButton.tsx";
-import { ButtonGroup } from "@comp/inputs/ButtonGroup.tsx";
+import { FormButton, FormContext } from "@comp/form/index.ts";
+import { ButtonGroup } from "@comp/buttons/index.ts";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();

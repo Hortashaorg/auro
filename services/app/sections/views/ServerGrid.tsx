@@ -1,14 +1,11 @@
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { Badge } from "@comp/content/Badge.tsx";
-import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
+import { Grid, HtmxWrapper, Section } from "@comp/wrappers/index.ts";
+import { Card } from "@comp/card/index.ts";
+import { CardContent } from "@comp/card/index.ts";
+import { Badge, Text } from "@comp/typography/index.ts";
+import { ButtonLink } from "@comp/buttons/index.ts";
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { onlineServers, serversWhereUserIsAdmin } from "@queries/servers.ts";
 import { throwError } from "@package/common";
-import { Section } from "@comp/layout/Section.tsx";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 
 type Props = JSX.IntrinsicElements["div"];
 

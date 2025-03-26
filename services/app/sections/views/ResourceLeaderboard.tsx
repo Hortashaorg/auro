@@ -1,10 +1,12 @@
-import { Text } from "@comp/content/Text.tsx";
-import { Section } from "@comp/layout/Section.tsx";
-import { Table } from "@comp/display/table/Table.tsx";
-import { TableBody } from "@comp/display/table/TableBody.tsx";
-import { TableCell } from "@comp/display/table/TableCell.tsx";
-import { TableHeader } from "@comp/display/table/TableHeader.tsx";
-import { TableRow } from "@comp/display/table/TableRow.tsx";
+import { Text } from "@comp/typography/index.ts";
+import { Section } from "@comp/wrappers/index.ts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@comp/table/index.ts";
 import { getResourceLeaderboard } from "@queries/resourceLeaderboard.ts";
 import { getResource } from "@queries/getResource.ts";
 

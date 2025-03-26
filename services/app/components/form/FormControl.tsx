@@ -1,6 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC, JSX } from "@kalena/framework";
-import { Text } from "@comp/content/Text.tsx";
+import { Text } from "@comp/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["div"] & {
   inputName: string; // The name attribute of the input field for error association

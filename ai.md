@@ -258,49 +258,76 @@ These patterns are fundamental to our architecture.
 
 ### Component Organization
 
-1. Sections
-   - Located in `services/app/sections/`
-   - Represent larger, composable parts of the UI
-   - Often correspond to specific routes or major UI regions
-   - Can be targeted by HTMX for partial updates
-   - Example: `services/app/sections/views/ResourcesTable.tsx`
+1. Component Structure
+   - Components are organized by category in the `services/app/components`
+     directory
+   - Each category has its own folder (e.g., `inputs`, `display`, `layout`,
+     `content`)
+   - Complex component groups have subfolders (e.g., `inputs/form`,
+     `display/modal`)
+   - Each component has its own file with a descriptive name
 
-2. Components
-   - Located in `services/app/components/`
-   - Reusable UI elements with specific styling and behavior
-   - Organized by category (display, inputs, layout, etc.)
-   - Can receive events from HTMX that trigger behavior
-   - Example: `services/app/components/display/table/Table.tsx`
+2. Index File Pattern
+   - Each component directory has an `index.ts` file that exports all components
+   - This enables importing multiple components from a single path
+   - Index files use explicit `.tsx` extensions in imports for better tooling
+     support
+   ```typescript
+   // Component directory index file (e.g., inputs/form/index.ts)
+   export { Form } from "./Form.tsx";
+   export { Input } from "./Input.tsx";
+   export { Label } from "./Label.tsx";
+   ```
 
-3. Component Hierarchy
-   - Core UI primitives (Button, Input, etc.)
-   - Compound components (Cards, Menus, etc.)
-   - Layouts (containers, grids, etc.)
-   - Sections (feature-specific larger components)
-   - Pages (full page compositions)
+3. Import Patterns
+   - Import components from their category or subcategory
+   - Prefer specific imports over importing from the root
+   ```typescript
+   // Good: Import from specific category
+   import { Button, Switch } from "@comp/inputs";
+   import { Form, Input, Label } from "@comp/inputs/form";
 
-4. Documentation Pattern
-   - Components should include JSDoc with:
-     - Description of purpose
-     - Feature list
-     - Usage examples
-     - Props documentation
+   // Also good: Import specific components from specific paths
+   import { Card } from "@comp/display/card";
+   import { Modal } from "@comp/display/modal";
 
+   // Avoid: Importing everything from root
+   // import { Button, Form, Card } from "@comp/components";
+   ```
+
+4. Component Composition
+   - Follow a parent-child relationship for related components
+   - Use wrapper components to provide context and styling
+   - Allow components to be composed in multiple ways
+   ```typescript
+   <Form id="my-form" hx-post="/api/endpoint">
+     <FormControl inputName="email">
+       <Label htmlFor="email">Email</Label>
+       <Input name="email" type="email" />
+     </FormControl>
+   </Form>;
+   ```
+
+5. Component Documentation
+   - All components include standardized JSDoc comments
+   - Documentation includes purpose, features, and usage examples
+   - Consistent format helps maintain the component library
    ```typescript
    /**
-    * Tooltip component for displaying additional information on hover
+    * Component name and concise description
     *
     * Features:
-    * - Multiple variants (dark, light)
-    * - Positioning options (top, bottom, left, right)
-    * - Smooth transition animations
-    * - Alpine.js integration for show/hide behavior
-    * - Accessible with proper ARIA role
+    * - Feature one
+    * - Feature two
+    * - Feature three
     *
     * @example
-    * <Tooltip content="This is helpful" position="top">
-    *   <Button>Hover Me</Button>
-    * </Tooltip>
+    * <ComponentName
+    *   prop1="value"
+    *   prop2={true}
+    * >
+    *   Children content
+    * </ComponentName>
     */
    ```
 

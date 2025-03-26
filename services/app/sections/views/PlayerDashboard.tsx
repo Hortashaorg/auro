@@ -1,12 +1,9 @@
 import type { InferSelectModel, schema } from "@package/database";
-import { Text } from "@comp/content/Text.tsx";
-import { Section } from "@comp/layout/Section.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { getServerActions } from "../../queries/serverActions.ts";
-import { Button } from "@comp/inputs/Button.tsx";
+import { Text } from "@comp/typography/index.ts";
+import { Grid, Section } from "@comp/wrappers/index.ts";
+import { Card, CardContent, CardImage } from "@comp/card/index.ts";
+import { getServerActions } from "@queries/serverActions.ts";
+import { Button } from "@comp/buttons/index.ts";
 import { ResourcesTable } from "./ResourcesTable.tsx";
 import { currentUser } from "@queries/currentUser.ts";
 

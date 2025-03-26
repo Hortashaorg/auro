@@ -1,7 +1,7 @@
 import { ErrorLayout } from "@sections/layout/ErrorLayout.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
-import { Flex } from "@comp/layout/Flex.tsx";
+import { Text } from "@comp/typography/index.ts";
+import { ButtonLink } from "@comp/buttons/index.ts";
+import { Flex } from "@comp/wrappers/index.ts";
 
 export const ErrorPage404 = () => {
   return (

@@ -1,12 +1,9 @@
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { db, eq, schema } from "@package/database";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
+import { Card, CardContent, CardImage } from "@comp/card/index.ts";
+import { Text } from "@comp/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["div"];
 

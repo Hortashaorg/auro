@@ -1,4 +1,4 @@
-import { Text } from "@comp/content/Text.tsx";
+import { Text } from "@comp/typography/index.ts";
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
@@ -35,7 +35,7 @@ type Props = JSX.IntrinsicElements["div"] & SelectVariants & {
   name: string;
 };
 
-export const Select: FC<Props> = (
+export const MenuSelect: FC<Props> = (
   { className, variant, flow, name, children, ...rest }: Props,
 ) => {
   return (

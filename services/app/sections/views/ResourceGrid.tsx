@@ -1,12 +1,9 @@
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
+import { Card, CardContent, CardImage } from "@comp/card/index.ts";
+import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
+import { Text } from "@comp/typography/index.ts";
 
 type Props = {
   id?: string;

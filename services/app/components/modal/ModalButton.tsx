@@ -1,4 +1,4 @@
-import { Button } from "@comp/inputs/Button.tsx";
+import { Button } from "@comp/buttons/index.ts";
 import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["button"] & {
