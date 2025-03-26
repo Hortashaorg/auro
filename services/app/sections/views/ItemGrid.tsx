@@ -58,7 +58,7 @@ const ItemCard = ({ item }: {
   };
 }) => {
   return (
-    <Card>
+    <Card className="w-3xs">
       <CardImage src={item.url} alt={item.name} />
       <CardContent title={item.name}>
         {item.description && (

@@ -9,7 +9,7 @@ export const AdminDashboard = (
   { server }: { server: InferSelectModel<typeof schema.server> },
 ) => {
   return (
-    <Card className="w-full max-w-md" id="admin-dashboard">
+    <Card width="fit" id="admin-dashboard">
       <CardContent label="Server Status" className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

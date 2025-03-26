@@ -28,7 +28,7 @@ export const LocationGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="location-section">
-      <Grid gap="lg" content="medium">
+      <Grid>
         {locations.map((location) => (
           <LocationCard key={location.id} location={location} />
         ))}
@@ -45,7 +45,7 @@ const LocationCard = ({ location }: {
   };
 }) => {
   return (
-    <Card>
+    <Card className="w-3xs">
       <CardImage src={location.url} alt={location.name} />
       <CardContent title={location.name}>
         <Text variant="h1" className="text-xl font-bold truncate">

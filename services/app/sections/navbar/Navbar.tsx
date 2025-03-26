@@ -113,7 +113,10 @@ export const Navbar = async () => {
           </button>
           {context.var.isLoggedIn
             ? (
-              <Select name="Profile" variant="single" flow="left">
+              <Select name="Account" variant="single" flow="left">
+                <Link href="/profile" variant="dropdownLink">
+                  Profile
+                </Link>
                 <Link href={context.var.logoutUrl} variant="dropdownLink">
                   Logout
                 </Link>

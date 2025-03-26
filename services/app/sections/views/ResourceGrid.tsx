@@ -31,7 +31,7 @@ export const ResourceGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="resource-section">
-      <Grid gap="lg" content="small">
+      <Grid>
         {resources.map((resource) => (
           <ResourceCard key={resource.id} resource={resource} />
         ))}
@@ -48,7 +48,7 @@ const ResourceCard = ({ resource }: {
   };
 }) => {
   return (
-    <Card>
+    <Card className="w-3xs">
       <CardImage src={resource.url} alt={resource.name} />
       <CardContent title={resource.name}>
         <Text variant="h1" className="text-xl font-bold truncate">

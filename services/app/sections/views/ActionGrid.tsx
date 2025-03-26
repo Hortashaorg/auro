@@ -50,7 +50,7 @@ const ActionCard = ({ action, serverId }: {
   serverId: string;
 }) => {
   return (
-    <Card>
+    <Card className="w-3xs">
       <CardImage src={action.assetUrl} alt={action.name} />
 
       <CardContent title={action.name}>
