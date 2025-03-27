@@ -71,7 +71,7 @@ type InputProps = BaseComponentProps & InputVariants & {
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
-  value?: string;
+  value?: string | number;
 };
 
 export const Input: FC<InputProps> = ({
