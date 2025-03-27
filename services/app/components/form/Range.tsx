@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const rangeVariants = cva(
   "h-2 w-full appearance-none bg-on-surface/15 focus:outline-primary dark:bg-on-surface-dark/15 dark:focus:outline-primary-dark [&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:bg-primary dark:[&::-moz-range-thumb]:bg-primary-dark active:[&::-moz-range-thumb]:scale-110 [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:border-none [&::-webkit-slider-thumb]:bg-primary active:[&::-webkit-slider-thumb]:scale-110 dark:[&::-webkit-slider-thumb]:bg-primary-dark [&::-moz-range-thumb]:rounded-full [&::-webkit-slider-thumb]:rounded-full rounded-full",
@@ -22,21 +23,26 @@ const rangeVariants = cva(
 
 type RangeVariants = NonNullableProps<typeof rangeVariants>;
 
-type Props = Omit<JSX.IntrinsicElements["input"], "type"> & RangeVariants & {
+type RangeProps = BaseComponentProps & RangeVariants & {
   unitSuffix?: string;
   showValue?: boolean;
+  min?: number | string;
+  max?: number | string;
+  defaultValue?: number | string;
+  name: string;
 };
 
 /**
  * Range component for numeric input with a slider
  *
- * Features:
- * - Real-time value display with optional unit suffix
- * - Different size variants (small, default, large)
- * - Error state styling
- * - Dark mode support
- * - Alpine.js integration for reactivity
- * - Automatically detects error state from parent FormControl component
+ * @props
+ * - state: Visual state of the slider ('default', 'error')
+ * - unitSuffix: Text to display after the value (e.g., '%', 'px')
+ * - showValue: Whether to display the current value
+ * - defaultValue: Initial value of the slider
+ * - min: Minimum value
+ * - max: Maximum value
+ * - name: Form field name
  *
  * @example
  * <Range
@@ -46,10 +52,9 @@ type Props = Omit<JSX.IntrinsicElements["input"], "type"> & RangeVariants & {
  *   defaultValue={75}
  *   unitSuffix="%"
  *   showValue
- *   size="default"
  * />
  */
-export const Range: FC<Props> = ({
+export const Range: FC<RangeProps> = ({
   className,
   state = "default",
   name,
@@ -57,7 +62,7 @@ export const Range: FC<Props> = ({
   showValue = true,
   defaultValue = 0,
   ...props
-}: Props) => {
+}: RangeProps) => {
   // Base classes that are always applied
   const baseClasses = cn(rangeVariants({ state }), className);
 

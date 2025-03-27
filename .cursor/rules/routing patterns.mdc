@@ -1,0 +1,54 @@
+---
+description: Routing System and Page Organization
+globs: 
+alwaysApply: false
+---
+# Form Handling Patterns
+
+## Form Components
+
+- Use `<Form>` component as the container
+- Always provide unique form IDs using feature-based naming:
+  `${feature}-${action}-form`
+- Structure forms consistently:
+
+```typescript
+<Form id="profile-update-form" hx-post="/api/profile/update">
+  <FormControl inputName="name">
+    <Label htmlFor="name" required>Name</Label>
+    <Input id="name" name="name" />
+    <ErrorMessage />
+  </FormControl>
+  <ButtonGroup>
+    <Button type="submit">Save</Button>
+  </ButtonGroup>
+</Form>
+```
+
+## Validation
+
+- Define validation schemas with Valibot
+- Place schemas at the bottom of the file
+- Reuse validation logic between client and server
+- Include helpful error messages
+
+```typescript
+const ProfileFormSchema = v.object({
+  name: v.pipe(
+    v.string(),
+    v.minLength(2, "Name must be at least 2 characters"),
+    v.maxLength(50, "Name cannot exceed 50 characters")
+  ),
+  email: v.pipe(
+    v.string(),
+    v.email("Please enter a valid email address")
+  )
+});
+```
+
+## Error Handling
+
+- Use HX-Trigger for form validation responses
+- Display field-specific errors with ErrorMessage component
+- Implement consistent error styling with Tailwind
+- Use optimistic updates for better UX

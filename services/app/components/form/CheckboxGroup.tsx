@@ -1,10 +1,11 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { FormControl } from "./FormControl.tsx";
 import { Text } from "@comp/typography/index.ts";
 import { Label } from "./Label.tsx";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 type Option = {
   value: string;
@@ -28,20 +29,26 @@ const checkboxGroupVariants = cva(
 );
 
 type CheckboxGroupVariants = NonNullableProps<typeof checkboxGroupVariants>;
-type CheckboxGroupProps =
-  & JSX.IntrinsicElements["div"]
-  & CheckboxGroupVariants
-  & {
-    name: string;
-    options: Option[];
-    values?: string[];
-    label?: string;
-    hint?: string;
-    required?: boolean;
-  };
+type CheckboxGroupProps = BaseComponentProps & CheckboxGroupVariants & {
+  name: string;
+  options: Option[];
+  values?: string[];
+  label?: string;
+  hint?: string;
+  required?: boolean;
+};
 
 /**
  * CheckboxGroup provides a group of checkboxes with consistent styling
+ *
+ * @props
+ * - name: Field name for form submission
+ * - options: Array of checkbox options (value, label, optional description)
+ * - values: Array of pre-selected values
+ * - label: Group label text
+ * - hint: Helper text for the checkbox group
+ * - orientation: Layout direction ('vertical' or 'horizontal')
+ * - required: Whether the field is required
  *
  * @example
  * <CheckboxGroup

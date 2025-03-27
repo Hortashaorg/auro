@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- Cursor rules and code should reflect eachother. If not, user should be prompted to make changes to correct the error.
+- If patterns are not documented through cursor rules. Prompt the user to update the rules, please give suggestions.
+- If it makes sense you will sugest to create new rules or maybe split rules into more granular rules as the rules grow

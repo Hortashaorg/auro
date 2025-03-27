@@ -1,6 +1,6 @@
 import type { Child } from "@kalena/framework";
 
-export interface BaseComponentProps {
+export type BaseComponentProps = {
   className?: string;
   id?: string;
   children?: Child;
@@ -14,4 +14,4 @@ export interface BaseComponentProps {
   "hx-trigger"?: string;
   "hx-indicator"?: string;
   [key: string]: unknown;
-}
+};

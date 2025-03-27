@@ -3,21 +3,22 @@ import type { FC } from "@kalena/framework";
 
 type ButtonProps = Parameters<typeof Button>[0];
 
-type Props = ButtonProps & {
+type FormButtonProps = ButtonProps & {
   formId: string;
   disableWhenClean?: boolean;
   disableDuringSubmit?: boolean;
-  variant?: Parameters<typeof Button>[0]["variant"];
+  variant?: ButtonProps["variant"];
 };
 
 /**
  * Button specifically designed to work with forms outside the form element
  *
- * Features:
- * - Automatically links to form via formId
- * - Can be disabled when form is clean (no changes)
- * - Can be disabled during form submission
- * - Inherits all Button component props
+ * @props
+ * - formId: ID of the form to submit
+ * - disableWhenClean: Whether to disable the button when form has no changes
+ * - disableDuringSubmit: Whether to disable the button during form submission
+ * - variant: Visual style of the button (inherited from Button component)
+ * - All Button component props are supported
  *
  * @example
  * <FormButton
@@ -29,12 +30,12 @@ type Props = ButtonProps & {
  *   Save Changes
  * </FormButton>
  */
-export const FormButton: FC<Props> = ({
+export const FormButton: FC<FormButtonProps> = ({
   formId,
   disableWhenClean = false,
   disableDuringSubmit = true,
   ...props
-}: Props) => {
+}: FormButtonProps) => {
   // Set disabled binding based on options
   let disabledBinding = "";
 

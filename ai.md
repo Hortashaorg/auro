@@ -1,38 +1,5 @@
 # AI Context Guide
 
-## Table of Contents
-
-- [File Maintenance Guidelines](#file-maintenance-guidelines)
-  - [Document Structure](#document-structure)
-  - [Update Principles](#update-principles)
-  - [Quality Standards](#quality-standards)
-  - [AI-Optimization](#ai-optimization)
-- [Overview](#overview)
-- [Core Architecture](#core-architecture)
-  - [Technology Stack](#technology-stack)
-  - [Project Structure](#project-structure)
-  - [Routing System](#routing-system)
-  - [Authentication](#authentication)
-  - [TypeScript Patterns](#typescript-patterns)
-  - [Query Architecture](#query-architecture)
-- [UI Architecture](#ui-architecture)
-  - [Component Organization](#component-organization)
-  - [HTMX Integration](#htmx-integration)
-  - [Alpine.js Patterns](#alpinejs-patterns)
-  - [Component Variants Pattern](#component-variants-pattern)
-  - [Semantic HTML Patterns](#semantic-html-patterns)
-- [Data Flow](#data-flow)
-  - [Query Patterns](#query-patterns)
-- [Implementation Patterns](#implementation-patterns)
-  - [Component Data Dependencies](#component-data-dependencies)
-  - [Empty State Patterns](#empty-state-patterns)
-  - [HTMX Section ID Patterns](#htmx-section-id-patterns)
-- [Import Patterns](#import-patterns)
-- [API Endpoint Patterns](#api-endpoint-patterns)
-- [Database Operation Patterns](#database-operation-patterns)
-- [Error Handling Patterns](#error-handling-patterns)
-- [Query Function Naming](#query-function-naming)
-
 ## File Maintenance Guidelines
 
 ### Document Structure
@@ -351,7 +318,28 @@ These patterns are fundamental to our architecture.
    - Place the type definition just before the component
    - Document props using JSDoc
 
-3. Documentation Pattern
+3. BaseComponentProps Over JSX.IntrinsicElements
+   - Always prefer `BaseComponentProps` over
+     `JSX.IntrinsicElements["element-type"]`
+   - For components that extend HTML elements, use
+     `Omit<BaseComponentProps, 'property'>` instead of
+     `JSX.IntrinsicElements["element-type"]`
+   - This ensures consistent HTMX attribute support across all components
+   ```typescript
+   // Good
+   type InputProps = BaseComponentProps & {
+     // Input-specific props
+     type?: string;
+     placeholder?: string;
+   };
+
+   // Avoid
+   type InputProps = JSX.IntrinsicElements["input"] & {
+     // Input-specific props
+   };
+   ```
+
+4. Documentation Pattern
    ```typescript
    /**
     * Button component for triggering actions
@@ -368,7 +356,7 @@ These patterns are fundamental to our architecture.
     */
    ```
 
-4. Component Variants Pattern
+5. Component Variants Pattern
    - Use class-variance-authority (cva) for defining variants
    - Define variants in a separate constant before the component
    - Group related styling options under a single variant name
@@ -398,7 +386,7 @@ These patterns are fundamental to our architecture.
    );
    ```
 
-5. Type Safety
+6. Type Safety
    - Extract type information from variant definitions
    - Use BaseComponentProps as the foundation for all component props
    - Combine with variant props for complete type safety
@@ -413,7 +401,7 @@ These patterns are fundamental to our architecture.
    };
    ```
 
-6. Component API Design
+7. Component API Design
    - Default behavior should be the most common use case
    - Variants should be named based on their visual or behavioral
      characteristics
@@ -427,14 +415,16 @@ These patterns are fundamental to our architecture.
    <Button tailwindClasses="bg-blue-500 text-white p-4" />
    ```
 
-7. Component Family Pattern
+8. Component Family Pattern
    - Create related components that work together (e.g., Card, CardContent,
      CardImage)
    - Each component should have its own variants but share a consistent API
    - Maintain consistent naming and prop patterns across component families
-   - Example:
+   - Examples of component families:
+
+   Card components:
    ```typescript
-   // Card component
+   // Card component family
    <Card width="fit" shadow="md" as="article">
      <CardImage
        src="/product.jpg"
@@ -451,6 +441,43 @@ These patterns are fundamental to our architecture.
        Product description here
      </CardContent>
    </Card>;
+   ```
+
+   Form components:
+   ```typescript
+   // Form component family
+   <Form id="profile-form" hx-post="/api/profile/update">
+     <FormSection
+       title="Basic Information"
+       description="Update your profile details"
+       variant="default"
+       spacingBottom="md"
+     >
+       <FormControl inputName="name">
+         <Label htmlFor="name" required>Name</Label>
+         <Input id="name" name="name" />
+       </FormControl>
+
+       <FormControl inputName="bio">
+         <Label htmlFor="bio">Bio</Label>
+         <Textarea id="bio" name="bio" rows={4} />
+       </FormControl>
+     </FormSection>
+
+     <FormButton formId="profile-form" disableWhenClean>
+       Save Changes
+     </FormButton>
+   </Form>;
+   ```
+
+   Button components:
+   ```typescript
+   // Button component family
+   <ButtonGroup spacing="md" alignment="end">
+     <Button variant="outline">Cancel</Button>
+     <Button variant="primary">Submit</Button>
+     <ButtonLink href="/help" variant="secondary">Help</ButtonLink>
+   </ButtonGroup>;
    ```
 
 ### HTMX Integration
@@ -1061,3 +1088,231 @@ implementing new features or modifying existing ones.
      // Implementation
    };
    ```
+
+## Component Migration Patterns
+
+1. Migrating to BaseComponentProps
+   - When updating existing components, replace JSX.IntrinsicElements with
+     BaseComponentProps
+   - Update imports to use direct paths (e.g., `@comp/typography/Text.tsx`
+     instead of `@comp/typography/index.ts`)
+   - Ensure props are properly typed and documented with JSDoc
+   - Steps for migration:
+     1. Import BaseComponentProps:
+        `import type { BaseComponentProps } from "@comp/utils/props.ts";`
+     2. Replace JSX.IntrinsicElements:
+        `type ComponentProps = BaseComponentProps & { ... }`
+     3. Update JSDoc to use the `@props` format with descriptions
+     4. Ensure className handling includes fallback:
+        `className={cn(variants, className || "")}`
+
+   Example before migration:
+   ```typescript
+   import type { FC, JSX } from "@kalena/framework";
+
+   type Props = JSX.IntrinsicElements["div"] & {
+     variant: "primary" | "secondary";
+   };
+
+   /**
+    * Component description
+    *
+    * Features:
+    * - Feature 1
+    * - Feature 2
+    */
+   export const Component: FC<Props> = ({ className, variant, ...props }) => {
+     return (
+       <div className={`base-class ${variant} ${className}`} {...props}>
+         Content
+       </div>
+     );
+   };
+   ```
+
+   Example after migration:
+   ```typescript
+   import type { FC } from "@kalena/framework";
+   import type { BaseComponentProps } from "@comp/utils/props.ts";
+   import { cn } from "@comp/utils/tailwind.ts";
+
+   type ComponentProps = BaseComponentProps & {
+     variant: "primary" | "secondary";
+   };
+
+   /**
+    * Component description
+    *
+    * @props
+    * - variant: Visual style of the component ('primary', 'secondary')
+    *
+    * @example
+    * <Component variant="primary">Content</Component>
+    */
+   export const Component: FC<ComponentProps> = ({
+     className,
+     variant,
+     ...props
+   }: ComponentProps) => {
+     return (
+       <div className={cn(`base-class ${variant}`, className || "")} {...props}>
+         Content
+       </div>
+     );
+   };
+   ```
+
+2. Adding CVA Variants to Existing Components
+   - Replace string literals in className with CVA variants
+   - Create a variants object with appropriately named groups
+   - Update the props type to use NonNullableProps
+   - Steps for migration:
+     1. Import CVA: `import { cva } from "class-variance-authority";`
+     2. Define variants: `const componentVariants = cva(...)`
+     3. Create variants type:
+        `type ComponentVariants = NonNullableProps<typeof componentVariants>;`
+     4. Update props:
+        `type ComponentProps = BaseComponentProps & ComponentVariants & {...}`
+
+   Example before CVA:
+   ```typescript
+   const Component: FC<ComponentProps> = ({
+     className,
+     variant,
+     size = "md",
+     ...props
+   }) => {
+     const sizeClass = size === "sm"
+       ? "text-sm py-1"
+       : size === "lg"
+       ? "text-lg py-3"
+       : "text-base py-2";
+     const variantClass = variant === "primary"
+       ? "bg-primary text-white"
+       : "bg-gray-200 text-gray-800";
+
+     return (
+       <div className={cn(sizeClass, variantClass, className)} {...props}>
+         Content
+       </div>
+     );
+   };
+   ```
+
+   Example after CVA:
+   ```typescript
+   const componentVariants = cva("base classes", {
+     variants: {
+       variant: {
+         primary: "bg-primary text-white",
+         secondary: "bg-gray-200 text-gray-800",
+       },
+       size: {
+         sm: "text-sm py-1",
+         md: "text-base py-2",
+         lg: "text-lg py-3",
+       },
+     },
+     defaultVariants: {
+       variant: "primary",
+       size: "md",
+     },
+   });
+
+   type ComponentVariants = NonNullableProps<typeof componentVariants>;
+   type ComponentProps = BaseComponentProps & ComponentVariants;
+
+   const Component: FC<ComponentProps> = ({
+     className,
+     variant,
+     size,
+     ...props
+   }) => {
+     return (
+       <div
+         className={cn(componentVariants({ variant, size }), className)}
+         {...props}
+       >
+         Content
+       </div>
+     );
+   };
+   ```
+
+### Wrapper Components
+
+Wrapper components serve as layout building blocks that provide consistent
+structure while maintaining maximum flexibility. These components simplify
+complex layouts and provide semantic meaning to different sections of the
+application.
+
+1. Key wrapper components:
+   - `Flex`: Provides flexbox layout with configurable direction, alignment,
+     justification and spacing
+   - `Grid`: Offers CSS grid layout with configurable columns, rows, and gaps
+   - `Section`: Semantic section element with standard padding and margin
+   - `Nav`: Navigation container with consistent styling
+   - `Menu`: Container for navigation items
+   - `BaseLayout`: Application layout wrapper that includes common elements
+
+2. Implementation pattern:
+   - Wrappers should be minimal and focused on layout concerns
+   - They accept BaseComponentProps to allow for HTMX and Alpine.js integration
+   - They may include variants for spacing, alignment, and other layout concerns
+   - They should handle className merging with sensible defaults
+
+```typescript
+import { cn } from "@comp/utils/tailwind.ts";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { cva } from "class-variance-authority";
+import type { NonNullableProps } from "@comp/utils/types.ts";
+
+// If the component has variants, define them with cva
+const flexVariants = cva("flex", {
+  variants: {
+    direction: {
+      row: "flex-row",
+      col: "flex-col",
+    },
+    justify: {
+      start: "justify-start",
+      center: "justify-center",
+      end: "justify-end",
+      between: "justify-between",
+    },
+    // Other variants...
+  },
+  defaultVariants: {
+    direction: "row",
+    justify: "start",
+  },
+});
+
+type FlexVariants = NonNullableProps<typeof flexVariants>;
+type FlexProps = BaseComponentProps & FlexVariants;
+
+export const Flex: FC<FlexProps> = ({
+  className,
+  direction,
+  justify,
+  ...props
+}: FlexProps) => {
+  return (
+    <div
+      className={cn(flexVariants({ direction, justify }), className || "")}
+      {...props}
+    >
+      {props.children}
+    </div>
+  );
+};
+```
+
+3. Usage patterns:
+   - Use wrappers to create consistent layouts across the application
+   - Combine multiple wrappers for complex layouts (e.g., `Section` containing a
+     `Grid`)
+   - Leverage the semantic meaning of wrappers to improve accessibility and code
+     clarity
+   - Prefer composition over configuration for highly specialized layouts

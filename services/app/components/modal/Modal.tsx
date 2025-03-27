@@ -2,9 +2,10 @@ import { cn } from "@comp/utils/tailwind.ts";
 import { Flex } from "@comp/wrappers/Flex.tsx";
 import { Button } from "../buttons/Button.tsx";
 import { Text } from "../typography/index.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const modalVariants = cva([
   "fixed inset-0 m-auto",
@@ -28,7 +29,7 @@ const modalVariants = cva([
 
 type ModalVariants = NonNullableProps<typeof modalVariants>;
 
-type Props = JSX.IntrinsicElements["dialog"] & ModalVariants & {
+type ModalProps = BaseComponentProps & ModalVariants & {
   title: string;
   modalRef: string;
 };
@@ -36,15 +37,10 @@ type Props = JSX.IntrinsicElements["dialog"] & ModalVariants & {
 /**
  * Modal component for displaying content in an overlay dialog
  *
- * Features:
- * - Built on native dialog element for accessibility
- * - Backdrop with semi-transparent background
- * - Title and close button in header
- * - Alpine.js integration for open/close behavior
- * - Responsive sizing with max-width
- * - Dark mode support
- * - Listens for close-dialog events
- * - Closes on blur (clicking outside the modal)
+ * @props
+ * - title: Text displayed in the modal header
+ * - modalRef: Reference name for Alpine.js to access this modal
+ * - maxWidth: Maximum width of the modal ('sm', 'md', 'lg', 'xl')
  *
  * @example
  * <Modal
@@ -69,14 +65,14 @@ type Props = JSX.IntrinsicElements["dialog"] & ModalVariants & {
  *   </Flex>
  * </Modal>
  */
-export const Modal: FC<Props> = ({
+export const Modal: FC<ModalProps> = ({
   title,
   children,
   className,
   modalRef,
   maxWidth,
   ...props
-}: Props) => {
+}: ModalProps) => {
   props["x-on:close-dialog.window"] = `$refs.${modalRef}.close()`;
   props["x-on:click"] = `$event.target === $el && $refs.${modalRef}.close()`;
 
@@ -84,7 +80,7 @@ export const Modal: FC<Props> = ({
     <dialog
       className={cn(
         modalVariants({ maxWidth }),
-        className,
+        className || "",
       )}
       x-ref={modalRef}
       {...props}

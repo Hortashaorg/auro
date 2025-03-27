@@ -1,6 +1,7 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const imageGridVariants = cva([
   "cursor-pointer",
@@ -48,7 +49,7 @@ type Asset = {
   url: string;
 };
 
-type Props = Omit<JSX.IntrinsicElements["input"], "children"> & {
+type ImageGridInputProps = Omit<BaseComponentProps, "children"> & {
   assets: Asset[];
   name: string;
   value?: string;
@@ -58,12 +59,11 @@ type Props = Omit<JSX.IntrinsicElements["input"], "children"> & {
 /**
  * ImageGridInput component for selecting an image from a grid of options
  *
- * Features:
- * - Visual grid of selectable images
- * - Highlights the selected image
- * - Uses Alpine.js for state management
- * - Stores the selected asset ID in a hidden input
- * - Proper dark mode support with visual feedback
+ * @props
+ * - assets: Array of image assets with id and url properties
+ * - name: Form field name
+ * - value: Currently selected asset ID
+ * - required: Whether selection is required
  *
  * @example
  * <FormControl inputName="assetId">
@@ -80,15 +80,15 @@ type Props = Omit<JSX.IntrinsicElements["input"], "children"> & {
  *   />
  * </FormControl>
  */
-export const ImageGridInput: FC<Props> = ({
+export const ImageGridInput: FC<ImageGridInputProps> = ({
   className,
   assets,
   value,
   ...props
-}: Props) => {
+}: ImageGridInputProps) => {
   return (
     <div
-      className={cn("w-full", className)}
+      className={cn("w-full", className || "")}
       x-data={`{
         selectedAsset: '${value || assets[0]?.id || ""}'
       }`}
@@ -114,9 +114,7 @@ export const ImageGridInput: FC<Props> = ({
               <img
                 src={asset.url}
                 alt={`Asset ${asset.id}`}
-                className="h-full w-full"
-                fit="cover"
-                rounded="md"
+                className="h-full w-full object-cover rounded-md"
               />
             </div>
           ))}

@@ -1,15 +1,27 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type Props = JSX.IntrinsicElements["ul"];
+type MenuProps = BaseComponentProps;
 
-export const Menu: FC<Props> = ({ className, children, ...rest }: Props) => {
+/**
+ * Menu component for navigation items
+ *
+ * @example
+ * <Menu>
+ *   <Link href="/">Home</Link>
+ *   <Link href="/about">About</Link>
+ * </Menu>
+ */
+export const Menu: FC<MenuProps> = (
+  { className, children, ...props }: MenuProps,
+) => {
   return (
     <div
-      {...rest}
+      {...props}
       className={cn(
         "hidden items-center md:flex",
-        className,
+        className || "",
       )}
     >
       {children}

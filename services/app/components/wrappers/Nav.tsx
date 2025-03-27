@@ -1,15 +1,29 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type Props = JSX.IntrinsicElements["nav"];
+type NavProps = BaseComponentProps;
 
-export const Nav: FC<Props> = ({ className, children, ...rest }: Props) => {
+/**
+ * Navigation wrapper component
+ *
+ * @example
+ * <Nav>
+ *   <Menu>
+ *     <Link href="/">Home</Link>
+ *     <Link href="/about">About</Link>
+ *   </Menu>
+ * </Nav>
+ */
+export const Nav: FC<NavProps> = (
+  { className, children, ...props }: NavProps,
+) => {
   return (
     <nav
-      {...rest}
+      {...props}
       className={cn(
         "flex items-center justify-between bg-surface-alt border-outline dark:border-outline-dark px-6 py-4 dark:bg-surface-dark-alt",
-        className,
+        className || "",
       )}
       aria-label="top menu"
       x-data="{ name:'' }"

@@ -1,12 +1,9 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BreadcrumbSegment } from "@queries/breadcrumbs.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type Props = {
-  /**
-   * Optional className for styling
-   */
-  className?: string;
+type BreadcrumbsProps = BaseComponentProps & {
   /**
    * Breadcrumb segments to display
    */
@@ -21,6 +18,9 @@ type Props = {
  * - Accessible with proper ARIA attributes
  * - Designed to work well within the application's navigation structure
  *
+ * @props
+ * - segments: Array of breadcrumb segments to display in the navigation path
+ *
  * @example
  * // Using with the utility function from queries
  * import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
@@ -32,17 +32,19 @@ type Props = {
  *   { label: "Products", href: "/products", isLink: false }
  * ]} />
  */
-export const Breadcrumbs: FC<Props> = ({
+export const Breadcrumbs: FC<BreadcrumbsProps> = ({
   className,
   segments,
-}) => {
+  ...props
+}: BreadcrumbsProps) => {
   return (
     <nav
       aria-label="breadcrumb"
       className={cn(
         "text-sm font-medium text-on-surface dark:text-on-surface-dark",
-        className,
+        className || "",
       )}
+      {...props}
     >
       <ol className="flex flex-wrap items-center gap-1">
         {segments.map((segment, index) => (

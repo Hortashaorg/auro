@@ -1,33 +1,35 @@
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type Props = JSX.IntrinsicElements["div"] & {
+type FormContextProps = BaseComponentProps & {
   formId: string;
 };
 
 /**
  * FormContext component that provides state management for forms and their associated controls
  *
- * Features:
- * - Manages form dirty state
- * - Handles form submission state
- * - Provides context for buttons and other controls outside the form
- * - Dispatches events when form state changes
+ * @props
+ * - formId: ID of the form to manage
+ * - children: Form and related components
  *
  * @example
  * <FormContext formId="my-form">
  *   <Form id="my-form" hx-post="/api/endpoint">
- *     <!-- Form fields -->
+ *     <FormControl inputName="email">
+ *       <Label htmlFor="email">Email</Label>
+ *       <Input id="email" name="email" />
+ *     </FormControl>
  *   </Form>
  *
- *   <Button type="submit" form="my-form">Submit</Button>
+ *   <FormButton formId="my-form" disableWhenClean>Submit</FormButton>
  * </FormContext>
  */
-export const FormContext: FC<Props> = ({
+export const FormContext: FC<FormContextProps> = ({
   children,
   formId,
   className,
   ...props
-}: Props) => {
+}: FormContextProps) => {
   // Create Alpine.js data with form state
   const alpineData = JSON.stringify({
     formIsDirty: false,

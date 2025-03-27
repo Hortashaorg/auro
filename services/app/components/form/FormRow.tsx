@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const formRowVariants = cva(
   "flex flex-col sm:flex-row w-full",
@@ -20,10 +21,14 @@ const formRowVariants = cva(
 );
 
 type FormRowVariants = NonNullableProps<typeof formRowVariants>;
-type FormRowProps = JSX.IntrinsicElements["div"] & FormRowVariants;
+type FormRowProps = BaseComponentProps & FormRowVariants;
 
 /**
  * FormRow allows multiple form controls to be arranged horizontally
+ *
+ * @props
+ * - gap: Spacing between form controls ('sm', 'md', 'lg')
+ * - children: Form control components to be arranged
  *
  * @example
  * <FormRow>

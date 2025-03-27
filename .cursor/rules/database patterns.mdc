@@ -1,0 +1,173 @@
+---
+description: Database Operation Patterns
+globs:
+alwaysApply: false
+---
+
+# Database Operation Patterns
+
+## Query Typing
+
+- Always type query results explicitly for type safety
+- Define custom types for complex query results
+- Return Promises with the appropriate type
+
+```typescript
+// Define explicit types for query results
+type AccountWithServers = {
+  account: {
+    id: string;
+    email: string;
+    nickname: string | null;
+  };
+  servers: Array<{
+    id: string;
+    name: string;
+  }>;
+};
+
+// Type the return value of your query function
+export async function getAccountWithServers(
+  email: string,
+): Promise<AccountWithServers | null> {
+  // Query implementation
+}
+```
+
+## Safe Database Operations
+
+- Use `eq`, `and`, `or` from the database package for conditions
+- NEVER use string interpolation for SQL values (avoid SQL injection)
+- Use `sql` template literal for raw SQL when necessary
+
+```typescript
+// Good pattern
+const [user] = await db.select({
+  id: schema.user.id,
+  name: schema.user.name,
+})
+  .from(schema.user)
+  .where(
+    and(
+      eq(schema.user.accountId, accountId),
+      eq(schema.user.serverId, serverId),
+    ),
+  );
+
+// Avoid SQL injection risk
+// BAD: `WHERE email = '${email}'`
+```
+
+## Null Handling
+
+- Handle nullable results explicitly
+- Return null or throw errors consistently based on context
+- Document null handling behavior in JSDoc comments
+
+```typescript
+if (!user) {
+  return null; // When it's acceptable for a resource not to exist
+  // OR
+  throw new Error("User not found"); // When it should exist
+}
+```
+
+## Date/Time Operations
+
+- Use SQL functions for date operations via the `sql` template
+- For updates, prefer `sql\`now()\`` over JavaScript Date objects
+
+```typescript
+// Good
+await db.update(schema.user)
+  .set({
+    name: newName,
+    updatedAt: sql`now()`,
+  })
+  .where(eq(schema.user.id, userId));
+
+// Avoid
+await db.update(schema.user)
+  .set({
+    name: newName,
+    updatedAt: new Date(), // Can cause type issues
+  })
+  .where(eq(schema.user.id, userId));
+```
+
+## Query Function Naming
+
+- Use clear, specific names that describe both input and output
+- Follow consistent naming patterns:
+  - `get[Entity]` - Get a single entity by its primary key
+  - `get[Entity]By[Property]` - Get a single entity by a property
+  - `get[Entity]With[RelatedEntities]` - Get entity with related entities
+  - `list[Entities]` - Get a list of entities
+  - `list[Entities]By[Property]` - Get a list filtered by a property
+
+## Query Documentation
+
+- Always document query functions with JSDoc
+- Include what it fetches, parameters, return type, and error behavior
+
+```typescript
+/**
+ * Get account and all associated users across servers
+ *
+ * @param email The email address of the account to fetch
+ * @returns The account and all server users associated with it
+ * @throws Error if account not found
+ */
+export const getAccountWithUsers = async (email: string) => {
+  // Implementation
+};
+```
+
+## Error Handling Levels
+
+- **System Errors**: Use `throwError` when data should exist based on
+  architecture
+- **User Errors**: Handle gracefully with proper UI feedback
+- **Optional Data**: Use nullish coalescing or conditional logic for fallbacks
+
+```typescript
+// System error - should never happen in normal flow
+const account = await db.query.account.findFirst({
+  where: (account, { eq }) => eq(account.email, email),
+}) ?? throwError("Account not found for logged-in user");
+
+// User error - handle gracefully
+if (userInput.length < 3) {
+  return <ValidationError message="Input must be at least 3 characters" />;
+}
+
+// Optional data - provide fallback
+const displayName = user.nickname || "Anonymous";
+```
+
+## Transaction Handling
+
+- Use transactions for operations that modify multiple tables
+- Handle transaction errors properly
+- Always commit or rollback transactions
+
+```typescript
+// Transaction example
+await db.transaction(async (tx) => {
+  // Create server
+  const [server] = await tx.insert(schema.server)
+    .values({
+      name,
+      accountId,
+    })
+    .returning();
+
+  // Create user in that server
+  await tx.insert(schema.user)
+    .values({
+      accountId,
+      serverId: server.id,
+      type: "admin",
+    });
+});
+```

@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const selectVariants = cva([
   "rounded-md",
@@ -48,24 +49,24 @@ type Option = {
   label: string;
 };
 
-type Props =
-  & Omit<JSX.IntrinsicElements["select"], "children">
+type SelectInputProps =
+  & BaseComponentProps
   & SelectVariants
   & {
     options: Option[];
     placeholder?: string;
+    name: string;
   };
 
 /**
  * SelectInput component for dropdown selection
  *
- * Features:
- * - Accepts an array of options with value and label
- * - Optional placeholder
- * - Different size variants (small, default, large)
- * - Error state styling
- * - Dark mode support
- * - Automatically detects error state from parent FormControl component via Alpine.js
+ * @props
+ * - options: Array of options with value and label properties
+ * - placeholder: Optional text shown when no option is selected
+ * - size: Size of the select input ('default', 'small', 'large')
+ * - state: Visual state of the input ('default', 'error')
+ * - name: Form field name
  *
  * @example
  * <SelectInput
@@ -79,7 +80,7 @@ type Props =
  *   size="default"
  * />
  */
-export const SelectInput: FC<Props> = ({
+export const SelectInput: FC<SelectInputProps> = ({
   className,
   size,
   state = "default",
@@ -87,7 +88,7 @@ export const SelectInput: FC<Props> = ({
   placeholder,
   name,
   ...props
-}: Props) => {
+}: SelectInputProps) => {
   // Base classes that are always applied
   const baseClasses = cn(selectVariants({ size, state }), className);
 

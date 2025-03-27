@@ -1,0 +1,49 @@
+---
+description: Authentication and Authorization Patterns
+globs: 
+alwaysApply: false
+---
+# Authentication and Authorization Patterns
+
+## Authentication Flow
+
+- Use OAuth code flow for authentication
+- Handle token management automatically via framework
+- Store tokens securely in HTTP-only cookies
+- Implement automatic token refresh
+- Use Auth Provider configuration in application setup
+
+## Permission Checks
+
+- Create reusable permission check functions
+- Use typed permission structures:
+
+```typescript
+export const isAuthenticated: PermissionCheck = async (c) => {
+  return !!c.get("user");
+};
+
+export const isAdmin: PermissionCheck = async (c) => {
+  const user = c.get("user");
+  return user?.role === "admin";
+};
+```
+
+## Protected Routes
+
+- Always specify permission checks in route definitions
+- Include appropriate redirect paths
+- Chain permission checks for complex requirements:
+
+```typescript
+permission: {
+  check: and(isAuthenticated, isResourceOwner),
+  redirectPath: "/login",
+}
+```
+
+## User Context
+
+- Access user context via `c.get("user")`
+- Include only necessary user information in context
+- Use context to render conditional UI elements

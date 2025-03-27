@@ -1,8 +1,9 @@
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/typography/Text.tsx";
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const selectVariants = cva(
   [
@@ -23,20 +24,37 @@ const selectVariants = cva(
         left: ["right-0"],
       },
     },
+    defaultVariants: {
+      variant: "single",
+      flow: "right",
+    },
   },
 );
 
-type SelectVariants = NonNullableProps<
-  typeof selectVariants,
-  "variant" | "flow"
->;
+type SelectVariants = NonNullableProps<typeof selectVariants>;
 
-type Props = JSX.IntrinsicElements["div"] & SelectVariants & {
+/**
+ * MenuSelect component for dropdown menu selection
+ *
+ * @props
+ * - name: Identifier and display label for the menu
+ * - variant: Layout width of the dropdown ('single', 'double')
+ * - flow: Direction the dropdown appears ('right', 'left')
+ * - children: Menu items to display in the dropdown
+ *
+ * @example
+ * <MenuSelect name="Options" variant="single" flow="right">
+ *   <a className="p-2 hover:bg-surface-alt" href="/profile">Profile</a>
+ *   <a className="p-2 hover:bg-surface-alt" href="/settings">Settings</a>
+ *   <a className="p-2 hover:bg-surface-alt" href="/logout">Logout</a>
+ * </MenuSelect>
+ */
+type MenuSelectProps = BaseComponentProps & SelectVariants & {
   name: string;
 };
 
-export const MenuSelect: FC<Props> = (
-  { className, variant, flow, name, children, ...rest }: Props,
+export const MenuSelect: FC<MenuSelectProps> = (
+  { className, variant, flow, name, children, ...rest }: MenuSelectProps,
 ) => {
   return (
     <div {...rest} className={cn("relative", className)}>

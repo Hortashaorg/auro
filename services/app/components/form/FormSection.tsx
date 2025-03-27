@@ -1,8 +1,9 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
-import { Text } from "@comp/typography/index.ts";
+import type { FC } from "@kalena/framework";
+import { Text } from "@comp/typography/Text.tsx";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const formSectionVariants = cva(
   "",
@@ -27,16 +28,17 @@ const formSectionVariants = cva(
   },
 );
 
-type FormSectionProps =
-  & JSX.IntrinsicElements["div"]
-  & NonNullableProps<typeof formSectionVariants>
-  & {
-    title: string;
-    description: string;
-  };
+type FormSectionVariants = NonNullableProps<typeof formSectionVariants>;
 
 /**
  * FormSection organizes form controls into logical sections with optional title and description
+ *
+ * @props
+ * - title: Section heading text
+ * - description: Additional context or instructions for the section
+ * - variant: Border style of the section ('default', 'subtle', 'none')
+ * - spacingBottom: Bottom margin and padding ('sm', 'md', 'lg', 'none')
+ * - children: Form controls to include in the section
  *
  * @example
  * <FormSection
@@ -56,6 +58,11 @@ type FormSectionProps =
  *   </FormControl>
  * </FormSection>
  */
+type FormSectionProps = BaseComponentProps & FormSectionVariants & {
+  title: string;
+  description: string;
+};
+
 export const FormSection: FC<FormSectionProps> = ({
   className,
   children,
@@ -64,10 +71,10 @@ export const FormSection: FC<FormSectionProps> = ({
   variant,
   spacingBottom,
   ...props
-}) => {
+}: FormSectionProps) => {
   return (
     <div
-      className={cn(formSectionVariants({ variant, spacingBottom, className }))}
+      className={cn(formSectionVariants({ variant, spacingBottom }), className)}
       {...props}
     >
       {title && (

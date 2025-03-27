@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const switchTrackVariants = cva([
   "relative",
@@ -100,7 +101,7 @@ const switchTrackVariants = cva([
 
 type SwitchVariants = NonNullableProps<typeof switchTrackVariants>;
 
-type SwitchProps = JSX.IntrinsicElements["div"] & SwitchVariants & {
+type SwitchProps = BaseComponentProps & SwitchVariants & {
   label?: string;
   name?: string;
   initialState?: boolean;
@@ -110,14 +111,12 @@ type SwitchProps = JSX.IntrinsicElements["div"] & SwitchVariants & {
 /**
  * Switch component for toggling boolean states using Alpine.js
  *
- * Features:
- * - Clean toggle animation
- * - Multiple color variants (default, success, danger, warning, info, secondary)
- * - Alpine.js integration for state management
- * - Optional label integration
- * - Consistent styling with other form components
- * - Proper focus states and accessibility
- * - Dark mode support
+ * @props
+ * - label: Text label beside the switch
+ * - name: Form field name
+ * - initialState: Whether the switch is toggled on initially
+ * - disabled: Whether the switch is disabled
+ * - variant: Visual style of the switch ('default', 'success', 'danger', etc.)
  *
  * @example
  * <Switch
