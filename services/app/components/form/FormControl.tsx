@@ -1,20 +1,14 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { Text } from "@comp/typography/index.ts";
-
-type Props = JSX.IntrinsicElements["div"] & {
-  inputName: string; // The name attribute of the input field for error association
-  hint?: string; // Optional helper text
-};
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 /**
  * FormControl wraps form inputs with consistent styling and error handling
  *
- * It provides:
- * - Automatic error display tied to the input name
- * - Optional hint text below the input
- * - Proper spacing and layout
- * - Alpine.js integration for error state management
+ * @props
+ * - inputName: The name attribute of the input field for error association
+ * - hint: Optional helper text
  *
  * @example
  * <FormControl inputName="email" hint="We'll never share your email">
@@ -22,13 +16,18 @@ type Props = JSX.IntrinsicElements["div"] & {
  *   <Input id="email" name="email" type="email" required />
  * </FormControl>
  */
-export const FormControl: FC<Props> = ({
+type FormControlProps = BaseComponentProps & {
+  inputName: string; // The name attribute of the input field for error association
+  hint?: string; // Optional helper text
+};
+
+export const FormControl: FC<FormControlProps> = ({
   className,
   children,
   inputName,
   hint,
   ...props
-}: Props) => {
+}) => {
   return (
     <div
       className={cn("mb-4", className)}

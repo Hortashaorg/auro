@@ -1,67 +1,38 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { NonNullableProps } from "@comp/utils/types.ts";
-import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
-
-const labelVariants = cva([
-  "block",
-  "text-base",
-  "font-normal",
-  "dark:text-on-surface-dark-strong",
-  "text-on-surface-strong",
-  "font-bold",
-  "mb-2",
-], {
-  variants: {
-    required: {
-      true: ["after:content-['*']", "after:ml-0.5", "after:text-danger"],
-    },
-    size: {
-      default: ["text-base"],
-      small: ["text-sm"],
-      large: ["text-lg"],
-    },
-  },
-  defaultVariants: {
-    required: false,
-    size: "default",
-  },
-});
-
-type LabelVariants = NonNullableProps<typeof labelVariants>;
-type Props = JSX.IntrinsicElements["label"] & LabelVariants & {
-  htmlFor?: string;
-};
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 /**
- * Label component for form inputs with consistent styling
+ * Label component for form inputs
  *
- * Features:
- * - Automatic required field indicator (asterisk)
- * - Different size variants
- * - Proper dark mode support
+ * @props
+ * - htmlFor: ID of the associated input element
+ * - required: Whether the field is required (adds an asterisk)
  *
  * @example
- * <Label htmlFor="email" required size="default">
- *   Email Address
- * </Label>
- * <Input id="email" name="email" type="email" required />
+ * <Label htmlFor="email" required>Email Address</Label>
  */
-export const Label: FC<Props> = ({
+type LabelProps = BaseComponentProps & {
+  htmlFor?: string;
+  required?: boolean;
+};
+
+export const Label: FC<LabelProps> = ({
+  children,
   className,
   required,
-  size,
-  children,
-  htmlFor,
   ...props
-}: Props) => {
+}) => {
   return (
     <label
-      htmlFor={htmlFor}
-      className={cn(labelVariants({ required, size }), className)}
+      className={cn(
+        "block font-medium text-md text-on-surface-strong dark:text-on-surface-dark-strong mb-1",
+        className,
+      )}
       {...props}
     >
       {children}
+      {required && <span className="text-danger ml-1">*</span>}
     </label>
   );
 };

@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 
 const textVariants = cva([], {
   variants: {
@@ -68,16 +69,12 @@ const textVariants = cva([], {
 
 type TextVariants = NonNullableProps<typeof textVariants>;
 
-type Props = JSX.IntrinsicElements["div"] & TextVariants;
-
 /**
  * Text component for consistent typography with predefined styles
  *
- * Features:
- * - Multiple variants (h1, h2, h3, body, error)
- * - Consistent styling with proper dark mode support
- * - Text alignment options
- * - Automatically uses semantic HTML tags based on variant
+ * @props
+ * - variant: Typography style (h1, h2, h3, body, span, error)
+ * - alignment: Text alignment (left, center)
  *
  * @example
  * <Text variant="h1" alignment="center">
@@ -92,8 +89,10 @@ type Props = JSX.IntrinsicElements["div"] & TextVariants;
  *   Error message with appropriate styling.
  * </Text>
  */
-export const Text: FC<Props> = (
-  { variant, className, alignment = "left", children, ...rest }: Props,
+type TextProps = BaseComponentProps & TextVariants;
+
+export const Text: FC<TextProps> = (
+  { variant, className, alignment = "left", children, ...rest }: TextProps,
 ) => {
   const Tag = variant?.startsWith("h") ? variant : "p";
   return (

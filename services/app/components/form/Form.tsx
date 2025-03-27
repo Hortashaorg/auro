@@ -1,59 +1,46 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import { Flex } from "@comp/wrappers/index.ts";
-import type { FC, JSX } from "@kalena/framework";
-
-type Props = JSX.IntrinsicElements["form"];
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 /**
- * Form component with built-in Alpine.js state management for errors
+ * Form component with built-in Alpine.js error handling
  *
- * Features:
- * - Automatic error handling with Alpine.js
- * - Listens for form-error events to display validation errors
- * - Supports clear-form events to reset the form
- * - Dispatches form-input events to notify parent context of changes
- * - Consistent layout with Flex component
+ * @props
+ * - id: Form identifier for targeting with HTMX
  *
  * @example
  * <Form
- *   id="my-form"
- *   hx-post="/api/submit-form"
- *   hx-swap="none"
+ *   id="login-form"
+ *   hx-post="/api/auth/login"
+ *   hx-swap="outerHTML"
  * >
- *   <FormControl inputName="name">
- *     <Label htmlFor="name" required>Name</Label>
- *     <Input id="name" name="name" required />
+ *   <FormControl inputName="email">
+ *     <Label htmlFor="email">Email</Label>
+ *     <Input name="email" id="email" type="email" required />
  *   </FormControl>
+ *   <Button type="submit">Login</Button>
  * </Form>
  */
-export const Form: FC<Props> = ({
-  children,
+type FormProps = BaseComponentProps;
+
+export const Form: FC<FormProps> = ({
   className,
-  id,
+  children,
   ...props
-}: Props) => {
-  // Basic error handling
-  props["x-data"] = "{ errors: {} }";
-
-  // Listen for clear-form events directly
-  props["x-on:clear-form.window"] = `
-    if ($event.detail && $event.detail.value === true) {
-      $el.reset();
-      errors = {};
-    }
-  `;
-
-  // Handle form-error events
-  props["x-on:form-error.window"] = `errors = $event.detail`;
-
-  // Notify parent context when form inputs change
-  props["x-on:input"] = `$dispatch('form-input', { formId: '${id}' })`;
+}) => {
+  // Add Alpine.js attributes to props
+  const formProps = {
+    ...props,
+    "x-data": "{ errors: {} }",
+    "x-on:form-error.document": "errors = $event.detail",
+    "x-on:clear-form.document":
+      "if ($event.detail?.value) { errors = {}; $el.reset(); }",
+    className: cn("space-y-4", className),
+  };
 
   return (
-    <form id={id} {...props} className={cn("w-full", className)}>
-      <Flex direction="col" gap="md">
-        {children}
-      </Flex>
+    <form {...formProps}>
+      {children}
     </form>
   );
 };

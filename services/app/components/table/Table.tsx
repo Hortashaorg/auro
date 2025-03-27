@@ -1,28 +1,23 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
-
-type TableProps = JSX.IntrinsicElements["table"] & {
-  zebra?: boolean;
-  compact?: boolean;
-  responsive?: boolean;
-};
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 /**
  * Table component for displaying structured data
  *
- * Features:
- * - Composable with other table components
- * - Optional horizontal scrolling for responsive layouts
- * - Support for zebra striping
- * - Compact mode for denser UIs
- * - Works with Alpine.js for dynamic data
+ * @props
+ * - responsive: Wraps table in scrollable container for mobile
  *
  * @example
- * <Table zebra>
+ * <Table>
  *   <TableHeader>...</TableHeader>
  *   <TableBody>...</TableBody>
  * </Table>
  */
+type TableProps = BaseComponentProps & {
+  responsive?: boolean;
+};
+
 export const Table: FC<TableProps> = ({
   children,
   className,

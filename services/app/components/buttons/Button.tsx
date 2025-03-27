@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 
 const buttonVariants = cva([
   "whitespace-nowrap",
@@ -116,10 +117,27 @@ const buttonVariants = cva([
 });
 type ButtonVariants = NonNullableProps<typeof buttonVariants>;
 
-type Props = JSX.IntrinsicElements["button"] & ButtonVariants;
+/**
+ * Button component for triggering actions
+ *
+ * @props
+ * - variant: Visual style of the button ('primary', 'secondary', etc.)
+ * - buttonSize: Size of the button ('sm', 'md', 'lg', 'xl')
+ * - disabled: Whether the button is disabled
+ *
+ * @example
+ * <Button
+ *   variant="primary"
+ *   buttonSize="md"
+ *   x-on:click="handleClick"
+ * >
+ *   Click me
+ * </Button>
+ */
+type ButtonProps = BaseComponentProps & ButtonVariants;
 
-export const Button: FC<Props> = (
-  { children, variant, buttonSize, className, ...rest }: Props,
+export const Button: FC<ButtonProps> = (
+  { children, variant, buttonSize, className, ...rest }: ButtonProps,
 ) => {
   return (
     <button

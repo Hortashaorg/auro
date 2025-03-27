@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 
 const alertVariants = cva([
   "rounded-lg",
@@ -64,44 +65,26 @@ const textVariants = cva([], {
   },
 });
 
-type InfoVariants = NonNullableProps<typeof alertVariants>;
-type Props = JSX.IntrinsicElements["div"] & InfoVariants & {
+type AlertVariants = NonNullableProps<typeof alertVariants>;
+
+/**
+ * Alert component for displaying contextual messages and alerts
+ *
+ * @props
+ * - variant: Alert style (info, warning, success, danger)
+ * - title: Title of the alert
+ *
+ * @example
+ * <Alert variant="info" title="Information">
+ *   This is an informational message.
+ * </Alert>
+ */
+type AlertProps = BaseComponentProps & AlertVariants & {
   title: string;
 };
 
-/**
- * Info component for displaying contextual messages and alerts
- *
- * Features:
- * - Multiple variants (info, warning, success, danger)
- * - Appropriate icons for each variant
- * - Consistent styling with proper dark mode support
- * - Accessible with role="alert"
- * - Flexible content area
- *
- * @example
- * // Information message
- * <Info variant="info">
- *   This is an informational message.
- * </Info>
- *
- * // Warning message
- * <Info variant="warning">
- *   Please be careful with this action.
- * </Info>
- *
- * // Success message
- * <Info variant="success">
- *   Your changes have been saved successfully.
- * </Info>
- *
- * // Error message
- * <Info variant="danger">
- *   An error occurred while processing your request.
- * </Info>
- */
-export const Alert: FC<Props> = (
-  { className, variant, children, title, ...props }: Props,
+export const Alert: FC<AlertProps> = (
+  { className, variant, children, title, ...props }: AlertProps,
 ) => {
   return (
     <div

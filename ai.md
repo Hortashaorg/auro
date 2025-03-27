@@ -314,12 +314,11 @@ These patterns are fundamental to our architecture.
    - Consistent format helps maintain the component library
    ```typescript
    /**
-    * Component name and concise description
+    * Short, clear description of what the component does
     *
-    * Features:
-    * - Feature one
-    * - Feature two
-    * - Feature three
+    * @props
+    * - prop1: Description of prop1
+    * - prop2: Description of prop2
     *
     * @example
     * <ComponentName
@@ -331,31 +330,175 @@ These patterns are fundamental to our architecture.
     */
    ```
 
+### Component Props Patterns
+
+1. Standard Props Structure
+   - Use the `BaseComponentProps` interface for all components
+   - Define component-specific props as an extension
+   - BaseComponentProps includes common props like className, id, children, and
+     HTMX attributes
+   ```typescript
+   import type { BaseComponentProps } from "@comp/utils/props.ts";
+
+   type ButtonProps = BaseComponentProps & {
+     variant: "primary" | "secondary" | "outline";
+     buttonSize?: "sm" | "md" | "lg" | "xl";
+   };
+   ```
+
+2. Props Type Naming
+   - Name prop types after the component: `[ComponentName]Props`
+   - Place the type definition just before the component
+   - Document props using JSDoc
+
+3. Documentation Pattern
+   ```typescript
+   /**
+    * Button component for triggering actions
+    *
+    * @props
+    * - variant: Visual style of the button
+    * - buttonSize: Size of the button
+    * - disabled: Whether the button is disabled
+    *
+    * @example
+    * <Button variant="primary" buttonSize="md" x-on:click="handleClick">
+    *   Click me
+    * </Button>
+    */
+   ```
+
+4. Component Variants Pattern
+   - Use class-variance-authority (cva) for defining variants
+   - Define variants in a constant before the component
+   - Use NonNullableProps for variant prop types
+   ```typescript
+   const buttonVariants = cva("base-classes", {
+     variants: {
+       variant: { primary: "...", secondary: "..." },
+       buttonSize: { sm: "...", md: "..." },
+     },
+     defaultVariants: {
+       variant: "primary",
+       buttonSize: "md",
+     },
+   });
+
+   type ButtonVariants = NonNullableProps<typeof buttonVariants>;
+   type ButtonProps = BaseComponentProps & ButtonVariants;
+   ```
+
+5. HTMX Integration
+   - All components automatically support HTMX attributes via
+     `BaseComponentProps`
+   - No need for special handling for HTMX in component implementations
+   - The `BaseComponentProps` interface includes common HTMX attributes:
+   ```typescript
+   export interface BaseComponentProps {
+     className?: string;
+     id?: string;
+     children?: Child;
+     "hx-get"?: string;
+     "hx-post"?: string;
+     "hx-put"?: string;
+     "hx-delete"?: string;
+     "hx-patch"?: string;
+     "hx-swap"?: string;
+     "hx-target"?: string;
+     "hx-trigger"?: string;
+     "hx-indicator"?: string;
+     [key: string]: unknown; // Allows for any other attributes
+   }
+   ```
+
+6. Component Implementation
+   - Destructure props at the start
+   - Use rest props to pass through HTML attributes and HTMX props
+   - Add proper TypeScript types to all parameters
+   ```typescript
+   export const Button: FC<ButtonProps> = ({
+     children,
+     variant,
+     buttonSize,
+     className,
+     ...rest
+   }: ButtonProps) => {
+     return (
+       <button
+         className={cn(buttonVariants({ variant, buttonSize }), className)}
+         {...rest}
+       >
+         {children}
+       </button>
+     );
+   };
+   ```
+
 ### HTMX Integration
 
-1. Section IDs
+1. Component HTMX Support
+   - All components automatically support HTMX attributes via
+     `BaseComponentProps`
+   - No need for special handling for HTMX in component implementations
+   - The `BaseComponentProps` interface includes common HTMX attributes:
+   ```typescript
+   export interface BaseComponentProps {
+     className?: string;
+     id?: string;
+     children?: Child;
+     "hx-get"?: string;
+     "hx-post"?: string;
+     "hx-put"?: string;
+     "hx-delete"?: string;
+     "hx-patch"?: string;
+     "hx-swap"?: string;
+     "hx-target"?: string;
+     "hx-trigger"?: string;
+     "hx-indicator"?: string;
+     [key: string]: unknown; // Allows for any other attributes
+   }
+   ```
+
+2. Section IDs
    - Sections intended for HTMX updates should have unique IDs
    - IDs should be descriptive and follow a consistent pattern
    ```typescript
    <Section id="player-resources">
    ```
 
-2. HTMX Attributes
+3. HTMX Attribute Usage
    - Use `hx-post` for server actions
    - Use `hx-swap` to control update behavior
    - Target specific sections using their IDs
    ```typescript
    <Button
      hx-post="/api/servers/${id}/actions/${actionId}/execute"
-     hx-swap="none"
+     hx-swap="outerHTML"
+     hx-target="#action-result"
    >
+     Execute Action
+   </Button>;
    ```
 
-3. Form Handling
+4. Form Handling
    - Use form validation schemas for type-safe validation
    - Handle validation errors with `form-error` events
    - Trigger updates through HTMX instead of traditional form submission
    - Use partial routes for form processing endpoints
+   ```typescript
+   <Form
+     id="create-server"
+     hx-post="/api/servers/create"
+     hx-swap="outerHTML"
+     hx-target="#form-container"
+   >
+     <FormControl inputName="name">
+       <Label htmlFor="name" required>Server Name</Label>
+       <Input id="name" name="name" required />
+     </FormControl>
+     <Button type="submit">Create Server</Button>
+   </Form>;
+   ```
 
 ### Alpine.js Patterns
 
@@ -502,6 +645,59 @@ These patterns are fundamental to our architecture.
      <Text>Card content goes here.</Text>
    </Card>;
    ```
+
+### Component Documentation
+
+1. JSDoc Structure
+   ```typescript
+   /**
+    * Short, clear description of what the component does
+    *
+    * @props
+    * - prop1: Description of prop1
+    * - prop2: Description of prop2
+    *
+    * @example
+    * <ComponentName
+    *   prop1="value"
+    *   prop2={true}
+    * >
+    *   Children content
+    * </ComponentName>
+    */
+   ```
+
+2. Required Sections
+   - **Description**: One concise sentence explaining the component's purpose
+   - **Props**: List of important props with descriptions
+   - **Example**: At least one practical usage example
+
+3. Example Implementation
+   ```typescript
+   /**
+    * Button component for triggering actions
+    *
+    * @props
+    * - variant: Visual style of the button ('primary' | 'secondary' | 'outline')
+    * - size: Size of the button ('sm' | 'default' | 'lg')
+    * - disabled: Whether the button is disabled
+    *
+    * @example
+    * <Button
+    *   variant="primary"
+    *   size="default"
+    *   x-on:click="handleClick"
+    * >
+    *   Click me
+    * </Button>
+    */
+   ```
+
+4. Documentation Guidelines
+   - Keep descriptions concise and clear
+   - Document only props that affect component behavior
+   - Include a practical example that shows common usage
+   - Use consistent formatting across all components
 
 ## Data Flow
 
