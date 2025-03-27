@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const textareaVariants = cva([
   "rounded-md",
@@ -43,34 +44,46 @@ const textareaVariants = cva([
 });
 
 type TextareaVariants = NonNullableProps<typeof textareaVariants>;
-type Props = JSX.IntrinsicElements["textarea"] & TextareaVariants;
 
 /**
- * Textarea component with consistent styling and variants
+ * Textarea component for multi-line text input
  *
- * Supports different sizes and states, with proper dark mode support.
- * Automatically detects error state from parent FormControl component via Alpine.js.
+ * @props
+ * - size: Sizing of the textarea ('default', 'small', 'large')
+ * - state: Visual state of the textarea ('default', 'error')
+ * - name: Input name (used for form submission and error state)
+ * - rows: Number of visible text lines
+ * - placeholder: Placeholder text
+ * - required: Whether the field is required
+ * - disabled: Whether the field is disabled
  *
  * @example
  * <Textarea
  *   name="description"
- *   placeholder="Enter a description"
+ *   placeholder="Enter description"
  *   rows={4}
- *   required
  *   size="default"
+ *   required
  * />
  */
-export const Textarea: FC<Props> = ({
+type TextareaProps = BaseComponentProps & TextareaVariants & {
+  name?: string;
+  rows?: number;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  value?: string;
+};
+
+export const Textarea: FC<TextareaProps> = ({
   className,
   size,
   state = "default",
-  name,
+  name = "",
   ...props
-}: Props) => {
-  // Base classes that are always applied
+}) => {
   const baseClasses = cn(textareaVariants({ size, state }), className);
 
-  // Error state classes to be conditionally applied
   const errorClasses = cn(
     textareaVariants({ size, state: "error" }),
     className,

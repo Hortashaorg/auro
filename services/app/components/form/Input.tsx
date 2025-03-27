@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 
 const inputVariants = cva([
   "rounded-md",
@@ -42,13 +43,18 @@ const inputVariants = cva([
 });
 
 type InputVariants = NonNullableProps<typeof inputVariants>;
-type Props = Omit<JSX.IntrinsicElements["input"], "size"> & InputVariants;
 
 /**
  * Input component with consistent styling and variants
  *
- * Supports different sizes and states, with proper dark mode support.
- * Automatically detects error state from parent FormControl component via Alpine.js.
+ * @props
+ * - size: Input field size ('default', 'small', 'large')
+ * - state: Visual state of the input ('default', 'error')
+ * - name: Input name (used for form submission and error state)
+ * - type: Input type (text, email, password, etc.)
+ * - placeholder: Placeholder text
+ * - required: Whether the field is required
+ * - disabled: Whether the field is disabled
  *
  * @example
  * <Input
@@ -59,17 +65,24 @@ type Props = Omit<JSX.IntrinsicElements["input"], "size"> & InputVariants;
  *   size="default"
  * />
  */
-export const Input: FC<Props> = ({
+type InputProps = BaseComponentProps & InputVariants & {
+  name?: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  value?: string;
+};
+
+export const Input: FC<InputProps> = ({
   className,
   size,
   state = "default",
-  name,
+  name = "",
   ...props
-}: Props) => {
-  // Base classes that are always applied
+}) => {
   const baseClasses = cn(inputVariants({ size, state }), className);
 
-  // Error state classes to be conditionally applied
   const errorClasses = cn(
     inputVariants({ size, state: "error" }),
     className,
