@@ -370,68 +370,87 @@ These patterns are fundamental to our architecture.
 
 4. Component Variants Pattern
    - Use class-variance-authority (cva) for defining variants
-   - Define variants in a constant before the component
-   - Use NonNullableProps for variant prop types
+   - Define variants in a separate constant before the component
+   - Group related styling options under a single variant name
+   - Provide clear default variants
+   - Example:
    ```typescript
-   const buttonVariants = cva("base-classes", {
-     variants: {
-       variant: { primary: "...", secondary: "..." },
-       buttonSize: { sm: "...", md: "..." },
+   const cardVariants = cva(
+     "base classes here",
+     {
+       variants: {
+         width: {
+           grow: "w-full",
+           fit: "w-fit",
+         },
+         shadow: {
+           none: "",
+           sm: "shadow-sm",
+           md: "shadow",
+           lg: "shadow-md",
+         },
+       },
+       defaultVariants: {
+         width: "grow",
+         shadow: "none",
+       },
      },
-     defaultVariants: {
-       variant: "primary",
-       buttonSize: "md",
-     },
-   });
-
-   type ButtonVariants = NonNullableProps<typeof buttonVariants>;
-   type ButtonProps = BaseComponentProps & ButtonVariants;
+   );
    ```
 
-5. HTMX Integration
-   - All components automatically support HTMX attributes via
-     `BaseComponentProps`
-   - No need for special handling for HTMX in component implementations
-   - The `BaseComponentProps` interface includes common HTMX attributes:
+5. Type Safety
+   - Extract type information from variant definitions
+   - Use BaseComponentProps as the foundation for all component props
+   - Combine with variant props for complete type safety
+   - Example:
    ```typescript
-   export interface BaseComponentProps {
-     className?: string;
-     id?: string;
-     children?: Child;
-     "hx-get"?: string;
-     "hx-post"?: string;
-     "hx-put"?: string;
-     "hx-delete"?: string;
-     "hx-patch"?: string;
-     "hx-swap"?: string;
-     "hx-target"?: string;
-     "hx-trigger"?: string;
-     "hx-indicator"?: string;
-     [key: string]: unknown; // Allows for any other attributes
-   }
-   ```
+   type CardVariants = NonNullableProps<typeof cardVariants>;
 
-6. Component Implementation
-   - Destructure props at the start
-   - Use rest props to pass through HTML attributes and HTMX props
-   - Add proper TypeScript types to all parameters
-   ```typescript
-   export const Button: FC<ButtonProps> = ({
-     children,
-     variant,
-     buttonSize,
-     className,
-     ...rest
-   }: ButtonProps) => {
-     return (
-       <button
-         className={cn(buttonVariants({ variant, buttonSize }), className)}
-         {...rest}
-       >
-         {children}
-       </button>
-     );
+   // Use BaseComponentProps as foundation
+   type CardProps = BaseComponentProps & CardVariants & {
+     // Additional component-specific props
+     as?: ElementType;
    };
+   ```
+
+6. Component API Design
+   - Default behavior should be the most common use case
+   - Variants should be named based on their visual or behavioral
+     characteristics
+   - Avoid leaking implementation details in prop names
+   - Example:
+   ```typescript
+   // Good - named based on visual appearance
+   <Button variant="primary" buttonSize="lg" />
+
+   // Avoid - leaking implementation details
+   <Button tailwindClasses="bg-blue-500 text-white p-4" />
+   ```
+
+7. Component Family Pattern
+   - Create related components that work together (e.g., Card, CardContent,
+     CardImage)
+   - Each component should have its own variants but share a consistent API
+   - Maintain consistent naming and prop patterns across component families
+   - Example:
+   ```typescript
+   // Card component
+   <Card width="fit" shadow="md" as="article">
+     <CardImage
+       src="/product.jpg"
+       alt="Product"
+       hover="scale"
+       height="lg"
+     />
+     <CardContent
+       title="Product Title"
+       label="Featured"
+       spacing="md"
+       padding="lg"
+     >
+       Product description here
+     </CardContent>
+   </Card>;
    ```
 
 ### HTMX Integration
@@ -540,65 +559,6 @@ These patterns are fundamental to our architecture.
    - Keep Alpine.js state serializable
    - Prefer server-driven state for complex data
    - Use x-effect for side effects
-
-### Component Variants Pattern
-
-1. Class Variance Authority (cva)
-   - Use cva for defining component variants
-   - Define variants in a separate constant before the component
-   - Group related styling options under a single variant name
-   - Provide clear default variants
-   - Example:
-   ```typescript
-   const cardVariants = cva(
-     "base classes here",
-     {
-       variants: {
-         width: {
-           grow: "w-full",
-           fit: "w-fit",
-         },
-         shadow: {
-           none: "",
-           sm: "shadow-sm",
-           md: "shadow",
-           lg: "shadow-md",
-         },
-       },
-       defaultVariants: {
-         width: "grow",
-         shadow: "none",
-       },
-     },
-   );
-   ```
-
-2. Type Safety
-   - Extract type information from variant definitions
-   - Combine with JSX.IntrinsicElements for proper HTML attribute types
-   - Example:
-   ```typescript
-   type CardVariants = NonNullableProps<typeof cardVariants>;
-
-   type Props = JSX.IntrinsicElements["div"] & CardVariants & {
-     // Additional component-specific props
-     as?: ElementType;
-   };
-   ```
-
-3. Component API Design
-   - Default behavior should be the most common use case
-   - Variants should be named based on their visual or behavioral
-     characteristics
-   - Avoid leaking implementation details in prop names
-   - Example:
-   ```typescript
-   // Good - named based on visual appearance
-   <Button variant="primary" size="lg" />
-
-   // Avoid - leaking implementation details
-   <Button tailwindClasses="bg-blue-500 text-white p-4" />
-   ```
 
 ### Semantic HTML Patterns
 

@@ -2,7 +2,8 @@ import { Text } from "@comp/typography/index.ts";
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const linkVariants = cva("py-3", {
   variants: {
@@ -34,7 +35,7 @@ const linkVariants = cva("py-3", {
 
 type LinkVariants = NonNullableProps<typeof linkVariants, "variant">;
 
-type Props = JSX.IntrinsicElements["a"] & LinkVariants & {
+type Props = LinkVariants & BaseComponentProps & {
   active?: boolean;
 };
 

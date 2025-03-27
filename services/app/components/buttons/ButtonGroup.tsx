@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const buttonGroupVariants = cva([
   "flex",
@@ -30,16 +31,12 @@ const buttonGroupVariants = cva([
 
 type ButtonGroupVariants = NonNullableProps<typeof buttonGroupVariants>;
 
-type ButtonGroupProps = JSX.IntrinsicElements["div"] & ButtonGroupVariants;
-
 /**
  * ButtonGroup component for grouping related buttons with consistent spacing
  *
- * Features:
- * - Flexbox container with configurable spacing between buttons
- * - Right-aligned by default (can be changed with alignment prop)
- * - Responsive with flex-wrap for small screens
- * - Maintains consistent spacing between buttons
+ * @props
+ * - spacing: Gap between buttons ('sm', 'md', 'lg')
+ * - alignment: Horizontal alignment of buttons ('right', 'left', 'center', 'between')
  *
  * @example
  * <ButtonGroup>
@@ -56,6 +53,8 @@ type ButtonGroupProps = JSX.IntrinsicElements["div"] & ButtonGroupVariants;
  *   </div>
  * </ButtonGroup>
  */
+type ButtonGroupProps = BaseComponentProps & ButtonGroupVariants;
+
 export const ButtonGroup: FC<ButtonGroupProps> = ({
   children,
   className,

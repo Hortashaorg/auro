@@ -1,33 +1,79 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { cva } from "class-variance-authority";
+import type { NonNullableProps } from "@comp/utils/types.ts";
 
-type Props = JSX.IntrinsicElements["img"];
+const cardImageVariants = cva([
+  "object-cover",
+  "transition",
+  "duration-700",
+  "ease-out",
+], {
+  variants: {
+    hover: {
+      scale: "group-hover:scale-105",
+      none: "",
+    },
+    objectFit: {
+      cover: "object-cover",
+      contain: "object-contain",
+      fill: "object-fill",
+      none: "object-none",
+    },
+    height: {
+      auto: "h-auto",
+      sm: "h-32",
+      md: "h-48",
+      lg: "h-64",
+      xl: "h-80",
+    },
+  },
+  defaultVariants: {
+    hover: "scale",
+    objectFit: "cover",
+    height: "auto",
+  },
+});
+
+type CardImageVariants = NonNullableProps<typeof cardImageVariants>;
 
 /**
- * Card component for containing related content with consistent styling
+ * CardImage component for displaying images within Cards
  *
- * Features:
- * - Consistent padding and border radius
- * - Border styling for visual separation
- * - Dark mode support
- * - Hover state styling
- * - Primary and secondary variants
+ * @props
+ * - src: Image source URL
+ * - alt: Alternative text description
+ * - hover: Hover effect ('scale', 'none')
+ * - objectFit: How the image fits its container ('cover', 'contain', 'fill', 'none')
+ * - height: Height of the image ('auto', 'sm', 'md', 'lg', 'xl')
  *
  * @example
- * <Card variant="primary">
- *   <Text variant="h3">Card Title</Text>
- *   <Text variant="body">Card content goes here.</Text>
- * </Card>
+ * <CardImage
+ *   src="/product.jpg"
+ *   alt="Product"
+ *   hover="scale"
+ *   height="lg"
+ * />
  */
-export const CardImage: FC<Props> = (
-  { className, ...props }: Props,
-) => {
+type CardImageProps = BaseComponentProps & CardImageVariants & {
+  src: string;
+  alt: string;
+};
+
+export const CardImage: FC<CardImageProps> = ({
+  className,
+  hover,
+  objectFit,
+  height,
+  ...props
+}: CardImageProps) => {
   return (
-    <div className="group flex rounded-radius max-w-sm flex-col overflow-hidden border border-outline bg-surface-alt text-on-surface dark:border-outline-dark dark:bg-surface-dark-alt dark:text-on-surface-dark">
+    <div className="overflow-hidden">
       <img
         {...props}
         className={cn(
-          "object-cover transition duration-700 ease-out group-hover:scale-105",
+          cardImageVariants({ hover, objectFit, height }),
           className,
         )}
       />

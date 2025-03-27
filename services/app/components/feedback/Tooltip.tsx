@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const tooltipVariants = cva([
   "absolute",
@@ -44,32 +45,20 @@ const tooltipVariants = cva([
 
 type TooltipVariants = NonNullableProps<typeof tooltipVariants>;
 
-type Props =
-  & JSX.IntrinsicElements["div"]
-  & TooltipVariants
-  & {
-    content: string;
-  };
-
 /**
  * Tooltip component for displaying additional information on hover
  *
- * Features:
- * - Multiple variants (dark, light)
- * - Positioning options (top, bottom, left, right)
- * - Smooth transition animations
- * - Alpine.js integration for show/hide behavior
- * - Accessible with proper ARIA role
+ * @props
+ * - content: Text to show in the tooltip
+ * - variant: Visual style of the tooltip ('dark', 'light')
+ * - position: Where the tooltip appears relative to the trigger element ('top', 'bottom', 'left', 'right')
  *
  * @example
- * <Tooltip
- *   content="This is a helpful tooltip"
- *   position="top"
- *   variant="dark"
- * >
+ * <Tooltip content="This is a helpful tooltip">
  *   <Button>Hover Me</Button>
  * </Tooltip>
  *
+ * @example
  * <Tooltip
  *   content="More information"
  *   position="right"
@@ -78,14 +67,18 @@ type Props =
  *   <Icon name="info" />
  * </Tooltip>
  */
-export const Tooltip: FC<Props> = ({
+type TooltipProps = BaseComponentProps & TooltipVariants & {
+  content: string;
+};
+
+export const Tooltip: FC<TooltipProps> = ({
   className,
   variant,
   position,
   content,
   children,
   ...props
-}: Props) => {
+}: TooltipProps) => {
   return (
     <div className="relative inline-block" x-data="{ show: false }">
       <div

@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 // Default base classes for the Card component
 const cardVariants = cva(
@@ -45,36 +46,36 @@ type CardVariants = NonNullableProps<typeof cardVariants>;
 // Allow any HTML element that can be used as an article
 export type ElementType = "article" | "section" | "div";
 
-// Combined props type with both HTML attributes and our variants
-type Props =
-  & JSX.IntrinsicElements["div"]
-  & CardVariants
-  & {
-    as?: ElementType;
-  };
-
 /**
  * Card component for containing related content with consistent styling
  *
- * Features:
- * - Consistent styling with variants for width, shadow, border, and padding
- * - Customizable HTML element via the 'as' prop for proper semantics
- * - Responsive behavior with width variants (grow or fit)
- * - Dark mode support
+ * @props
+ * - width: Controls the width of the card ('grow', 'fit')
+ * - shadow: Shadow depth ('none', 'sm', 'md', 'lg')
+ * - border: Border style ('default', 'subtle', 'none')
+ * - padding: Internal padding ('none', 'sm', 'md', 'lg')
+ * - as: HTML element to render the card as ('div', 'article', 'section')
  *
  * @example
  * <Card>
- *   <Text variant="h3">Card Title</Text>
- *   <Text variant="body">Card content goes here.</Text>
+ *   <CardContent title="Card Title">
+ *     Card content goes here.
+ *   </CardContent>
  * </Card>
  *
  * @example
  * <Card width="fit" shadow="md" as="article">
- *   <Text variant="h3">Product Card</Text>
- *   <Text variant="body">This is a product description.</Text>
+ *   <CardImage src="/product.jpg" alt="Product" />
+ *   <CardContent title="Product Name">
+ *     This is a product description.
+ *   </CardContent>
  * </Card>
  */
-export const Card: FC<Props> = ({
+type CardProps = BaseComponentProps & CardVariants & {
+  as?: ElementType;
+};
+
+export const Card: FC<CardProps> = ({
   children,
   className,
   width,
@@ -83,7 +84,7 @@ export const Card: FC<Props> = ({
   padding,
   as: Element = "div",
   ...props
-}: Props) => {
+}: CardProps) => {
   return (
     <Element
       className={cn(
