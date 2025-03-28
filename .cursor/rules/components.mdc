@@ -21,6 +21,10 @@ Review this guide to understand the available UI components, their classificatio
     *   `@comp/atoms/buttons/ButtonGroup.tsx`: `<div>` for grouping/spacing buttons.
     *   `@comp/atoms/buttons/index.ts`: All buttons can be imported from here.
 
+*   **Image:**
+    *   `@comp/atoms/image/Image.tsx`: Standard button element. Variants: visual styles, sizes.
+    *   `@comp/atoms/image/index.ts`: All image components can be imported from here.
+
 *   **Typography:**
     *   *(Placeholder)*
 

@@ -13,29 +13,14 @@ const cardVariants = cva(
         grow: "w-full",
         fit: "w-fit",
       },
-      shadow: {
-        none: "",
-        sm: "shadow-sm",
-        md: "shadow",
-        lg: "shadow-md",
-      },
       border: {
         default: "border border-outline dark:border-outline-dark",
-        subtle: "border border-outline/30 dark:border-outline-dark/30",
         none: "border-0",
-      },
-      padding: {
-        none: "",
-        sm: "p-2",
-        md: "p-4",
-        lg: "p-6",
       },
     },
     defaultVariants: {
       width: "grow",
-      shadow: "none",
       border: "default",
-      padding: "none",
     },
   },
 );
@@ -75,16 +60,14 @@ export const Card: FC<CardProps> = ({
   children,
   className,
   width,
-  shadow,
   border,
-  padding,
   as: Element = "div",
   ...props
 }: CardProps) => {
   return (
     <Element
       className={cn(
-        cardVariants({ width, shadow, border, padding }),
+        cardVariants({ width, border }),
         className,
       )}
       {...props}
