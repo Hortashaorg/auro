@@ -43,6 +43,14 @@ const inputVariants = cva([
 });
 
 type InputVariants = NonNullableProps<typeof inputVariants>;
+type InputProps = BaseComponentProps & InputVariants & {
+  name?: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  value?: string | number;
+};
 
 /**
  * Input component with consistent styling and variants
@@ -65,15 +73,6 @@ type InputVariants = NonNullableProps<typeof inputVariants>;
  *   size="default"
  * />
  */
-type InputProps = BaseComponentProps & InputVariants & {
-  name?: string;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-  disabled?: boolean;
-  value?: string | number;
-};
-
 export const Input: FC<InputProps> = ({
   className,
   size,

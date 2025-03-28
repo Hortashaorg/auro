@@ -116,6 +116,7 @@ const buttonVariants = cva([
   },
 });
 type ButtonVariants = NonNullableProps<typeof buttonVariants>;
+type ButtonProps = BaseComponentProps & ButtonVariants;
 
 /**
  * Button component for triggering actions
@@ -134,8 +135,6 @@ type ButtonVariants = NonNullableProps<typeof buttonVariants>;
  *   Click me
  * </Button>
  */
-type ButtonProps = BaseComponentProps & ButtonVariants;
-
 export const Button: FC<ButtonProps> = (
   { children, variant, buttonSize, className, ...rest }: ButtonProps,
 ) => {

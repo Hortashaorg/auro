@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const badgeVariants = cva([
   "rounded-radius",
@@ -89,7 +90,7 @@ const badgeVariants = cva([
 });
 
 type BadgeVariants = NonNullableProps<typeof badgeVariants>;
-type Props = JSX.IntrinsicElements["span"] & BadgeVariants;
+type Props = BaseComponentProps & BadgeVariants;
 
 /**
  * Badge component for displaying status, labels, or counts

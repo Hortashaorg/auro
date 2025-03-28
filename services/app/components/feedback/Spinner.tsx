@@ -30,6 +30,7 @@ const spinnerVariants = cva([
 });
 
 type SpinnerVariants = NonNullableProps<typeof spinnerVariants>;
+type SpinnerProps = BaseComponentProps & SpinnerVariants;
 
 /**
  * Spinner component for indicating loading states
@@ -45,16 +46,7 @@ type SpinnerVariants = NonNullableProps<typeof spinnerVariants>;
  * @example
  * // Large danger spinner
  * <Spinner size="lg" variant="danger" />
- *
- * @example
- * // Inside a button with loading state
- * <button disabled>
- *   <Spinner size="sm" className="mr-2" />
- *   Loading...
- * </button>
  */
-type SpinnerProps = BaseComponentProps & SpinnerVariants;
-
 export const Spinner: FC<SpinnerProps> = ({
   variant,
   size,

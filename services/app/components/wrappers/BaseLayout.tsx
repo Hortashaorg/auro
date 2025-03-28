@@ -1,7 +1,21 @@
-import type { FC, JSX } from "@kalena/framework";
-type Props = JSX.IntrinsicElements["body"] & {
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
+
+type Props = BaseComponentProps & {
   title: string;
 };
+
+/**
+ * BaseLayout component for the main layout of the application
+ *
+ * @Props
+ * - title: The title of the page
+ *
+ * @example
+ * <BaseLayout title="My App">
+ *   <div>Content</div>
+ * </BaseLayout>
+ */
 export const BaseLayout: FC<Props> = ({
   title,
   children,

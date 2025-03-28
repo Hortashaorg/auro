@@ -35,7 +35,6 @@ type CheckboxGroupProps = BaseComponentProps & CheckboxGroupVariants & {
   values?: string[];
   label?: string;
   hint?: string;
-  required?: boolean;
 };
 
 /**
@@ -72,12 +71,12 @@ export const CheckboxGroup: FC<CheckboxGroupProps> = ({
   label,
   hint,
   orientation,
-  required,
 }: CheckboxGroupProps) => {
   return (
     <FormControl inputName={name} hint={hint} className={className}>
       {label && (
-        <Label as="div" required={required}>
+        <Label as="div">
+          |
           {label}
         </Label>
       )}

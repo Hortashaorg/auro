@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const gridVariants = cva("grid", {
   variants: {
@@ -37,7 +38,7 @@ const gridVariants = cva("grid", {
 });
 
 type GridVariants = NonNullableProps<typeof gridVariants>;
-type Props = JSX.IntrinsicElements["div"] & GridVariants;
+type Props = BaseComponentProps & GridVariants;
 
 /**
  * Grid component for creating responsive grid layouts

@@ -40,11 +40,11 @@ const cardVariants = cva(
   },
 );
 
-// Extract type information from the variant definitions
 type CardVariants = NonNullableProps<typeof cardVariants>;
-
-// Allow any HTML element that can be used as an article
-export type ElementType = "article" | "section" | "div";
+type ElementType = "article" | "section" | "div";
+type CardProps = BaseComponentProps & CardVariants & {
+  as?: ElementType;
+};
 
 /**
  * Card component for containing related content with consistent styling
@@ -71,10 +71,6 @@ export type ElementType = "article" | "section" | "div";
  *   </CardContent>
  * </Card>
  */
-type CardProps = BaseComponentProps & CardVariants & {
-  as?: ElementType;
-};
-
 export const Card: FC<CardProps> = ({
   children,
   className,

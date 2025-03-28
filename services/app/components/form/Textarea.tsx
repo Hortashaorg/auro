@@ -44,6 +44,14 @@ const textareaVariants = cva([
 });
 
 type TextareaVariants = NonNullableProps<typeof textareaVariants>;
+type TextareaProps = BaseComponentProps & TextareaVariants & {
+  name?: string;
+  rows?: number;
+  placeholder?: string;
+  required?: boolean;
+  disabled?: boolean;
+  value?: string;
+};
 
 /**
  * Textarea component for multi-line text input
@@ -66,15 +74,6 @@ type TextareaVariants = NonNullableProps<typeof textareaVariants>;
  *   required
  * />
  */
-type TextareaProps = BaseComponentProps & TextareaVariants & {
-  name?: string;
-  rows?: number;
-  placeholder?: string;
-  required?: boolean;
-  disabled?: boolean;
-  value?: string;
-};
-
 export const Textarea: FC<TextareaProps> = ({
   className,
   size,

@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const modalIconVariants = cva(
   [
@@ -30,11 +31,10 @@ const modalIconVariants = cva(
 
 type ModalIconVariants = NonNullableProps<typeof modalIconVariants>;
 
-type Props = JSX.IntrinsicElements["button"] & ModalIconVariants & {
+type Props = BaseComponentProps & ModalIconVariants & {
   modalRef: string;
   icon?: string;
   label?: string;
-  className?: string;
 };
 
 /**

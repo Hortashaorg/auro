@@ -30,6 +30,10 @@ const cardContentVariants = cva([
 });
 
 type CardContentVariants = NonNullableProps<typeof cardContentVariants>;
+type CardContentProps = BaseComponentProps & CardContentVariants & {
+  title?: string;
+  label?: string;
+};
 
 /**
  * CardContent component for providing structured content within Cards
@@ -45,11 +49,6 @@ type CardContentVariants = NonNullableProps<typeof cardContentVariants>;
  *   <p>This is the main content of the card.</p>
  * </CardContent>
  */
-type CardContentProps = BaseComponentProps & CardContentVariants & {
-  title?: string;
-  label?: string;
-};
-
 export const CardContent: FC<CardContentProps> = ({
   children,
   className,

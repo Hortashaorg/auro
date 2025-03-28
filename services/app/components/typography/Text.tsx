@@ -68,6 +68,7 @@ const textVariants = cva([], {
 });
 
 type TextVariants = NonNullableProps<typeof textVariants>;
+type TextProps = BaseComponentProps & TextVariants;
 
 /**
  * Text component for consistent typography with predefined styles
@@ -89,8 +90,6 @@ type TextVariants = NonNullableProps<typeof textVariants>;
  *   Error message with appropriate styling.
  * </Text>
  */
-type TextProps = BaseComponentProps & TextVariants;
-
 export const Text: FC<TextProps> = (
   { variant, className, alignment = "left", children, ...rest }: TextProps,
 ) => {

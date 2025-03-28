@@ -1,6 +1,7 @@
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type TableRowProps = JSX.IntrinsicElements["tr"];
+type TableRowProps = BaseComponentProps;
 
 /**
  * TableRow component for rows within tables

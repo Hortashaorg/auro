@@ -1,7 +1,8 @@
 import { Button } from "@comp/buttons/index.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type Props = JSX.IntrinsicElements["button"] & {
+type Props = BaseComponentProps & {
   modalRef: string;
   variant?: Parameters<typeof Button>[0]["variant"];
 };

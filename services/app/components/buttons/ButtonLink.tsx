@@ -65,6 +65,9 @@ const buttonLinkVariants = cva([
 });
 
 type ButtonLinkVariants = NonNullableProps<typeof buttonLinkVariants>;
+type ButtonLinkProps = BaseComponentProps & ButtonLinkVariants & {
+  href: string;
+};
 
 /**
  * ButtonLink component for link styling that looks like a button
@@ -83,10 +86,6 @@ type ButtonLinkVariants = NonNullableProps<typeof buttonLinkVariants>;
  *   Go to Dashboard
  * </ButtonLink>
  */
-type ButtonLinkProps = BaseComponentProps & ButtonLinkVariants & {
-  href: string;
-};
-
 export const ButtonLink: FC<ButtonLinkProps> = ({
   children,
   className,

@@ -2,6 +2,10 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
+type TableProps = BaseComponentProps & {
+  responsive?: boolean;
+};
+
 /**
  * Table component for displaying structured data
  *
@@ -14,10 +18,6 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
  *   <TableBody>...</TableBody>
  * </Table>
  */
-type TableProps = BaseComponentProps & {
-  responsive?: boolean;
-};
-
 export const Table: FC<TableProps> = ({
   children,
   className,

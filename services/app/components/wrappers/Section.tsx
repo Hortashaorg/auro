@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type Props = JSX.IntrinsicElements["section"];
+type Props = BaseComponentProps;
 
 /**
  * Section component for grouping related content

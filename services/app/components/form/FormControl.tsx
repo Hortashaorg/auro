@@ -3,6 +3,11 @@ import type { FC } from "@kalena/framework";
 import { Text } from "@comp/typography/index.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
+type FormControlProps = BaseComponentProps & {
+  inputName: string; // The name attribute of the input field for error association
+  hint?: string; // Optional helper text
+};
+
 /**
  * FormControl wraps form inputs with consistent styling and error handling
  *
@@ -16,11 +21,6 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
  *   <Input id="email" name="email" type="email" required />
  * </FormControl>
  */
-type FormControlProps = BaseComponentProps & {
-  inputName: string; // The name attribute of the input field for error association
-  hint?: string; // Optional helper text
-};
-
 export const FormControl: FC<FormControlProps> = ({
   className,
   children,

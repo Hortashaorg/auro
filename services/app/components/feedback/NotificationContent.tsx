@@ -2,7 +2,6 @@ import type { FC } from "@kalena/framework";
 import { cn } from "@comp/utils/tailwind.ts";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
-import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const notificationVariants = cva([
   "pointer-events-auto",
@@ -98,43 +97,24 @@ const titleVariants = cva([
 });
 
 type NotificationVariants = NonNullableProps<typeof notificationVariants>;
+type NotificationContentProps = NotificationVariants;
 
 /**
  * NotificationContent component for displaying toast notifications
  *
  * @props
  * - variant: Visual style of the notification ('info', 'warning', 'success', 'danger')
- * - title: Title text to display in the notification
- * - message: Content text of the notification
- * - sender: Optional sender information (for message type notifications)
- * - displayDuration: How long to show the notification in milliseconds (default: 5000)
  *
  * @example
  * <NotificationContent
  *   variant="success"
- *   title="Success"
- *   message="Your changes have been saved."
  * />
  *
  * @example
  * <NotificationContent
  *   variant="info"
- *   title="New Message"
- *   message="You have a new message"
- *   sender={{ name: "John Doe", avatar: "/avatars/john.jpg" }}
- *   displayDuration={8000}
  * />
  */
-type NotificationContentProps = BaseComponentProps & NotificationVariants & {
-  title?: string;
-  message?: string;
-  sender?: {
-    name: string;
-    avatar: string;
-  };
-  displayDuration?: number;
-};
-
 export const NotificationContent: FC<NotificationContentProps> = ({
   variant,
 }: NotificationContentProps) => {

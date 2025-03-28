@@ -1,34 +1,14 @@
 import type { FC } from "@kalena/framework";
 import { NotificationContent } from "./NotificationContent.tsx";
-import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 /**
  * ToastNotificationContainer component for managing and displaying toast notifications
  *
- * @props
- * - All BaseComponentProps are supported
- *
  * @example
  * <ToastNotificationContainer />
- *
- * @example
- * // To trigger a notification from anywhere in the application:
- * // Use Alpine.js events system
- * <button
- *   x-on:click="$dispatch('show-toast', {
- *     variant: 'success',
- *     title: 'Success',
- *     message: 'Operation completed successfully'
- *   })"
- * >
- *   Show Toast
- * </button>
  */
-type ToastNotificationContainerProps = BaseComponentProps;
-
-export const ToastNotificationContainer: FC<ToastNotificationContainerProps> = (
-  props: ToastNotificationContainerProps,
-) => {
+export const ToastNotificationContainer: FC = () => {
+  const props: Record<string, string> = {};
   props["x-on:show-toast.window"] = `addNotification({
                 variant: $event.detail.variant,
                 title: $event.detail.title,

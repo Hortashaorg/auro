@@ -30,6 +30,7 @@ const buttonGroupVariants = cva([
 });
 
 type ButtonGroupVariants = NonNullableProps<typeof buttonGroupVariants>;
+type ButtonGroupProps = BaseComponentProps & ButtonGroupVariants;
 
 /**
  * ButtonGroup component for grouping related buttons with consistent spacing
@@ -53,8 +54,6 @@ type ButtonGroupVariants = NonNullableProps<typeof buttonGroupVariants>;
  *   </div>
  * </ButtonGroup>
  */
-type ButtonGroupProps = BaseComponentProps & ButtonGroupVariants;
-
 export const ButtonGroup: FC<ButtonGroupProps> = ({
   children,
   className,

@@ -1,6 +1,20 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+type RadioOption = {
+  value: string;
+  label: string;
+  description?: string;
+  disabled?: boolean;
+};
+
+type RadioGroupProps = BaseComponentProps & {
+  name: string;
+  options: RadioOption[];
+  value?: string;
+  required?: boolean;
+  disabled?: boolean;
+};
 
 /**
  * RadioGroup component for displaying a group of radio buttons
@@ -23,21 +37,6 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
  *   required
  * />
  */
-type RadioOption = {
-  value: string;
-  label: string;
-  description?: string;
-  disabled?: boolean;
-};
-
-type RadioGroupProps = BaseComponentProps & {
-  name: string;
-  options: RadioOption[];
-  value?: string;
-  required?: boolean;
-  disabled?: boolean;
-};
-
 export const RadioGroup: FC<RadioGroupProps> = ({
   className,
   name,

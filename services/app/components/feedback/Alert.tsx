@@ -66,6 +66,9 @@ const textVariants = cva([], {
 });
 
 type AlertVariants = NonNullableProps<typeof alertVariants>;
+type AlertProps = BaseComponentProps & AlertVariants & {
+  title: string;
+};
 
 /**
  * Alert component for displaying contextual messages and alerts
@@ -79,10 +82,6 @@ type AlertVariants = NonNullableProps<typeof alertVariants>;
  *   This is an informational message.
  * </Alert>
  */
-type AlertProps = BaseComponentProps & AlertVariants & {
-  title: string;
-};
-
 export const Alert: FC<AlertProps> = (
   { className, variant, children, title, ...props }: AlertProps,
 ) => {

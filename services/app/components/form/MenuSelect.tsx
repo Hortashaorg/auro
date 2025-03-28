@@ -32,6 +32,9 @@ const selectVariants = cva(
 );
 
 type SelectVariants = NonNullableProps<typeof selectVariants>;
+type MenuSelectProps = BaseComponentProps & SelectVariants & {
+  name: string;
+};
 
 /**
  * MenuSelect component for dropdown menu selection
@@ -49,10 +52,6 @@ type SelectVariants = NonNullableProps<typeof selectVariants>;
  *   <a className="p-2 hover:bg-surface-alt" href="/logout">Logout</a>
  * </MenuSelect>
  */
-type MenuSelectProps = BaseComponentProps & SelectVariants & {
-  name: string;
-};
-
 export const MenuSelect: FC<MenuSelectProps> = (
   { className, variant, flow, name, children, ...rest }: MenuSelectProps,
 ) => {

@@ -37,6 +37,10 @@ const cardImageVariants = cva([
 });
 
 type CardImageVariants = NonNullableProps<typeof cardImageVariants>;
+type CardImageProps = BaseComponentProps & CardImageVariants & {
+  src: string;
+  alt: string;
+};
 
 /**
  * CardImage component for displaying images within Cards
@@ -56,11 +60,6 @@ type CardImageVariants = NonNullableProps<typeof cardImageVariants>;
  *   height="lg"
  * />
  */
-type CardImageProps = BaseComponentProps & CardImageVariants & {
-  src: string;
-  alt: string;
-};
-
 export const CardImage: FC<CardImageProps> = ({
   className,
   hover,

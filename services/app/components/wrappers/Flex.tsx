@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 const flexVariants = cva("flex", {
   variants: {
@@ -50,7 +51,7 @@ const flexVariants = cva("flex", {
 });
 
 type FlexVariants = NonNullableProps<typeof flexVariants>;
-type Props = JSX.IntrinsicElements["div"] & FlexVariants;
+type Props = BaseComponentProps & FlexVariants;
 
 /**
  * Flex component for creating flexible layouts with consistent styling

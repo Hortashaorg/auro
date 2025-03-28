@@ -44,6 +44,9 @@ const tooltipVariants = cva([
 });
 
 type TooltipVariants = NonNullableProps<typeof tooltipVariants>;
+type TooltipProps = BaseComponentProps & TooltipVariants & {
+  content: string;
+};
 
 /**
  * Tooltip component for displaying additional information on hover
@@ -67,10 +70,6 @@ type TooltipVariants = NonNullableProps<typeof tooltipVariants>;
  *   <Icon name="info" />
  * </Tooltip>
  */
-type TooltipProps = BaseComponentProps & TooltipVariants & {
-  content: string;
-};
-
 export const Tooltip: FC<TooltipProps> = ({
   className,
   variant,

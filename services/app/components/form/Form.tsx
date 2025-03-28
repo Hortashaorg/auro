@@ -2,6 +2,8 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
+type FormProps = BaseComponentProps;
+
 /**
  * Form component with built-in Alpine.js error handling
  *
@@ -21,8 +23,6 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
  *   <Button type="submit">Login</Button>
  * </Form>
  */
-type FormProps = BaseComponentProps;
-
 export const Form: FC<FormProps> = ({
   className,
   children,

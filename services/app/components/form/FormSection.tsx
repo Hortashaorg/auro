@@ -29,6 +29,10 @@ const formSectionVariants = cva(
 );
 
 type FormSectionVariants = NonNullableProps<typeof formSectionVariants>;
+type FormSectionProps = BaseComponentProps & FormSectionVariants & {
+  title: string;
+  description: string;
+};
 
 /**
  * FormSection organizes form controls into logical sections with optional title and description
@@ -58,11 +62,6 @@ type FormSectionVariants = NonNullableProps<typeof formSectionVariants>;
  *   </FormControl>
  * </FormSection>
  */
-type FormSectionProps = BaseComponentProps & FormSectionVariants & {
-  title: string;
-  description: string;
-};
-
 export const FormSection: FC<FormSectionProps> = ({
   className,
   children,

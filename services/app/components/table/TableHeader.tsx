@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type TableHeaderProps = JSX.IntrinsicElements["thead"];
+type TableHeaderProps = BaseComponentProps;
 
 /**
  * TableHeader component for the header section of tables

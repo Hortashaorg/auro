@@ -1,7 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { FC, JSX } from "@kalena/framework";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type TabProps = JSX.IntrinsicElements["div"] & {
+type TabProps = BaseComponentProps & {
   tabId: string;
 };
 

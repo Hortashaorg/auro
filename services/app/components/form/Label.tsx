@@ -2,6 +2,11 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
+type LabelProps = BaseComponentProps & {
+  htmlFor?: string;
+  required?: boolean;
+};
+
 /**
  * Label component for form inputs
  *
@@ -12,11 +17,6 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
  * @example
  * <Label htmlFor="email" required>Email Address</Label>
  */
-type LabelProps = BaseComponentProps & {
-  htmlFor?: string;
-  required?: boolean;
-};
-
 export const Label: FC<LabelProps> = ({
   children,
   className,
