@@ -1,4 +1,4 @@
-import { Button } from "../buttons/Button.tsx";
+import { Button } from "../buttons/index.ts";
 import type { FC } from "@kalena/framework";
 
 type ButtonProps = Parameters<typeof Button>[0];

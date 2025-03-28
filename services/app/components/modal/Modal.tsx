@@ -1,6 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { Flex } from "@comp/wrappers/Flex.tsx";
-import { Button } from "../buttons/Button.tsx";
+import { Button } from "../buttons/index.ts";
 import { Text } from "../typography/index.ts";
 import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";

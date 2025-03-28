@@ -1,0 +1,37 @@
+---
+description: Overview of all available components
+globs: 
+alwaysApply: false
+---
+# Component Overview
+
+Review this guide to understand the available UI components, their classification (Atoms, Molecules, etc.), and their intended use. Familiarize yourself with existing components before creating new ones to promote consistency and reuse.
+
+**Molecules vs Atoms**
+*   If a component renders a single primary HTML element, being a visual element or a wrapper it is an **Atom**.
+*   If a component internally combines two or more Atoms/HTML elements to form a distinct functional unit, it's a **Molecule**.
+
+
+## Atoms
+
+*   **Buttons:**
+    *   `@comp/atoms/buttons/Button.tsx`: Standard button element. Variants: visual styles, sizes.
+    *   `@comp/atoms/buttons/Link.tsx`: Styled `<a>` tag for navigation. Variants: navLink, dropdownLink.
+    *   `@comp/atoms/buttons/ButtonLink.tsx`: `<a>` tag styled like a Button.
+    *   `@comp/atoms/buttons/ButtonGroup.tsx`: `<div>` for grouping/spacing buttons.
+    *   `@comp/atoms/buttons/index.ts`: All buttons can be imported from here.
+
+*   **Typography:**
+    *   *(Placeholder)*
+
+*   **Form Elements:**
+    *   *(Placeholder)*
+
+
+## Molecules
+
+*   **Cards:**
+    *   *(Placeholder)*
+
+*   **Forms:**
+    *   *(Placeholder)*

@@ -1,11 +1,19 @@
-import { Text } from "@comp/typography/index.ts";
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-const linkVariants = cva("py-3", {
+// Add base text styles here
+const linkVariants = cva([
+  "py-3",
+  "text-base",
+  "font-normal",
+  "dark:text-on-surface-dark",
+  "text-on-surface",
+  "font-body",
+  "leading-loose",
+], {
   variants: {
     variant: {
       navLink: [
@@ -67,9 +75,7 @@ export const Link: FC<Props> = (
       data-active={active}
       className={cn(linkVariants({ variant }), className)}
     >
-      <Text variant="body">
-        {children}
-      </Text>
+      {children}
     </a>
   );
 };

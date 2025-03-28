@@ -1,0 +1,27 @@
+---
+description: When building UI
+globs: 
+alwaysApply: false
+---
+# UI Building Guidelines
+
+Follow these principles when developing UI components and features to ensure consistency, maintainability, and reusability.
+
+## 1. Leverage Atomic Design Components
+
+*   **Prioritize Atoms & Molecules:** When constructing UI elements or features, primarily use the existing Atoms and Molecules defined in `services/app/components/atoms/` and `services/app/components/molecules/`. Refer to the `components.mdc` rule for an overview.
+*   **Avoid Style Overrides:** Refrain from overriding the default styles of existing Atom and Molecule components (e.g., using inline styles or overly specific CSS selectors). Their predefined styles ensure visual consistency.
+*   **Extend or Create, Don't Hack:** If the existing components don't meet the required functionality or visual appearance:
+    *   Consider if an existing component can be *extended* with new variants or props to support the use case.
+    *   If extension isn't feasible, create a *new* reusable Atom or Molecule following the established patterns.
+    *   Avoid creating one-off styles or complex local component structures for things that should be part of the core component library.
+
+## 2. Structure for Dynamic Content (HTMX)
+
+*   **UI Sections for Re-rendering:** UI fragments that are intended to be replaced or re-rendered via HTMX actions (e.g., part of a page updating after a form submission) should ideally be defined as components within the `services/app/sections/` directory. This keeps dynamically swapped content organized.
+*   **HTMX Endpoints:** Server-side endpoints that handle HTMX requests and return HTML fragments should be located in the `services/app/api/` directory.
+*   **Page Routes:** Full page routes that render initial layouts and components are defined within the `services/app/pages/` directory.
+
+---
+
+**Goal:** By adhering to these guidelines, we aim for a UI codebase that is predictable, easy to update, and leverages reusable components effectively, especially when integrating with HTMX for dynamic updates.
