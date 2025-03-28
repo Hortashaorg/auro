@@ -1,6 +1,6 @@
 import { ErrorLayout } from "@sections/layout/ErrorLayout.tsx";
 import { Text } from "@comp/typography/index.ts";
-import { ButtonLink } from "@comp/buttons/index.ts";
+import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { Flex } from "@comp/wrappers/index.ts";
 
 export const ErrorPage404 = () => {

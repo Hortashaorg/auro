@@ -1,4 +1,4 @@
-import { Button } from "@comp/buttons/index.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 

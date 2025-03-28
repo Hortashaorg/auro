@@ -1,9 +1,10 @@
 import type { InferSelectModel, schema } from "@package/database";
 import { Text } from "@comp/typography/index.ts";
 import { Grid, Section } from "@comp/wrappers/index.ts";
-import { Card, CardContent, CardImage } from "@comp/card/index.ts";
+import { Card, CardImage } from "@comp/atoms/card/index.ts";
+import { CardContent } from "@comp/molecules/card/index.ts";
 import { getServerActions } from "@queries/serverActions.ts";
-import { Button } from "@comp/buttons/index.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 import { ResourcesTable } from "./ResourcesTable.tsx";
 import { currentUser } from "@queries/currentUser.ts";
 

@@ -1,8 +1,8 @@
 import { Grid, HtmxWrapper, Section } from "@comp/wrappers/index.ts";
-import { Card } from "@comp/card/index.ts";
-import { CardContent } from "@comp/card/index.ts";
+import { Card } from "@comp/atoms/card/index.ts";
+import { CardContent } from "@comp/molecules/card/index.ts";
 import { Badge, Text } from "@comp/typography/index.ts";
-import { ButtonLink } from "@comp/buttons/index.ts";
+import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { onlineServers, serversWhereUserIsAdmin } from "@queries/servers.ts";
 import { throwError } from "@package/common";

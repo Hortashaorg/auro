@@ -1,7 +1,7 @@
 import { getGlobalContext } from "@kalena/framework";
 import { db, eq, schema } from "@package/database";
 import { Form, RadioGroup } from "@comp/form/index.ts";
-import { Button } from "@comp/buttons/index.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 
 export const AddResourceToActionForm = async () => {
   const globalContext = getGlobalContext();

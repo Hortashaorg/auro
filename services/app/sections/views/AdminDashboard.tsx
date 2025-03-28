@@ -2,8 +2,8 @@ import { Text } from "@comp/typography/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
 import { Switch } from "@comp/form/index.ts";
 import { Badge } from "@comp/typography/index.ts";
-import { Card } from "@comp/card/index.ts";
-import { CardContent } from "@comp/card/index.ts";
+import { Card } from "@comp/atoms/card/index.ts";
+import { CardContent } from "@comp/molecules/card/index.ts";
 
 export const AdminDashboard = (
   { server }: { server: InferSelectModel<typeof schema.server> },

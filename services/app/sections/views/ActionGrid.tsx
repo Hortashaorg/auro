@@ -1,10 +1,12 @@
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
-import { Card, CardContent, CardImage } from "@comp/card/index.ts";
+import { Card, CardImage } from "@comp/atoms/card/index.ts";
 import { Badge, Text } from "@comp/typography/index.ts";
-import { ButtonLink } from "@comp/buttons/index.ts";
+import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getServerActions } from "@queries/serverActions.ts";
+import { CardContent } from "@comp/molecules/card/index.ts";
+
 type Props = JSX.IntrinsicElements["div"];
 
 export const ActionGrid = async ({ ...props }: Props) => {

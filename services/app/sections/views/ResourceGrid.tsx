@@ -1,7 +1,8 @@
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Card, CardContent, CardImage } from "@comp/card/index.ts";
+import { Card, CardImage } from "@comp/atoms/card/index.ts";
+import { CardContent } from "@comp/molecules/card/index.ts";
 import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
 import { Text } from "@comp/typography/index.ts";
 

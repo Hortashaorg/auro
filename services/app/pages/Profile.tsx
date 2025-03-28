@@ -1,12 +1,12 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
 import { Text } from "@comp/typography/index.ts";
-import { Card } from "@comp/card/index.ts";
+import { Card } from "@comp/atoms/card/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
 import { ProfileNicknameForm } from "@sections/forms/ProfileNicknameForm.tsx";
 import { throwError } from "@package/common";
 import { getAccountWithUsers } from "@queries/getAccountWithUsers.ts";
-import { CardContent } from "@comp/card/index.ts";
+import { CardContent } from "@comp/molecules/card/index.ts";
 
 const Profile = async () => {
   const context = getGlobalContext();

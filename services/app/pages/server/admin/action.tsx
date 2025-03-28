@@ -9,7 +9,7 @@ import { Modal, ModalButton } from "@comp/modal/index.ts";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
 import { FormButton, FormContext } from "@comp/form/index.ts";
-import { ButtonGroup } from "@comp/buttons/index.ts";
+import { ButtonGroup } from "@comp/atoms/buttons/index.ts";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();

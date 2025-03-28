@@ -7,7 +7,7 @@ import {
   Switch,
   Textarea,
 } from "@comp/form/index.ts";
-import { Button } from "@comp/buttons/index.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
