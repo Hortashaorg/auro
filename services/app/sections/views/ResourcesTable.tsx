@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "@comp/table/index.ts";
+} from "@comp/atoms/table/index.ts";
 import { getUserResources } from "@queries/userResources.ts";
 
 type Props = {

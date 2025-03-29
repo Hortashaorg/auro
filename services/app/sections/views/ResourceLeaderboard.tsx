@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "@comp/table/index.ts";
+} from "@comp/atoms/table/index.ts";
 import { getResourceLeaderboard } from "@queries/resourceLeaderboard.ts";
 import { getResource } from "@queries/getResource.ts";
 
