@@ -1,7 +1,7 @@
-import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import { Text } from "@comp/atoms/typography/index.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { FormField } from "@comp/atoms/form/index.ts";
 
 type FormControlProps = BaseComponentProps & {
   inputName: string; // The name attribute of the input field for error association
@@ -22,15 +22,13 @@ type FormControlProps = BaseComponentProps & {
  * </FormControl>
  */
 export const FormControl: FC<FormControlProps> = ({
-  className,
   children,
   inputName,
   hint,
   ...props
 }) => {
   return (
-    <div
-      className={cn("mb-4", className)}
+    <FormField
       {...props}
     >
       {children}
@@ -48,6 +46,6 @@ export const FormControl: FC<FormControlProps> = ({
         x-show={`errors && errors['${inputName}']`}
         x-text={`errors['${inputName}']`}
       />
-    </div>
+    </FormField>
   );
 };

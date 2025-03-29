@@ -63,10 +63,8 @@ export const Range: FC<RangeProps> = ({
   defaultValue = 0,
   ...props
 }: RangeProps) => {
-  // Base classes that are always applied
   const baseClasses = cn(rangeVariants({ state }), className);
 
-  // Error state classes to be conditionally applied
   const errorClasses = cn(
     rangeVariants({ state: "error" }),
     className,

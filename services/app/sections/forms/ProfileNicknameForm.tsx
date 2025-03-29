@@ -1,11 +1,7 @@
 import type { JSX } from "@kalena/framework";
-import {
-  Form,
-  FormButton,
-  FormControl,
-  Input,
-  Label,
-} from "@comp/form/index.ts";
+import { FormControl } from "@comp/molecules/form/index.ts";
+import { FormButton } from "@comp/molecules/form/index.ts";
+import { Form, Input, Label } from "@comp/atoms/form/index.ts";
 import { Text } from "@comp/atoms/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["div"] & {

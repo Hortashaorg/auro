@@ -40,6 +40,13 @@ Review this guide to understand the available UI components, their classificatio
     - `@comp/atoms/tabs/TabsTrigger.tsx`: The clickable button/trigger for switching tabs.
     - `@comp/atoms/tabs/TabContent.tsx`: The content panel associated with a specific tab.
     - `@comp/atoms/tabs/index.ts`: All tab atoms can be imported from here.
+- Table:
+    - `@comp/atoms/table/Table.tsx`: Renders a `<table>` element.
+    - `@comp/atoms/table/TableHeader.tsx`: Renders a `<thead>` or `<th>` element.
+    - `@comp/atoms/table/TableBody.tsx`: Renders a `<tbody>` element.
+    - `@comp/atoms/table/TableRow.tsx`: Renders a `<tr>` element.
+    - `@comp/atoms/table/TableCell.tsx`: Renders a `<td>` element.
+    - `@comp/atoms/table/index.ts`: All table atoms can be imported from here.
 
 ## Molecules
 

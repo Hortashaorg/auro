@@ -1,4 +1,5 @@
-import { Form, FormControl, Input, Range } from "@comp/form/index.ts";
+import { FormControl } from "@comp/molecules/form/index.ts";
+import { Form, Input, Range } from "@comp/atoms/form/index.ts";
 import {
   Table,
   TableBody,

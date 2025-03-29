@@ -1,6 +1,6 @@
 import { Badge, Text, Title } from "@comp/atoms/typography/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
-import { Switch } from "@comp/form/index.ts";
+import { Switch } from "@comp/atoms/form/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 
 export const AdminDashboard = (
@@ -42,6 +42,7 @@ export const AdminDashboard = (
           </div>
         </div>
         <Switch
+          name="online"
           initialState={server.online}
           hx-post={`/api/servers/${server.id}/toggle-status`}
           hx-target="#admin-dashboard"

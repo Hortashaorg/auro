@@ -1,10 +1,10 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
-import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { cva } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-const inputVariants = cva([
+const textareaVariants = cva([
   "rounded-md",
   "border",
   "dark:border-outline-dark",
@@ -20,6 +20,7 @@ const inputVariants = cva([
   "disabled:opacity-50",
   "disabled:cursor-not-allowed",
   "w-full",
+  "resize-y",
 ], {
   variants: {
     size: {
@@ -42,53 +43,53 @@ const inputVariants = cva([
   },
 });
 
-type InputVariants = NonNullableProps<typeof inputVariants>;
-type InputProps = BaseComponentProps & InputVariants & {
-  name?: string;
-  type?: string;
+type TextareaVariants = NonNullableProps<typeof textareaVariants>;
+type TextareaProps = BaseComponentProps & TextareaVariants & {
+  name: string;
+  rows?: number;
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
-  value?: string | number;
+  value?: string;
 };
 
 /**
- * Input component with consistent styling and variants
+ * Textarea component for multi-line text input
  *
  * @props
- * - size: Input field size ('default', 'small', 'large')
- * - state: Visual state of the input ('default', 'error')
- * - name: Input name (used for form submission and error state)
- * - type: Input type (text, email, password, etc.)
+ * - size: Sizing of the textarea ('default', 'small', 'large')
+ * - state: Visual state of the textarea ('default', 'error')
+ * - name: Input name (required). Used for form submission and error state.
+ * - rows: Number of visible text lines
  * - placeholder: Placeholder text
  * - required: Whether the field is required
  * - disabled: Whether the field is disabled
  *
  * @example
- * <Input
- *   name="email"
- *   type="email"
- *   placeholder="Enter your email"
- *   required
+ * <Textarea
+ *   name="description"
+ *   placeholder="Enter description"
+ *   rows={4}
  *   size="default"
+ *   required
  * />
  */
-export const Input: FC<InputProps> = ({
+export const Textarea: FC<TextareaProps> = ({
   className,
   size,
   state = "default",
-  name = "",
+  name,
   ...props
 }) => {
-  const baseClasses = cn(inputVariants({ size, state }), className);
+  const baseClasses = cn(textareaVariants({ size, state }), className);
 
   const errorClasses = cn(
-    inputVariants({ size, state: "error" }),
+    textareaVariants({ size, state: "error" }),
     className,
   );
 
   return (
-    <input
+    <textarea
       {...props}
       name={name}
       className={baseClasses}

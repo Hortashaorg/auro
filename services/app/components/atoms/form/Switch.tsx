@@ -102,8 +102,7 @@ const switchTrackVariants = cva([
 type SwitchVariants = NonNullableProps<typeof switchTrackVariants>;
 
 type SwitchProps = BaseComponentProps & SwitchVariants & {
-  label?: string;
-  name?: string;
+  name: string;
   initialState?: boolean;
   disabled?: boolean;
 };
@@ -111,23 +110,28 @@ type SwitchProps = BaseComponentProps & SwitchVariants & {
 /**
  * Switch component for toggling boolean states using Alpine.js
  *
+ * Renders a visually styled switch control linked to a hidden checkbox.
+ * Use a separate Label component associated via `id`/`for` attributes.
+ *
  * @props
- * - label: Text label beside the switch
- * - name: Form field name
- * - initialState: Whether the switch is toggled on initially
- * - disabled: Whether the switch is disabled
+ * - name: Form field name (required). Used for ID and submission.
+ * - initialState: Whether the switch is toggled on initially (default: false).
+ * - disabled: Whether the switch is disabled (default: false).
  * - variant: Visual style of the switch ('default', 'success', 'danger', etc.)
+ * - className: Additional classes for the wrapper div.
+ * - ...rest: Props passed to the wrapper div.
  *
  * @example
- * <Switch
- *   name="enableFeature"
- *   initialState={true}
- *   label="Enable feature"
- *   variant="success"
- * />
+ * <>
+ *   <Label for="feature">Enable Feature</Label>
+ *   <Switch
+ *     name="feature"
+ *     initialState={true}
+ *     variant="success"
+ *   />
+ * </>
  */
 export const Switch: FC<SwitchProps> = ({
-  label,
   initialState = false,
   variant = "default",
   className,
@@ -137,7 +141,7 @@ export const Switch: FC<SwitchProps> = ({
 }: SwitchProps) => {
   return (
     <div
-      className={cn("flex items-center gap-3", className)}
+      className={cn("inline-block align-middle", className)}
       x-data={`{ isOn: ${initialState} }`}
       {...props}
     >
@@ -158,11 +162,6 @@ export const Switch: FC<SwitchProps> = ({
         )}
       >
       </div>
-      {label && (
-        <span className="text-sm font-medium text-on-surface peer-checked:text-on-surface-strong peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-on-surface-dark dark:peer-checked:text-on-surface-dark-strong">
-          {label}
-        </span>
-      )}
     </div>
   );
 };

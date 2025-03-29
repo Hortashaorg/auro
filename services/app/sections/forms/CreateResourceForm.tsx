@@ -1,12 +1,12 @@
+import { FormControl } from "@comp/molecules/form/index.ts";
 import {
   Form,
-  FormControl,
-  ImageGridInput,
   Input,
   Label,
   Switch,
   Textarea,
-} from "@comp/form/index.ts";
+} from "@comp/atoms/form/index.ts";
+import { ImageGridInput } from "@comp/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";

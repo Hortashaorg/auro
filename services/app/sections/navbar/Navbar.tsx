@@ -1,6 +1,6 @@
 import { Menu, Nav } from "@comp/wrappers/index.ts";
 import { Link } from "@comp/atoms/buttons/index.ts";
-import { MenuSelect } from "@comp/form/index.ts";
+import { MenuSelect } from "@comp/molecules/navigation/index.ts";
 import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
 import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";

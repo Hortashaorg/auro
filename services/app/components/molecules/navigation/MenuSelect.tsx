@@ -57,7 +57,10 @@ export const MenuSelect: FC<MenuSelectProps> = (
 ) => {
   return (
     <div {...rest} className={cn("relative", className)}>
-      <div x-on:click={`name = name == "${name}" ? "" : "${name}"`}>
+      <div
+        x-on:click={`name = name == "${name}" ? "" : "${name}"`}
+        className="hover:bg-surface dark:hover:bg-surface-dark cursor-pointer px-4 relative py-3"
+      >
         {
           <button
             className="hover:bg-surface dark:hover:bg-surface-dark cursor-pointer px-4 relative py-3"
@@ -76,6 +79,12 @@ export const MenuSelect: FC<MenuSelectProps> = (
       <div
         className={selectVariants({ flow, variant })}
         x-show={`name == "${name}"`}
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="transform opacity-0 scale-95"
+        x-transition:enter-end="transform opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="transform opacity-100 scale-100"
+        x-transition:leave-end="transform opacity-0 scale-95"
         x-cloak
       >
         {children}
