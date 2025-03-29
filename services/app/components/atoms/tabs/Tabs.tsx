@@ -30,7 +30,7 @@ export const Tabs: FC<TabsProps> = ({
   initialTabId,
   className,
   ...props
-}: TabsProps) => {
+}) => {
   return (
     <div
       className={cn(

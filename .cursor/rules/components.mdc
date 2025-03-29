@@ -28,16 +28,21 @@ Review this guide to understand the available UI components, their classificatio
 - Cards:
     - `@comp/atoms/card/Card.tsx`: Standard card.
     - `@comp/atoms/card/CardBody.tsx`: Creates vertical space between elements in the card.
-    - `@comp/atoms/card/index.ts`: All card can atoms can be imported from here.
+    - `@comp/atoms/card/index.ts`: All card atoms can be imported from here.
 - Typography:
     - (Placeholder)
-- Form Elements:
-    - (Placeholder)
+- Tabs:
+    - `@comp/atoms/tabs/Tabs.tsx`: Wrapper for correct Tab behavior.
+    - `@comp/atoms/tabs/TabsList.tsx`: Container for grouping `TabsTrigger` components.
+    - `@comp/atoms/tabs/TabsTrigger.tsx`: The clickable button/trigger for switching tabs.
+    - `@comp/atoms/tabs/TabContent.tsx`: The content panel associated with a specific tab.
+    - `@comp/atoms/tabs/index.ts`: All tab atoms can be imported from here.
 
 ## Molecules
 
 - Cards:
     - `@comp/molecules/card/MediaCardHeader.tsx`: Takes small picture, title and description to display on header of card.
+    - `@comp/molecules/card/index.ts`: All card molecules can be imported from here.
 - Modals:
     - `@comp/molecules/modal/Modal.tsx`: Renders the main dialog structure with title, content area, and close functionality.
     - `@comp/molecules/modal/ModalButton.tsx`: A button specifically styled and configured to trigger the display of a Modal.

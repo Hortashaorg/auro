@@ -4,7 +4,12 @@ import { Layout } from "@sections/layout/Layout.tsx";
 import { Text } from "@comp/typography/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
-import { Tab, Tabs, TabsList, TabsTrigger } from "@comp/tabs/index.ts";
+import {
+  TabContent,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "../../../components/atoms/tabs/index.ts";
 import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
@@ -54,7 +59,7 @@ const TabsSection = (
         <TabsTrigger tabId="settings">Settings</TabsTrigger>
       </TabsList>
 
-      <Tab tabId="rewards">
+      <TabContent tabId="rewards">
         <Text variant="h3" className="text-xl font-bold mb-6">
           {actionName}
         </Text>
@@ -93,19 +98,19 @@ const TabsSection = (
             <AddResourceToActionForm />
           </Modal>
         </FormContext>
-      </Tab>
+      </TabContent>
 
-      <Tab tabId="history">
+      <TabContent tabId="history">
         <Text variant="h3">
           Usage History for {actionName}
         </Text>
-      </Tab>
+      </TabContent>
 
-      <Tab tabId="settings">
+      <TabContent tabId="settings">
         <Text variant="h3">
           {actionName} Settings
         </Text>
-      </Tab>
+      </TabContent>
     </Tabs>
   );
 };

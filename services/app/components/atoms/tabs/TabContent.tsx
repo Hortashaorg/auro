@@ -2,7 +2,7 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type TabProps = BaseComponentProps & {
+type TabContentProps = BaseComponentProps & {
   tabId: string;
 };
 
@@ -24,12 +24,12 @@ type TabProps = BaseComponentProps & {
  *   </div>
  * </Tab>
  */
-export const Tab: FC<TabProps> = ({
+export const TabContent: FC<TabContentProps> = ({
   children,
   tabId,
   className,
   ...props
-}: TabProps) => {
+}) => {
   return (
     <div
       id={tabId}

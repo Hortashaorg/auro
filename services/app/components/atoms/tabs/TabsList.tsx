@@ -24,7 +24,7 @@ export const TabsList: FC<TabsListProps> = ({
   children,
   className,
   ...props
-}: TabsListProps) => {
+}) => {
   return (
     <div
       className={cn(

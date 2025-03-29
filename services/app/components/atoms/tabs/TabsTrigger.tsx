@@ -24,7 +24,7 @@ export const TabsTrigger: FC<TabsTriggerProps> = ({
   tabId,
   className,
   ...props
-}: TabsTriggerProps) => {
+}) => {
   return (
     <button
       type="button"

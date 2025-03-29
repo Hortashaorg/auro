@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Rule Usage and Maintenance Guidelines
+
+This rule outlines how to effectively leverage and maintain the project's defined rules during development.
+
+## 1. Consult Rules Before Starting Tasks
+
+- **Mandatory First Step:** Before beginning any coding task, refactoring effort, or component creation, **always** check for existing rules that might be relevant. Use available tools or search functions to find rules related to the task domain (e.g., UI building, state management, naming conventions).
+- **Purpose:** Consulting rules first ensures alignment with established project standards, patterns, and architectural decisions, preventing rework and maintaining consistency.
+
+## 2. Proactively Suggest Rule Improvements
+
+- **Identify Gaps & Ambiguities:** While working, pay attention to situations where existing rules are unclear, incomplete, or potentially outdated based on the current task or recent changes.
+- **Suggest Snippets:** When a gap or necessary clarification is identified, proactively suggest specific, ready-to-use Markdown snippets that can be added to or used to modify the relevant rule file(s).
+- **Frequency:** Offer these suggestions naturally during the conversation, especially after completing a sub-task or when discussing component design or implementation details.
+- **Goal:** This collaborative approach helps keep the project's documented knowledge accurate, relevant, and continuously improving.

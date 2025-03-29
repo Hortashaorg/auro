@@ -16,7 +16,9 @@ This document outlines the main directories and their purpose within the project
 
 ## Main Application (`services/app/`)
 
-The primary web application code lives within `services/app/`. Key subdirectories include:
+The primary web application code lives within `services/app/`.
+**Note:** When referencing paths within this application (e.g., in imports or tool commands), ensure they start directly from `services/app/...`, avoiding any extra leading prefixes like `app/`.
+
 
 - `components/`: Contains reusable UI components following an Atomic Design methodology.
     - Organized into `atoms/` and `molecules/`.
