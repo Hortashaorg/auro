@@ -1,6 +1,5 @@
 import { Grid, HtmxWrapper, Section } from "@comp/wrappers/index.ts";
-import { Card } from "@comp/atoms/card/index.ts";
-import { CardContent } from "@comp/molecules/card/index.ts";
+import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Badge, Text } from "@comp/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getGlobalContext, type JSX } from "@kalena/framework";
@@ -52,11 +51,11 @@ const ServerCard = ({ server }: {
 }) => {
   return (
     <Card>
-      <CardContent title={server.name}>
+      <CardBody>
+        <Text variant="h3">{server.name}</Text>
         <Badge
           variant={server.online ? "success" : "danger"}
           size="sm"
-          className="shrink-0"
         >
           {server.online ? "Online" : "Offline"}
         </Badge>
@@ -65,7 +64,7 @@ const ServerCard = ({ server }: {
         >
           Enter
         </ButtonLink>
-      </CardContent>
+      </CardBody>
     </Card>
   );
 };

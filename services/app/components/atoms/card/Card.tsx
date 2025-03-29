@@ -17,10 +17,15 @@ const cardVariants = cva(
         default: "border border-outline dark:border-outline-dark",
         none: "border-0",
       },
+      padding: {
+        none: "",
+        md: "p-4",
+      },
     },
     defaultVariants: {
       width: "grow",
       border: "default",
+      padding: "md",
     },
   },
 );
@@ -61,13 +66,14 @@ export const Card: FC<CardProps> = ({
   className,
   width,
   border,
+  padding,
   as: Element = "div",
   ...props
 }: CardProps) => {
   return (
     <Element
       className={cn(
-        cardVariants({ width, border }),
+        cardVariants({ width, border, padding }),
         className,
       )}
       {...props}

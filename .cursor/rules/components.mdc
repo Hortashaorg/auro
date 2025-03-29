@@ -25,6 +25,11 @@ Review this guide to understand the available UI components, their classificatio
     *   `@comp/atoms/image/Image.tsx`: Standard button element. Variants: visual styles, sizes.
     *   `@comp/atoms/image/index.ts`: All image components can be imported from here.
 
+*   **Cards:**
+    *   `@comp/atoms/card/Card.tsx`: Standard card.
+    *   `@comp/atoms/card/CardBody.tsx`: Creates vertical space between elements in the card.
+    *   `@comp/atoms/card/index.ts`: All card can atoms can be imported from here.
+
 *   **Typography:**
     *   *(Placeholder)*
 
@@ -35,7 +40,7 @@ Review this guide to understand the available UI components, their classificatio
 ## Molecules
 
 *   **Cards:**
-    *   *(Placeholder)*
+    *   `@comp/molecules/card/MediaCardHeader.tsx`: Takes small picture, title and description to display on header of card.
 
 *   **Forms:**
     *   *(Placeholder)*

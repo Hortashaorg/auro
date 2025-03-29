@@ -1,11 +1,11 @@
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
-import { Card, CardImage } from "@comp/atoms/card/index.ts";
-import { Badge, Text } from "@comp/typography/index.ts";
+import { Card, CardBody } from "@comp/atoms/card/index.ts";
+import { Badge } from "@comp/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getServerActions } from "@queries/serverActions.ts";
-import { CardContent } from "@comp/molecules/card/index.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -19,7 +19,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="action-section">
-      <Grid gap="lg" content="small">
+      <Grid>
         {actions.map((action) => (
           <ActionCard
             key={action.id}
@@ -48,15 +48,14 @@ const ActionCard = ({ action, serverId }: {
   serverId: string;
 }) => {
   return (
-    <Card className="w-3xs">
-      <CardImage src={action.assetUrl} alt={action.name} />
-
-      <CardContent title={action.name}>
-        {action.description && (
-          <Text variant="body">
-            {action.description}
-          </Text>
-        )}
+    <Card>
+      <MediaCardHeader
+        title={action.name}
+        description={action.description}
+        imageSrc={action.assetUrl}
+        imageAlt={action.name}
+      />
+      <CardBody>
         <div className="flex flex-wrap gap-2">
           <Badge variant="warning" className="flex items-center gap-1">
             <i data-lucide="clock" width={16} height={16}></i>
@@ -84,7 +83,7 @@ const ActionCard = ({ action, serverId }: {
         >
           Configure
         </ButtonLink>
-      </CardContent>
+      </CardBody>
     </Card>
   );
 };

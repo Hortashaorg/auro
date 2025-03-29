@@ -1,10 +1,9 @@
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Card, CardImage } from "@comp/atoms/card/index.ts";
-import { CardContent } from "@comp/molecules/card/index.ts";
+import { Card } from "@comp/atoms/card/index.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
-import { Text } from "@comp/typography/index.ts";
 
 type Props = {
   id?: string;
@@ -21,6 +20,7 @@ export const ResourceGrid = async ({ ...props }: Props) => {
     url: schema.asset.url,
     name: schema.resource.name,
     id: schema.resource.id,
+    description: schema.resource.description,
   }).from(schema.resource)
     .innerJoin(schema.asset, eq(schema.resource.assetId, schema.asset.id))
     .where(
@@ -43,16 +43,17 @@ const ResourceCard = ({ resource }: {
     id: string;
     name: string;
     url: string;
+    description: string | null;
   };
 }) => {
   return (
     <Card className="w-3xs">
-      <CardImage src={resource.url} alt={resource.name} />
-      <CardContent title={resource.name}>
-        <Text variant="h1" className="text-xl font-bold truncate">
-          {resource.name}
-        </Text>
-      </CardContent>
+      <MediaCardHeader
+        title={resource.name}
+        description={resource.description ?? undefined}
+        imageSrc={resource.url}
+        imageAlt={resource.name}
+      />
     </Card>
   );
 };

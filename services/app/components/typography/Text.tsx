@@ -37,7 +37,7 @@ const textVariants = cva([], {
         "dark:text-on-surface-dark",
         "text-on-surface",
         "font-body",
-        "leading-loose",
+        "leading-normal",
       ],
       span: [
         "text-base",

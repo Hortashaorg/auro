@@ -2,15 +2,15 @@ import { Text } from "@comp/typography/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
 import { Switch } from "@comp/form/index.ts";
 import { Badge } from "@comp/typography/index.ts";
-import { Card } from "@comp/atoms/card/index.ts";
-import { CardContent } from "@comp/molecules/card/index.ts";
+import { Card, CardBody } from "@comp/atoms/card/index.ts";
 
 export const AdminDashboard = (
   { server }: { server: InferSelectModel<typeof schema.server> },
 ) => {
   return (
     <Card width="fit" id="admin-dashboard">
-      <CardContent label="Server Status" className="space-y-4">
+      <CardBody>
+        <Text variant="h3">Server Status</Text>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Badge
@@ -40,20 +40,19 @@ export const AdminDashboard = (
                 : "Server is currently offline and inaccessible to players"}
             </Text>
           </div>
-          <Switch
-            initialState={server.online}
-            hx-post={`/api/servers/${server.id}/toggle-status`}
-            hx-target="#admin-dashboard"
-            hx-swap="outerHTML"
-            variant={server.online ? "success" : "danger"}
-            label={server.online ? "Enabled" : "Disabled"}
-            className="ml-auto"
-          />
         </div>
+        <Switch
+          initialState={server.online}
+          hx-post={`/api/servers/${server.id}/toggle-status`}
+          hx-target="#admin-dashboard"
+          hx-swap="outerHTML"
+          variant={server.online ? "success" : "danger"}
+          label={server.online ? "Enabled" : "Disabled"}
+        />
         <div className="text-xs text-on-surface-variant dark:text-on-surface-dark-variant italic">
           Toggle the switch to {server.online ? "disable" : "enable"} the server
         </div>
-      </CardContent>
+      </CardBody>
     </Card>
   );
 };

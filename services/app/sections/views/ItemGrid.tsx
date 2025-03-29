@@ -1,10 +1,9 @@
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Card, CardImage } from "@comp/atoms/card/index.ts";
-import { CardContent } from "@comp/molecules/card/index.ts";
+import { Card } from "@comp/atoms/card/index.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
-import { Text } from "@comp/typography/index.ts";
 
 type Props = {
   id?: string;
@@ -31,7 +30,7 @@ export const ItemGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="item-section">
-      <Grid gap="lg" content="small">
+      <Grid>
         {items.map((item) => (
           <ItemCard
             key={item.id}
@@ -57,14 +56,12 @@ const ItemCard = ({ item }: {
 }) => {
   return (
     <Card className="w-3xs">
-      <CardImage src={item.url} alt={item.name} />
-      <CardContent title={item.name}>
-        {item.description && (
-          <Text variant="body">
-            {item.description}
-          </Text>
-        )}
-      </CardContent>
+      <MediaCardHeader
+        title={item.name}
+        description={item.description}
+        imageSrc={item.url}
+        imageAlt={item.name}
+      />
     </Card>
   );
 };

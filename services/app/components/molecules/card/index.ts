@@ -1,1 +1,1 @@
-export { CardContent } from "./CardContent.tsx";
+export { MediaCardHeader } from "./MediaCardHeader.tsx";
