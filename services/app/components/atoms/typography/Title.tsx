@@ -53,20 +53,20 @@ type Props =
  * with consistent typography styles based on the level.
  *
  * @props
- * - level: Semantic heading level (1-3). Required. Determines tag (h1-h3) and styling.
+ * - level: Semantic heading level ('h1', 'h2', 'h3'). Required. Determines tag and styling.
  * - alignment: Text alignment ('left', 'center'). Defaults to 'left'.
  * - children: The text content of the title.
  * - className: Additional CSS classes.
  * - ...rest: Standard HTML heading attributes (e.g., id).
  *
- * @example // Renders <h1> with level 1 styles
- * <Title level={1}>Main Page Title</Title>
+ * @example // Renders <h1> with h1 styles
+ * <Title level="h1">Main Page Title</Title>
  *
- * @example // Renders <h2> with level 2 styles, centered
- * <Title level={2} alignment="center">Section Title</Title>
+ * @example // Renders <h2> with h2 styles, centered
+ * <Title level="h2" alignment="center">Section Title</Title>
  *
- * @example // Renders <h3> with level 3 styles
- * <Title level={3}>Subsection Title</Title>
+ * @example // Renders <h3> with h3 styles
+ * <Title level="h3">Subsection Title</Title>
  */
 export const Title: FC<Props> = ({
   className,

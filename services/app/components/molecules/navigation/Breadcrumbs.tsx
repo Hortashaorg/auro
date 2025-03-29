@@ -44,7 +44,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
       aria-label="breadcrumb"
       className={cn(
         "text-sm font-medium text-on-surface dark:text-on-surface-dark",
-        className || "",
+        className,
       )}
       {...props}
     >
