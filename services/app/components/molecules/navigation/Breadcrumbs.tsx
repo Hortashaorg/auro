@@ -58,7 +58,6 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
               ? (
                 <Link
                   href={segment.href}
-                  variant="breadcrumb"
                 >
                   {segment.label}
                 </Link>

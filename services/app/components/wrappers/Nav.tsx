@@ -22,7 +22,7 @@ export const Nav: FC<NavProps> = (
     <nav
       {...props}
       className={cn(
-        "flex items-center justify-between bg-surface-alt border-outline dark:border-outline-dark px-6 py-4 dark:bg-surface-dark-alt",
+        "flex items-center justify-between bg-surface-alt border-outline dark:border-outline-dark px-6 dark:bg-surface-dark-alt",
         className || "",
       )}
       aria-label="top menu"

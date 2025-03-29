@@ -25,13 +25,12 @@ export const Navbar = async () => {
 
   return (
     <header className="flex flex-col">
-      <Nav id="section-navbar" className="h-14 flex items-center">
+      <Nav id="section-navbar" className="flex items-center">
         <Menu className="h-full">
           {!isServer && (
             <Link
               href="/"
-              variant="default"
-              padding="md"
+              size="md"
               activeStyle="background"
               active={currentPath === "/"}
             >
@@ -41,8 +40,7 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && !isServer && (
             <Link
               href="/servers"
-              variant="default"
-              padding="md"
+              size="md"
               activeStyle="background"
               active={currentPath === "/servers"}
             >
@@ -52,8 +50,7 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && isServer && (
             <Link
               href={`/servers/${serverId}`}
-              variant="default"
-              padding="md"
+              size="md"
               activeStyle="background"
               active={currentPath === `/servers/${serverId}`}
             >
@@ -63,8 +60,7 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && isPlayer && (
             <Link
               href={`/servers/${serverId}/leaderboard`}
-              variant="default"
-              padding="md"
+              size="md"
               activeStyle="background"
               active={currentPath === `/servers/${serverId}/leaderboard`}
             >
@@ -75,8 +71,7 @@ export const Navbar = async () => {
             <>
               <Link
                 href={`/servers/${serverId}/locations`}
-                variant="default"
-                padding="md"
+                size="md"
                 activeStyle="background"
                 active={isActive(`/servers/${serverId}/locations`)}
               >
@@ -84,8 +79,7 @@ export const Navbar = async () => {
               </Link>
               <Link
                 href={`/servers/${serverId}/actions`}
-                variant="default"
-                padding="md"
+                size="md"
                 activeStyle="background"
                 active={isActive(`/servers/${serverId}/actions`)}
               >
@@ -93,8 +87,7 @@ export const Navbar = async () => {
               </Link>
               <Link
                 href={`/servers/${serverId}/resources`}
-                variant="default"
-                padding="md"
+                size="md"
                 activeStyle="background"
                 active={isActive(`/servers/${serverId}/resources`)}
               >
@@ -102,8 +95,7 @@ export const Navbar = async () => {
               </Link>
               <Link
                 href={`/servers/${serverId}/items`}
-                variant="default"
-                padding="md"
+                size="md"
                 activeStyle="background"
                 active={isActive(`/servers/${serverId}/items`)}
               >
@@ -129,19 +121,17 @@ export const Navbar = async () => {
               <MenuSelect name="Account" variant="single" flow="left">
                 <Link
                   href="/profile"
-                  variant="subtle"
-                  padding="sm"
+                  size="md"
                   display="block"
-                  className="text-center"
+                  background="alt"
                 >
                   Profile
                 </Link>
                 <Link
                   href={context.var.logoutUrl}
-                  variant="subtle"
-                  padding="sm"
+                  size="md"
                   display="block"
-                  className="text-center"
+                  background="alt"
                 >
                   Logout
                 </Link>
@@ -150,8 +140,7 @@ export const Navbar = async () => {
             : (
               <Link
                 href={context.var.loginUrl}
-                variant="default"
-                padding="md"
+                size="md"
               >
                 Login
               </Link>

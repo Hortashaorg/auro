@@ -9,24 +9,13 @@ const linkStyles = cva([
 ], {
   variants: {
     variant: {
-      default: [
+      normal: [
         "text-on-surface",
         "dark:text-on-surface-dark",
         "hover:text-on-surface-strong",
         "dark:hover:text-on-surface-dark-strong",
       ],
-      primary: [
-        "text-primary",
-        "dark:text-primary-dark",
-        "hover:underline",
-      ],
-      subtle: [
-        "text-on-surface",
-        "dark:text-on-surface-dark",
-        "hover:text-on-surface",
-        "dark:hover:text-on-surface-dark",
-      ],
-      breadcrumb: [
+      strong: [
         "text-sm",
         "text-on-surface",
         "dark:text-on-surface-dark",
@@ -34,10 +23,13 @@ const linkStyles = cva([
         "dark:hover:text-on-surface-dark-strong",
       ],
     },
-    padding: {
-      none: "p-0",
-      sm: "px-2 py-1",
-      md: "px-4 py-3",
+    background: {
+      none: "",
+      alt: "bg-surface-alt dark:bg-surface-dark-alt",
+    },
+    size: {
+      sm: "text-sm",
+      md: "text-base px-4 py-3",
     },
     display: {
       inline: "inline-block",
@@ -46,19 +38,15 @@ const linkStyles = cva([
     activeStyle: {
       background:
         "data-[active=true]:bg-surface data-[active=true]:dark:bg-surface-dark",
-      underline: "data-[active=true]:underline",
-      strong:
-        "data-[active=true]:text-on-surface-strong data-[active=true]:dark:text-on-surface-dark-strong data-[active=true]:font-semibold",
-      primaryStrong:
-        "data-[active=true]:text-primary data-[active=true]:dark:text-primary-dark data-[active=true]:font-semibold",
       none: "",
     },
   },
   defaultVariants: {
-    variant: "default",
-    padding: "none",
+    variant: "normal",
+    size: "sm",
     display: "inline",
     activeStyle: "none",
+    background: "none",
   },
 });
 
@@ -73,39 +61,42 @@ type Props =
   };
 
 /**
- * Link component for navigation and actions with compositional styling
+ * Link component for navigation and actions with compositional styling.
  *
- * Use props to combine visual style, padding, display, and active state appearance.
+ * Use props to combine visual style, size, layout, background, and active state appearance.
  *
  * @props
- * - variant: Core visual style ('default', 'primary', 'subtle', 'breadcrumb'). Defaults to 'default'.
- * - padding: Internal padding ('none', 'sm', 'md'). Defaults to 'none'.
+ * - variant: Core visual style ('normal', 'strong'). Defaults to 'normal'.
+ * - background: Optional background style ('none', 'alt'). Defaults to 'none'.
+ * - size: Controls text size and padding ('sm', 'md'). Defaults to 'sm'.
  * - display: CSS display property ('inline', 'block'). Defaults to 'inline'.
- * - activeStyle: How the link appears when active ('background', 'underline', 'strong', 'primaryStrong', 'none'). Defaults to 'none'.
- * - active: Boolean indicating if the link is active (triggers activeStyle).
- * - href: The URL the link points to.
+ * - activeStyle: How the link appears when active ('background', 'none'). Defaults to 'none'.
+ * - active: Boolean indicating if the link is active (triggers activeStyle via `data-active=true`).
+ * - href: The URL the link points to. Required.
  * - children: The content of the link.
+ * - className: Optional additional CSS classes.
  * - ...rest: Standard HTML anchor attributes passed to the `<a>` tag.
  *
- * @example // Default link
+ * @example // Default small link
  * <Link href="/home">Home</Link>
  *
- * @example // Primary link with medium padding, block display, and background active state
- * <Link href="/action" variant="primary" padding="md" display="block" activeStyle="background" active={isActive}>Do Action</Link>
+ * @example // Medium size link for main nav with background active state
+ * <Link href="/servers" size="md" activeStyle="background" active={isActive}>Servers</Link>
  *
- * @example // Subtle block link for dropdowns
- * <Link href="/profile" variant="subtle" display="block" padding="sm">Profile</Link>
+ * @example // Block link with alt background (e.g., for dropdown)
+ * <Link href="/profile" display="block" background="alt" size="md">Profile</Link>
  *
- * @example // Breadcrumb link (inherits small text and specific hover from variant)
- * <Link href="/category" variant="breadcrumb">Category</Link>
+ * @example // Strong variant link (e.g., breadcrumb style link)
+ * <Link href="/category" variant="strong">Category</Link>
  */
 export const Link: FC<Props> = (
   {
     className,
     variant,
-    padding,
+    size,
     display,
     activeStyle,
+    background,
     active,
     children,
     ...rest
@@ -116,7 +107,7 @@ export const Link: FC<Props> = (
       {...rest}
       data-active={active}
       className={cn(
-        linkStyles({ variant, padding, display, activeStyle }),
+        linkStyles({ variant, size, display, activeStyle, background }),
         className,
       )}
     >
