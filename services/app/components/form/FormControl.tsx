@@ -1,6 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 type FormControlProps = BaseComponentProps & {

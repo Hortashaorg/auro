@@ -1,4 +1,4 @@
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 import { Section } from "@comp/wrappers/index.ts";
 import { getLeaderboardResources } from "@queries/resourceLeaderboard.ts";
 import { ResourceLeaderboard } from "@sections/views/ResourceLeaderboard.tsx";

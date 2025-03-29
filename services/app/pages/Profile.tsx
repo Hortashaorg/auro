@@ -1,6 +1,6 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
 import { ProfileNicknameForm } from "@sections/forms/ProfileNicknameForm.tsx";

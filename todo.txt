@@ -26,11 +26,6 @@ Implement a Component Composition Pattern
     Create more composable patterns for complex components
     For example, a FormGroup that wraps FormControl + Label + Input
     This would reduce boilerplate in component consumers
-Handle Props and TypeScript Intellisense
-    Improve the approach to component props
-    Currently using JSX.IntrinsicElements which shows too many props
-    Create more specific prop interfaces that extend HTML element props
-    Focus on making important props prominent in intellisense
 Event Naming Conventions
     Standardize event naming across all components
     For example: form-error, form-input, form-clear
@@ -38,7 +33,3 @@ Event Naming Conventions
 Default Values and Behavior Configuration
     Consider a configuration system for library-wide defaults
     Allow overrides at various levels
-Update ai.md Documentation
-    Update the component organization section to reflect new structure
-    Document the component library patterns and best practices
-    Include examples of component composition

@@ -6,7 +6,7 @@ import {
   Input,
   Label,
 } from "@comp/form/index.ts";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["div"] & {
   account: {

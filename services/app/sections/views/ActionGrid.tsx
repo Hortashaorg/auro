@@ -2,7 +2,7 @@ import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
-import { Badge } from "@comp/typography/index.ts";
+import { Badge } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getServerActions } from "@queries/serverActions.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";

@@ -1,5 +1,5 @@
 import type { InferSelectModel, schema } from "@package/database";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 import { Grid, Section } from "@comp/wrappers/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";

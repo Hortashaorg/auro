@@ -1,7 +1,7 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import {
@@ -9,7 +9,7 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
-} from "../../../components/atoms/tabs/index.ts";
+} from "@comp/atoms/tabs/index.ts";
 import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";

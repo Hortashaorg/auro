@@ -1,6 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
-import { Text } from "@comp/typography/Text.tsx";
+import { Text } from "@comp/atoms/typography/Text.tsx";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";

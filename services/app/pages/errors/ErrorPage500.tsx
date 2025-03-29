@@ -1,5 +1,5 @@
 import { ErrorLayout } from "@sections/layout/ErrorLayout.tsx";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { Flex } from "@comp/wrappers/index.ts";
 

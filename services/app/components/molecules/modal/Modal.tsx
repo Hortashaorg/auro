@@ -1,7 +1,7 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { Flex } from "@comp/wrappers/Flex.tsx";
 import { Button } from "@comp/atoms/buttons/index.ts";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";

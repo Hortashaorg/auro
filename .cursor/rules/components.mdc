@@ -30,7 +30,9 @@ Review this guide to understand the available UI components, their classificatio
     - `@comp/atoms/card/CardBody.tsx`: Creates vertical space between elements in the card.
     - `@comp/atoms/card/index.ts`: All card atoms can be imported from here.
 - Typography:
-    - (Placeholder)
+    - `@comp/atoms/typography/Badge.tsx`: Renders a badge element, often used for counts or status indicators.
+    - `@comp/atoms/typography/Text.tsx`: Renders text content (e.g., paragraph, span). Variants likely control size, weight, color.
+    - `@comp/atoms/typography/index.ts`: All typography atoms can be imported from here.
 - Tabs:
     - `@comp/atoms/tabs/Tabs.tsx`: Wrapper for correct Tab behavior.
     - `@comp/atoms/tabs/TabsList.tsx`: Container for grouping `TabsTrigger` components.

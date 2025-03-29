@@ -1,7 +1,6 @@
-import { Text } from "@comp/typography/index.ts";
+import { Badge, Text } from "@comp/atoms/typography/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
 import { Switch } from "@comp/form/index.ts";
-import { Badge } from "@comp/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 
 export const AdminDashboard = (

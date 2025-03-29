@@ -1,4 +1,4 @@
-import { Text } from "@comp/typography/Text.tsx";
+import { Text } from "@comp/atoms/typography/Text.tsx";
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";

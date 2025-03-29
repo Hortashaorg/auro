@@ -5,7 +5,7 @@ import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
 import { Breadcrumbs } from "@comp/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
-import { Text } from "@comp/typography/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 
 export const Navbar = async () => {
   const context = getGlobalContext();
