@@ -1,6 +1,6 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
 import { ProfileNicknameForm } from "@sections/forms/ProfileNicknameForm.tsx";
@@ -18,7 +18,7 @@ const Profile = async () => {
   return (
     <Layout title="Profile Settings">
       <div>
-        <Text variant="h1" className="mb-2">Profile Settings</Text>
+        <Title level="h1" className="mb-2">Profile Settings</Title>
         <Text variant="body">
           Manage your account settings and customize your server names.
         </Text>
@@ -26,7 +26,7 @@ const Profile = async () => {
 
       <Card>
         <CardBody>
-          <Text variant="h3" className="mb-2">Default Name</Text>
+          <Title className="mb-2">Default Name</Title>
           <Text variant="body">
             This is the name that will be used by default when you join new
             servers.
@@ -37,7 +37,7 @@ const Profile = async () => {
 
       <Card>
         <CardBody>
-          <Text variant="h3">Server-Specific Names</Text>
+          <Title>Server-Specific Names</Title>
           <Text variant="body">
             Customize your name for each server you belong to.
           </Text>

@@ -36,17 +36,15 @@ export const FormControl: FC<FormControlProps> = ({
       {children}
 
       {hint && (
-        <Text
-          variant="body"
-          className="mt-1 text-sm text-on-surface dark:text-on-surface-dark"
-        >
+        <Text variant="body" size="sm" className="mt-1">
           {hint}
         </Text>
       )}
 
       <Text
         variant="error"
-        className="mt-1 text-sm"
+        size="sm"
+        className="mt-1"
         x-show={`errors && errors['${inputName}']`}
         x-text={`errors['${inputName}']`}
       />

@@ -3,6 +3,7 @@ import type { FC } from "@kalena/framework";
 import type { BreadcrumbSegment } from "@queries/breadcrumbs.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { Link } from "@comp/atoms/buttons/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
 
 type BreadcrumbsProps = BaseComponentProps & {
   /**
@@ -63,12 +64,14 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
                 </Link>
               )
               : (
-                <span
-                  className="text-on-surface-strong font-bold dark:text-on-surface-dark-strong"
+                <Text
+                  variant="strong"
+                  size="sm"
+                  as="span"
                   aria-current="page"
                 >
                   {segment.label}
-                </span>
+                </Text>
               )}
           </li>
         ))}

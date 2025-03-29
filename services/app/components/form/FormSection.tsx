@@ -1,9 +1,9 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
-import { Text } from "@comp/atoms/typography/Text.tsx";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
 
 const formSectionVariants = cva(
   "",
@@ -77,13 +77,13 @@ export const FormSection: FC<FormSectionProps> = ({
       {...props}
     >
       {title && (
-        <Text as="h3" variant="h3" className="mb-2">
+        <Title level="h3">
           {title}
-        </Text>
+        </Title>
       )}
 
       {description && (
-        <Text variant="body" className="mb-4 text-on-surface">
+        <Text variant="body">
           {description}
         </Text>
       )}

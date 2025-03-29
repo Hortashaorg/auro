@@ -1,6 +1,6 @@
 import { Grid, HtmxWrapper, Section } from "@comp/wrappers/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
-import { Badge, Text } from "@comp/atoms/typography/index.ts";
+import { Badge, Title } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { onlineServers, serversWhereUserIsAdmin } from "@queries/servers.ts";
@@ -21,7 +21,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
     <HtmxWrapper {...props} id="server-section">
       {adminServers.length > 0 && (
         <Section>
-          <Text variant="h2">My Servers</Text>
+          <Title level="h2">My Servers</Title>
           <Grid gap="md" content="small">
             {adminServers.map((server) => (
               <ServerCard key={server.id} server={server} />
@@ -31,7 +31,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
       )}
 
       <Section>
-        <Text variant="h2">Available Servers</Text>
+        <Title level="h2">Available Servers</Title>
         <Grid gap="md" content="small">
           {publicServers.map((server) => (
             <ServerCard key={server.id} server={server} />
@@ -52,7 +52,7 @@ const ServerCard = ({ server }: {
   return (
     <Card>
       <CardBody>
-        <Text variant="h3">{server.name}</Text>
+        <Title>{server.name}</Title>
         <Badge
           variant={server.online ? "success" : "danger"}
           size="sm"

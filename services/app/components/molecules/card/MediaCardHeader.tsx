@@ -1,8 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
-import { Text } from "@comp/atoms/typography/Text.tsx";
 import { Image } from "@comp/atoms/image/Image.tsx";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
 
 type CardHeaderProps = BaseComponentProps & {
   title: string;
@@ -47,9 +47,9 @@ export const MediaCardHeader: FC<CardHeaderProps> = ({
     >
       {imageSrc && imageAlt && <Image src={imageSrc} alt={imageAlt} />}
       <div className="flex flex-col">
-        <Text variant="h3" className="line-clamp-1">
+        <Title className="line-clamp-1">
           {title}
-        </Text>
+        </Title>
         {description && (
           <Text variant="body" className="line-clamp-2">
             {description}

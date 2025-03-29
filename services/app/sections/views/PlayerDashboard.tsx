@@ -1,5 +1,5 @@
 import type { InferSelectModel, schema } from "@package/database";
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Grid, Section } from "@comp/wrappers/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
@@ -66,11 +66,11 @@ export const PlayerDashboard = async (
       <ResourcesTable serverId={server.id} />
 
       <Section>
-        <Text variant="h2">Actions</Text>
-        <Text variant="body">
+        <Title level="h2">Actions</Title>
+        <Text>
           You have {user.availableActions} available actions
         </Text>
-        <Text variant="body">
+        <Text>
           More available actions in:{" "}
           {calculateTimeUntilNextAction(server.actionRecoveryInterval)}
         </Text>

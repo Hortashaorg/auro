@@ -1,4 +1,4 @@
-import { Badge, Text } from "@comp/atoms/typography/index.ts";
+import { Badge, Text, Title } from "@comp/atoms/typography/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
 import { Switch } from "@comp/form/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
@@ -9,7 +9,7 @@ export const AdminDashboard = (
   return (
     <Card width="fit" id="admin-dashboard">
       <CardBody>
-        <Text variant="h3">Server Status</Text>
+        <Title>Server Status</Title>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Badge
@@ -31,8 +31,9 @@ export const AdminDashboard = (
                 )}
             </Badge>
             <Text
-              variant="span"
-              className="text-sm text-on-surface-variant dark:text-on-surface-dark-variant"
+              variant="body"
+              size="sm"
+              as="span"
             >
               {server.online
                 ? "Server is currently running and accessible to players"
@@ -48,9 +49,12 @@ export const AdminDashboard = (
           variant={server.online ? "success" : "danger"}
           label={server.online ? "Enabled" : "Disabled"}
         />
-        <div className="text-xs text-on-surface-variant dark:text-on-surface-dark-variant italic">
+        <Text
+          variant="body"
+          size="sm"
+        >
           Toggle the switch to {server.online ? "disable" : "enable"} the server
-        </div>
+        </Text>
       </CardBody>
     </Card>
   );

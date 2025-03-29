@@ -1,7 +1,7 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { Flex } from "@comp/wrappers/Flex.tsx";
 import { Button } from "@comp/atoms/buttons/index.ts";
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Title } from "@comp/atoms/typography/index.ts";
 import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
@@ -87,7 +87,7 @@ export const Modal: FC<ModalProps> = ({
     >
       <Flex direction="col" gap="md" className="p-6 w-full">
         <div className="flex items-center justify-between w-full">
-          <Text variant="h1" className="text-xl">{title}</Text>
+          <Title level="h1" className="text-xl">{title}</Title>
           <Button
             type="button"
             variant="inverse"

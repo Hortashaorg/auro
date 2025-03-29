@@ -1,4 +1,4 @@
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Section } from "@comp/wrappers/index.ts";
 import {
   Table,
@@ -19,11 +19,10 @@ export const ResourceLeaderboard = async ({ resourceId, ...props }: Props) => {
   const resource = await getResource(resourceId);
   const firstEntry = leaderboard[0];
 
-  // If we have no entries, we can't show the leaderboard yet
   if (!firstEntry) {
     return (
       <Section id={`resource-leaderboard-${resourceId}`} {...props}>
-        <Text variant="h2">{resource.name} Leaderboard</Text>
+        <Title level="h2">{resource.name} Leaderboard</Title>
         <Text>No one has collected this resource yet. Be the first!</Text>
       </Section>
     );
@@ -37,7 +36,7 @@ export const ResourceLeaderboard = async ({ resourceId, ...props }: Props) => {
           alt={firstEntry.resource.name}
           className="w-8 h-8 object-cover rounded"
         />
-        <Text variant="h2">{resource.name} Leaderboard</Text>
+        <Title level="h2">{resource.name} Leaderboard</Title>
       </div>
 
       <Table>

@@ -1,7 +1,7 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import {
@@ -60,16 +60,16 @@ const TabsSection = (
       </TabsList>
 
       <TabContent tabId="rewards">
-        <Text variant="h3" className="text-xl font-bold mb-6">
+        <Title>
           {actionName}
-        </Text>
+        </Title>
 
         <FormContext formId="modify-resource-of-action-form">
           <div className="mb-4">
-            <Text variant="h3">
+            <Title>
               Resource Rewards
-            </Text>
-            <Text variant="body">
+            </Title>
+            <Text>
               Resources that players can gather from this action
             </Text>
           </div>
@@ -101,15 +101,15 @@ const TabsSection = (
       </TabContent>
 
       <TabContent tabId="history">
-        <Text variant="h3">
+        <Title>
           Usage History for {actionName}
-        </Text>
+        </Title>
       </TabContent>
 
       <TabContent tabId="settings">
-        <Text variant="h3">
+        <Title>
           {actionName} Settings
-        </Text>
+        </Title>
       </TabContent>
     </Tabs>
   );

@@ -1,4 +1,4 @@
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Section } from "@comp/wrappers/index.ts";
 import { getLeaderboardResources } from "@queries/resourceLeaderboard.ts";
 import { ResourceLeaderboard } from "@sections/views/ResourceLeaderboard.tsx";
@@ -16,13 +16,13 @@ const LeaderboardPage = async () => {
       {resources.length === 0
         ? (
           <Section>
-            <Text variant="h1">Leaderboards</Text>
+            <Title level="h1">Leaderboards</Title>
             <Text>No leaderboards available for this server.</Text>
           </Section>
         )
         : (
           <Section>
-            <Text variant="h1">Leaderboards</Text>
+            <Title level="h1">Leaderboards</Title>
             <div className="space-y-8">
               {resources.map((resource) => (
                 <ResourceLeaderboard

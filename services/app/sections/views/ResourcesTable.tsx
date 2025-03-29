@@ -1,4 +1,4 @@
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Title } from "@comp/atoms/typography/index.ts";
 import { Section } from "@comp/wrappers/index.ts";
 import {
   Table,
@@ -18,7 +18,7 @@ export const ResourcesTable = async ({ serverId, ...props }: Props) => {
 
   return (
     <Section id="player-resources" {...props}>
-      <Text variant="h2">Resources</Text>
+      <Title level="h2">Resources</Title>
       <Table>
         <TableHeader>
           <TableRow>

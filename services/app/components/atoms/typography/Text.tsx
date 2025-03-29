@@ -1,36 +1,11 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { NonNullableProps } from "@comp/utils/types.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 
 const textVariants = cva([], {
   variants: {
     variant: {
-      h1: [
-        "text-3xl",
-        "font-bold",
-        "dark:text-on-surface-dark-strong",
-        "text-on-surface-strong",
-        "leading-tight",
-        "tracking-normal",
-      ],
-      h2: [
-        "text-2xl",
-        "font-bold",
-        "dark:text-on-surface-dark-strong",
-        "text-on-surface-strong",
-        "leading-tight",
-        "tracking-normal",
-      ],
-      h3: [
-        "text-lg",
-        "font-semibold",
-        "dark:text-on-surface-dark-strong",
-        "text-on-surface-strong",
-        "leading-tight",
-        "tracking-normal",
-      ],
       body: [
         "text-base",
         "font-normal",
@@ -39,13 +14,13 @@ const textVariants = cva([], {
         "font-body",
         "leading-normal",
       ],
-      span: [
-        "text-base",
-        "font-normal",
-        "dark:text-on-surface-dark",
-        "text-on-surface",
+      strong: [
+        "text-sm",
+        "font-bold",
+        "dark:text-on-surface-dark-strong",
+        "text-on-surface-strong",
         "font-body",
-        "leading-loose",
+        "leading-normal",
       ],
       error: [
         "text-base",
@@ -53,51 +28,71 @@ const textVariants = cva([], {
         "text-danger",
         "dark:text-danger",
         "font-body",
-        "leading-loose",
+        "leading-normal",
       ],
     },
     alignment: {
       left: ["text-left"],
       center: ["text-center"],
     },
+    size: {
+      sm: ["text-sm"],
+      normal: ["text-base"],
+    },
   },
   defaultVariants: {
     variant: "body",
     alignment: "left",
+    size: "normal",
   },
 });
 
-type TextVariants = NonNullableProps<typeof textVariants>;
-type TextProps = BaseComponentProps & TextVariants;
+type TextVariantProps = VariantProps<typeof textVariants>;
+
+type Props =
+  & BaseComponentProps
+  & TextVariantProps
+  & {
+    as?: "span" | "p";
+  };
 
 /**
- * Text component for consistent typography with predefined styles
+ * Text component for rendering general text elements like paragraphs and spans.
+ *
+ * Use `variant` for semantic styling (body, strong, error) and `as` to control the HTML tag.
+ * For semantic headings (h1-h6), use the dedicated `Title` component.
  *
  * @props
- * - variant: Typography style (h1, h2, h3, body, span, error)
- * - alignment: Text alignment (left, center)
+ * - variant: Typographic style ('body', 'strong', 'error'). Defaults to 'body'.
+ * - alignment: Text alignment ('left', 'center'). Defaults to 'left'.
+ * - size: Text size ('sm', 'normal'). Defaults to 'normal'.
+ * - as: Optional HTML tag to render (e.g., 'p', 'span'). Defaults to 'p'.
+ * - className: Additional CSS classes.
+ * - children: The text content.
+ * - ...rest: Other props passed to the underlying HTML element.
  *
- * @example
- * <Text variant="h1" alignment="center">
- *   Page Title
- * </Text>
+ * @example // Body text (renders <p>)
+ * <Text>This is a paragraph.</Text>
  *
- * <Text variant="body">
- *   Regular paragraph text with consistent styling.
- * </Text>
+ * @example // Strong text inline (renders <span>)
+ * <Text variant="strong" as="span">Important word.</Text>
  *
- * <Text variant="error">
- *   Error message with appropriate styling.
- * </Text>
+ * @example // Error message (renders <p>)
+ * <Text variant="error">Something went wrong.</Text>
+ *
+ * @example // Small text
+ * <Text size="sm">This is smaller text.</Text>
  */
-export const Text: FC<TextProps> = (
-  { variant, className, alignment = "left", children, ...rest }: TextProps,
+export const Text: FC<Props> = (
+  { variant, className, alignment, size, as, children, ...rest }: Props,
 ) => {
-  const Tag = variant?.startsWith("h") ? variant : "p";
+  const defaultTag = "p";
+  const Tag = as || defaultTag;
+
   return (
     <Tag
       {...rest}
-      className={cn(textVariants({ variant, alignment }), className)}
+      className={cn(textVariants({ variant, alignment, size }), className)}
     >
       {children}
     </Tag>
