@@ -18,3 +18,12 @@ This rule outlines how to effectively leverage and maintain the project's define
 - **Suggest Snippets:** When a gap or necessary clarification is identified, proactively suggest specific, ready-to-use Markdown snippets that can be added to or used to modify the relevant rule file(s).
 - **Frequency:** Offer these suggestions naturally during the conversation, especially after completing a sub-task or when discussing component design or implementation details.
 - **Goal:** This collaborative approach helps keep the project's documented knowledge accurate, relevant, and continuously improving.
+
+## 3. Guiding Principle: Minimal and Clear Implementation
+
+Strive for the most concise implementation possible while strictly adhering to all other defined rules (Imports, CVA, JSDocs, Props, FC Syntax, Required Props, No Comments).
+
+*   **Leverage Abstractions:** Fully utilize `BaseComponentProps` and framework utilities to avoid redundant definitions (e.g., for `children`, standard attributes).
+*   **Avoid Boilerplate:** Eliminate unnecessary variables, overly complex structures, or repetitive code where simpler, direct alternatives exist and meet the requirements.
+*   **Clarity Over Premature Optimization:** While conciseness is valued, ensure the code remains readable and maintainable.
+*   **Self-Explanatory Code:** Write code that clearly expresses its intent, minimizing the need for comments outside of the required JSDocs.

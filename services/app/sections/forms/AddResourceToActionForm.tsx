@@ -1,7 +1,7 @@
 import { getGlobalContext } from "@kalena/framework";
 import { db, eq, schema } from "@package/database";
 import { Form } from "@comp/atoms/form/index.ts";
-import { RadioGroup } from "@comp/form/index.ts";
+import { RadioGroup } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 
 export const AddResourceToActionForm = async () => {
@@ -19,10 +19,12 @@ export const AddResourceToActionForm = async () => {
       hx-swap="none"
     >
       <RadioGroup
+        legend="Select a resource"
         name="resourceId"
         options={availableResources.map((resource) => ({
           label: resource.name,
           value: resource.id,
+          description: resource.description ?? undefined,
         }))}
       />
 

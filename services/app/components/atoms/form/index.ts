@@ -7,3 +7,6 @@ export { Textarea } from "./Textarea.tsx";
 export { FormField } from "./FormField.tsx";
 export { FormRow } from "./FormRow.tsx";
 export { SelectInput } from "./SelectInput.tsx";
+export { RadioButton } from "./RadioButton.tsx";
+export { Fieldset } from "./Fieldset.tsx";
+export { Legend } from "./Legend.tsx";

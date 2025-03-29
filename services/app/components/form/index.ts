@@ -8,7 +8,7 @@
 // export { Label } from "./Label.tsx"; // Also moved
 
 export { CheckboxGroup } from "./CheckboxGroup.tsx";
-export { RadioGroup } from "./RadioGroup.tsx";
+// Removed export: export { RadioGroup } from "./RadioGroup.tsx";
 
 // Keep Switch export commented out or removed as it moved too
 // export { Switch } from "./Switch.tsx";

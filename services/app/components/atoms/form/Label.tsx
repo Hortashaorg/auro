@@ -26,7 +26,7 @@ export const Label: FC<LabelProps> = ({
   return (
     <label
       className={cn(
-        "block font-medium text-md text-on-surface-strong dark:text-on-surface-dark-strong mb-1",
+        "block font-medium text-base text-on-surface-strong dark:text-on-surface-dark-strong mb-1",
         className,
       )}
       {...props}
