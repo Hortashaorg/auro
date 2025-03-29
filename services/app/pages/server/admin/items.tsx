@@ -1,7 +1,7 @@
 import { createRoute } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Modal, ModalButton } from "@comp/modal/index.ts";
+import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { ItemGrid } from "@sections/views/ItemGrid.tsx";
 import { CreateItemForm } from "@sections/forms/CreateItemForm.tsx";
 

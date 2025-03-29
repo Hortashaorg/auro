@@ -5,7 +5,7 @@ import { Text } from "@comp/typography/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { Tab, Tabs, TabsList, TabsTrigger } from "@comp/tabs/index.ts";
-import { Modal, ModalButton } from "@comp/modal/index.ts";
+import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
 import { FormButton, FormContext } from "@comp/form/index.ts";

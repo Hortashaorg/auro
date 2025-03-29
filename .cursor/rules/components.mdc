@@ -7,40 +7,40 @@ alwaysApply: false
 
 Review this guide to understand the available UI components, their classification (Atoms, Molecules, etc.), and their intended use. Familiarize yourself with existing components before creating new ones to promote consistency and reuse.
 
-**Molecules vs Atoms**
-*   If a component renders a single primary HTML element, being a visual element or a wrapper it is an **Atom**.
-*   If a component internally combines two or more Atoms/HTML elements to form a distinct functional unit, it's a **Molecule**.
+### Molecules vs Atoms
 
+*   A component is an **Atom** if it renders a single primary HTML element, acting as a basic visual building block (e.g., `<button>`, `<img>`, `<input>`) or a simple structural wrapper (e.g., a `<div>` for layout like `CardBody` or `ButtonGroup`).
+*   A component is a **Molecule** if it combines multiple elements to form a distinct functional unit. Specifically, it's a Molecule if:
+    *   It renders **one or more Atom** components internally, OR
+    *   It renders **two or more distinct HTML elements** as part of its core structure (not just simple wrappers passed via `children`).
 
 ## Atoms
 
-*   **Buttons:**
-    *   `@comp/atoms/buttons/Button.tsx`: Standard button element. Variants: visual styles, sizes.
-    *   `@comp/atoms/buttons/Link.tsx`: Styled `<a>` tag for navigation. Variants: navLink, dropdownLink.
-    *   `@comp/atoms/buttons/ButtonLink.tsx`: `<a>` tag styled like a Button.
-    *   `@comp/atoms/buttons/ButtonGroup.tsx`: `<div>` for grouping/spacing buttons.
-    *   `@comp/atoms/buttons/index.ts`: All buttons can be imported from here.
-
-*   **Image:**
-    *   `@comp/atoms/image/Image.tsx`: Standard button element. Variants: visual styles, sizes.
-    *   `@comp/atoms/image/index.ts`: All image components can be imported from here.
-
-*   **Cards:**
-    *   `@comp/atoms/card/Card.tsx`: Standard card.
-    *   `@comp/atoms/card/CardBody.tsx`: Creates vertical space between elements in the card.
-    *   `@comp/atoms/card/index.ts`: All card can atoms can be imported from here.
-
-*   **Typography:**
-    *   *(Placeholder)*
-
-*   **Form Elements:**
-    *   *(Placeholder)*
-
+- Buttons:
+    - `@comp/atoms/buttons/Button.tsx`: Standard button element. Variants: visual styles, sizes.
+    - `@comp/atoms/buttons/Link.tsx`: Styled `<a>` tag for navigation. Variants: navLink, dropdownLink.
+    - `@comp/atoms/buttons/ButtonLink.tsx`: `<a>` tag styled like a Button.
+    - `@comp/atoms/buttons/ButtonGroup.tsx`: `<div>` for grouping/spacing buttons.
+    - `@comp/atoms/buttons/index.ts`: All buttons can be imported from here.
+- Image:
+    - `@comp/atoms/image/Image.tsx`: Standard button element. Variants: visual styles, sizes.
+    - `@comp/atoms/image/index.ts`: All image components can be imported from here.
+- Cards:
+    - `@comp/atoms/card/Card.tsx`: Standard card.
+    - `@comp/atoms/card/CardBody.tsx`: Creates vertical space between elements in the card.
+    - `@comp/atoms/card/index.ts`: All card can atoms can be imported from here.
+- Typography:
+    - (Placeholder)
+- Form Elements:
+    - (Placeholder)
 
 ## Molecules
 
-*   **Cards:**
-    *   `@comp/molecules/card/MediaCardHeader.tsx`: Takes small picture, title and description to display on header of card.
+- Cards:
+    - `@comp/molecules/card/MediaCardHeader.tsx`: Takes small picture, title and description to display on header of card.
+- Modals:
+    - `@comp/molecules/modal/Modal.tsx`: Renders the main dialog structure with title, content area, and close functionality.
+    - `@comp/molecules/modal/ModalButton.tsx`: A button specifically styled and configured to trigger the display of a Modal.
+    - `@comp/molecules/modal/index.ts`: Exports all modal molecules.
 
-*   **Forms:**
-    *   *(Placeholder)*
+
