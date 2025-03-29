@@ -3,7 +3,7 @@ import { Link } from "@comp/atoms/buttons/index.ts";
 import { MenuSelect } from "@comp/form/index.ts";
 import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
-import { Breadcrumbs } from "@comp/navigation/index.ts";
+import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
 import { Text } from "@comp/atoms/typography/index.ts";
 
@@ -18,10 +18,8 @@ export const Navbar = async () => {
   const isAdmin = isServer && data.user.type === "admin";
   const isPlayer = isServer && data.user.type === "player";
 
-  // Calculate breadcrumb segments for navigation
   const breadcrumbSegments = await calculateBreadcrumbSegments();
 
-  // Determine which navigation item is active
   const currentPath = context.req.path;
   const isActive = (path: string) => currentPath.includes(path);
 
@@ -32,7 +30,9 @@ export const Navbar = async () => {
           {!isServer && (
             <Link
               href="/"
-              variant="navLink"
+              variant="default"
+              padding="md"
+              activeStyle="background"
               active={currentPath === "/"}
             >
               Home
@@ -41,7 +41,9 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && !isServer && (
             <Link
               href="/servers"
-              variant="navLink"
+              variant="default"
+              padding="md"
+              activeStyle="background"
               active={currentPath === "/servers"}
             >
               Servers
@@ -50,7 +52,9 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && isServer && (
             <Link
               href={`/servers/${serverId}`}
-              variant="navLink"
+              variant="default"
+              padding="md"
+              activeStyle="background"
               active={currentPath === `/servers/${serverId}`}
             >
               Overview
@@ -59,7 +63,9 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && isPlayer && (
             <Link
               href={`/servers/${serverId}/leaderboard`}
-              variant="navLink"
+              variant="default"
+              padding="md"
+              activeStyle="background"
               active={currentPath === `/servers/${serverId}/leaderboard`}
             >
               Leaderboard
@@ -69,28 +75,36 @@ export const Navbar = async () => {
             <>
               <Link
                 href={`/servers/${serverId}/locations`}
-                variant="navLink"
+                variant="default"
+                padding="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/locations`)}
               >
                 Locations
               </Link>
               <Link
                 href={`/servers/${serverId}/actions`}
-                variant="navLink"
+                variant="default"
+                padding="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/actions`)}
               >
                 Actions
               </Link>
               <Link
                 href={`/servers/${serverId}/resources`}
-                variant="navLink"
+                variant="default"
+                padding="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/resources`)}
               >
                 Resources
               </Link>
               <Link
                 href={`/servers/${serverId}/items`}
-                variant="navLink"
+                variant="default"
+                padding="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/items`)}
               >
                 Items
@@ -113,10 +127,22 @@ export const Navbar = async () => {
           {context.var.isLoggedIn
             ? (
               <MenuSelect name="Account" variant="single" flow="left">
-                <Link href="/profile" variant="dropdownLink">
+                <Link
+                  href="/profile"
+                  variant="subtle"
+                  padding="sm"
+                  display="block"
+                  className="text-center"
+                >
                   Profile
                 </Link>
-                <Link href={context.var.logoutUrl} variant="dropdownLink">
+                <Link
+                  href={context.var.logoutUrl}
+                  variant="subtle"
+                  padding="sm"
+                  display="block"
+                  className="text-center"
+                >
                   Logout
                 </Link>
               </MenuSelect>
@@ -124,7 +150,8 @@ export const Navbar = async () => {
             : (
               <Link
                 href={context.var.loginUrl}
-                variant="navLink"
+                variant="default"
+                padding="md"
               >
                 Login
               </Link>

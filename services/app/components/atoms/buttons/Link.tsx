@@ -1,79 +1,124 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import type { NonNullableProps } from "@comp/utils/types.ts";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-// Add base text styles here
-const linkVariants = cva([
-  "py-3",
-  "text-base",
-  "font-normal",
-  "dark:text-on-surface-dark",
-  "text-on-surface",
+const linkStyles = cva([
   "font-body",
-  "leading-loose",
+  "transition-colors",
 ], {
   variants: {
     variant: {
-      navLink: [
-        "group",
-        "relative",
-        "px-4",
-        "hover:bg-surface",
-        "dark:hover:bg-surface-dark",
-        "data-[active=true]:bg-surface",
-        "data-[active=true]:dark:bg-surface-dark",
+      default: [
+        "text-on-surface",
+        "dark:text-on-surface-dark",
+        "hover:text-on-surface-strong",
+        "dark:hover:text-on-surface-dark-strong",
       ],
-      dropdownLink: [
-        "block",
-        "px-5",
-        "text-center",
-        "dark:bg-surface-dark-alt",
-        "bg-surface-alt",
-        "dark:hover:bg-surface-dark-alt/50",
-        "hover:bg-surface-alt/50",
+      primary: [
+        "text-primary",
+        "dark:text-primary-dark",
+        "hover:underline",
       ],
+      subtle: [
+        "text-on-surface",
+        "dark:text-on-surface-dark",
+        "hover:text-on-surface",
+        "dark:hover:text-on-surface-dark",
+      ],
+      breadcrumb: [
+        "text-sm",
+        "text-on-surface",
+        "dark:text-on-surface-dark",
+        "hover:text-on-surface-strong",
+        "dark:hover:text-on-surface-dark-strong",
+      ],
+    },
+    padding: {
+      none: "p-0",
+      sm: "px-2 py-1",
+      md: "px-4 py-3",
+    },
+    display: {
+      inline: "inline-block",
+      block: "block",
+    },
+    activeStyle: {
+      background:
+        "data-[active=true]:bg-surface data-[active=true]:dark:bg-surface-dark",
+      underline: "data-[active=true]:underline",
+      strong:
+        "data-[active=true]:text-on-surface-strong data-[active=true]:dark:text-on-surface-dark-strong data-[active=true]:font-semibold",
+      primaryStrong:
+        "data-[active=true]:text-primary data-[active=true]:dark:text-primary-dark data-[active=true]:font-semibold",
+      none: "",
     },
   },
   defaultVariants: {
-    variant: "navLink",
+    variant: "default",
+    padding: "none",
+    display: "inline",
+    activeStyle: "none",
   },
 });
 
-type LinkVariants = NonNullableProps<typeof linkVariants, "variant">;
+type LinkStyleProps = VariantProps<typeof linkStyles>;
 
-type Props = LinkVariants & BaseComponentProps & {
-  active?: boolean;
-};
+type Props =
+  & BaseComponentProps
+  & LinkStyleProps
+  & {
+    active?: boolean;
+    href: string;
+  };
 
 /**
- * Link component for navigation with consistent styling
+ * Link component for navigation and actions with compositional styling
  *
- * Features:
- * - Multiple variants (navLink, dropdownLink)
- * - Active state indicator with left border and subtle background
- * - Subtle hover states
- * - Wraps content in Text component for typography consistency
- * - Group hover effects for child elements
+ * Use props to combine visual style, padding, display, and active state appearance.
  *
- * @example
- * <Link href="/dashboard" variant="navLink" active={true}>
- *   Dashboard
- * </Link>
+ * @props
+ * - variant: Core visual style ('default', 'primary', 'subtle', 'breadcrumb'). Defaults to 'default'.
+ * - padding: Internal padding ('none', 'sm', 'md'). Defaults to 'none'.
+ * - display: CSS display property ('inline', 'block'). Defaults to 'inline'.
+ * - activeStyle: How the link appears when active ('background', 'underline', 'strong', 'primaryStrong', 'none'). Defaults to 'none'.
+ * - active: Boolean indicating if the link is active (triggers activeStyle).
+ * - href: The URL the link points to.
+ * - children: The content of the link.
+ * - ...rest: Standard HTML anchor attributes passed to the `<a>` tag.
  *
- * <Link href="/settings" variant="dropdownLink">
- *   Settings
- * </Link>
+ * @example // Default link
+ * <Link href="/home">Home</Link>
+ *
+ * @example // Primary link with medium padding, block display, and background active state
+ * <Link href="/action" variant="primary" padding="md" display="block" activeStyle="background" active={isActive}>Do Action</Link>
+ *
+ * @example // Subtle block link for dropdowns
+ * <Link href="/profile" variant="subtle" display="block" padding="sm">Profile</Link>
+ *
+ * @example // Breadcrumb link (inherits small text and specific hover from variant)
+ * <Link href="/category" variant="breadcrumb">Category</Link>
  */
 export const Link: FC<Props> = (
-  { className, variant, active, children, ...rest }: Props,
+  {
+    className,
+    variant,
+    padding,
+    display,
+    activeStyle,
+    active,
+    children,
+    ...rest
+  }: Props,
 ) => {
   return (
     <a
       {...rest}
       data-active={active}
-      className={cn(linkVariants({ variant }), className)}
+      className={cn(
+        linkStyles({ variant, padding, display, activeStyle }),
+        className,
+      )}
     >
       {children}
     </a>

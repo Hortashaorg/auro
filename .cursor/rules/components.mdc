@@ -9,10 +9,10 @@ Review this guide to understand the available UI components, their classificatio
 
 ### Molecules vs Atoms
 
-*   A component is an **Atom** if it renders a single primary HTML element, acting as a basic visual building block (e.g., `<button>`, `<img>`, `<input>`) or a simple structural wrapper (e.g., a `<div>` for layout like `CardBody` or `ButtonGroup`).
-*   A component is a **Molecule** if it combines multiple elements to form a distinct functional unit. Specifically, it's a Molecule if:
-    *   It renders **one or more Atom** components internally, OR
-    *   It renders **two or more distinct HTML elements** as part of its core structure (not just simple wrappers passed via `children`).
+- A component is an **Atom** if it renders a single primary HTML element, acting as a basic visual building block (e.g., `<button>`, `<img>`, `<input>`) or a simple structural wrapper (e.g., a `<div>` for layout like `CardBody` or `ButtonGroup`).
+- A component is a **Molecule** if it combines multiple elements to form a distinct functional unit. Specifically, it's a Molecule if:
+    - It renders **one or more Atom** components internally, OR
+    - It renders **two or more distinct HTML elements** as part of its core structure (not just simple wrappers passed via `children`).
 
 ## Atoms
 

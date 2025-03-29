@@ -2,6 +2,7 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BreadcrumbSegment } from "@queries/breadcrumbs.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { Link } from "@comp/atoms/buttons/index.ts";
 
 type BreadcrumbsProps = BaseComponentProps & {
   /**
@@ -55,12 +56,12 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
 
             {segment.isLink
               ? (
-                <a
+                <Link
                   href={segment.href}
-                  className="hover:text-on-surface-strong dark:hover:text-on-surface-dark-strong"
+                  variant="breadcrumb"
                 >
                   {segment.label}
-                </a>
+                </Link>
               )
               : (
                 <span
