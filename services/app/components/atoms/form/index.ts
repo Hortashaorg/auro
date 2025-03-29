@@ -6,3 +6,4 @@ export { Switch } from "./Switch.tsx";
 export { Textarea } from "./Textarea.tsx";
 export { FormField } from "./FormField.tsx";
 export { FormRow } from "./FormRow.tsx";
+export { SelectInput } from "./SelectInput.tsx";

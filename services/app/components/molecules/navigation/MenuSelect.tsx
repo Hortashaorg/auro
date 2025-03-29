@@ -4,6 +4,7 @@ import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 
 const selectVariants = cva(
   [
@@ -57,25 +58,19 @@ export const MenuSelect: FC<MenuSelectProps> = (
 ) => {
   return (
     <div {...rest} className={cn("relative", className)}>
-      <div
+      <Button
         x-on:click={`name = name == "${name}" ? "" : "${name}"`}
-        className="hover:bg-surface dark:hover:bg-surface-dark cursor-pointer px-4 relative py-3"
+        variant="alternate"
+        className="hover:bg-surface dark:hover:bg-surface-dark"
       >
-        {
-          <button
-            className="hover:bg-surface dark:hover:bg-surface-dark cursor-pointer px-4 relative py-3"
-            type="button"
-          >
-            <Text
-              variant="body"
-              className="flex items-center justify-between gap-3"
-            >
-              {name}
-              <i data-lucide="chevron-down" width={16} height={16}></i>
-            </Text>
-          </button>
-        }
-      </div>
+        <Text
+          variant="body"
+          className="flex items-center justify-between gap-3"
+        >
+          {name}
+          <i data-lucide="chevron-down" width={16} height={16}></i>
+        </Text>
+      </Button>
       <div
         className={selectVariants({ flow, variant })}
         x-show={`name == "${name}"`}

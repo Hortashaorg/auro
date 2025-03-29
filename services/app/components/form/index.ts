@@ -14,6 +14,6 @@ export { RadioGroup } from "./RadioGroup.tsx";
 // export { Switch } from "./Switch.tsx";
 
 export { ImageGridInput } from "./ImageGridInput.tsx";
-export { SelectInput } from "./SelectInput.tsx";
+// Removed export: export { SelectInput } from "./SelectInput.tsx";
 // Removed export: export { MenuSelect } from "./MenuSelect.tsx";
 // export { FormControl } from "./FormControl.tsx"; // Moved

@@ -89,10 +89,7 @@ export const SelectInput: FC<SelectInputProps> = ({
   name,
   ...props
 }: SelectInputProps) => {
-  // Base classes that are always applied
   const baseClasses = cn(selectVariants({ size, state }), className);
-
-  // Error state classes to be conditionally applied
   const errorClasses = cn(
     selectVariants({ size, state: "error" }),
     className,
