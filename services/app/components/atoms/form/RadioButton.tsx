@@ -12,8 +12,6 @@ const radioButtonVariants = cva(
     "disabled:opacity-50 disabled:cursor-not-allowed",
   ],
 );
-
-// Define specific props for RadioButton, inheriting framework/HTML attributes
 type RadioButtonProps = BaseComponentProps & {
   name: string;
   value?: string;
@@ -38,10 +36,8 @@ export const RadioButton: FC<RadioButtonProps> = ({
   checked,
   disabled,
   required,
-  ...props // Pass remaining props like aria-describedby
+  ...props
 }) => {
-  // Generate classes using CVA. Pass className to allow overriding/extending.
-  // Also pass any specific variant props defined in the variants object if they existed.
   const radioClasses = cn(radioButtonVariants({ className }));
 
   return (
@@ -53,9 +49,8 @@ export const RadioButton: FC<RadioButtonProps> = ({
       checked={checked}
       disabled={disabled}
       required={required}
-      className={radioClasses} // Apply CVA generated classes
+      className={radioClasses}
       {...props}
     />
-  ) // Spread the rest of the props
-  ;
+  );
 };

@@ -10,3 +10,4 @@ export { SelectInput } from "./SelectInput.tsx";
 export { RadioButton } from "./RadioButton.tsx";
 export { Fieldset } from "./Fieldset.tsx";
 export { Legend } from "./Legend.tsx";
+export { Checkbox } from "./Checkbox.tsx";

@@ -4,7 +4,8 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { FormControl } from "@comp/molecules/form/index.ts";
 import { Checkbox, Fieldset, Label, Legend } from "@comp/atoms/form/index.ts";
 import { Text } from "@comp/atoms/typography/index.ts";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
+import type { NonNullableProps } from "@comp/utils/types.ts";
 
 type Option = {
   value: string;
@@ -30,7 +31,7 @@ const checkboxGroupContainerVariants = cva(
 
 type CheckboxGroupProps =
   & BaseComponentProps
-  & VariantProps<typeof checkboxGroupContainerVariants>
+  & NonNullableProps<typeof checkboxGroupContainerVariants>
   & {
     name: string;
     options: Option[];
