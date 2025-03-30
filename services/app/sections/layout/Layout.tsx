@@ -2,7 +2,7 @@ import { cn } from "@comp/utils/tailwind.ts";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
 import type { JSX } from "@kalena/framework";
 import { BaseLayout, Flex } from "@comp/wrappers/index.ts";
-import { ToastNotificationContainer } from "@comp/feedback/ToastNotificationContainer.tsx";
+import { ToastNotifications } from "@comp/molecules/feedback/index.ts";
 type Props = JSX.IntrinsicElements["div"] & {
   title: string;
 };
@@ -25,7 +25,7 @@ export const Layout = ({
           {children}
         </Flex>
       </div>
-      <ToastNotificationContainer />
+      <ToastNotifications />
     </BaseLayout>
   );
 };

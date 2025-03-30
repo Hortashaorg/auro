@@ -81,5 +81,6 @@ Review this guide to understand the available UI components, their classificatio
     - `@comp/molecules/form/FormRow.tsx`: `<div>` for arranging multiple `FormControl` instances horizontally.
     - `@comp/molecules/form/FormSection.tsx`: Organizes multiple `FormControl` or `FormRow` instances into a visually distinct section with optional title/description.
     - `@comp/molecules/form/RadioGroup.tsx`: Manages a group of `RadioButton` options within a `FormControl` and `Fieldset`. Handles single selection.
+    - `@comp/molecules/form/ImageGridInput.tsx`: Input Select but for a visual element.
     - `@comp/molecules/form/index.ts`: All form molecules can be imported from here.
 

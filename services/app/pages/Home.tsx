@@ -1,6 +1,6 @@
 import { Layout } from "@sections/layout/Layout.tsx";
 import { Title } from "@comp/atoms/typography/index.ts";
-import { Alert } from "@comp/feedback/Alert.tsx";
+import { Alert } from "@comp/molecules/feedback/Alert.tsx";
 import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";
 
