@@ -1,7 +1,7 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Text, Title } from "@comp/atoms/typography/index.ts";
+import { Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import {
@@ -82,7 +82,7 @@ const TabsSection = (
               modalRef="addResourceModal"
               className="flex items-center gap-2"
             >
-              <i data-lucide="plus" width={16} height={16} />Add Resource
+              <Icon icon="plus" variant="inverse" />Add Resource
             </ModalButton>
             <FormButton
               formId="modify-resource-of-action-form"

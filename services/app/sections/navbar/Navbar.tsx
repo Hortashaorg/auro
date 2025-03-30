@@ -5,7 +5,7 @@ import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
 import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Icon, Text } from "@comp/atoms/typography/index.ts";
 
 export const Navbar = async () => {
   const context = getGlobalContext();
@@ -112,8 +112,8 @@ export const Navbar = async () => {
             className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
           >
             <Text>
-              <i data-lucide="sun" x-show="isDarkMode" x-cloak></i>
-              <i data-lucide="moon" x-show="!isDarkMode" x-cloak></i>
+              <Icon icon="sun" x-show="isDarkMode" size="size-7" x-cloak />
+              <Icon icon="moon" x-show="!isDarkMode" size="size-7" x-cloak />
             </Text>
           </button>
           {context.var.isLoggedIn

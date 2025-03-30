@@ -1,7 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { Flex } from "@comp/wrappers/Flex.tsx";
-import { Button } from "@comp/atoms/buttons/index.ts";
-import { Title } from "@comp/atoms/typography/index.ts";
+import { Icon, Title } from "@comp/atoms/typography/index.ts";
 import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
@@ -88,14 +87,14 @@ export const Modal: FC<ModalProps> = ({
       <Flex direction="col" gap="md" className="p-6 w-full">
         <div className="flex items-center justify-between w-full">
           <Title level="h1" className="text-xl">{title}</Title>
-          <Button
+          <button
             type="button"
-            variant="inverse"
-            buttonSize="sm"
             x-on:click={`$refs.${modalRef}.close()`}
+            className="ml-auto cursor-pointer"
+            aria-label="Dismiss alert"
           >
-            <i data-lucide="x"></i>
-          </Button>
+            <Icon icon="x" variant="default" />
+          </button>
         </div>
         {children}
       </Flex>

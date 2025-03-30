@@ -5,6 +5,7 @@ import { cva } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
+import { Icon } from "@comp/atoms/typography/index.ts";
 
 const selectVariants = cva(
   [
@@ -68,7 +69,7 @@ export const MenuSelect: FC<MenuSelectProps> = (
           className="flex items-center justify-between gap-3"
         >
           {name}
-          <i data-lucide="chevron-down" width={16} height={16}></i>
+          <Icon icon="chevron-down" />
         </Text>
       </Button>
       <div

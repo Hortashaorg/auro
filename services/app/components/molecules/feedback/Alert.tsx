@@ -86,7 +86,7 @@ export const Alert: FC<AlertProps> = (
       {...props}
     >
       <div className={cn(contentVariants({ variant }))}>
-        <Icon icon={variant} variant={variant} />
+        <Icon icon={variant} variant={variant} size="size-7" />
         <div className="flex flex-col gap-2">
           {children}
         </div>
@@ -97,7 +97,7 @@ export const Alert: FC<AlertProps> = (
             className="ml-auto cursor-pointer"
             aria-label="Dismiss alert"
           >
-            <Icon icon="cross" variant="default" />
+            <Icon icon="x" variant="default" />
           </button>
         )}
       </div>

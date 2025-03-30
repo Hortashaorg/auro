@@ -2,7 +2,7 @@ import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
-import { Badge } from "@comp/atoms/typography/index.ts";
+import { Badge, Icon } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getServerActions } from "@queries/serverActions.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
@@ -58,7 +58,7 @@ const ActionCard = ({ action, serverId }: {
       <CardBody>
         <div className="flex flex-wrap gap-2">
           <Badge variant="warning" className="flex items-center gap-1">
-            <i data-lucide="clock" width={16} height={16}></i>
+            <Icon icon="clock" variant="none" />
             {action.cooldownMinutes}m cooldown
           </Badge>
           <Badge
@@ -66,13 +66,13 @@ const ActionCard = ({ action, serverId }: {
             className="flex items-center gap-1"
           >
             {action.repeatable
-              ? <i data-lucide="repeat" width={16} height={16}></i>
-              : <i data-lucide="x" width={16} height={16}></i>}
+              ? <Icon icon="repeat" variant="none" />
+              : <Icon icon="x" variant="none" />}
             {action.repeatable ? "Repeatable" : "One-time"}
           </Badge>
           {action.locationName && (
             <Badge variant="default" className="flex items-center gap-1">
-              <i data-lucide="map-pin" width={16} height={16}></i>
+              <Icon icon="map-pin" variant="none" />
               {action.locationName}
             </Badge>
           )}

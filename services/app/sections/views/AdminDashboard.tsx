@@ -1,4 +1,4 @@
-import { Badge, Text, Title } from "@comp/atoms/typography/index.ts";
+import { Badge, Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
 import { Switch } from "@comp/atoms/form/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
@@ -19,13 +19,13 @@ export const AdminDashboard = (
               {server.online
                 ? (
                   <>
-                    <i data-lucide="server" width={16} height={16}></i>
+                    <Icon icon="server" variant="none" />
                     Online
                   </>
                 )
                 : (
                   <>
-                    <i data-lucide="server-off" width={16} height={16}></i>
+                    <Icon icon="server-off" variant="none" />
                     Offline
                   </>
                 )}

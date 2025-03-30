@@ -3,7 +3,7 @@ import type { FC } from "@kalena/framework";
 import type { BreadcrumbSegment } from "@queries/breadcrumbs.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { Link } from "@comp/atoms/buttons/index.ts";
-import { Text } from "@comp/atoms/typography/index.ts";
+import { Icon, Text } from "@comp/atoms/typography/index.ts";
 
 type BreadcrumbsProps = BaseComponentProps & {
   /**
@@ -51,9 +51,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
       <ol className="flex flex-wrap items-center gap-1">
         {segments.map((segment, index) => (
           <li key={segment.href} className="flex items-center gap-1">
-            {index > 0 && (
-              <i data-lucide="chevron-right" width={16} height={16}></i>
-            )}
+            {index > 0 && <Icon icon="chevron-right" />}
 
             {segment.isLink
               ? (
