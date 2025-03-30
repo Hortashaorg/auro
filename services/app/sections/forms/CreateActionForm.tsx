@@ -7,7 +7,7 @@ import {
   Textarea,
 } from "@comp/atoms/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
-import { ImageGridInput } from "@comp/form/index.ts";
+import { ImageGridInput } from "@comp/molecules/form/index.ts";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
@@ -20,6 +20,7 @@ export const CreateActionForm = async () => {
   const [assets, locations] = await Promise.all([
     db.select({
       id: schema.asset.id,
+      name: schema.asset.name,
       url: schema.asset.url,
     })
       .from(schema.asset)

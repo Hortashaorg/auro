@@ -47,6 +47,7 @@ const imageGridVariants = cva([
 type Asset = {
   id: string;
   url: string;
+  name: string;
 };
 
 type ImageGridInputProps = Omit<BaseComponentProps, "children"> & {
@@ -113,7 +114,7 @@ export const ImageGridInput: FC<ImageGridInputProps> = ({
             >
               <img
                 src={asset.url}
-                alt={`Asset ${asset.id}`}
+                alt={asset.name}
                 className="h-full w-full object-cover rounded-md"
               />
             </div>

@@ -6,7 +6,7 @@ import {
   SelectInput,
   Textarea,
 } from "@comp/atoms/form/index.ts";
-import { ImageGridInput } from "@comp/form/index.ts";
+import { ImageGridInput } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
@@ -20,6 +20,7 @@ export const CreateItemForm = async () => {
   const assets = await db.select({
     id: schema.asset.id,
     url: schema.asset.url,
+    name: schema.asset.name,
   })
     .from(schema.asset)
     .where(eq(schema.asset.type, "item"));
