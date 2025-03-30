@@ -1,8 +1,6 @@
 import type { FC } from "@kalena/framework";
-import { cn } from "@comp/utils/tailwind.ts";
-import { cva } from "class-variance-authority";
-import type { NonNullableProps } from "@comp/utils/types.ts";
-import { Icon } from "@comp/atoms/typography/index.ts";
+import { Alert } from "@comp/molecules/feedback/Alert.tsx";
+import { AlertTitle } from "@comp/atoms/feedback/index.ts";
 
 /**
  * ToastNotifications component for managing and displaying toast notifications
@@ -76,86 +74,9 @@ export const ToastNotifications: FC = () => {
   );
 };
 
-const notificationVariants = cva([
-  "pointer-events-auto",
-  "relative",
-  "rounded-radius",
-  "border",
-  "bg-surface",
-  "text-on-surface",
-  "dark:bg-surface-dark",
-  "dark:text-on-surface-dark",
-], {
-  variants: {
-    variant: {
-      info: [
-        "border-info",
-      ],
-      warning: [
-        "border-warning",
-      ],
-      success: [
-        "border-success",
-      ],
-      danger: [
-        "border-danger",
-      ],
-    },
-  },
-  defaultVariants: {
-    variant: "info",
-  },
-});
-
-const contentVariants = cva([
-  "flex",
-  "w-full",
-  "items-center",
-  "gap-2.5",
-  "rounded-radius",
-  "p-4",
-  "transition-all",
-  "duration-300",
-], {
-  variants: {
-    variant: {
-      info: ["bg-info/10"],
-      warning: ["bg-warning/10"],
-      success: ["bg-success/10"],
-      danger: ["bg-danger/10"],
-    },
-  },
-  defaultVariants: {
-    variant: "info",
-  },
-});
-
-const titleVariants = cva([
-  "text-sm",
-  "font-semibold",
-], {
-  variants: {
-    variant: {
-      info: ["text-info"],
-      warning: ["text-warning"],
-      success: ["text-success"],
-      danger: ["text-danger"],
-      message: [
-        "text-on-surface-strong",
-        "dark:text-on-surface-dark-strong",
-      ],
-    },
-  },
-  defaultVariants: {
-    variant: "info",
-  },
-});
-
-type NotificationVariants = NonNullableProps<
-  typeof notificationVariants,
-  "variant"
->;
-type NotificationContentProps = NotificationVariants;
+type NotificationContentProps = {
+  variant: "info" | "warning" | "success" | "danger";
+};
 
 const NotificationContent: FC<NotificationContentProps> = ({
   variant,
@@ -177,40 +98,15 @@ const NotificationContent: FC<NotificationContentProps> = ({
   };
 
   return (
-    <div
-      x-cloak
-      className={cn(notificationVariants({ variant }))}
-      role="alert"
+    <Alert
       {...notifications}
+      variant={variant}
+      onDismiss="(isVisible = false), removeNotification(notification.id)"
     >
-      <div className={cn(contentVariants({ variant }))}>
-        <Icon icon={variant} variant={variant} />
-
-        <div className="flex flex-col gap-2">
-          <h3
-            x-cloak
-            x-show="notification.title"
-            className={cn(titleVariants({ variant }))}
-            x-text="notification.title"
-          >
-          </h3>
-          <p
-            x-cloak
-            x-show="notification.message"
-            className="text-pretty text-sm"
-            x-text="notification.message"
-          >
-          </p>
-        </div>
-        <button
-          type="button"
-          className="ml-auto cursor-pointer"
-          aria-label="dismiss notification"
-          x-on:click="(isVisible = false), removeNotification(notification.id)"
-        >
-          <Icon icon="cross" />
-        </button>
-      </div>
-    </div>
+      <AlertTitle variant={variant}>
+        <span x-text="notification.title"></span>
+      </AlertTitle>
+      <span x-text="notification.message"></span>
+    </Alert>
   );
 };

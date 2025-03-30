@@ -58,26 +58,10 @@ const contentVariants = cva([
     variant: "info",
   },
 });
-const titleVariants = cva([
-  "text-sm",
-  "font-semibold",
-], {
-  variants: {
-    variant: {
-      info: ["text-info"],
-      warning: ["text-warning"],
-      success: ["text-success"],
-      danger: ["text-danger"],
-    },
-  },
-  defaultVariants: {
-    variant: "info",
-  },
-});
 
 type AlertVariants = NonNullableProps<typeof alertVariants, "variant">;
 type AlertProps = BaseComponentProps & AlertVariants & {
-  title: string;
+  onDismiss?: string;
 };
 
 /**
@@ -93,7 +77,7 @@ type AlertProps = BaseComponentProps & AlertVariants & {
  * </Alert>
  */
 export const Alert: FC<AlertProps> = (
-  { className, variant, children, title, ...props }: AlertProps,
+  { className, variant, children, onDismiss, ...props }: AlertProps,
 ) => {
   return (
     <div
@@ -104,13 +88,18 @@ export const Alert: FC<AlertProps> = (
       <div className={cn(contentVariants({ variant }))}>
         <Icon icon={variant} variant={variant} />
         <div className="flex flex-col gap-2">
-          <h3
-            className={cn(titleVariants({ variant }))}
-          >
-            {title}
-          </h3>
-          <p className="text-pretty text-sm">{children}</p>
+          {children}
         </div>
+        {onDismiss && (
+          <button
+            type="button"
+            x-on:click={onDismiss}
+            className="ml-auto cursor-pointer"
+            aria-label="Dismiss alert"
+          >
+            <Icon icon="cross" variant="default" />
+          </button>
+        )}
       </div>
     </div>
   );
