@@ -5,7 +5,7 @@ import type { FC } from "@kalena/framework";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 
 const titleVariants = cva([
-  "text-sm",
+  "text-base",
   "font-semibold",
 ], {
   variants: {
