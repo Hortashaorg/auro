@@ -1,5 +1,5 @@
 import { Text, Title } from "@comp/atoms/typography/index.ts";
-import { Section } from "@comp/wrappers/index.ts";
+import { Section } from "@comp/atoms/layout/index.ts";
 import { getLeaderboardResources } from "@queries/resourceLeaderboard.ts";
 import { ResourceLeaderboard } from "@sections/views/ResourceLeaderboard.tsx";
 import { createRoute, v } from "@kalena/framework";

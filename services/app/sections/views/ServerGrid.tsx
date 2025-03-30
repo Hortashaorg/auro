@@ -1,4 +1,5 @@
-import { HtmxWrapper, Section } from "@comp/wrappers/index.ts";
+import { HtmxWrapper } from "@comp/atoms/layout/index.ts";
+import { Section } from "@comp/atoms/layout/index.ts";
 import { Grid } from "@comp/atoms/layout/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Badge, Title } from "@comp/atoms/typography/index.ts";

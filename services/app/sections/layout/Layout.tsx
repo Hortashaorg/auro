@@ -1,7 +1,7 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import { Navbar } from "@sections/navbar/Navbar.tsx";
 import type { JSX } from "@kalena/framework";
-import { BaseLayout } from "@comp/wrappers/index.ts";
+import { BaseLayout } from "@comp/molecules/layout/index.ts";
 import { Flex } from "@comp/atoms/layout/index.ts";
 import { ToastNotifications } from "@comp/molecules/feedback/index.ts";
 type Props = JSX.IntrinsicElements["div"] & {

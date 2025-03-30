@@ -20,7 +20,7 @@ export const Menu: FC<MenuProps> = (
     <div
       {...props}
       className={cn(
-        "hidden items-center md:flex",
+        "items-center flex",
         className || "",
       )}
     >

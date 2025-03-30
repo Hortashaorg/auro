@@ -13,19 +13,10 @@ CI/CD
 - Introducing Testing
 
 Bugs:
-Smaller pictures? Use the pixel art
 Introduce limited actions that fill up
 User/account names
 
 CLEANUP:
-Standardize JSDoc Format
-    Create a consistent format for component documentation
-    Include features, examples, and explanations
-    Make sure all components are properly documented
-Implement a Component Composition Pattern
-    Create more composable patterns for complex components
-    For example, a FormGroup that wraps FormControl + Label + Input
-    This would reduce boilerplate in component consumers
 Event Naming Conventions
     Standardize event naming across all components
     For example: form-error, form-input, form-clear

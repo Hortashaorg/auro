@@ -1,4 +1,4 @@
-import { BaseLayout } from "@comp/wrappers/index.ts";
+import { BaseLayout } from "@comp/molecules/layout/index.ts";
 import type { FC, JSX } from "@kalena/framework";
 
 type Props = JSX.IntrinsicElements["div"] & {

@@ -1,4 +1,4 @@
-import { Menu, Nav } from "@comp/wrappers/index.ts";
+import { Menu, Nav } from "@comp/atoms/navigation/index.ts";
 import { Link } from "@comp/atoms/buttons/index.ts";
 import { MenuSelect } from "@comp/molecules/navigation/index.ts";
 import { getGlobalContext } from "@kalena/framework";
