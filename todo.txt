@@ -20,3 +20,5 @@ Refactor:
 Sections: Should reflect the path where the section is being used. (page)
 API: Should reflect the path where the section is being used.
 Query: Should reflect data structure.
+
+The Form handling pattern is repetitive. Does it have to be this repetitive?

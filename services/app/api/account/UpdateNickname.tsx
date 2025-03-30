@@ -45,14 +45,13 @@ const UpdateNickname = async () => {
       if (
         error.constraint_name === "account_nickname_unique"
       ) {
-        // Unique constraint violation
         context.header(
           "HX-Trigger",
           createEvents([
             {
               name: "form-error",
               values: {
-                name: "An action with this name already exists on this server",
+                nickname: "There is already an account with this nickname",
               },
             },
           ]),
