@@ -47,8 +47,8 @@ const CreateItem = async () => {
     context.header(
       "HX-Trigger",
       createEvents([
-        { name: "close-dialog", values: { value: true } },
-        { name: "clear-form", values: { value: true } },
+        { name: "dialog-close", values: { value: true } },
+        { name: "form-clear", values: { value: true } },
       ]),
     );
 

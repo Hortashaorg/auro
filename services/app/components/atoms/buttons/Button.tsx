@@ -1,6 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
-import type { BaseComponentProps } from "@comp/utils/props.ts";
+import type { BaseComponentProps, HTMXProps } from "@comp/utils/props.ts";
 import { cva } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 
@@ -116,7 +116,7 @@ const buttonVariants = cva([
   },
 });
 type ButtonVariants = NonNullableProps<typeof buttonVariants>;
-type ButtonProps = BaseComponentProps & ButtonVariants;
+type ButtonProps = BaseComponentProps & ButtonVariants & HTMXProps;
 
 /**
  * Button component for triggering actions

@@ -22,7 +22,7 @@ const ExecuteAction = async () => {
       "HX-Trigger",
       createEvents([
         {
-          name: "show-toast",
+          name: "toast-show",
           values: {
             message: "You have no actions left",
             title: "No Actions Left",
@@ -103,7 +103,7 @@ const ExecuteAction = async () => {
     "HX-Trigger",
     createEvents([
       {
-        name: "show-toast",
+        name: "toast-show",
         values: {
           message: "You have successfully executed the action",
           title: "Success",

@@ -1,14 +1,14 @@
 type events = {
-  "close-dialog": {
+  "dialog-close": {
     value: boolean;
   };
-  "clear-form": {
+  "form-clear": {
     value: boolean;
   };
   "form-error": {
     [field: string]: string;
   };
-  "show-toast": {
+  "toast-show": {
     message: string;
     variant: "info" | "warning" | "success" | "danger";
     title: string;

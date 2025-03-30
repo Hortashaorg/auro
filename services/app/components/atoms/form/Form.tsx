@@ -1,8 +1,8 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
-import type { BaseComponentProps } from "@comp/utils/props.ts";
+import type { BaseComponentProps, HTMXProps } from "@comp/utils/props.ts";
 
-type FormProps = BaseComponentProps;
+type FormProps = BaseComponentProps & HTMXProps;
 
 /**
  * Form component with built-in Alpine.js error handling
@@ -33,7 +33,7 @@ export const Form: FC<FormProps> = ({
     ...props,
     "x-data": "{ errors: {} }",
     "x-on:form-error.document": "errors = $event.detail",
-    "x-on:clear-form.document":
+    "x-on:form-clear.document":
       "if ($event.detail?.value) { errors = {}; $el.reset(); }",
     className: cn("space-y-4", className),
   };

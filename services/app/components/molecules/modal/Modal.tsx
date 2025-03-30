@@ -72,7 +72,7 @@ export const Modal: FC<ModalProps> = ({
   maxWidth,
   ...props
 }: ModalProps) => {
-  props["x-on:close-dialog.window"] = `$refs.${modalRef}.close()`;
+  props["x-on:dialog-close.window"] = `$refs.${modalRef}.close()`;
   props["x-on:click"] = `$event.target === $el && $refs.${modalRef}.close()`;
 
   return (

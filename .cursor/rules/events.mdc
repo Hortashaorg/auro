@@ -1,0 +1,29 @@
+---
+description: How to properly use events
+globs: 
+alwaysApply: false
+---
+# Event Naming Conventions
+
+This document outlines the naming convention for custom events used within the application, particularly those defined in `services/app/components/utils/events.ts`. Consistency in event naming helps improve code readability and maintainability.
+
+## Convention
+
+Events should be named using **kebab-case** and follow the pattern:
+
+`[scope/subject]-[action/state]`
+
+-   **`scope/subject`**: (Required) The primary entity, component, or context the event relates to.
+    -   *Examples:* `dialog`, `form`, `toast`, `user-profile`, `data-table`
+-   **`action/state`**: (Required) The specific action that occurred or the state being signaled.
+    -   *Examples:* `open`, `close`, `submit`, `clear`, `update`, `error`, `success`, `show`, `hide`, `select`, `change`
+
+## Examples
+- `dialog-close`
+- `form-clear`
+- `form-error`
+- `toast-show`
+
+## Usage
+
+When creating new events in `events.ts` or dispatching events from components, adhere to this convention.

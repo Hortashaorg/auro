@@ -1,9 +1,10 @@
-import type { Child } from "@kalena/framework";
-
 export type BaseComponentProps = {
   className?: string;
   id?: string;
-  children?: Child;
+  [key: string]: unknown;
+};
+
+export type HTMXProps = {
   "hx-get"?: string;
   "hx-post"?: string;
   "hx-put"?: string;
@@ -13,5 +14,4 @@ export type BaseComponentProps = {
   "hx-target"?: string;
   "hx-trigger"?: string;
   "hx-indicator"?: string;
-  [key: string]: unknown;
 };

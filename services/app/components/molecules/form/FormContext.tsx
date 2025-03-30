@@ -66,8 +66,8 @@ export const FormContext: FC<FormContextProps> = ({
     }
   `;
 
-  // Listen for clear-form events directly
-  props["x-on:clear-form.window"] = `
+  // Listen for form-clear events directly
+  props["x-on:form-clear.window"] = `
     if ($event.detail && $event.detail.value === true) {
       formIsDirty = false;
       isSubmitting = false;

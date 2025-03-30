@@ -132,7 +132,7 @@ const ChangeActionResourceRewards = async () => {
       "HX-Trigger",
       createEvents([
         {
-          name: "clear-form",
+          name: "form-clear",
           values: { value: true },
         },
       ]),

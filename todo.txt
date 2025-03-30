@@ -15,7 +15,3 @@ CI/CD
 Bugs:
 Introduce limited actions that fill up
 User/account names
-
-CLEANUP:
-Event Naming Conventions
-Better Props (HTMX should not be used everywhere)

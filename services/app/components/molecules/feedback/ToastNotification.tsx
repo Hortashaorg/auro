@@ -10,7 +10,7 @@ import { AlertTitle } from "@comp/atoms/feedback/index.ts";
  */
 export const ToastNotifications: FC = () => {
   const props: Record<string, string> = {};
-  props["x-on:show-toast.window"] = `addNotification({
+  props["x-on:toast-show.window"] = `addNotification({
                 variant: $event.detail.variant,
                 title: $event.detail.title,
                 message: $event.detail.message,

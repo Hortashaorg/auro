@@ -2,7 +2,7 @@ import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
-import type { BaseComponentProps } from "@comp/utils/props.ts";
+import type { BaseComponentProps, HTMXProps } from "@comp/utils/props.ts";
 
 const switchTrackVariants = cva([
   "relative",
@@ -101,7 +101,7 @@ const switchTrackVariants = cva([
 
 type SwitchVariants = NonNullableProps<typeof switchTrackVariants>;
 
-type SwitchProps = BaseComponentProps & SwitchVariants & {
+type SwitchProps = BaseComponentProps & SwitchVariants & HTMXProps & {
   name: string;
   initialState?: boolean;
   disabled?: boolean;
