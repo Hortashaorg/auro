@@ -1,14 +1,14 @@
-import { Form } from "@comp/inputs/form/Form.tsx";
-import { FormControl } from "@comp/inputs/form/FormControl.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { Range } from "@comp/inputs/form/Range.tsx";
-import { TableRow } from "@comp/display/table/TableRow.tsx";
-import { TableCell } from "@comp/display/table/TableCell.tsx";
+import { FormControl } from "@comp/molecules/form/index.ts";
+import { Form, Input, Range } from "@comp/atoms/form/index.ts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@comp/atoms/table/index.ts";
 import { db, eq, schema } from "@package/database";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
-import { Table } from "@comp/display/table/Table.tsx";
-import { TableHeader } from "@comp/display/table/TableHeader.tsx";
-import { TableBody } from "@comp/display/table/TableBody.tsx";
 
 type Props = JSX.IntrinsicElements["form"];
 /**

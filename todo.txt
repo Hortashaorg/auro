@@ -4,24 +4,18 @@ Administrator:
 - As administrator on a server, I can modify/delete items on the server.
 - As administrator on a server, I can set up costs for executing an action.
 
-Player:
-- As a player on a server, I recive energy to spend on doing actions.
-
 UI:
 - Loading states / Optimistic updates pattern
 - Component Testing
 
 Technical:
-Workflow - typecheck, linting and formatting
 CI/CD
 - Introducing Testing
-- Typecheck, formatting, linting
-- We should move BasicLayout and maybe other project specific component somewhere else in the repo
 
 Bugs:
-Smaller pictures? Use the pixel art
 Introduce limited actions that fill up
+User/account names
 
-Missing:
-Send error notification to user
-Leaderboard
+CLEANUP:
+Event Naming Conventions
+Better Props (HTMX should not be used everywhere)

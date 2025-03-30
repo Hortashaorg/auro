@@ -1,12 +1,11 @@
-import { Nav } from "@comp/navigation/Nav.tsx";
-import { Link } from "@comp/navigation/Link.tsx";
-import { Menu } from "@comp/navigation/Menu.tsx";
-import { Select } from "@comp/navigation/Select.tsx";
+import { Menu, Nav } from "@comp/atoms/navigation/index.ts";
+import { Link } from "@comp/atoms/buttons/index.ts";
+import { MenuSelect } from "@comp/molecules/navigation/index.ts";
 import { getGlobalContext } from "@kalena/framework";
 import { serverAndUser } from "@queries/serverAndUser.ts";
-import { Breadcrumbs } from "@comp/navigation/Breadcrumbs.tsx";
+import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/breadcrumbs.ts";
-import { Text } from "@comp/content/Text.tsx";
+import { Icon, Text } from "@comp/atoms/typography/index.ts";
 
 export const Navbar = async () => {
   const context = getGlobalContext();
@@ -19,21 +18,20 @@ export const Navbar = async () => {
   const isAdmin = isServer && data.user.type === "admin";
   const isPlayer = isServer && data.user.type === "player";
 
-  // Calculate breadcrumb segments for navigation
   const breadcrumbSegments = await calculateBreadcrumbSegments();
 
-  // Determine which navigation item is active
   const currentPath = context.req.path;
   const isActive = (path: string) => currentPath.includes(path);
 
   return (
     <header className="flex flex-col">
-      <Nav id="section-navbar" className="h-14 flex items-center">
+      <Nav id="section-navbar" className="flex items-center">
         <Menu className="h-full">
           {!isServer && (
             <Link
               href="/"
-              variant="navLink"
+              size="md"
+              activeStyle="background"
               active={currentPath === "/"}
             >
               Home
@@ -42,7 +40,8 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && !isServer && (
             <Link
               href="/servers"
-              variant="navLink"
+              size="md"
+              activeStyle="background"
               active={currentPath === "/servers"}
             >
               Servers
@@ -51,7 +50,8 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && isServer && (
             <Link
               href={`/servers/${serverId}`}
-              variant="navLink"
+              size="md"
+              activeStyle="background"
               active={currentPath === `/servers/${serverId}`}
             >
               Overview
@@ -60,7 +60,8 @@ export const Navbar = async () => {
           {context.var.isLoggedIn && isPlayer && (
             <Link
               href={`/servers/${serverId}/leaderboard`}
-              variant="navLink"
+              size="md"
+              activeStyle="background"
               active={currentPath === `/servers/${serverId}/leaderboard`}
             >
               Leaderboard
@@ -70,28 +71,32 @@ export const Navbar = async () => {
             <>
               <Link
                 href={`/servers/${serverId}/locations`}
-                variant="navLink"
+                size="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/locations`)}
               >
                 Locations
               </Link>
               <Link
                 href={`/servers/${serverId}/actions`}
-                variant="navLink"
+                size="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/actions`)}
               >
                 Actions
               </Link>
               <Link
                 href={`/servers/${serverId}/resources`}
-                variant="navLink"
+                size="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/resources`)}
               >
                 Resources
               </Link>
               <Link
                 href={`/servers/${serverId}/items`}
-                variant="navLink"
+                size="md"
+                activeStyle="background"
                 active={isActive(`/servers/${serverId}/items`)}
               >
                 Items
@@ -107,22 +112,35 @@ export const Navbar = async () => {
             className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
           >
             <Text>
-              <i data-lucide="sun" x-show="isDarkMode" x-cloak></i>
-              <i data-lucide="moon" x-show="!isDarkMode" x-cloak></i>
+              <Icon icon="sun" x-show="isDarkMode" size="size-7" x-cloak />
+              <Icon icon="moon" x-show="!isDarkMode" size="size-7" x-cloak />
             </Text>
           </button>
           {context.var.isLoggedIn
             ? (
-              <Select name="Profile" variant="single" flow="left">
-                <Link href={context.var.logoutUrl} variant="dropdownLink">
+              <MenuSelect name="Account" variant="single" flow="left">
+                <Link
+                  href="/profile"
+                  size="md"
+                  display="block"
+                  background="alt"
+                >
+                  Profile
+                </Link>
+                <Link
+                  href={context.var.logoutUrl}
+                  size="md"
+                  display="block"
+                  background="alt"
+                >
                   Logout
                 </Link>
-              </Select>
+              </MenuSelect>
             )
             : (
               <Link
                 href={context.var.loginUrl}
-                variant="navLink"
+                size="md"
               >
                 Login
               </Link>

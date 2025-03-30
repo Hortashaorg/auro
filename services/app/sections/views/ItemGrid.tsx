@@ -1,12 +1,9 @@
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
+import { Card } from "@comp/atoms/card/index.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
+import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
 
 type Props = {
   id?: string;
@@ -33,7 +30,7 @@ export const ItemGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="item-section">
-      <Grid gap="lg" content="small">
+      <Grid>
         {items.map((item) => (
           <ItemCard
             key={item.id}
@@ -58,15 +55,13 @@ const ItemCard = ({ item }: {
   };
 }) => {
   return (
-    <Card>
-      <CardImage src={item.url} alt={item.name} />
-      <CardContent title={item.name}>
-        {item.description && (
-          <Text variant="body">
-            {item.description}
-          </Text>
-        )}
-      </CardContent>
+    <Card className="w-3xs">
+      <MediaCardHeader
+        title={item.name}
+        description={item.description}
+        imageSrc={item.url}
+        imageAlt={item.name}
+      />
     </Card>
   );
 };

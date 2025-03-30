@@ -1,0 +1,140 @@
+---
+description: How to correctly apply styling to components
+globs: 
+alwaysApply: false
+---
+# Styling and Color Guidelines
+
+This document outlines the guidelines for styling components and using the defined color palette within the project. Adhering to these rules ensures visual consistency, accessibility, and easier theme maintenance.
+
+## Core Principle: Use Semantic Color Tokens
+
+**Always use the defined semantic color tokens over hardcoded color values (e.g., hex codes, generic Tailwind colors).**
+
+Our color system is defined using CSS custom properties (variables) in `services/app/main.css`. These variables represent semantic meanings (e.g., "surface", "primary action", "text on surface") rather than specific color values.
+
+**Why?**
+
+*   **Theming:** Allows for easier updates to the color theme (including dark mode) by changing the variable definitions in one place.
+*   **Consistency:** Ensures UI elements use the intended colors for their purpose across the application.
+*   **Maintainability:** Makes the codebase easier to understand and refactor.
+
+## Tooling: Tailwind CSS
+
+We use Tailwind CSS, configured to map utility classes to these semantic CSS variables. You should primarily interact with the color system via these Tailwind classes.
+
+## Color Palette and Semantic Usage
+
+Here are the main semantic color tokens and their intended use, along with example Tailwind utility patterns derived from `services/app/main.css`:
+
+### Surface Colors (Backgrounds)
+
+Used for backgrounds of pages, containers, cards, inputs, etc.
+
+*   `--color-surface` / `--color-surface-dark`
+    *   **Example:** `bg-surface`, `dark:bg-surface-dark`
+    *   **Use:** Default background for main content areas, cards.
+*   `--color-surface-alt` / `--color-surface-dark-alt`
+    *   **Example:** `bg-surface-alt`, `dark:bg-surface-dark-alt`
+    *   **Use:** Slightly different background, often for sidebars, headers, or nested elements needing subtle differentiation.
+
+### On-Surface Colors (Text & Icons)
+
+Used for text, icons, and other foreground elements placed on top of surface colors.
+
+*   `--color-on-surface` / `--color-on-surface-dark`
+    *   **Example:** `text-on-surface`, `dark:text-on-surface-dark`
+    *   **Use:** Standard body text, paragraphs, labels.
+*   `--color-on-surface-strong` / `--color-on-surface-dark-strong`
+    *   **Example:** `text-on-surface-strong`, `dark:text-on-surface-dark-strong`
+    *   **Use:** Headings, emphasized text, hover states for default links.
+
+### Primary Colors (Main Actions)
+
+Used for primary buttons, active navigation states, focused elements, main links.
+
+*   `--color-primary` / `--color-primary-dark`
+    *   **Example:** `bg-primary`, `text-primary`, `border-primary`, `dark:bg-primary-dark`, etc.
+    *   **Use:** Primary interactive elements.
+*   `--color-on-primary` / `--color-on-primary-dark`
+    *   **Example:** `text-on-primary`, `dark:text-on-primary-dark`
+    *   **Use:** Text/icons placed directly on a `bg-primary` background.
+
+### Secondary Colors (Secondary Actions)
+
+Used for secondary buttons or alternative interactive elements.
+
+*   `--color-secondary` / `--color-secondary-dark`
+    *   **Example:** `bg-secondary`, `text-secondary`, `border-secondary`, `dark:bg-secondary-dark`, etc.
+    *   **Use:** Secondary interactive elements.
+*   `--color-on-secondary` / `--color-on-secondary-dark`
+    *   **Example:** `text-on-secondary`, `dark:text-on-secondary-dark`
+    *   **Use:** Text/icons placed directly on a `bg-secondary` background.
+
+### Outline Colors (Borders & Dividers)
+
+Used for borders on inputs, cards, dividers, etc.
+
+*   `--color-outline` / `--color-outline-dark`
+    *   **Example:** `border-outline`, `dark:border-outline-dark`
+    *   **Use:** Standard borders, dividers.
+*   `--color-outline-strong` / `--color-outline-dark-strong`
+    *   **Example:** `border-outline-strong`, `dark:border-outline-dark-strong`
+    *   **Use:** Stronger or focused borders (though focus often uses `outline-primary`).
+
+### Status Colors (Feedback)
+
+Used for alerts, badges, validation states, etc.
+
+*   `--color-info`, `--color-on-info`
+    *   **Example:** `bg-info`, `text-info`, `border-info`, `text-on-info` (on `bg-info`)
+*   `--color-success`, `--color-on-success`
+    *   **Example:** `bg-success`, `text-success`, `border-success`, `text-on-success` (on `bg-success`)
+*   `--color-warning`, `--color-on-warning`
+    *   **Example:** `bg-warning`, `text-warning`, `border-warning`, `text-on-warning` (on `bg-warning`)
+*   `--color-danger`, `--color-on-danger`
+    *   **Example:** `bg-danger`, `text-danger`, `border-danger`, `text-on-danger` (on `bg-danger`)
+
+## General Styling Guidelines
+
+*   **Dark Mode:** Use Tailwind's `dark:` prefix to apply styles specific to dark mode (e.g., `text-on-surface dark:text-on-surface-dark`).
+*   **Accessibility:** Pay attention to color contrast, especially for text (`on-`) colors against their corresponding backgrounds (`surface`, `primary`, etc.). Use tools to check contrast ratios if unsure.
+*   **Component Props:** When creating components, prefer accepting semantic variants (like `variant="primary"`) rather than direct color props. Let the component internally map variants to the correct Tailwind classes.
+*   **Focus States:** Ensure interactive elements have clear, visible focus states, typically using `focus-visible:` utilities and often involving the `primary` or `outline` colors (e.g., `focus-visible:outline-primary`).
+
+## Generating Lighter Color Tints with Opacity
+
+Instead of defining numerous explicit "light" or "faint" color variations in our core palette (e.g., `--color-primary-light`), we can leverage Tailwind CSS's built-in opacity modifiers to create tints of our existing semantic colors directly where needed.
+
+**The Pattern:**
+
+Apply an opacity value to a semantic background color utility using a forward slash (`/`). The value ranges from `0` (fully transparent) to `100` (fully opaque).
+
+*   `bg-{color}/{opacity}`
+
+**Examples:**
+
+*   `bg-primary/20`: A light tint (20% opacity) of the primary color.
+*   `bg-info/15`: A very subtle tint (15% opacity) of the info color.
+*   `bg-success/50`: A half-opaque version of the success color.
+*   `bg-danger/10`: An extremely faint tint (10% opacity) of the danger color.
+
+**Why Use This Pattern?**
+
+1.  **Keeps Palette Lean:** Avoids bloating the core color definitions in `main.css` and `tailwind.config.js` with dozens of minor variations.
+2.  **Maintains Semantic Link:** `bg-info/15` clearly communicates its origin from the base `info` color, preserving the semantic connection.
+3.  **Theme Consistency:** If the base color (e.g., `--color-primary`) is updated, all tints derived using opacity (`bg-primary/20`, `bg-primary/50`, etc.) automatically reflect that change.
+4.  **Flexibility:** Provides fine-grained control over the exact level of tint needed directly in the component's styling.
+
+**When to Use:**
+
+*   **Subtle Highlights:** For understated backgrounds on sections, list items, or containers that need slight emphasis without using a full `bg-surface-alt`.
+*   **Hover/Active States:** Creating subtle background shifts on hover or active states where a full color change is too jarring (e.g., `hover:bg-primary/10`).
+*   **Layered Elements:** Differentiating stacked UI elements visually.
+*   **Less Prominent Indicators:** For badges or status indicators where the full-strength color might be too visually demanding.
+
+**Important Considerations:**
+
+*   **Contrast:** When placing text or other elements on top of these low-opacity backgrounds, be mindful of accessibility and ensure sufficient contrast. Often, these tints work best when layered *on top of* a standard surface color (like `bg-surface`) rather than directly on the base background. The browser effectively blends the semi-transparent color with whatever is behind it.
+*   **Deliberate Use:** While powerful, use this technique deliberately. Overusing very faint tints can make the UI feel washed out. Ensure the chosen opacity level serves a clear purpose.
+

@@ -1,20 +1,20 @@
 import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
-import { Tab } from "@comp/display/tabs/Tab.tsx";
-import { Tabs } from "@comp/display/tabs/Tabs.tsx";
-import { TabsList } from "@comp/display/tabs/TabsList.tsx";
-import { TabsTrigger } from "@comp/display/tabs/TabsTrigger.tsx";
-import { Modal } from "@comp/display/modal/Modal.tsx";
-import { ModalButton } from "@comp/display/modal/ModalButton.tsx";
+import {
+  TabContent,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@comp/atoms/tabs/index.ts";
+import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { AddResourceToActionForm } from "@sections/forms/AddResourceToActionForm.tsx";
 import { ModifyResourceOfActionForm } from "@sections/forms/ModifyResourceOfActionForm.tsx";
-import { FormContext } from "@comp/inputs/form/FormContext.tsx";
-import { FormButton } from "@comp/inputs/form/FormButton.tsx";
-import { ButtonGroup } from "@comp/inputs/ButtonGroup.tsx";
+import { FormButton, FormContext } from "@comp/molecules/form/index.ts";
+import { ButtonGroup } from "@comp/atoms/buttons/index.ts";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -59,17 +59,17 @@ const TabsSection = (
         <TabsTrigger tabId="settings">Settings</TabsTrigger>
       </TabsList>
 
-      <Tab tabId="rewards">
-        <Text variant="h3" className="text-xl font-bold mb-6">
+      <TabContent tabId="rewards">
+        <Title>
           {actionName}
-        </Text>
+        </Title>
 
         <FormContext formId="modify-resource-of-action-form">
           <div className="mb-4">
-            <Text variant="h3">
+            <Title>
               Resource Rewards
-            </Text>
-            <Text variant="body">
+            </Title>
+            <Text>
               Resources that players can gather from this action
             </Text>
           </div>
@@ -82,7 +82,7 @@ const TabsSection = (
               modalRef="addResourceModal"
               className="flex items-center gap-2"
             >
-              <i data-lucide="plus" width={16} height={16} />Add Resource
+              <Icon icon="plus" variant="inverse" />Add Resource
             </ModalButton>
             <FormButton
               formId="modify-resource-of-action-form"
@@ -98,19 +98,19 @@ const TabsSection = (
             <AddResourceToActionForm />
           </Modal>
         </FormContext>
-      </Tab>
+      </TabContent>
 
-      <Tab tabId="history">
-        <Text variant="h3">
+      <TabContent tabId="history">
+        <Title>
           Usage History for {actionName}
-        </Text>
-      </Tab>
+        </Title>
+      </TabContent>
 
-      <Tab tabId="settings">
-        <Text variant="h3">
+      <TabContent tabId="settings">
+        <Title>
           {actionName} Settings
-        </Text>
-      </Tab>
+        </Title>
+      </TabContent>
     </Tabs>
   );
 };

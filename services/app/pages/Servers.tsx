@@ -1,6 +1,5 @@
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Modal } from "@comp/display/modal/Modal.tsx";
-import { ModalButton } from "@comp/display/modal/ModalButton.tsx";
+import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { ServerGrid } from "@sections/views/ServerGrid.tsx";
 import { createRoute } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";

@@ -1,10 +1,12 @@
-import { Text } from "@comp/content/Text.tsx";
-import { Section } from "@comp/layout/Section.tsx";
-import { Table } from "@comp/display/table/Table.tsx";
-import { TableBody } from "@comp/display/table/TableBody.tsx";
-import { TableCell } from "@comp/display/table/TableCell.tsx";
-import { TableHeader } from "@comp/display/table/TableHeader.tsx";
-import { TableRow } from "@comp/display/table/TableRow.tsx";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
+import { Section } from "@comp/atoms/layout/index.ts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@comp/atoms/table/index.ts";
 import { getResourceLeaderboard } from "@queries/resourceLeaderboard.ts";
 import { getResource } from "@queries/getResource.ts";
 
@@ -17,11 +19,10 @@ export const ResourceLeaderboard = async ({ resourceId, ...props }: Props) => {
   const resource = await getResource(resourceId);
   const firstEntry = leaderboard[0];
 
-  // If we have no entries, we can't show the leaderboard yet
   if (!firstEntry) {
     return (
       <Section id={`resource-leaderboard-${resourceId}`} {...props}>
-        <Text variant="h2">{resource.name} Leaderboard</Text>
+        <Title level="h2">{resource.name} Leaderboard</Title>
         <Text>No one has collected this resource yet. Be the first!</Text>
       </Section>
     );
@@ -35,7 +36,7 @@ export const ResourceLeaderboard = async ({ resourceId, ...props }: Props) => {
           alt={firstEntry.resource.name}
           className="w-8 h-8 object-cover rounded"
         />
-        <Text variant="h2">{resource.name} Leaderboard</Text>
+        <Title level="h2">{resource.name} Leaderboard</Title>
       </div>
 
       <Table>

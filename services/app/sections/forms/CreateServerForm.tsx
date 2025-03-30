@@ -1,8 +1,6 @@
-import { Form } from "@comp/inputs/form/Form.tsx";
-import { Button } from "@comp/inputs/Button.tsx";
-import { Label } from "@comp/inputs/form/Label.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { FormControl } from "@comp/inputs/form/FormControl.tsx";
+import { Form, Input, Label } from "@comp/atoms/form/index.ts";
+import { FormControl } from "@comp/molecules/form/index.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 
 export const CreateServerForm = () => {
   return (

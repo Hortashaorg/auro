@@ -1,12 +1,9 @@
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
+import { Card } from "@comp/atoms/card/index.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
+import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
 
 type Props = {
   id?: string;
@@ -23,6 +20,7 @@ export const ResourceGrid = async ({ ...props }: Props) => {
     url: schema.asset.url,
     name: schema.resource.name,
     id: schema.resource.id,
+    description: schema.resource.description,
   }).from(schema.resource)
     .innerJoin(schema.asset, eq(schema.resource.assetId, schema.asset.id))
     .where(
@@ -31,7 +29,7 @@ export const ResourceGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="resource-section">
-      <Grid gap="lg" content="small">
+      <Grid>
         {resources.map((resource) => (
           <ResourceCard key={resource.id} resource={resource} />
         ))}
@@ -45,16 +43,17 @@ const ResourceCard = ({ resource }: {
     id: string;
     name: string;
     url: string;
+    description: string | null;
   };
 }) => {
   return (
-    <Card>
-      <CardImage src={resource.url} alt={resource.name} />
-      <CardContent title={resource.name}>
-        <Text variant="h1" className="text-xl font-bold truncate">
-          {resource.name}
-        </Text>
-      </CardContent>
+    <Card className="w-3xs">
+      <MediaCardHeader
+        title={resource.name}
+        description={resource.description ?? undefined}
+        imageSrc={resource.url}
+        imageAlt={resource.name}
+      />
     </Card>
   );
 };

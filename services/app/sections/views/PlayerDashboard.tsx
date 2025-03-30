@@ -1,12 +1,10 @@
 import type { InferSelectModel, schema } from "@package/database";
-import { Text } from "@comp/content/Text.tsx";
-import { Section } from "@comp/layout/Section.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { getServerActions } from "../../queries/serverActions.ts";
-import { Button } from "@comp/inputs/Button.tsx";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
+import { Grid, Section } from "@comp/atoms/layout/index.ts";
+import { Card, CardBody } from "@comp/atoms/card/index.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
+import { getServerActions } from "@queries/serverActions.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 import { ResourcesTable } from "./ResourcesTable.tsx";
 import { currentUser } from "@queries/currentUser.ts";
 
@@ -68,11 +66,11 @@ export const PlayerDashboard = async (
       <ResourcesTable serverId={server.id} />
 
       <Section>
-        <Text variant="h2">Actions</Text>
-        <Text variant="body">
+        <Title level="h2">Actions</Title>
+        <Text>
           You have {user.availableActions} available actions
         </Text>
-        <Text variant="body">
+        <Text>
           More available actions in:{" "}
           {calculateTimeUntilNextAction(server.actionRecoveryInterval)}
         </Text>
@@ -80,16 +78,20 @@ export const PlayerDashboard = async (
         <Grid>
           {actions.map((action) => (
             <Card>
-              <CardImage src={action.assetUrl} alt={action.name} />
-              <CardContent>
-                <Text>{action.name}</Text>
+              <CardBody>
+                <MediaCardHeader
+                  title={action.name}
+                  description={action.description ?? undefined}
+                  imageSrc={action.assetUrl}
+                  imageAlt={action.name}
+                />
                 <Button
                   hx-post={`/api/servers/${server.id}/actions/${action.id}/execute`}
                   hx-swap="none"
                 >
                   Do it!
                 </Button>
-              </CardContent>
+              </CardBody>
             </Card>
           ))}
         </Grid>

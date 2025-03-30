@@ -1,0 +1,110 @@
+---
+description: Overview of all available components
+globs: 
+alwaysApply: false
+---
+# Component Overview
+
+Review this guide to understand the available UI components, their classification (Atoms, Molecules, etc.), and their intended use. Familiarize yourself with existing components before creating new ones to promote consistency and reuse.
+
+### Molecules vs Atoms
+
+- A component is an **Atom** if it renders a single primary HTML element, acting as a basic visual building block (e.g., `<button>`, `<img>`, `<input>`) or a simple structural wrapper (e.g., a `<div>` for layout like `CardBody` or `ButtonGroup`).
+- A component is a **Molecule** if it combines multiple elements to form a distinct functional unit. Specifically, it's a Molecule if:
+    - It renders **one or more Atom** components internally, OR
+    - It renders **two or more distinct HTML elements** as part of its core structure (not just simple wrappers passed via `children`).
+
+## Atoms
+
+- Buttons:
+    - `@comp/atoms/buttons/Button.tsx`: Standard button element. Variants: visual styles, sizes.
+    - `@comp/atoms/buttons/Link.tsx`: Styled `<a>` tag for navigation. Variants: navLink, dropdownLink.
+    - `@comp/atoms/buttons/ButtonLink.tsx`: `<a>` tag styled like a Button.
+    - `@comp/atoms/buttons/ButtonGroup.tsx`: `<div>` for grouping/spacing buttons.
+    - `@comp/atoms/buttons/index.ts`: All buttons can be imported from here.
+- Image:
+    - `@comp/atoms/image/Image.tsx`: Standard button element. Variants: visual styles, sizes.
+    - `@comp/atoms/image/index.ts`: All image components can be imported from here.
+- Cards:
+    - `@comp/atoms/card/Card.tsx`: Standard card.
+    - `@comp/atoms/card/CardBody.tsx`: Creates vertical space between elements in the card.
+    - `@comp/atoms/card/index.ts`: All card atoms can be imported from here.
+- Typography:
+    - `@comp/atoms/typography/Badge.tsx`: Renders a badge element, often used for counts or status indicators.
+    - `@comp/atoms/typography/Text.tsx`: Renders text content (e.g., paragraph, span). Variants likely control size, weight, color.
+    - `@comp/atoms/typography/Title.tsx`: Renders semantic headings (h1-h3) with styles based on `level` prop.
+    - `@comp/atoms/typography/Icon.tsx`: Used to render Icon.
+    - `@comp/atoms/typography/index.ts`: All typography atoms can be imported from here.
+- Tabs:
+    - `@comp/atoms/tabs/Tabs.tsx`: Wrapper for correct Tab behavior.
+    - `@comp/atoms/tabs/TabsList.tsx`: Container for grouping `TabsTrigger` components.
+    - `@comp/atoms/tabs/TabsTrigger.tsx`: The clickable button/trigger for switching tabs.
+    - `@comp/atoms/tabs/TabContent.tsx`: The content panel associated with a specific tab.
+    - `@comp/atoms/tabs/index.ts`: All tab atoms can be imported from here.
+- Table:
+    - `@comp/atoms/table/Table.tsx`: Renders a `<table>` element.
+    - `@comp/atoms/table/TableHeader.tsx`: Renders a `<thead>` or `<th>` element.
+    - `@comp/atoms/table/TableBody.tsx`: Renders a `<tbody>` element.
+    - `@comp/atoms/table/TableRow.tsx`: Renders a `<tr>` element.
+    - `@comp/atoms/table/TableCell.tsx`: Renders a `<td>` element.
+    - `@comp/atoms/table/index.ts`: All table atoms can be imported from here.
+- Feedback:
+    - `@comp/atoms/feedback/AlertTitle.tsx`: Renders a Alert Title. Used as child of Alerts.
+    - `@comp/atoms/feedback/Spinner.tsx`: Renders a spinner animation. Used to indicate loading state.
+- Forms:
+    - `@comp/atoms/form/Checkbox.tsx`: Styled `<input type="checkbox">`. Used within `CheckboxGroup` or individually with a `Label`.
+    - `@comp/atoms/form/Fieldset.tsx`: Semantic `<fieldset>` wrapper, typically containing a `Legend` and inputs. Resets default styles.
+    - `@comp/atoms/form/Form.tsx`: Main `<form>` element wrapper, includes AlpineJS error handling setup.
+    - `@comp/atoms/form/FormField.tsx`: Basic `<div>` wrapper for grouping a single Label/Input pair without FormControl's hint/error logic.¨
+    - `@comp/atoms/form/FormRow.tsx`: Used to fit more then one input for a row.
+    - `@comp/atoms/form/Input.tsx`: Styled `<input>` element for various text-based types. Handles error states via AlpineJS.
+    - `@comp/atoms/form/Label.tsx`: Styled `<label>` element, associates with inputs via `htmlFor`.
+    - `@comp/atoms/form/Legend.tsx`: Styled `<legend>` element, used as the label within a `Fieldset`.
+    - `@comp/atoms/form/RadioButton.tsx`: Styled `<input type="radio">`. Used within `RadioGroup`.
+    - `@comp/atoms/form/Range.tsx`: Styled `<input type="range">` with optional value display. Handles error states via AlpineJS.
+    - `@comp/atoms/form/SelectInput.tsx`: Styled `<select>` element. Handles error states via AlpineJS.
+    - `@comp/atoms/form/Switch.tsx`: Styled toggle switch, implemented using a hidden checkbox and AlpineJS.
+    - `@comp/atoms/form/Textarea.tsx`: Styled `<textarea>` element. Handles error states via AlpineJS.
+    - `@comp/atoms/form/index.ts`: All form atoms can be imported from here.
+- Layout:
+    - `@comp/atoms/layout/Flex.tsx`: Creating a flex container, simply a container to limit options for consistancy.
+    - `@comp/atoms/layout/Grid.tsx`: Creating a grid container, simply a container to limit options for consistency.
+    - `@comp/atoms/layout/HtmxWrapper.tsx`: Sometimes you have to wrap a section in a container to be targeted by HTMX and give it an ID. Just use this one.
+    - `@comp/atoms/layout/Section.tsx`: Define a section with wrapping it in this component.
+    - `@comp/atoms/layout/index.ts`: Some patterns for wrapping ui elements is often repeated. These components can be imported from layout.
+- Navigation:
+    - `@comp/atoms/navigation/Menu.tsx`: Creating a top menu. This should be its wrapper.
+    - `@comp/atoms/navigation/Nav.tsx`: Navigation, placed in a menu wrapping links, buttons and other UI components in the top navigation menu.
+    - `@comp/atoms/navigation/index.ts`: For navigation atoms, you can import them from here.
+
+## Molecules
+
+- Cards:
+    - `@comp/molecules/card/MediaCardHeader.tsx`: Takes small picture, title and description to display on header of card.
+    - `@comp/molecules/card/index.ts`: All card molecules can be imported from here.
+- Modals:
+    - `@comp/molecules/modal/Modal.tsx`: Renders the main dialog structure with title, content area, and close functionality.
+    - `@comp/molecules/modal/ModalButton.tsx`: A button specifically styled and configured to trigger the display of a Modal.
+    - `@comp/molecules/modal/index.ts`: Exports modal molecules.
+- Navigation:
+    - `@comp/molecules/navigation/Breadcrumbs.tsx`: Render of breadcrumbs
+    - `@comp/molecules/navigation/MenuSelect.tsx`: Menu to be used in top navigation
+    - `@comp/molecules/navigation/index.ts`: Exports navigation molecules
+- Forms:
+    - `@comp/molecules/form/CheckboxGroup.tsx`: Manages a group of `Checkbox` options within a `FormControl` and `Fieldset`. Handles multiple selections.
+    - `@comp/molecules/form/FormControl.tsx`: Wraps a form field (Label + Input Atom or a Group Molecule) to provide standard layout, hint text, and AlpineJS error message display.
+    - `@comp/molecules/form/FormSection.tsx`: Organizes multiple `FormControl` or `FormRow` instances into a visually distinct section with optional title/description.
+    - `@comp/molecules/form/RadioGroup.tsx`: Manages a group of `RadioButton` options within a `FormControl` and `Fieldset`. Handles single selection.
+    - `@comp/molecules/form/ImageGridInput.tsx`: Input Select but for a visual element.
+    - `@comp/molecules/form/FormContext.tsx`: Wrapping Form inside of FormContext. With FormButton you can then trigger form without the button needing to be placed inside of this form.
+    - `@comp/molecules/form/FormButton.tsx`: Being inside a FormContext you can trigger a form that is inside of the same FormContext.tsx.
+    - `@comp/molecules/form/index.ts`: All form molecules can be imported from here.
+- Feedback:
+    - `@comp/molecules/feedback/Alert.tsx`: Show static alert on your page.
+    - `@comp/molecules/feedback/ToastNotifcation.tsx`: Often placed on the root of the page. Will render toast notifcations for a duration.
+    - `@comp/molecules/feedback/Tooltip.tsx`: Wrapping UI in a tooltip will show tooltip when you hover the UI elements.
+    - `@comp/molecules/feedback/index.ts`: Feedback molecules can be imported from here.
+- Layout:
+    - `@comp/molecules/layout/BaseLayout.tsx`: All pages should directly or indirectly wrap this layout. Through this you will get the required htmx + alpinejs dependencies, darkmode, favicon link etc.
+    - `@comp/molecules/layout/index.ts`: Can export layouts from here.
+

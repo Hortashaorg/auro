@@ -1,0 +1,34 @@
+---
+description: Overview of the repository structure
+globs: 
+alwaysApply: false
+---
+# Repository Structure Overview
+
+This document outlines the main directories and their purpose within the project.
+
+## Top-Level Directories
+
+- `packages/`: Contains reusable libraries or modules shared across different services or applications within the monorepo (if applicable).
+- `services/`: Houses the distinct applications or microservices of the project. The main web application resides here.
+- `scripts/`: Holds utility scripts for development, building, deployment, etc.
+- `.devcontainer/`: Configuration for the development container environment.
+
+## Main Application (`services/app/`)
+
+The primary web application code lives within `services/app/`.
+**Note:** When referencing paths within this application (e.g., in imports or tool commands), ensure they start directly from `services/app/...`, avoiding any extra leading prefixes like `app/`.
+
+
+- `components/`: Contains reusable UI components following an Atomic Design methodology.
+    - Organized into `atoms/` and `molecules/`.
+    - Refer to `components.mdc` for detailed component classification and usage guidelines.
+- `sections/`: UI fragments designed to be potentially re-rendered or swapped via HTMX actions. Often composed of multiple components.
+- `pages/`: Defines the main page routes for the application, rendering initial layouts and composing sections and components.
+- `api/`: Contains server-side endpoints, particularly those handling HTMX requests and returning HTML fragments or handling form submissions.
+- `public/`: Static assets served directly by the web server (e.g., images, client-side JS libraries like `darkmode.js` or `favicon.ico`).
+- `permissions/`: Logic related to user permissions and authorization (inferred from imports like `@permissions/index.ts`).
+
+---
+
+**Goal:** Maintain a clear separation of concerns, making it easier to locate code, understand responsibilities, and manage the different parts of the application and the overall project.

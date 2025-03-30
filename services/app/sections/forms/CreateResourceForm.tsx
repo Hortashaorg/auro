@@ -1,14 +1,16 @@
-import { Form } from "@comp/inputs/form/Form.tsx";
-import { Button } from "@comp/inputs/Button.tsx";
-import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
-import { Label } from "@comp/inputs/form/Label.tsx";
-import { Textarea } from "@comp/inputs/form/Textarea.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { FormControl } from "@comp/inputs/form/FormControl.tsx";
+import { FormControl } from "@comp/molecules/form/index.ts";
+import {
+  Form,
+  Input,
+  Label,
+  Switch,
+  Textarea,
+} from "@comp/atoms/form/index.ts";
+import { ImageGridInput } from "@comp/molecules/form/index.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { Switch } from "@comp/inputs/Switch.tsx";
 
 export const CreateResourceForm = async () => {
   const globalContext = getGlobalContext();
@@ -18,6 +20,7 @@ export const CreateResourceForm = async () => {
   const assets = await db.select({
     id: schema.asset.id,
     url: schema.asset.url,
+    name: schema.asset.name,
   })
     .from(schema.asset)
     .where(eq(schema.asset.type, "resource"));

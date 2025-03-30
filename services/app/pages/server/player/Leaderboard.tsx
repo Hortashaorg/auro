@@ -1,5 +1,5 @@
-import { Text } from "@comp/content/Text.tsx";
-import { Section } from "@comp/layout/Section.tsx";
+import { Text, Title } from "@comp/atoms/typography/index.ts";
+import { Section } from "@comp/atoms/layout/index.ts";
 import { getLeaderboardResources } from "@queries/resourceLeaderboard.ts";
 import { ResourceLeaderboard } from "@sections/views/ResourceLeaderboard.tsx";
 import { createRoute, v } from "@kalena/framework";
@@ -16,13 +16,13 @@ const LeaderboardPage = async () => {
       {resources.length === 0
         ? (
           <Section>
-            <Text variant="h1">Leaderboards</Text>
+            <Title level="h1">Leaderboards</Title>
             <Text>No leaderboards available for this server.</Text>
           </Section>
         )
         : (
           <Section>
-            <Text variant="h1">Leaderboards</Text>
+            <Title level="h1">Leaderboards</Title>
             <div className="space-y-8">
               {resources.map((resource) => (
                 <ResourceLeaderboard

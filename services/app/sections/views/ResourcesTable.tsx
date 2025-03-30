@@ -1,10 +1,12 @@
-import { Text } from "@comp/content/Text.tsx";
-import { Section } from "@comp/layout/Section.tsx";
-import { Table } from "@comp/display/table/Table.tsx";
-import { TableBody } from "@comp/display/table/TableBody.tsx";
-import { TableCell } from "@comp/display/table/TableCell.tsx";
-import { TableHeader } from "@comp/display/table/TableHeader.tsx";
-import { TableRow } from "@comp/display/table/TableRow.tsx";
+import { Title } from "@comp/atoms/typography/index.ts";
+import { Section } from "@comp/atoms/layout/index.ts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@comp/atoms/table/index.ts";
 import { getUserResources } from "@queries/userResources.ts";
 
 type Props = {
@@ -16,7 +18,7 @@ export const ResourcesTable = async ({ serverId, ...props }: Props) => {
 
   return (
     <Section id="player-resources" {...props}>
-      <Text variant="h2">Resources</Text>
+      <Title level="h2">Resources</Title>
       <Table>
         <TableHeader>
           <TableRow>

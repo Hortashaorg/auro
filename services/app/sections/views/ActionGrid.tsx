@@ -1,14 +1,12 @@
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { Badge } from "@comp/content/Badge.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
-import { getServerActions } from "../../queries/serverActions.ts";
+import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
+import { Card, CardBody } from "@comp/atoms/card/index.ts";
+import { Badge, Icon } from "@comp/atoms/typography/index.ts";
+import { ButtonLink } from "@comp/atoms/buttons/index.ts";
+import { getServerActions } from "@queries/serverActions.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
+
 type Props = JSX.IntrinsicElements["div"];
 
 export const ActionGrid = async ({ ...props }: Props) => {
@@ -21,7 +19,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="action-section">
-      <Grid gap="lg" content="small">
+      <Grid>
         {actions.map((action) => (
           <ActionCard
             key={action.id}
@@ -51,17 +49,16 @@ const ActionCard = ({ action, serverId }: {
 }) => {
   return (
     <Card>
-      <CardImage src={action.assetUrl} alt={action.name} />
-
-      <CardContent title={action.name}>
-        {action.description && (
-          <Text variant="body">
-            {action.description}
-          </Text>
-        )}
+      <MediaCardHeader
+        title={action.name}
+        description={action.description}
+        imageSrc={action.assetUrl}
+        imageAlt={action.name}
+      />
+      <CardBody>
         <div className="flex flex-wrap gap-2">
           <Badge variant="warning" className="flex items-center gap-1">
-            <i data-lucide="clock" width={16} height={16}></i>
+            <Icon icon="clock" variant="none" />
             {action.cooldownMinutes}m cooldown
           </Badge>
           <Badge
@@ -69,13 +66,13 @@ const ActionCard = ({ action, serverId }: {
             className="flex items-center gap-1"
           >
             {action.repeatable
-              ? <i data-lucide="repeat" width={16} height={16}></i>
-              : <i data-lucide="x" width={16} height={16}></i>}
+              ? <Icon icon="repeat" variant="none" />
+              : <Icon icon="x" variant="none" />}
             {action.repeatable ? "Repeatable" : "One-time"}
           </Badge>
           {action.locationName && (
             <Badge variant="default" className="flex items-center gap-1">
-              <i data-lucide="map-pin" width={16} height={16}></i>
+              <Icon icon="map-pin" variant="none" />
               {action.locationName}
             </Badge>
           )}
@@ -86,7 +83,7 @@ const ActionCard = ({ action, serverId }: {
         >
           Configure
         </ButtonLink>
-      </CardContent>
+      </CardBody>
     </Card>
   );
 };

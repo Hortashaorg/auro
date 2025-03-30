@@ -1,12 +1,9 @@
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { db, eq, schema } from "@package/database";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { CardImage } from "@comp/display/card/CardImage.tsx";
-import { Text } from "@comp/content/Text.tsx";
+import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
+import { Card } from "@comp/atoms/card/index.ts";
+import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -20,6 +17,7 @@ export const LocationGrid = async ({ ...props }: Props) => {
     url: schema.asset.url,
     name: schema.location.name,
     id: schema.location.id,
+    description: schema.location.description,
   }).from(schema.location)
     .innerJoin(schema.asset, eq(schema.location.assetId, schema.asset.id))
     .where(
@@ -28,9 +26,15 @@ export const LocationGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="location-section">
-      <Grid gap="lg" content="medium">
+      <Grid>
         {locations.map((location) => (
-          <LocationCard key={location.id} location={location} />
+          <LocationCard
+            key={location.id}
+            location={{
+              ...location,
+              description: location.description ?? undefined,
+            }}
+          />
         ))}
       </Grid>
     </HtmxWrapper>
@@ -42,16 +46,17 @@ const LocationCard = ({ location }: {
     id: string;
     name: string;
     url: string;
+    description?: string;
   };
 }) => {
   return (
-    <Card>
-      <CardImage src={location.url} alt={location.name} />
-      <CardContent title={location.name}>
-        <Text variant="h1" className="text-xl font-bold truncate">
-          {location.name}
-        </Text>
-      </CardContent>
+    <Card className="w-3xs">
+      <MediaCardHeader
+        title={location.name}
+        description={location.description}
+        imageSrc={location.url}
+        imageAlt={location.name}
+      />
     </Card>
   );
 };

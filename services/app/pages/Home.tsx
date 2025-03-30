@@ -1,15 +1,17 @@
 import { Layout } from "@sections/layout/Layout.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { Alert } from "@comp/feedback/Alert.tsx";
+import { Title } from "@comp/atoms/typography/index.ts";
 import { createRoute } from "@kalena/framework";
 import { isPublic } from "@permissions/index.ts";
+import { Alert } from "@comp/molecules/feedback/index.ts";
+import { AlertTitle } from "@comp/atoms/feedback/index.ts";
 
 const Home = () => {
   return (
     <Layout title="Home">
-      <Text variant="h1" className="mb-8">Home page</Text>
+      <Title level="h1" className="mb-8">Home page</Title>
 
-      <Alert variant="warning" title="Warning! No game music">
+      <Alert variant="warning">
+        <AlertTitle variant="warning">Warning! No game music</AlertTitle>
         Do not expect any game music here. I suggest using spotify. Ok Li?
       </Alert>
     </Layout>

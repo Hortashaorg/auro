@@ -1,16 +1,15 @@
-import { Text } from "@comp/content/Text.tsx";
+import { Badge, Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
-import { Switch } from "@comp/inputs/Switch.tsx";
-import { Badge } from "@comp/content/Badge.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
+import { Switch } from "@comp/atoms/form/index.ts";
+import { Card, CardBody } from "@comp/atoms/card/index.ts";
 
 export const AdminDashboard = (
   { server }: { server: InferSelectModel<typeof schema.server> },
 ) => {
   return (
-    <Card className="w-full max-w-md" id="admin-dashboard">
-      <CardContent label="Server Status" className="space-y-4">
+    <Card width="fit" id="admin-dashboard">
+      <CardBody>
+        <Title>Server Status</Title>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Badge
@@ -20,40 +19,44 @@ export const AdminDashboard = (
               {server.online
                 ? (
                   <>
-                    <i data-lucide="server" width={16} height={16}></i>
+                    <Icon icon="server" variant="none" />
                     Online
                   </>
                 )
                 : (
                   <>
-                    <i data-lucide="server-off" width={16} height={16}></i>
+                    <Icon icon="server-off" variant="none" />
                     Offline
                   </>
                 )}
             </Badge>
             <Text
-              variant="span"
-              className="text-sm text-on-surface-variant dark:text-on-surface-dark-variant"
+              variant="body"
+              size="sm"
+              as="span"
             >
               {server.online
                 ? "Server is currently running and accessible to players"
                 : "Server is currently offline and inaccessible to players"}
             </Text>
           </div>
-          <Switch
-            initialState={server.online}
-            hx-post={`/api/servers/${server.id}/toggle-status`}
-            hx-target="#admin-dashboard"
-            hx-swap="outerHTML"
-            variant={server.online ? "success" : "danger"}
-            label={server.online ? "Enabled" : "Disabled"}
-            className="ml-auto"
-          />
         </div>
-        <div className="text-xs text-on-surface-variant dark:text-on-surface-dark-variant italic">
+        <Switch
+          name="online"
+          initialState={server.online}
+          hx-post={`/api/servers/${server.id}/toggle-status`}
+          hx-target="#admin-dashboard"
+          hx-swap="outerHTML"
+          variant={server.online ? "success" : "danger"}
+          label={server.online ? "Enabled" : "Disabled"}
+        />
+        <Text
+          variant="body"
+          size="sm"
+        >
           Toggle the switch to {server.online ? "disable" : "enable"} the server
-        </div>
-      </CardContent>
+        </Text>
+      </CardBody>
     </Card>
   );
 };

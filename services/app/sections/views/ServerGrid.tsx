@@ -1,14 +1,12 @@
-import { Grid } from "@comp/layout/Grid.tsx";
-import { Card } from "@comp/display/card/Card.tsx";
-import { CardContent } from "@comp/display/card/CardContent.tsx";
-import { Text } from "@comp/content/Text.tsx";
-import { Badge } from "@comp/content/Badge.tsx";
-import { ButtonLink } from "@comp/navigation/ButtonLink.tsx";
+import { HtmxWrapper } from "@comp/atoms/layout/index.ts";
+import { Section } from "@comp/atoms/layout/index.ts";
+import { Grid } from "@comp/atoms/layout/index.ts";
+import { Card, CardBody } from "@comp/atoms/card/index.ts";
+import { Badge, Title } from "@comp/atoms/typography/index.ts";
+import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { onlineServers, serversWhereUserIsAdmin } from "@queries/servers.ts";
 import { throwError } from "@package/common";
-import { Section } from "@comp/layout/Section.tsx";
-import { HtmxWrapper } from "@comp/layout/HtmxWrapper.tsx";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -25,7 +23,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
     <HtmxWrapper {...props} id="server-section">
       {adminServers.length > 0 && (
         <Section>
-          <Text variant="h2">My Servers</Text>
+          <Title level="h2">My Servers</Title>
           <Grid gap="md" content="small">
             {adminServers.map((server) => (
               <ServerCard key={server.id} server={server} />
@@ -35,7 +33,7 @@ export const ServerGrid = async ({ ...props }: Props) => {
       )}
 
       <Section>
-        <Text variant="h2">Available Servers</Text>
+        <Title level="h2">Available Servers</Title>
         <Grid gap="md" content="small">
           {publicServers.map((server) => (
             <ServerCard key={server.id} server={server} />
@@ -55,11 +53,11 @@ const ServerCard = ({ server }: {
 }) => {
   return (
     <Card>
-      <CardContent title={server.name}>
+      <CardBody>
+        <Title>{server.name}</Title>
         <Badge
           variant={server.online ? "success" : "danger"}
           size="sm"
-          className="shrink-0"
         >
           {server.online ? "Online" : "Offline"}
         </Badge>
@@ -68,7 +66,7 @@ const ServerCard = ({ server }: {
         >
           Enter
         </ButtonLink>
-      </CardContent>
+      </CardBody>
     </Card>
   );
 };

@@ -1,11 +1,13 @@
-import { Form } from "@comp/inputs/form/Form.tsx";
-import { Button } from "@comp/inputs/Button.tsx";
-import { ImageGridInput } from "@comp/inputs/form/ImageGridInput.tsx";
-import { Label } from "@comp/inputs/form/Label.tsx";
-import { Textarea } from "@comp/inputs/form/Textarea.tsx";
-import { Input } from "@comp/inputs/form/Input.tsx";
-import { SelectInput } from "@comp/inputs/form/SelectInput.tsx";
-import { FormControl } from "@comp/inputs/form/FormControl.tsx";
+import { FormControl } from "@comp/molecules/form/index.ts";
+import {
+  Form,
+  Input,
+  Label,
+  SelectInput,
+  Textarea,
+} from "@comp/atoms/form/index.ts";
+import { Button } from "@comp/atoms/buttons/index.ts";
+import { ImageGridInput } from "@comp/molecules/form/index.ts";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext } from "@kalena/framework";
 import { throwError } from "@package/common";
@@ -18,6 +20,7 @@ export const CreateActionForm = async () => {
   const [assets, locations] = await Promise.all([
     db.select({
       id: schema.asset.id,
+      name: schema.asset.name,
       url: schema.asset.url,
     })
       .from(schema.asset)
