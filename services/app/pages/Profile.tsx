@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
-import { Flex } from "@comp/atoms/layout/index.ts";
+import { DefaultNicknameDisplay } from "@sections/views/DefaultNicknameDisplay.tsx";
 
 const Profile = async () => {
   const context = getGlobalContext();
@@ -21,7 +21,7 @@ const Profile = async () => {
   const email = context.var.email ??
     throwError("Email not found despite user being logged in");
 
-  const { account, userServers } = await getAccountWithUsers(email);
+  const { userServers } = await getAccountWithUsers(email);
 
   return (
     <Layout title="Profile Settings">
@@ -39,13 +39,7 @@ const Profile = async () => {
             This is the name that will be used by default when you join new
             servers.
           </Text>
-          <Flex justify="between">
-            <div>
-              <Text variant="strong">Current Default:</Text>
-              <Text>{account.nickname ?? "No Default Nickname Set"}</Text>
-            </div>
-            <Button variant="outline" size="sm">Edit</Button>
-          </Flex>
+          <DefaultNicknameDisplay />
         </CardBody>
       </Card>
 
@@ -70,7 +64,7 @@ const Profile = async () => {
                     <TableRow key={server.id}>
                       <TableCell>{server.name ?? "Unnamed Server"}</TableCell>
                       <TableCell>
-                        {user.name ?? account.nickname ?? "No Nickname Set"}
+                        {user.name ?? "No Nickname Set"}
                       </TableCell>
                       <TableCell>
                         <Button variant="outline" size="sm">Edit</Button>
