@@ -8,7 +8,7 @@ import {
 } from "@comp/atoms/table/index.ts";
 import { Text } from "@comp/atoms/typography/index.ts";
 import { Button } from "@comp/atoms/buttons/Button.tsx";
-import { Flex } from "@comp/atoms/layout/index.ts";
+import { ButtonGroup } from "@comp/atoms/buttons/ButtonGroup.tsx";
 import { getAccountWithUsers } from "@queries/getAccountWithUsers.ts";
 import { throwError } from "@package/common";
 
@@ -48,7 +48,7 @@ export const ServerNicknamesTable = async () => {
             )}
         </TableBody>
       </Table>
-      <Flex justify="end" className="mt-4">
+      <ButtonGroup className="mt-4">
         <Button
           variant="outline"
           size="sm"
@@ -58,7 +58,7 @@ export const ServerNicknamesTable = async () => {
         >
           Edit Server Names
         </Button>
-      </Flex>
+      </ButtonGroup>
     </div>
   );
 };
