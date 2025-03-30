@@ -14,8 +14,7 @@ export const DefaultNicknameForm: FC = async () => {
   return (
     <Form
       hx-post="/api/account/update-nickname"
-      hx-target="#default-nickname-display"
-      hx-swap="outerHTML"
+      hx-swap="none"
     >
       <Flex direction="col" gap="md">
         <FormControl inputName="nickname">

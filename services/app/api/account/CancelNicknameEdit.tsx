@@ -6,7 +6,7 @@ const CancelNicknameEdit = () => {
   return <DefaultNicknameDisplay />;
 };
 
-export const cancelNicknameEdit = createRoute({
+export const cancelNicknameEditRoute = createRoute({
   path: "/api/account/cancel-nickname-edit",
   component: CancelNicknameEdit,
   permission: {

@@ -24,7 +24,8 @@ import { increaseAvailableActions } from "@queries/increaseAvailableActions.ts";
 import { leaderboardRoute } from "@pages/server/player/Leaderboard.tsx";
 import { profileRoute } from "@pages/Profile.tsx";
 import { updateNicknameFormRoute } from "@api/account/UpdateNicknameForm.tsx";
-import { cancelNicknameEdit } from "@api/account/CancelNicknameEdit.tsx";
+import { cancelNicknameEditRoute } from "@api/account/CancelNicknameEdit.tsx";
+import { updateNicknameRoute } from "@api/account/UpdateNickname.tsx";
 
 const clientSecret = Deno.env.get("AUTH_CLIENT_SECRET") ??
   throwError("Missing auth client secret");
@@ -68,7 +69,8 @@ const myApp = app({
     leaderboardRoute,
     profileRoute,
     updateNicknameFormRoute,
-    cancelNicknameEdit,
+    cancelNicknameEditRoute,
+    updateNicknameRoute,
   ],
   errorPages: {
     notFound: ErrorPage404,

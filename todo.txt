@@ -15,3 +15,8 @@ CI/CD
 Bugs:
 Introduce limited actions that fill up
 User/account names
+
+Refactor:
+Sections: Should reflect the path where the section is being used. (page)
+API: Should reflect the path where the section is being used.
+Query: Should reflect data structure.
