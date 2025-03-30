@@ -1,7 +1,8 @@
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { db, eq, schema } from "@package/database";
-import { Grid, HtmxWrapper } from "@comp/wrappers/index.ts";
+import { Grid } from "@comp/atoms/layout/index.ts";
+import { HtmxWrapper } from "@comp/wrappers/index.ts";
 import { Card } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 

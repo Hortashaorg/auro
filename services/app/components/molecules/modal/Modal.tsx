@@ -1,5 +1,5 @@
 import { cn } from "@comp/utils/tailwind.ts";
-import { Flex } from "@comp/wrappers/Flex.tsx";
+import { Flex } from "@comp/atoms/layout/index.ts";
 import { Icon, Title } from "@comp/atoms/typography/index.ts";
 import type { FC } from "@kalena/framework";
 import { cva } from "class-variance-authority";

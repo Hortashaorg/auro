@@ -1,7 +1,7 @@
 import { ErrorLayout } from "@sections/layout/ErrorLayout.tsx";
 import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
-import { Flex } from "@comp/wrappers/index.ts";
+import { Flex } from "@comp/atoms/layout/index.ts";
 
 export const ErrorPage500 = () => {
   return (

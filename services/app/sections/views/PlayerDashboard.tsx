@@ -1,6 +1,7 @@
 import type { InferSelectModel, schema } from "@package/database";
 import { Text, Title } from "@comp/atoms/typography/index.ts";
-import { Grid, Section } from "@comp/wrappers/index.ts";
+import { Grid } from "@comp/atoms/layout/index.ts";
+import { Section } from "@comp/wrappers/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { getServerActions } from "@queries/serverActions.ts";

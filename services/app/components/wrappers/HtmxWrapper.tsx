@@ -1,6 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
-import { Flex } from "@comp/wrappers/Flex.tsx";
+import { Flex } from "@comp/atoms/layout/index.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 type Props = BaseComponentProps;
