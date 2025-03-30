@@ -18,9 +18,4 @@ User/account names
 
 CLEANUP:
 Event Naming Conventions
-    Standardize event naming across all components
-    For example: form-error, form-input, form-clear
-    Create a consistent pattern for all component events
-Default Values and Behavior Configuration
-    Consider a configuration system for library-wide defaults
-    Allow overrides at various levels
+Better Props (HTMX should not be used everywhere)
