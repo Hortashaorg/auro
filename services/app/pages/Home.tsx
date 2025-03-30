@@ -11,8 +11,9 @@ const Home = () => {
       <Title level="h1" className="mb-8">Home page</Title>
 
       <Alert variant="warning">
-        <AlertTitle variant="warning">Warning! No game music</AlertTitle>
-        Do not expect any game music here. I suggest using spotify. Ok Li?
+        <AlertTitle variant="warning">Requires Login</AlertTitle>
+        You can currently just create a new account with a dummy email to have a
+        look around.
       </Alert>
     </Layout>
   );
