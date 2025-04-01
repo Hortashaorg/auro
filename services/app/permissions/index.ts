@@ -59,7 +59,7 @@ export const isPlayerOfServer = async (c: GlobalContext): Promise<boolean> => {
     ),
   );
 
-  return !!data && data.user.type === "player" && data.server.id === serverId;
+  return !!data && data.server.id === serverId;
 };
 
 export const isAdminOfServer = async (c: GlobalContext): Promise<boolean> => {

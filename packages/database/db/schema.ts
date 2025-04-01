@@ -70,7 +70,7 @@ export const asset = pgTable("asset", {
 
 export const server = pgTable("server", {
   id: uuid().primaryKey().defaultRandom(),
-  actionRecoveryInterval: intervals().notNull().default("1hour"),
+  actionRecoveryInterval: intervals().notNull(),
   actionRecoveryAmount: integer().notNull().default(1),
   maxAvailableActions: integer().notNull().default(100),
   startingAvailableActions: integer().notNull().default(15),
