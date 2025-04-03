@@ -3,27 +3,40 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Rule Usage and Maintenance Guidelines
+# Rule: AI Collaboration & Rule Usage
 
-This rule outlines how to effectively leverage and maintain the project's defined rules during development.
+This rule outlines how to effectively leverage and maintain the project's defined rules during development, and how to collaborate effectively as an AI pair programmer.
 
 ## 1. Consult Rules Before Starting Tasks
 
-- **Mandatory First Step:** Before beginning any coding task, refactoring effort, or component creation, **always** check for existing rules that might be relevant. Use available tools or search functions to find rules related to the task domain (e.g., UI building, state management, naming conventions).
-- **Purpose:** Consulting rules first ensures alignment with established project standards, patterns, and architectural decisions, preventing rework and maintaining consistency.
+*   **Mandatory First Step:** Before beginning any coding task, refactoring effort, or component creation, **always** check for existing rules that might be relevant. Use available tools or search functions to find rules related to the task domain (e.g., UI building, API creation, state management, naming conventions).
+*   **Purpose:** Consulting rules first ensures alignment with established project standards, patterns, and architectural decisions, preventing rework and maintaining consistency.
 
-## 2. Proactively Suggest Rule Improvements
+## 2. Handling Rule Discrepancies
 
-- **Identify Gaps & Ambiguities:** While working, pay attention to situations where existing rules are unclear, incomplete, or potentially outdated based on the current task or recent changes.
-- **Suggest Snippets:** When a gap or necessary clarification is identified, proactively suggest specific, ready-to-use Markdown snippets that can be added to or used to modify the relevant rule file(s).
-- **Frequency:** Offer these suggestions naturally during the conversation, especially after completing a sub-task or when discussing component design or implementation details.
-- **Goal:** This collaborative approach helps keep the project's documented knowledge accurate, relevant, and continuously improving.
+*   **Prioritize Code Examples:** When existing rules seem contradictory, unclear, or outdated compared to recent code examples within the relevant feature or route directory, prioritize the pattern shown in the code example as the likely current standard.
+*   **Report & Suggest:** Clearly point out the discrepancy between the rule and the code example during the conversation. Suggest a specific Markdown snippet to update the relevant rule file(s).
+*   **Ask if Unsure:** If the correct approach isn't clear even after comparing rules and code, ask the USER for clarification before proceeding with implementation.
 
-## 3. Guiding Principle: Minimal and Clear Implementation
+## 3. Proactively Suggest Rule Improvements
 
-Strive for the most concise implementation possible while strictly adhering to all other defined rules (Imports, CVA, JSDocs, Props, FC Syntax, Required Props, No Comments).
+*   **Identify Gaps & Ambiguities:** While working, pay attention to situations where existing rules are unclear, incomplete, or where guidance is missing entirely based on the current task.
+*   **Suggest Snippets:** When a gap or necessary clarification is identified, proactively suggest specific, ready-to-use Markdown snippets that can be added to or used to modify the relevant rule file(s).
+*   **Frequency:** Offer these suggestions naturally during the conversation, especially after completing a sub-task or when discussing design or implementation details.
+*   **Goal:** This collaborative approach helps keep the project's documented knowledge accurate, relevant, and continuously improving.
 
-*   **Leverage Abstractions:** Fully utilize `BaseComponentProps` and framework utilities to avoid redundant definitions (e.g., for `children`, standard attributes).
+## 4. Collaborative Workflow
+
+*   **Small Steps:** Break coding tasks down into small, logical, incremental steps (e.g., creating one component structure, implementing one API endpoint's basic functionality, adding validation).
+*   **Explain & Implement:** Briefly explain the plan for the immediate next step before implementing it.
+*   **Pause for Review:** After completing a distinct step (like creating a file, adding a function, fixing a set of errors), explicitly pause and wait for USER review and feedback before moving on to the next step. This ensures alignment and facilitates the pair-programming dynamic.
+
+## 5. Guiding Principle: Minimal, Clear, and Consistent Implementation
+
+Strive for the most concise implementation possible while strictly adhering to all other defined rules and **prioritizing consistency with existing codebase patterns**.
+
+*   **Reference Existing Code (Reiteration):** Before writing new code for common patterns, actively look for similar implementations within the project to maintain consistency.
+*   **Leverage Abstractions:** Fully utilize framework utilities (`@kalena/framework`) and defined base types/props to avoid redundant definitions.
 *   **Avoid Boilerplate:** Eliminate unnecessary variables, overly complex structures, or repetitive code where simpler, direct alternatives exist and meet the requirements.
 *   **Clarity Over Premature Optimization:** While conciseness is valued, ensure the code remains readable and maintainable.
-*   **Self-Explanatory Code:** Write code that clearly expresses its intent, minimizing the need for comments outside of the required JSDocs.
+*   **Self-Explanatory Code:** Write code that clearly expresses its intent, we should not need components unless it is jsdocs for a component.
