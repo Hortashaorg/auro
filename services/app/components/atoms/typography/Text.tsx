@@ -15,11 +15,11 @@ const textVariants = cva([], {
         "leading-normal",
       ],
       strong: [
-        "text-sm",
+        "text-base",
         "font-bold",
         "dark:text-on-surface-dark-strong",
         "text-on-surface-strong",
-        "font-body",
+        "font-medium",
         "leading-normal",
       ],
       error: [

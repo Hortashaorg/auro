@@ -141,6 +141,7 @@ export const Button: FC<ButtonProps> = (
 ) => {
   return (
     <button
+      type="button"
       {...rest}
       className={cn(buttonVariants({ variant, buttonSize }), className)}
     >

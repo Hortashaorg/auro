@@ -19,8 +19,9 @@ This document outlines the standard rules for creating and structuring UI compon
 
 ## 3. Documentation (JSDocs)
 
-*   **Required:** All components **must** include comprehensive JSDoc comments explaining their purpose, props, and usage examples.
-*   **Guidance:** Refer to the `component_jsdocs` rule for detailed instructions on how to properly implement JSDocs.
+*   **Required for Reusable Components:** Reusable components (typically Atoms and Molecules residing in `services/app/components/`) **must** include comprehensive JSDoc comments explaining their purpose, props, and usage examples.
+*   **Discouraged for Sections/Pages:** For route-specific files like Pages (`.page.tsx`) or Sections (`.section.tsx`) located within `services/app/routes/`, comments (including JSDocs) are **discouraged**. Prioritize clear, self-explanatory code and structure. Only add documentation if the logic or props are exceptionally complex and cannot be easily understood from the code itself.
+*   **Guidance:** Refer to the `component_jsdocs` rule for detailed instructions on *how* to properly implement JSDocs when they *are* included.
 
 ## 4. Styling Application
 

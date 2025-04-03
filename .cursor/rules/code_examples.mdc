@@ -1,0 +1,276 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Rule: Code Examples & Common Patterns
+
+This rule provides concrete code examples for common patterns used throughout the application. Refer to these examples when implementing similar features.
+
+---
+
+## Pattern 1: Inline Edit using Alpine.js State
+
+This pattern uses Alpine.js to toggle between a display view and an edit form within a single section component, minimizing server requests. HTMX is used only for the final save action.
+
+**Use Case:** Simple inline editing of a single field or closely related fields where the form doesn't require complex server-side data fetching just to display it.
+
+**Example File:** `services/app/routes/profile/DefaultNicknameFlex.section.tsx`
+
+```typescript
+import { Button } from "@comp/atoms/buttons/Button.tsx";
+import { Form, Input, Label } from "@comp/atoms/form/index.ts";
+import { Flex } from "@comp/atoms/layout/index.ts";
+import { Text } from "@comp/atoms/typography/index.ts";
+import { getAccount } from "@queries/account/getAccount.ts";
+import { getGlobalContext } from "@kalena/framework";
+import { throwError } from "@package/common";
+import { FormControl } from "@comp/molecules/form/FormControl.tsx";
+import { ButtonGroup } from "@comp/atoms/buttons/ButtonGroup.tsx";
+
+export const DefaultNicknameFlex = async () => {
+  const email = getGlobalContext().var.email ?? throwError("Email not found");
+  const account = await getAccount(email) ?? throwError("Account not found");
+
+  const currentNickname = account.nickname ?? "";
+  // Escape quotes for safe embedding in x-data
+  const escapedNickname = currentNickname.replace(/'/g, "\\'");
+
+  return (
+    <Flex
+      id="default-nickname-display" // Target for HTMX swap after save
+      direction="col"
+      gap="md"
+      // Alpine state: isEditing flag and nickname value
+      x-data={`{ isEditing: false, nickname: '${escapedNickname}' }`}
+    >
+      {/* Display Mode */}
+      <Flex
+        direction="col"
+        x-show="!isEditing" // Show when not editing
+        gap="md"
+      >
+        <Text variant="strong">Current Default:</Text>
+        <Text x-text="nickname || 'No Default Nickname Set'"></Text>
+        <Button
+          variant="outline"
+          size="sm"
+          x-on:click="isEditing = true" // Toggle Alpine state
+        >
+          Edit
+        </Button>
+      </Flex>
+
+      {/* Edit Mode Form */}
+      <Form
+        x-show="isEditing" // Show when editing
+        style="display: none;" // Hide initially to prevent flash
+        hx-post="/api/profile/update-nickname" // POST to update endpoint
+        hx-target="#default-nickname-display" // Target the root element
+        hx-swap="outerHTML" // Replace entire component on success
+      >
+        <Label htmlFor="account-nickname-input">
+          Current Default:
+        </Label>
+        <FormControl inputName="nickname" class="flex-grow">
+          <Input
+            id="account-nickname-input"
+            name="nickname"
+            required
+            x-model="nickname" // Bind input to Alpine state
+            placeholder="Enter your default nickname"
+          />
+        </FormControl>
+        <ButtonGroup>
+          <Button
+            variant="outline"
+            size="sm"
+            x-on:click="isEditing = false" // Toggle Alpine state
+          >
+            Cancel
+          </Button>
+          <Button type="submit" variant="primary" size="sm">
+            Save Changes
+          </Button>
+        </ButtonGroup>
+      </Form>
+    </Flex>
+  );
+};
+```
+
+---
+
+## Pattern 2: Bulk Edit using Separate Form Section & API
+
+This pattern uses HTMX to fetch a separate form component for editing multiple items (e.g., in a table) and a dedicated API endpoint to process the bulk update.
+
+**Use Case:** Editing multiple related items at once, especially when the form structure is significantly different from the display structure or requires specific data fetching.
+
+**Example Files:**
+*   Form Component: `services/app/routes/profile/EditServerNicknamesForm.section.tsx`
+*   API Handler: `services/app/routes/profile/UpdateServerNicknames.api.tsx`
+
+**Form Component Snippet (`EditServerNicknamesForm.section.tsx`):**
+
+```typescript
+import type { FC } from "@kalena/framework";
+import { Form, Input } from "@comp/atoms/form/index.ts";
+import { /* ... Table imports ... */ } from "@comp/atoms/table/index.ts";
+import { Button } from "@comp/atoms/buttons/Button.tsx";
+import { ButtonGroup } from "@comp/atoms/buttons/ButtonGroup.tsx";
+// ... Type imports ...
+
+type EditServerNicknamesFormProps = { /* ... */ };
+
+export const EditServerNicknamesForm: FC<EditServerNicknamesFormProps> = (
+  { userServers },
+) => {
+  return (
+    <div id="server-nicknames-section">
+      <Form
+        hx-post="/api/profile/update-server-nicknames" // POST to bulk update API
+        hx-target="#server-nicknames-section" // Target containing element
+        hx-swap="outerHTML" // Replace on success
+        id="edit-server-nicknames-form"
+        className="space-y-4"
+      >
+        <Table>
+          {/* ... Table Header ... */}
+          <TableBody>
+            {userServers.map(({ user, server }) => (
+              <TableRow key={server.id}>
+                <TableCell>{server.name ?? "Unnamed Server"}</TableCell>
+                <TableCell>
+                  {/* Input name includes unique ID */}
+                  <Input
+                    type="text"
+                    name={`server_${server.id}_nickname`}
+                    value={user.name ?? ""}
+                    placeholder="Enter nickname"
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <ButtonGroup className="mt-4 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            hx-get="/api/profile/cancel-edit-server-nicknames" // GET endpoint to fetch display view
+            hx-target="#server-nicknames-section"
+            hx-swap="outerHTML"
+          >
+            Cancel
+          </Button>
+          <Button type="submit" variant="primary" size="sm">
+            Save Changes
+          </Button>
+        </ButtonGroup>
+      </Form>
+    </div>
+  );
+};
+```
+
+**API Handler Snippet (`UpdateServerNicknames.api.tsx`):**
+
+```typescript
+import { ServerNicknamesTable } from "./ServerNicknamesTable.section.tsx";
+import { createRoute, v } from "@kalena/framework";
+import { isLoggedIn } from "@permissions/index.ts";
+import { and, db, eq, schema } from "@package/database";
+import { throwError } from "@package/common";
+
+// Schema expects key-value pairs from the form
+const formSchema = v.record(v.string(), v.string());
+
+const UpdateHandler = async () => {
+  const context = updateServerNicknamesRoute.context();
+  const email = context.var.email ?? throwError("Email not found");
+
+  // Fetch necessary IDs (e.g., accountId)
+  const account = await db.query.account.findFirst({ /* ... */ }) ?? throwError("Account not found");
+  const accountId = account.id;
+
+  // Validate form data
+  const result = context.req.valid("form");
+  if (!result.success) {
+    console.error("Form validation failed:", result.issues);
+    context.status(400);
+    return <p>Error: Invalid data submitted.</p>;
+  }
+
+  const formData = result.output;
+  const updatePromises = [];
+
+  // Loop through form data
+  for (const [key, value] of Object.entries(formData)) {
+    // Parse key to get item ID (e.g., serverId)
+    if (key.startsWith("server_") && key.endsWith("_nickname")) {
+      const parts = key.split("_");
+      if (parts.length === 3) {
+        const serverId = parts[1];
+        const newNickname = value;
+        // Add DB update to promises array
+        updatePromises.push(
+          db.update(schema.user)
+            .set({ name: newNickname })
+            .where(and(
+              eq(schema.user.serverId, serverId as string),
+              eq(schema.user.accountId, accountId),
+            )),
+        );
+      }
+    }
+  }
+
+  // Execute all updates
+  await Promise.all(updatePromises);
+  // Return the updated display table
+  return <ServerNicknamesTable />;
+};
+
+export const updateServerNicknamesRoute = createRoute({
+  path: "/api/profile/update-server-nicknames", // API path
+  component: UpdateHandler,
+  formValidationSchema: formSchema, // Link validation schema
+  permission: { check: isLoggedIn, redirectPath: "/" },
+  partial: true,
+  hmr: Deno.env.get("ENV") === "local",
+});
+
+```
+
+---
+
+## Pattern 3: Basic API Endpoint (`createRoute`)
+
+This shows the minimal structure for creating a simple API endpoint, often used for fetching display fragments or handling simple actions.
+
+**Use Case:** Simple GET requests returning JSX fragments, simple cancel actions.
+
+**Example File:** `services/app/routes/profile/CancelEditServerNicknames.api.tsx`
+
+```typescript
+import { ServerNicknamesTable } from "./ServerNicknamesTable.section.tsx";
+import { createRoute } from "@kalena/framework";
+import { isLoggedIn } from "@permissions/index.ts";
+
+// Simple handler function returns the desired JSX
+const CancelHandler = () => {
+  return <ServerNicknamesTable />;
+};
+
+// Define the route with createRoute
+export const cancelEditServerNicknamesRoute = createRoute({
+  path: "/api/profile/cancel-edit-server-nicknames", // API path
+  component: CancelHandler,
+  permission: { check: isLoggedIn, redirectPath: "/" },
+  partial: true,
+  hmr: Deno.env.get("ENV") === "local",
+});
+
+```

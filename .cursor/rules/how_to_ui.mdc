@@ -24,5 +24,19 @@ Follow these principles when developing UI components and features to ensure con
 - **Use Naming Conventions:** Employ noun-first naming for section components (e.g., `ProfileDetails.section.tsx`) and verb-first naming for API endpoints (e.g., `UpdateProfile.api.tsx`), as shown in `repo_structure.mdc`.
 - **Page Routes:** Full page components continue to use the `{RouteName}.page.tsx` convention within the route directory.
 
+## 3. Handling Local UI State Changes (Edit Toggles, etc.)
+
+-   **Use Alpine.js for Local State:** For interactions that only change the UI state *within* a loaded section or component (e.g., toggling between a display view and an edit form, showing/hiding details) **without needing new data from the server**, use Alpine.js (`x-data`, `x-show`, `x-if`, `x-on:click`, etc.).
+-   **Avoid HTMX for Pure UI Toggles:** Do **not** use HTMX GET requests (`hx-get`) solely to fetch slightly different view fragments (like switching to an edit form) if the necessary data is already available on the client. This creates unnecessary server load and network latency.
+-   **HTMX for Server Actions:** Reserve HTMX (`hx-post`, `hx-put`, `hx-delete`) primarily for actions that require **server interaction** (e.g., submitting form data to update the database, deleting an item).
+-   **Example Pattern (Inline Edit):**
+    1.  Load the section (`.section.tsx`) containing both display and form elements.
+    2.  Use `x-data` to hold an `isEditing` flag.
+    3.  Use `x-show` or `x-if` to conditionally display either the view elements or the form elements based on `isEditing`.
+    4.  An "Edit" button sets `isEditing = true` via `x-on:click`.
+    5.  A "Cancel" button sets `isEditing = false` via `x-on:click`.
+    6.  The "Save" button within the form uses `hx-post` to submit data to the appropriate API endpoint. The API response should ideally replace the section (`hx-swap="outerHTML"`) with the updated view, naturally resetting the Alpine state.
+
+
 ### Goal
 This co-location strategy keeps all code related to a specific route feature together, improving discoverability and maintainability.
