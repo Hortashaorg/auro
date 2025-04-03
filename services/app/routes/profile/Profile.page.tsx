@@ -4,7 +4,7 @@ import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Layout } from "@layout/Layout.tsx";
 import { ServerNicknamesTable } from "./ServerNicknamesTable.section.tsx";
-import { DefaultNicknameFlex } from "./DefaultNicknameFlex.section.tsx";
+import { AccountNicknameFlex } from "./AccountNicknameFlex.section.tsx";
 
 const Profile = () => {
   return (
@@ -23,7 +23,7 @@ const Profile = () => {
             This is the name that will be used by default when you join new
             servers.
           </Text>
-          <DefaultNicknameFlex />
+          <AccountNicknameFlex />
         </CardBody>
       </Card>
 
