@@ -1,0 +1,80 @@
+---
+description: Concept of Codebase Organisation & Naming Conventions
+globs: 
+alwaysApply: false
+---
+# Concept: Codebase Organisation & Naming Conventions
+
+This document outlines the structural organisation and naming conventions used throughout the codebase. Adhering to these guidelines ensures maintainability, predictability, and discoverability.
+
+## 1. Guiding Principles
+
+*   **Co-location:** Keep related code together. Features specific to a route belong within that route's directory.
+*   **Clarity:** Use clear, descriptive names for files, directories, variables, functions, and components that accurately reflect their purpose.
+*   **Consistency:** Follow established patterns consistently across the codebase. Refer to examples (`examples_features`, `examples_api`) when unsure.
+
+## 2. Top-Level Directory Structure
+
+The project root contains three main directories:
+
+*   `packages/`: Contains shared libraries or modules used across different parts of the application (e.g., `database`, `common`).
+*   `services/`: Contains the main application service(s). Currently, this primarily holds `services/app/`.
+*   `scripts/`: Contains utility scripts for development, deployment, etc.
+
+## 3. Core Application Structure (`services/app/`)
+
+The `services/app/` directory contains the core web application code:
+
+*   `components/`: Houses reusable UI components, organized by type:
+    *   `atoms/`: Smallest building blocks (Button, Input, Text).
+    *   `molecules/`: Simple combinations of atoms (FormControl, ModalButton).
+    *   `organisms/`: More complex component structures (potentially Header, Sidebar - *if used*).
+*   `routes/`: Contains all application routes, features, pages, and associated API endpoints and UI sections. See "Route Structure" below.
+*   `layout/`: Defines the main page layout structure(s).
+*   `queries/`: Contains database query functions, organized by domain.
+*   `permissions/`: Defines access control logic and checks.
+*   `utils/`: Holds shared utility functions specific to the application.
+*   `public/`: Static assets served directly.
+
+## 4. Path Referencing
+
+*   **Aliases:** Use predefined path aliases for cleaner imports (e.g., `@comp/`, `@queries/`, `@layout/`, `@permissions/`, `@package/`). These are typically configured in the project's build/runtime setup (e.g., `deno.json` or `tsconfig.json`).
+*   **Root:** Remember that the application root for these aliases and relative paths is effectively `services/app/`. Do not prefix paths with `app/` incorrectly.
+
+## 5. Route Structure
+
+Each feature or logical page grouping resides in its own directory within `services/app/routes/`.
+
+*   **Co-location:** All components, API endpoints, and UI sections specific to a route are placed within that route's directory.
+*   **File Suffixes:** Use standard suffixes to denote file purpose:
+    *   `.page.tsx`: The main component rendering the full page view for a route.
+    *   `.api.tsx`: An API endpoint handler, defined using `createRoute`.
+    *   `.section.tsx`: A reusable UI fragment or section, often used for HTMX swaps or within pages/modals.
+*   **Exports:** Each route directory should have an `index.ts` file that exports all the relevant route definitions (`createRoute` results) from the `.api.tsx` and `.page.tsx` files within that directory.
+
+*   **Example (`routes/profile/`):**
+    ```
+    routes/
+      profile/
+        Profile.page.tsx                 # Main page component
+        UpdateAccountNickname.api.tsx    # API endpoints (Verb-first PascalCase)
+        UpdateServerNickname.api.tsx
+        AccountNicknameFlex.section.tsx  # UI sections (Noun-first PascalCase)
+        ServerNicknamesTable.section.tsx
+        EditAccountNicknameForm.section.tsx
+        EditServerNicknameForm.section.tsx
+        index.ts                         # Route exports
+    ```
+
+## 6. Naming Conventions
+
+*   **Files/Directories:**
+    *   Route Directories: `kebab-case` (e.g., `user-profile`, `admin-settings`).
+    *   Components/Pages/Sections (`.tsx`): `PascalCase` (e.g., `UserProfileCard.section.tsx`, `SettingsPage.page.tsx`).
+    *   API Endpoints (`.api.tsx`): `PascalCase`, often starting with a verb (e.g., `UpdateUserProfile.api.tsx`, `GetUserDetails.api.tsx`).
+*   **Code (Within Files):**
+    *   Variables/Functions: `camelCase`.
+    *   Types/Interfaces/Classes: `PascalCase`.
+    *   Constants: `UPPER_SNAKE_CASE` (if applicable, for true constants).
+    *   **Clarity:** Prioritize descriptive names over brevity.
+    *   *(Note: Rely primarily on configured Linters (e.g., ESLint) and Formatters (e.g., Prettier) for detailed code style enforcement.)*

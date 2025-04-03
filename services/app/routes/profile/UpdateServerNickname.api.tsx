@@ -61,16 +61,23 @@ const UpdateHandler = async () => {
 
     return <ServerNicknamesTable hx-swap-oob="true" />;
   } catch (error) {
-    if (error instanceof PostgresError) {
+    if (
+      error instanceof PostgresError &&
+      error.constraint_name === "unique_user_name_per_server"
+    ) {
       context.header(
         "HX-Trigger",
-        createEvents([{
-          name: "form-error",
-          values: { form: "Database error occurred." },
-        }]),
+        createEvents([
+          {
+            name: "form-error",
+            values: {
+              nickname: "This nickname is already taken on this server.",
+            },
+          },
+        ]),
       );
-      context.status(500);
-      return <p>Database Error</p>;
+      context.status(400);
+      return <p>Nickname exists</p>;
     }
     throw error;
   }

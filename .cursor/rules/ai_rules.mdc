@@ -7,36 +7,47 @@ alwaysApply: true
 
 This rule outlines how to effectively leverage and maintain the project's defined rules during development, and how to collaborate effectively as an AI pair programmer.
 
-## 1. Consult Rules Before Starting Tasks
+## 1. Understand the Project Structure & Consult Rules
 
-*   **Mandatory First Step:** Before beginning any coding task, refactoring effort, or component creation, **always** check for existing rules that might be relevant. Use available tools or search functions to find rules related to the task domain (e.g., UI building, API creation, state management, naming conventions).
-*   **Purpose:** Consulting rules first ensures alignment with established project standards, patterns, and architectural decisions, preventing rework and maintaining consistency.
+*   **Workspace Root:** The project root contains directories like `packages/`, `services/`, and `scripts/`. The main application code resides within `services/app/`. **Important:** When referencing application paths (e.g., in imports or tool commands), always start from `services/app/...`. Avoid incorrect prefixes like `app/services/...`. Refer to `concept_organisation` for details.
+*   **Consult Rules First:** Before beginning *any* coding task, **always** check for relevant project rules. This ensures alignment and prevents rework.
+*   **Rule Categories & Purpose:** Understand the different types of rules available:
+    *   `concept_*` **(Principles & Guidelines):** Explain high-level approaches, conventions, and the "why" behind certain choices (e.g., `concept_organisation`, `concept_features`, `concept_event_naming`). Consult these to understand the overall strategy and conventions.
+    *   `how_to_*` **(Definition Requirements):** Detail the specific steps, syntax, and mandatory requirements for *creating* core artifacts like reusable components or API endpoints (e.g., `how_to_component`, `how_to_api`). Consult these when defining these specific types of items.
+    *   `examples_*` **(Implementation Patterns):** Provide concrete code snippets for common, established patterns (e.g., `examples_features` for UI patterns like modals/inline edits, `examples_api` for backend patterns like OOB swaps/HX-Triggers). **Consult these first** when implementing common features or API responses.
+*   **Suggested Workflow:**
+    1.  Understand the task.
+    2.  Consult `concept_organisation` (file location/naming) & relevant `concept_` rules (approach).
+    3.  Check `examples_` rules for matching implementation patterns.
+    4.  Consult `how_to_` rules if defining new core components/APIs.
+    5.  Implement step-by-step, seeking review (`Section 4`).
 
-## 2. Handling Rule Discrepancies
+## 2. Handling Rule Discrepancies & Prioritizing Code Examples
 
-*   **Prioritize Code Examples:** When existing rules seem contradictory, unclear, or outdated compared to recent code examples within the relevant feature or route directory, prioritize the pattern shown in the code example as the likely current standard.
-*   **Report & Suggest:** Clearly point out the discrepancy between the rule and the code example during the conversation. Suggest a specific Markdown snippet to update the relevant rule file(s).
-*   **Ask if Unsure:** If the correct approach isn't clear even after comparing rules and code, ask the USER for clarification before proceeding with implementation.
+*   **Codebase is Key:** While rules provide guidance, the existing codebase is the primary reference for current implementation patterns. Before implementing common elements or tackling recurring errors, actively search relevant directories for existing examples. Ask the USER if unsure where to look.
+*   **Prioritize `examples_` & Code:** When general rules (`concept_`, `how_to_`) seem contradictory or outdated compared to `examples_` rules or recent code examples, **prioritize the pattern shown in the `examples_` rule or the recent code**.
+*   **Report & Suggest:** Clearly point out any discrepancy between rules, examples, and code. Suggest specific Markdown snippets to update the relevant rule file(s) (`Section 3`).
+*   **Ask if Unsure:** If the correct approach isn't clear even after comparing rules and code, ask the USER for clarification before proceeding.
 
 ## 3. Proactively Suggest Rule Improvements
 
-*   **Identify Gaps & Ambiguities:** While working, pay attention to situations where existing rules are unclear, incomplete, or where guidance is missing entirely based on the current task.
-*   **Suggest Snippets:** When a gap or necessary clarification is identified, proactively suggest specific, ready-to-use Markdown snippets that can be added to or used to modify the relevant rule file(s).
+*   **Identify Gaps & Ambiguities:** While working, pay attention to situations where existing rules are unclear, incomplete, or missing guidance based on the current task or discovered code patterns.
+*   **Suggest Snippets:** When a gap or necessary clarification is identified, proactively suggest specific, ready-to-use Markdown snippets for the relevant rule file(s).
 *   **Frequency:** Offer these suggestions naturally during the conversation, especially after completing a sub-task or when discussing design or implementation details.
 *   **Goal:** This collaborative approach helps keep the project's documented knowledge accurate, relevant, and continuously improving.
 
 ## 4. Collaborative Workflow
 
-*   **Small Steps:** Break coding tasks down into small, logical, incremental steps (e.g., creating one component structure, implementing one API endpoint's basic functionality, adding validation).
+*   **Small Steps:** Break tasks down into small, logical, incremental steps.
 *   **Explain & Implement:** Briefly explain the plan for the immediate next step before implementing it.
-*   **Pause for Review:** After completing a distinct step (like creating a file, adding a function, fixing a set of errors), explicitly pause and wait for USER review and feedback before moving on to the next step. This ensures alignment and facilitates the pair-programming dynamic.
+*   **Pause for Review:** After completing a distinct step (creating a file, adding a function, fixing errors), explicitly pause and wait for USER review and feedback before moving on.
+*   **Iterative Process:** Understand that the optimal solution might emerge through discussion and iterative refinement. Suggestions and changes during development are a normal and expected part of pair programming.
 
 ## 5. Guiding Principle: Minimal, Clear, and Consistent Implementation
 
-Strive for the most concise implementation possible while strictly adhering to all other defined rules and **prioritizing consistency with existing codebase patterns**.
-
-*   **Reference Existing Code (Reiteration):** Before writing new code for common patterns, actively look for similar implementations within the project to maintain consistency.
-*   **Leverage Abstractions:** Fully utilize framework utilities (`@kalena/framework`) and defined base types/props to avoid redundant definitions.
-*   **Avoid Boilerplate:** Eliminate unnecessary variables, overly complex structures, or repetitive code where simpler, direct alternatives exist and meet the requirements.
-*   **Clarity Over Premature Optimization:** While conciseness is valued, ensure the code remains readable and maintainable.
-*   **Self-Explanatory Code:** Write code that clearly expresses its intent, we should not need components unless it is jsdocs for a component.
+*   Strive for the most concise implementation possible while strictly adhering to all other defined rules and prioritizing consistency with existing codebase patterns.
+*   **Reference Existing Code & Examples:** Before writing new code for common patterns, actively look for similar implementations within the project **and consult relevant `examples_` rules** to maintain consistency.
+*   **Leverage Abstractions:** Fully utilize framework utilities (`@kalena/framework`) and defined base types/props.
+*   **Avoid Boilerplate:** Eliminate unnecessary variables, complex structures, or repetitive code where simpler alternatives exist.
+*   **Clarity Over Premature Optimization:** Ensure code remains readable and maintainable.
+*   **Self-Explanatory Code:** Write code that clearly expresses its intent, minimizing comments outside required JSDocs (for reusable components only, see `how_to_component`).

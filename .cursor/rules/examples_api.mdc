@@ -1,0 +1,81 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Rule: API Code Examples & Common Patterns
+
+When an API endpoint successfully processes a request (especially after a POST/PUT/DELETE), it needs to update the UI appropriately and provide feedback.
+
+### 1. Updating the UI (HTMX Swaps)
+
+Choose a swap strategy based on the scope of the change:
+
+*   **Out-of-Band (OOB) Swap:** Ideal for updating a specific, self-contained section without replacing the element that triggered the request (like a form in a modal).
+    *   **Implementation:** Return the *updated component* (e.g., `<AccountNicknameFlex />`) from the API handler. Add the `hx-swap-oob="true"` attribute directly to the root element of the returned component JSX. HTMX will find the element in the main DOM with the matching ID and swap it.
+*   **Targeted Swap (Full Component):** Simpler when updating involves re-rendering a larger component, like a whole table after one row changes.
+    *   **Implementation:** Return the complete, updated parent component (e.g., `<ServerNicknamesTable />`) from the API handler. Ensure the *triggering form* has `hx-target` pointing to the parent component's ID (e.g., `hx-target="#server-nicknames-section"`) and `hx-swap="outerHTML"`.
+
+---
+
+### 2. Standard User Feedback (HX-Trigger Events)
+
+Use the `HX-Trigger` header to send events back to the client for standard feedback patterns. Import `createEvents` from `@comp/utils/events.ts`.
+
+*   **On Success (Form in Modal):** Always trigger `dialog-close` to close the modal.
+    ```typescript
+    context.header(
+      "HX-Trigger",
+      createEvents([{ name: "dialog-close", values: { value: true } }])
+    );
+    ```
+*   **On Success (General):** Trigger `toast-show` to display a success message. Include `message`, `variant` (`success`, `info`, etc.), and `title`.
+    ```typescript
+    context.header(
+      "HX-Trigger",
+      createEvents([{
+        name: "toast-show",
+        values: { message: "Action successful!", variant: "success", title: "Success" }
+      }])
+    );
+    ```
+    *(Combine multiple events in one `createEvents` array if needed)*
+*   **On Validation Error:** Trigger `form-error`. The `values` should be a `Record<string, string>` mapping input names (or a general key like 'form') to error messages. The `Form` component should automatically display these.
+    ```typescript
+    const errorEvents: Record<string, string> = { /* ... map field keys to error messages ... */ };
+    context.header(
+      "HX-Trigger",
+      createEvents([{ name: "form-error", values: errorEvents }])
+    );
+    context.status(400); // Set appropriate status code
+    ```
+---
+
+### 3. Handling Specific Database Errors
+
+Inside `catch` blocks, check for expected `PostgresError` types, particularly unique constraint violations using `error.constraint_name`. Provide specific feedback to the user via a `form-error` trigger instead of a generic server error.
+
+```typescript
+try {
+  // ... database operation ...
+} catch (error) {
+  if (
+    error instanceof PostgresError &&
+    error.constraint_name === "your_unique_constraint_name" // Check specific constraint
+  ) {
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        { name: "form-error", values: { fieldName: "This value is already taken." } },
+      ]),
+    );
+    context.status(400); // Bad Request (user error)
+    return <p>Constraint Violation</p>; // Simple response body
+  }
+  // Handle other errors (generic DB error, unexpected errors)
+  // ...
+  throw error; // Re-throw unexpected errors
+}
+```
+
+---

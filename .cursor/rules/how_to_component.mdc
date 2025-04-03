@@ -19,9 +19,58 @@ This document outlines the standard rules for creating and structuring UI compon
 
 ## 3. Documentation (JSDocs)
 
-*   **Required for Reusable Components:** Reusable components (typically Atoms and Molecules residing in `services/app/components/`) **must** include comprehensive JSDoc comments explaining their purpose, props, and usage examples.
-*   **Discouraged for Sections/Pages:** For route-specific files like Pages (`.page.tsx`) or Sections (`.section.tsx`) located within `services/app/routes/`, comments (including JSDocs) are **discouraged**. Prioritize clear, self-explanatory code and structure. Only add documentation if the logic or props are exceptionally complex and cannot be easily understood from the code itself.
-*   **Guidance:** Refer to the `component_jsdocs` rule for detailed instructions on *how* to properly implement JSDocs when they *are* included.
+*   **Required for Reusable Components:** Reusable components (typically Atoms and Molecules residing in `services/app/components/`) **must** include comprehensive JSDoc comments explaining their purpose, props, and usage.
+*   **Discouraged for Sections/Pages:** For route-specific files (`.page.tsx`, `.section.tsx`), comments (including JSDocs) are discouraged. Prioritize self-explanatory code.
+*   **Core Requirements:** When included, JSDocs should clearly state the component's function and document each key prop using `@param`. Include a usage example with `@example`. Describe the props as they appear in the component's `Props` type.
+
+*   **Example:**
+
+    ```typescript
+    import type { FC } from "@kalena/framework";
+    import { cva, type VariantProps } from "class-variance-authority";
+
+    const buttonVariants = cva(/* ... variants config ... */);
+
+    type ButtonProps = JSX.IntrinsicElements["button"] &
+      VariantProps<typeof buttonVariants> & {
+        // Additional specific props if any
+      };
+
+  /**
+  * Button component for triggering actions
+  *
+  * @props
+  * - variant: Visual style of the button ('primary', 'secondary', etc.)
+  * - buttonSize: Size of the button ('sm', 'md', 'lg', 'xl')
+  * - disabled: Whether the button is disabled
+  *
+  * @example
+  * <Button
+  *   variant="primary"
+  *   buttonSize="md"
+  *   x-on:click="handleClick"
+  * >
+  *   Click me
+  * </Button>
+  */
+    export const Button: FC<ButtonProps> = ({
+      className,
+      variant,
+      size,
+      children,
+      ...props
+    }) => {
+      return (
+        <button
+          className={buttonVariants({ variant, size, className })}
+          {...props}
+        >
+          {children}
+        </button>
+      );
+    };
+    ```
+
 
 ## 4. Styling Application
 

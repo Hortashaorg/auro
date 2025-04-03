@@ -21,6 +21,7 @@ export const getAccountWithUsers = async (email: string) => {
   })
     .from(schema.user)
     .innerJoin(schema.server, eq(schema.user.serverId, schema.server.id))
+    .orderBy(schema.server.name)
     .where(eq(schema.user.accountId, account.id));
 
   return {
