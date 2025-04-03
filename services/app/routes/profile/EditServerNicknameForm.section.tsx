@@ -14,15 +14,9 @@ export const EditServerNicknameForm: FC<EditServerNicknameFormProps> = (
 ) => {
   return (
     <Form
-      // No Alpine needed here; API response handles modal close & OOB swap
-      hx-post="/api/profile/update-single-server-nickname"
-      hx-target={`#nickname-row-${serverId}`} // Target specific row for OOB swap
-      hx-swap="outerHTML"
-      // Include both serverId (hidden) and nickname
-      hx-include="[name='serverId'], [name='nickname']"
-      class="flex flex-col gap-md"
+      hx-post="/api/profile/update-server-nickname"
+      hx-swap="none"
     >
-      {/* Hidden input for server ID */}
       <input type="hidden" name="serverId" value={serverId} />
 
       <FormControl inputName="nickname">
@@ -33,12 +27,11 @@ export const EditServerNicknameForm: FC<EditServerNicknameFormProps> = (
           id={`server-nickname-input-${serverId}`}
           name="nickname"
           required
-          value={currentNickname} // Pre-fill
+          value={currentNickname}
           placeholder="Enter new server nickname"
         />
       </FormControl>
       <ButtonGroup justify="end">
-        {/* Standard dismiss button for modal */}
         <Button type="button" variant="outline" data-dismiss="modal">
           Cancel
         </Button>

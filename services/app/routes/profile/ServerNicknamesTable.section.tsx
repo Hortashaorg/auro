@@ -30,32 +30,31 @@ export const ServerNicknamesTable = async () => {
         </TableHeader>
         <TableBody>
           {userServers.length > 0
-            ? userServers.map(({ user, server }) => {
+            ? userServers.map(({ user, server }, index) => {
+              const currentNickname = user.name ?? "";
+              const modalRef = `editServerNicknameModal${index}`;
+
               return (
-                <TableRow
-                  key={server.id}
-                  id={`nickname-row-${server.id}`}
-                >
+                <TableRow key={server.id} id={`nickname-row-${server.id}`}>
                   <TableCell>{server.name ?? "Unnamed Server"}</TableCell>
                   <TableCell>
-                    <Text>{user.name ?? "No Nickname Set"}</Text>
+                    <Text>{currentNickname || "No Nickname Set"}</Text>
                   </TableCell>
                   <TableCell>
                     <ModalButton
-                      modalRef={`editServerNicknameModal-${server.id}`}
+                      modalRef={modalRef}
                       variant="outline"
                       size="xs"
                     >
                       Edit
                     </ModalButton>
-
                     <Modal
-                      modalRef={`editServerNicknameModal-${server.id}`}
-                      title={`Edit ${server.name} Nickname`}
+                      modalRef={modalRef}
+                      title={`Edit Nickname for ${server.name ?? "Server"}`}
                     >
                       <EditServerNicknameForm
                         serverId={server.id}
-                        currentNickname={user.name ?? ""}
+                        currentNickname={currentNickname}
                       />
                     </Modal>
                   </TableCell>
