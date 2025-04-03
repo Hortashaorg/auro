@@ -1,0 +1,77 @@
+---
+description: How to Create API Endpoints
+globs: 
+alwaysApply: false
+---
+# Rule: How to Create API Endpoints
+
+This rule outlines the standard way to create API endpoints (`.api.tsx` files) within the `services/app/routes/` directories using the `@kalena/framework`'s `createRoute` utility.
+
+## 1. Basic Structure
+
+API endpoints **must** be defined using `createRoute`, exporting the resulting route object. The handler logic should be a separate function passed to the `component` property. **Crucially, the `path` property must always be prefixed with `/api/`**.
+
+```typescript
+import { createRoute, v /* ... other imports */ } from "@kalena/framework";
+import { isLoggedIn } from "@permissions/index.ts";
+// ... other imports like db, schema, sections
+
+// Define the handler function
+const MyApiHandler = async () => {
+  // Get route-specific context
+  const context = myApiRoute.context();
+  const email = context.var.email; // Access context variables
+
+  // ... handler logic ...
+
+  // Return JSX, Response, or other valid Hono return types
+  return <SomeSection />;
+};
+
+// Define the route using createRoute
+export const myApiRoute = createRoute({
+  path: "/api/feature/action", // MUST start with /api/
+  component: MyApiHandler,
+  permission: { // Optional: Define permissions
+    check: isLoggedIn,
+    redirectPath: "/",
+  },
+  partial: true, // Usually true for API fragments
+  hmr: Deno.env.get("ENV") === "local", // Standard HMR setting
+});
+```
+
+## 2. Handling POST Requests & Form Data
+
+For endpoints handling form submissions (typically POST requests):
+
+- **Add `formValidationSchema`:** Define a validation schema using `v` (Valibot, exposed via `@kalena/framework` to ensure version consistency) and assign it to the `formValidationSchema` property in `createRoute`. This implicitly handles the POST method.
+- **Access Validated Data:** Use `context.req.valid("form")` within the handler. Check `result.success`. If successful, access the validated data via `result.output`.
+- **Handle Validation Errors:** If `!result.success`, inspect `result.issues` and potentially set a 400 status (`context.status(400)`) and/or trigger HTMX form error events using `context.header("HX-Trigger", createEvents(...))`.
+
+```typescript
+// Example Schema using 'v' (Valibot via framework)
+const formSchema = v.object({
+  name: v.pipe(v.string(), v.minLength(3)),
+  // ... other fields
+});
+
+// Inside Handler
+const result = context.req.valid("form");
+if (!result.success) {
+  // Handle errors...
+  return <p>Validation Failed</p>;
+}
+const { name } = result.output;
+// ... process validated data ...
+```
+
+## 3. Key Points
+
+- **Path Prefix:** API route paths **must** start with `/api/`.
+- **Context:** Always use the route-specific context (`routeName.context()`), not `getGlobalContext()`.
+- **Validation:** Use `v` from `@kalena/framework` for validation schemas. This is the framework's exposed version of Valibot, ensuring compatibility.
+- **Database:** Import `db` and `schema` from `@package/database` for database interactions. Refer to query files (`services/app/queries/`) or schema definitions if unsure about table/field names.
+- **HTMX:** Use `context.header("HX-Trigger", ...)` to send events back to the client if needed.
+
+---
