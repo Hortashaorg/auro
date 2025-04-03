@@ -1,43 +1,14 @@
-import { createRoute, type FC, v } from "@kalena/framework";
+import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
 import { and, db, eq, PostgresError, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
-import { TableCell, TableRow } from "@comp/atoms/table/index.ts";
-import { Text } from "@comp/atoms/typography/index.ts";
-import { ModalButton } from "@comp/molecules/modal/index.ts";
+import { ServerNicknamesTable } from "./ServerNicknamesTable.section.tsx";
 
 const formSchema = v.object({
   serverId: v.string(),
   nickname: v.string(),
 });
-
-type UserSchemaType = typeof schema.user.$inferSelect;
-type ServerSchemaType = typeof schema.server.$inferSelect;
-
-type RenderTableRowProps = {
-  user: UserSchemaType;
-  server: Pick<ServerSchemaType, "id" | "name">;
-};
-
-const RenderTableRow: FC<RenderTableRowProps> = ({ user, server }) => {
-  const currentNickname = user.name ?? "";
-  const modalRef = `editServerNicknameModal-${server.id}`;
-
-  return (
-    <TableRow key={server.id} id={`nickname-row-${server.id}`}>
-      <TableCell>{server.name ?? "Unnamed Server"}</TableCell>
-      <TableCell>
-        <Text>{currentNickname || "No Nickname Set"}</Text>
-      </TableCell>
-      <TableCell>
-        <ModalButton modalRef={modalRef} variant="outline" size="xs">
-          Edit
-        </ModalButton>
-      </TableCell>
-    </TableRow>
-  );
-};
 
 const UpdateHandler = async () => {
   const context = updateServerNicknameRoute.context();
@@ -73,17 +44,6 @@ const UpdateHandler = async () => {
         eq(schema.user.accountId, accountId),
       ));
 
-    const updatedUser = await db.query.user.findFirst({
-      where: and(
-        eq(schema.user.serverId, serverId),
-        eq(schema.user.accountId, accountId),
-      ),
-    }) ?? throwError("Failed to fetch updated user data");
-    const serverData = await db.query.server.findFirst({
-      columns: { id: true, name: true },
-      where: eq(schema.server.id, serverId),
-    }) ?? throwError("Failed to fetch server data");
-
     context.header(
       "HX-Trigger",
       createEvents([
@@ -99,13 +59,7 @@ const UpdateHandler = async () => {
       ]),
     );
 
-    return (
-      <RenderTableRow
-        user={updatedUser}
-        server={serverData}
-        hx-swap-oob="#nickname-row-${serverId}"
-      />
-    );
+    return <ServerNicknamesTable hx-swap-oob="true" />;
   } catch (error) {
     if (error instanceof PostgresError) {
       context.header(
