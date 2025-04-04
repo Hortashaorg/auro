@@ -41,11 +41,11 @@ export const AlertTitle: FC<AlertTitleProps> = ({
   ...props
 }: AlertTitleProps) => {
   return (
-    <h3
+    <h2
       className={cn(titleVariants({ variant }), className)}
       {...props}
     >
       {children}
-    </h3>
+    </h2>
   );
 };

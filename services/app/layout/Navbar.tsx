@@ -101,6 +101,7 @@ export const Navbar = async () => {
         <Menu x-data="themeData" className="h-full gap-2">
           <button
             type="button"
+            aria-label="Toggle dark mode"
             x-on:click="themeToggle"
             className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
           >
