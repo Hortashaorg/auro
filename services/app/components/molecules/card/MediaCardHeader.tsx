@@ -47,7 +47,7 @@ export const MediaCardHeader: FC<CardHeaderProps> = ({
     >
       {imageSrc && imageAlt && <Image src={imageSrc} alt={imageAlt} />}
       <div className="flex flex-col">
-        <Title className="line-clamp-1">
+        <Title level="h2" className="line-clamp-1">
           {title}
         </Title>
         {description && (

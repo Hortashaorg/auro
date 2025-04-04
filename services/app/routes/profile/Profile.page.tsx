@@ -18,7 +18,7 @@ const Profile = () => {
 
       <Card>
         <CardBody>
-          <Title className="mb-2">Default Name</Title>
+          <Title level="h2" className="mb-2">Default Name</Title>
           <Text variant="body" className="mb-4">
             This is the name that will be used by default when you join new
             servers.
@@ -29,7 +29,7 @@ const Profile = () => {
 
       <Card>
         <CardBody>
-          <Title>Server-Specific Names</Title>
+          <Title level="h2">Server-Specific Names</Title>
           <Text variant="body" className="mb-4">
             Customize your name for each server you belong to.
           </Text>
