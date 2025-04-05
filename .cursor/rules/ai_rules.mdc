@@ -24,7 +24,7 @@ This rule outlines how to effectively leverage and maintain the project's define
 
 ## 2. Handling Rule Discrepancies & Prioritizing Code Examples
 
-*   **Codebase is Key:** While rules provide guidance, the existing codebase is the primary reference for current implementation patterns. Before implementing common elements or tackling recurring errors, actively search relevant directories for existing examples. Ask the USER if unsure where to look.
+*   **Codebase is Key:** While rules provide guidance, the existing codebase is the primary reference for current implementation patterns. Before implementing common elements or tackling recurring errors, actively search relevant directories for existing examples. Ask the USER if unsure where to look. **If imports fail or you are unsure about a specific function/file name, use file system tools (`list_dir`, `read_file`) to verify the correct path and name before proceeding.**
 *   **Prioritize `examples_` & Code:** When general rules (`concept_`, `how_to_`) seem contradictory or outdated compared to `examples_` rules or recent code examples, **prioritize the pattern shown in the `examples_` rule or the recent code**.
 *   **Report & Suggest:** Clearly point out any discrepancy between rules, examples, and code. Suggest specific Markdown snippets to update the relevant rule file(s) (`Section 3`).
 *   **Ask if Unsure:** If the correct approach isn't clear even after comparing rules and code, ask the USER for clarification before proceeding.

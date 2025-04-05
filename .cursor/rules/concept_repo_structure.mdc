@@ -1,7 +1,7 @@
 ---
-description: Concept of Codebase Organisation & Naming Conventions
+description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 # Concept: Codebase Organisation & Naming Conventions
 
@@ -38,14 +38,15 @@ The `services/app/` directory contains the core web application code:
 
 ## 4. Path Referencing
 
-*   **Aliases:** Use predefined path aliases for cleaner imports (e.g., `@comp/`, `@queries/`, `@layout/`, `@permissions/`, `@package/`). These are typically configured in the project's build/runtime setup (e.g., `deno.json` or `tsconfig.json`).
+*   **Aliases:** Use predefined path aliases for cleaner imports (e.g., `@comp/`, `@queries/`, `@layout/`, `@permissions/`, `@package/`). These are configured in the project's Deno import map (`deno.json`).
 *   **Root:** Remember that the application root for these aliases and relative paths is effectively `services/app/`. Do not prefix paths with `app/` incorrectly.
+*   **Fallback:** If path aliases are not resolving correctly (especially in newly created files or specific contexts), request prompter for help rather then struggeling.
 
 ## 5. Route Structure
 
 Each feature or logical page grouping resides in its own directory within `services/app/routes/`.
 
-*   **Co-location:** All components, API endpoints, and UI sections specific to a route are placed within that route's directory.
+*   **Co-location:** All components (`.section.tsx`), **API endpoints (`.api.tsx`)**, and UI sections (`.section.tsx`) specific to a route **must** be placed within that route's directory (e.g., `routes/profile/`). **Do not create a separate root `/api` directory.** This co-location directly supports the common HTMX pattern of fetching and swapping UI fragments from their corresponding backend logic.
 *   **File Suffixes:** Use standard suffixes to denote file purpose:
     *   `.page.tsx`: The main component rendering the full page view for a route.
     *   `.api.tsx`: An API endpoint handler, defined using `createRoute`.

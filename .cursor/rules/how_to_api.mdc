@@ -8,6 +8,7 @@ alwaysApply: false
 This rule outlines the standard way to create API endpoints (`.api.tsx` files) within the `services/app/routes/` directories using the `@kalena/framework`'s `createRoute` utility.
 
 ## 1. Basic Structure
+- **File Location:** Remember to place the API file (`.api.tsx`) alongside the relevant section/route file within `services/app/routes/...` as per the `concept_repo_structure` guidelines.
 
 API endpoints **must** be defined using `createRoute`, exporting the resulting route object. The handler logic should be a separate function passed to the `component` property. **Crucially, the `path` property must always be prefixed with `/api/`**.
 

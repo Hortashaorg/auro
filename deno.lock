@@ -8,6 +8,7 @@
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@valibot/valibot@1.0.0": "1.0.0",
+    "npm:@opentelemetry/api@1.9.0": "1.9.0",
     "npm:@opentelemetry/api@^1.9.0": "1.9.0",
     "npm:@types/node@*": "22.5.4",
     "npm:class-variance-authority@0.7.1": "0.7.1",
@@ -527,7 +528,7 @@
         "dependencies": [
           "jsr:@hono/hono@4.7.5",
           "jsr:@valibot/valibot@1.0.0",
-          "npm:@opentelemetry/api@^1.9.0"
+          "npm:@opentelemetry/api@1.9.0"
         ]
       },
       "services/app": {
