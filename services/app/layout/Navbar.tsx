@@ -51,6 +51,14 @@ export const Navbar = async () => {
                 Overview
               </Link>
               <Link
+                href={`/servers/${serverId}/resources`}
+                size="md"
+                activeStyle="background"
+                active={currentPath === `/servers/${serverId}/resources`}
+              >
+                Resources
+              </Link>
+              <Link
                 href={`/servers/${serverId}/leaderboard`}
                 size="md"
                 activeStyle="background"
