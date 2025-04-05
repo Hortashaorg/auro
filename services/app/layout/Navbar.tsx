@@ -1,10 +1,11 @@
 import { Menu, Nav } from "@comp/atoms/navigation/index.ts";
 import { Link } from "@comp/atoms/buttons/index.ts";
 import { MenuSelect } from "@comp/molecules/navigation/index.ts";
-import { FC, getGlobalContext } from "@kalena/framework";
+import { type FC, getGlobalContext } from "@kalena/framework";
 import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/other/breadcrumbs.ts";
 import { Icon, Text, Title } from "@comp/atoms/typography/index.ts";
+import { IconButton } from "@comp/atoms/buttons/index.ts";
 
 interface NavLink {
   href: string;
@@ -120,41 +121,35 @@ export const Navbar = async () => {
         </Menu>
 
         <Menu x-data="themeData" className="h-full gap-2 hidden md:flex">
-          <button
-            type="button"
+          <IconButton
             aria-label="Toggle dark mode"
             x-on:click="themeToggle"
-            className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
           >
             <Text>
               <Icon icon="sun" x-show="isDarkMode" size="size-7" x-cloak />
               <Icon icon="moon" x-show="!isDarkMode" size="size-7" x-cloak />
             </Text>
-          </button>
+          </IconButton>
           <TopMenuItems items={userLinks} currentPath={currentPath} />
         </Menu>
 
         <div className="md:hidden flex-grow"></div>
         <Menu x-data="themeData" className="h-full gap-2 md:hidden">
-          <button
-            type="button"
+          <IconButton
             aria-label="Toggle dark mode"
             x-on:click="themeToggle"
-            className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
           >
             <Text>
               <Icon icon="sun" x-show="isDarkMode" size="size-7" x-cloak />
               <Icon icon="moon" x-show="!isDarkMode" size="size-7" x-cloak />
             </Text>
-          </button>
-          <button
-            type="button"
+          </IconButton>
+          <IconButton
             aria-label="Open menu"
             x-on:click="mobileMenuOpen = !mobileMenuOpen"
-            className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
           >
             <Icon icon="menu" size="size-7" />
-          </button>
+          </IconButton>
         </Menu>
       </Nav>
 
@@ -173,14 +168,14 @@ export const Navbar = async () => {
       >
         <div className="flex justify-between items-center mb-4">
           <Title>Menu</Title>
-          <button
-            type="button"
+          <IconButton
             aria-label="Close menu"
             x-on:click="mobileMenuOpen = false"
-            className="px-2 py-2 hover:bg-surface-alt dark:hover:bg-surface-dark-alt bg-surface dark:bg-surface-dark rounded-full cursor-pointer"
+            background="surface"
+            backgroundHover="surfaceAlt"
           >
             <Icon icon="x" size="size-7" />
-          </button>
+          </IconButton>
         </div>
         <Breadcrumbs segments={breadcrumbSegments} className="mb-4" />
         <MobileMenuItems items={pageLinks} currentPath={currentPath} />
