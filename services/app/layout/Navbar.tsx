@@ -9,6 +9,7 @@ import { IconButton } from "@comp/atoms/buttons/index.ts";
 
 interface NavLink {
   href: string;
+  external?: boolean;
   text: string;
   condition: boolean;
 }
@@ -102,6 +103,7 @@ export const Navbar = async () => {
         {
           href: context.var.logoutUrl,
           text: "Logout",
+          external: true,
           condition: true,
         },
       ],
@@ -109,6 +111,7 @@ export const Navbar = async () => {
     {
       href: context.var.loginUrl,
       text: "Login",
+      external: true,
       condition: !context.var.isLoggedIn,
     },
   ];
@@ -218,6 +221,7 @@ const TopMenuItems: FC<TopMenuItemsProps> = ({ items, currentPath }) => {
                   key={child.text}
                   href={child.href!}
                   size="md"
+                  external={!!child.external}
                   background="surfaceAlt"
                   backgroundHover="surface"
                   active={isActive(child.href)}
@@ -235,6 +239,7 @@ const TopMenuItems: FC<TopMenuItemsProps> = ({ items, currentPath }) => {
           <Link
             key={link.text}
             href={link.href!}
+            external={!!link.external}
             size="md"
             activeStyle="surface"
             textHover="strong"
@@ -274,6 +279,7 @@ const MobileMenuItems: FC<MobileMenuItemsProps> = ({ items, currentPath }) => {
                 <Link
                   key={child.text}
                   href={child.href}
+                  external={!!child.external}
                   size="md"
                   active={isActive(child.href)}
                   backgroundHover="surfaceAlt"
@@ -289,7 +295,8 @@ const MobileMenuItems: FC<MobileMenuItemsProps> = ({ items, currentPath }) => {
         return (
           <Link
             key={link.text}
-            href={link.href!}
+            href={link.href}
+            external={!!link.external}
             active={isActive(link.href!)}
             activeStyle="surfaceAlt"
             backgroundHover="surfaceAlt"
