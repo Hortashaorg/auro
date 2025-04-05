@@ -1,7 +1,7 @@
 import { Menu, Nav } from "@comp/atoms/navigation/index.ts";
 import { Link } from "@comp/atoms/buttons/index.ts";
 import { MenuSelect } from "@comp/molecules/navigation/index.ts";
-import { getGlobalContext } from "@kalena/framework";
+import { FC, getGlobalContext } from "@kalena/framework";
 import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/other/breadcrumbs.ts";
 import { Icon, Text, Title } from "@comp/atoms/typography/index.ts";
@@ -25,7 +25,6 @@ export const Navbar = async () => {
   const breadcrumbSegments = await calculateBreadcrumbSegments();
 
   const currentPath = new URL(context.req.url).pathname;
-  const isActive = (path: string) => currentPath === path;
   const isAdminPath = serverId
     ? context.req.routePath.includes("/admin")
     : false;
@@ -117,41 +116,7 @@ export const Navbar = async () => {
     <header className="flex flex-col" x-data="{ mobileMenuOpen: false }">
       <Nav id="section-navbar" className="flex items-center">
         <Menu className="h-full hidden md:flex">
-          {pageLinks.map((link) => {
-            if (!link.condition) return null;
-
-            if ("children" in link) {
-              return (
-                <MenuSelect key={link.text} name={link.text} variant="single">
-                  {link.children.map((child) => (
-                    <Link
-                      key={child.text}
-                      href={child.href!}
-                      size="md"
-                      display="block"
-                      background="alt"
-                      active={isActive(child.href!)}
-                      activeStyle="background"
-                    >
-                      {child.text}
-                    </Link>
-                  ))}
-                </MenuSelect>
-              );
-            }
-
-            return (
-              <Link
-                key={link.text}
-                href={link.href!}
-                size="md"
-                activeStyle="background"
-                active={isActive(link.href!)}
-              >
-                {link.text}
-              </Link>
-            );
-          })}
+          <TopMenuItems items={pageLinks} currentPath={currentPath} />
         </Menu>
 
         <Menu x-data="themeData" className="h-full gap-2 hidden md:flex">
@@ -166,41 +131,7 @@ export const Navbar = async () => {
               <Icon icon="moon" x-show="!isDarkMode" size="size-7" x-cloak />
             </Text>
           </button>
-          {userLinks.map((link) => {
-            if (!link.condition) return null;
-
-            if ("children" in link) {
-              return (
-                <MenuSelect key={link.text} name={link.text} variant="single">
-                  {link.children.map((child) => (
-                    <Link
-                      key={child.text}
-                      href={child.href!}
-                      size="md"
-                      display="block"
-                      background="alt"
-                      active={isActive(child.href!)}
-                      activeStyle="background"
-                    >
-                      {child.text}
-                    </Link>
-                  ))}
-                </MenuSelect>
-              );
-            }
-
-            return (
-              <Link
-                key={link.text}
-                href={link.href!}
-                size="md"
-                activeStyle="background"
-                active={isActive(link.href!)}
-              >
-                {link.text}
-              </Link>
-            );
-          })}
+          <TopMenuItems items={userLinks} currentPath={currentPath} />
         </Menu>
 
         <div className="md:hidden flex-grow"></div>
@@ -222,7 +153,7 @@ export const Navbar = async () => {
             x-on:click="mobileMenuOpen = !mobileMenuOpen"
             className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
           >
-            <Icon icon="plus" size="size-7" />
+            <Icon icon="menu" size="size-7" />
           </button>
         </Menu>
       </Nav>
@@ -240,7 +171,7 @@ export const Navbar = async () => {
         x-cloak
         className="fixed inset-0 z-50 flex min-h-screen bg-surface dark:bg-surface-dark md:hidden"
       >
-        <div className="flex justify-between items-center mb-4 p-4">
+        <div className="flex justify-between items-center mb-4">
           <Title>Menu</Title>
           <button
             type="button"
@@ -251,51 +182,129 @@ export const Navbar = async () => {
             <Icon icon="x" size="size-7" />
           </button>
         </div>
-        {pageLinks.map((link) => {
-          if (!link.condition) return null;
-
-          if ("children" in link) {
-            return (
-              <MenuSelect
-                key={link.text}
-                name={link.text}
-                variant="single"
-              >
-                {link.children.map((child) => (
-                  <Link
-                    key={child.text}
-                    href={child.href}
-                    display="block"
-                    active={isActive(child.href)}
-                    activeStyle="background"
-                  >
-                    {child.text}
-                  </Link>
-                ))}
-              </MenuSelect>
-            );
-          }
-
-          return (
-            <Link
-              key={link.text}
-              href={link.href!}
-              display="block"
-              active={isActive(link.href!)}
-              activeStyle="background"
-              x-on:click="mobileMenuOpen = false"
-            >
-              {link.text}
-            </Link>
-          );
-        })}
+        <Breadcrumbs segments={breadcrumbSegments} className="mb-4" />
+        <MobileMenuItems items={pageLinks} currentPath={currentPath} />
 
         <hr className="border-2 dark:border-surface-dark-alt border-surface-alt my-4" />
+
+        <MobileMenuItems items={userLinks} currentPath={currentPath} />
       </Menu>
 
-      <div className="w-full py-2.5 px-5">
+      <div className="w-full py-2.5 px-5 hidden md:flex">
         <Breadcrumbs segments={breadcrumbSegments} />
       </div>
     </header>
+  );
+};
+
+type TopMenuItemsProps = {
+  items: (NavLink | NavSelect)[];
+  currentPath: string;
+};
+const TopMenuItems: FC<TopMenuItemsProps> = ({ items, currentPath }) => {
+  const isActive = (path: string) => currentPath === path;
+
+  return (
+    <>
+      {items.map((link) => {
+        if (!link.condition) return null;
+
+        if ("children" in link) {
+          return (
+            <MenuSelect
+              key={link.text}
+              name={link.text}
+              textHover="strong"
+              activeStyle="surface"
+              active={link.children.some((child) => isActive(child.href))}
+            >
+              {link.children.map((child) => (
+                <Link
+                  key={child.text}
+                  href={child.href!}
+                  size="md"
+                  background="surfaceAlt"
+                  backgroundHover="surface"
+                  active={isActive(child.href)}
+                  activeStyle="surface"
+                  variant="menuItem"
+                >
+                  {child.text}
+                </Link>
+              ))}
+            </MenuSelect>
+          );
+        }
+
+        return (
+          <Link
+            key={link.text}
+            href={link.href!}
+            size="md"
+            activeStyle="surface"
+            textHover="strong"
+            active={isActive(link.href!)}
+          >
+            {link.text}
+          </Link>
+        );
+      })}
+    </>
+  );
+};
+
+type MobileMenuItemsProps = {
+  items: (NavLink | NavSelect)[];
+  currentPath: string;
+};
+
+const MobileMenuItems: FC<MobileMenuItemsProps> = ({ items, currentPath }) => {
+  const isActive = (path: string) => currentPath === path;
+
+  return (
+    <>
+      {items.map((link) => {
+        if (!link.condition) return null;
+
+        if ("children" in link) {
+          return (
+            <MenuSelect
+              key={link.text}
+              name={link.text}
+              backgroundHover="surfaceAlt"
+              variant="fullWidth"
+              open={link.children.some((child) => isActive(child.href))}
+            >
+              {link.children.map((child) => (
+                <Link
+                  key={child.text}
+                  href={child.href}
+                  size="md"
+                  active={isActive(child.href)}
+                  backgroundHover="surfaceAlt"
+                  activeStyle="surfaceAlt"
+                >
+                  {child.text}
+                </Link>
+              ))}
+            </MenuSelect>
+          );
+        }
+
+        return (
+          <Link
+            key={link.text}
+            href={link.href!}
+            active={isActive(link.href!)}
+            activeStyle="surfaceAlt"
+            backgroundHover="surfaceAlt"
+            size="md"
+            x-on:click="mobileMenuOpen = false"
+          >
+            {link.text}
+          </Link>
+        );
+      })}
+    </>
   );
 };

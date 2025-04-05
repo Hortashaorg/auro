@@ -3,58 +3,70 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-const linkStyles = cva([
+const linkVariants = cva([
   "font-body",
   "transition-colors",
 ], {
   variants: {
     variant: {
+      menuItem: ["block"],
+      none: [],
+    },
+    text: {
       normal: [
         "text-on-surface",
         "dark:text-on-surface-dark",
-        "hover:text-on-surface-strong",
-        "dark:hover:text-on-surface-dark-strong",
       ],
       strong: [
         "text-sm",
-        "text-on-surface",
-        "dark:text-on-surface-dark",
-        "hover:text-on-surface-strong",
-        "dark:hover:text-on-surface-dark-strong",
+        "text-on-surface-strong",
+        "dark:text-on-surface-dark-strong",
+      ],
+    },
+    textHover: {
+      none: [],
+      strong: [
+        "hover:text-on-surface-strong dark:hover:text-on-surface-dark-strong",
       ],
     },
     background: {
       none: "",
-      alt: "bg-surface-alt dark:bg-surface-dark-alt",
+      surfaceAlt: "bg-surface-alt dark:bg-surface-dark-alt",
+      surface: "bg-surface dark:bg-surface-dark",
+    },
+    backgroundHover: {
+      none: "",
+      surfaceAlt: "hover:bg-surface-alt dark:hover:bg-surface-dark-alt",
+      surface: "hover:bg-surface dark:hover:bg-surface-dark",
     },
     size: {
       sm: "text-sm",
       md: "text-base px-4 py-3",
     },
-    display: {
-      inline: "inline-block",
-      block: "block",
-    },
     activeStyle: {
-      background:
+      surface:
         "data-[active=true]:bg-surface data-[active=true]:dark:bg-surface-dark",
+      surfaceAlt:
+        "data-[active=true]:bg-surface-alt data-[active=true]:dark:bg-surface-dark-alt",
       none: "",
     },
   },
   defaultVariants: {
-    variant: "normal",
-    size: "sm",
-    display: "inline",
-    activeStyle: "none",
+    variant: "none",
+    text: "normal",
+    textHover: "none",
     background: "none",
+    backgroundHover: "none",
+    size: "sm",
+    activeStyle: "none",
   },
 });
 
-type LinkStyleProps = VariantProps<typeof linkStyles>;
+type LinkVariants = VariantProps<typeof linkVariants>;
 
 type Props =
   & BaseComponentProps
-  & LinkStyleProps
+  & LinkVariants
   & {
     active?: boolean;
     href: string;
@@ -66,11 +78,13 @@ type Props =
  * Use props to combine visual style, size, layout, background, and active state appearance.
  *
  * @props
- * - variant: Core visual style ('normal', 'strong'). Defaults to 'normal'.
- * - background: Optional background style ('none', 'alt'). Defaults to 'none'.
- * - size: Controls text size and padding ('sm', 'md'). Defaults to 'sm'.
- * - display: CSS display property ('inline', 'block'). Defaults to 'inline'.
- * - activeStyle: How the link appears when active ('background', 'none'). Defaults to 'none'.
+ * - variant: Layout style ('menuItem', 'none'). Defaults to 'none'.
+ * - text: Text color variant ('normal', 'strong'). Defaults to 'normal'.
+ * - textHover: Hover text color effect ('none', 'strong'). Defaults to 'none'.
+ * - background: Background color variant ('none', 'surfaceAlt', 'surface'). Defaults to 'none'.
+ * - backgroundHover: Hover background effect ('none', 'surfaceAlt', 'surface'). Defaults to 'none'.
+ * - size: Size variant ('sm', 'md'). Defaults to 'sm'.
+ * - activeStyle: Active state styling ('none', 'surface', 'surfaceAlt'). Defaults to 'none'.
  * - active: Boolean indicating if the link is active (triggers activeStyle via `data-active=true`).
  * - href: The URL the link points to. Required.
  * - children: The content of the link.
@@ -80,21 +94,23 @@ type Props =
  * @example // Default small link
  * <Link href="/home">Home</Link>
  *
- * @example // Medium size link for main nav with background active state
- * <Link href="/servers" size="md" activeStyle="background" active={isActive}>Servers</Link>
+ * @example // Medium size link for main nav with surface background active state
+ * <Link href="/servers" size="md" activeStyle="surface" active={isActive}>Servers</Link>
  *
- * @example // Block link with alt background (e.g., for dropdown)
- * <Link href="/profile" display="block" background="alt" size="md">Profile</Link>
+ * @example // Menu item link with surfaceAlt background
+ * <Link href="/profile" variant="menuItem" background="surfaceAlt" size="md">Profile</Link>
  *
- * @example // Strong variant link (e.g., breadcrumb style link)
- * <Link href="/category" variant="strong">Category</Link>
+ * @example // Strong text link with hover effect
+ * <Link href="/category" text="strong" textHover="strong">Category</Link>
  */
 export const Link: FC<Props> = (
   {
     className,
     variant,
     size,
-    display,
+    backgroundHover,
+    textHover,
+    text,
     activeStyle,
     background,
     active,
@@ -107,7 +123,15 @@ export const Link: FC<Props> = (
       {...rest}
       data-active={active}
       className={cn(
-        linkStyles({ variant, size, display, activeStyle, background }),
+        linkVariants({
+          variant,
+          size,
+          backgroundHover,
+          textHover,
+          text,
+          activeStyle,
+          background,
+        }),
         className,
       )}
     >

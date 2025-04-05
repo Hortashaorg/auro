@@ -1,79 +1,184 @@
-import { Text } from "@comp/atoms/typography/Text.tsx";
 import { cn } from "@comp/utils/tailwind.ts";
 import type { NonNullableProps } from "@comp/utils/types.ts";
 import { cva } from "class-variance-authority";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
-import { Button } from "@comp/atoms/buttons/index.ts";
 import { Icon } from "@comp/atoms/typography/index.ts";
 
+const selectButtonVariants = cva([
+  "font-body",
+  "transition-colors",
+  "cursor-pointer",
+  "flex",
+  "gap-3",
+  "items-center",
+  "justify-between",
+], {
+  variants: {
+    variant: {
+      normal: [
+        "relative",
+      ],
+      fullWidth: [
+        "w-full",
+      ],
+    },
+    text: {
+      normal: [
+        "text-on-surface",
+        "dark:text-on-surface-dark",
+      ],
+      strong: [
+        "text-sm",
+        "text-on-surface-strong",
+        "dark:text-on-surface-dark-strong",
+      ],
+    },
+    textHover: {
+      none: [],
+      strong: [
+        "hover:text-on-surface-strong dark:hover:text-on-surface-dark-strong",
+      ],
+    },
+    background: {
+      none: "",
+      surfaceAlt: "bg-surface-alt dark:bg-surface-dark-alt",
+      surface: "bg-surface dark:bg-surface-dark",
+    },
+    backgroundHover: {
+      none: "",
+      surfaceAlt: "hover:bg-surface-alt dark:hover:bg-surface-dark-alt",
+      surface: "hover:bg-surface dark:hover:bg-surface-dark",
+    },
+    size: {
+      sm: "text-sm",
+      md: "text-base px-4 py-3",
+    },
+    activeStyle: {
+      surface:
+        "data-[active=true]:bg-surface data-[active=true]:dark:bg-surface-dark",
+      surfaceAlt:
+        "data-[active=true]:bg-surface-alt data-[active=true]:dark:bg-surface-dark-alt",
+      none: "",
+    },
+  },
+  defaultVariants: {
+    variant: "normal",
+    text: "normal",
+    textHover: "none",
+    background: "none",
+    backgroundHover: "none",
+    size: "md",
+    activeStyle: "none",
+  },
+});
+
 const selectVariants = cva(
-  [
-    "absolute",
-    "grid",
-    "rounded-sm",
-    "z-20",
-    "rounded-lg",
-  ],
+  [],
   {
     variants: {
       variant: {
-        single: ["w-48", "grid-cols-1"],
-        double: ["w-96", "grid-cols-2"],
-      },
-      flow: {
-        right: [],
-        left: ["right-0"],
+        normal: [
+          "absolute",
+          "grid",
+          "rounded-sm",
+          "z-20",
+          "rounded-lg",
+          "w-48",
+          "grid-cols-1",
+        ],
+        fullWidth: ["flex", "flex-col", "pl-4"],
       },
     },
     defaultVariants: {
-      variant: "single",
-      flow: "right",
+      variant: "normal",
     },
   },
 );
 
 type SelectVariants = NonNullableProps<typeof selectVariants>;
-type MenuSelectProps = BaseComponentProps & SelectVariants & {
-  name: string;
-};
+type SelectButtonVariants = NonNullableProps<typeof selectButtonVariants>;
+
+type MenuSelectProps =
+  & BaseComponentProps
+  & SelectVariants
+  & SelectButtonVariants
+  & {
+    name: string;
+    open?: boolean;
+    active?: boolean;
+  };
 
 /**
  * MenuSelect component for dropdown menu selection
  *
  * @props
  * - name: Identifier and display label for the menu
- * - variant: Layout width of the dropdown ('single', 'double')
- * - flow: Direction the dropdown appears ('right', 'left')
+ * - variant: Layout style of the dropdown ('normal', 'fullWidth')
+ * - text: Text color variant ('normal', 'strong')
+ * - textHover: Hover text color effect ('none', 'strong')
+ * - background: Background color variant ('none', 'surfaceAlt', 'surface')
+ * - backgroundHover: Hover background effect ('none', 'surfaceAlt', 'surface')
+ * - size: Size variant ('sm', 'md')
+ * - activeStyle: Active state styling ('none', 'surface', 'surfaceAlt')
+ * - open: Optional boolean to control initial open state
  * - children: Menu items to display in the dropdown
  *
  * @example
- * <MenuSelect name="Options" variant="single" flow="right">
- *   <a className="p-2 hover:bg-surface-alt" href="/profile">Profile</a>
- *   <a className="p-2 hover:bg-surface-alt" href="/settings">Settings</a>
- *   <a className="p-2 hover:bg-surface-alt" href="/logout">Logout</a>
+ * <MenuSelect name="Options" variant="normal" size="md" textHover="strong">
+ *   <Link href="/profile" size="md" background="surfaceAlt" backgroundHover="surface">
+ *     Profile
+ *   </Link>
+ *   <Link href="/settings" size="md" background="surfaceAlt" backgroundHover="surface">
+ *     Settings
+ *   </Link>
+ *   <Link href="/logout" size="md" background="surfaceAlt" backgroundHover="surface">
+ *     Logout
+ *   </Link>
  * </MenuSelect>
  */
 export const MenuSelect: FC<MenuSelectProps> = (
-  { className, variant, flow, name, children, ...rest }: MenuSelectProps,
+  {
+    className,
+    variant,
+    textHover,
+    activeStyle,
+    background,
+    backgroundHover,
+    size,
+    text,
+    name,
+    children,
+    open,
+    active,
+    ...rest
+  }: MenuSelectProps,
 ) => {
   return (
-    <div {...rest} className={cn("relative", className)}>
-      <Button
+    <div {...rest} className="relative">
+      <button
+        type="button"
         x-on:click={`name = name == "${name}" ? "" : "${name}"`}
-        variant="alternate"
-        className="hover:bg-surface dark:hover:bg-surface-dark"
+        x-init={`${open ? `name = "${name}"` : ""}`}
+        data-active={active}
+        className={cn(
+          selectButtonVariants({
+            variant,
+            textHover,
+            activeStyle,
+            background,
+            backgroundHover,
+            size,
+            text,
+          }),
+          className,
+        )}
       >
-        <Text
-          variant="body"
-          className="flex items-center justify-between gap-3"
-        >
-          {name}
-          <Icon icon="chevron-down" />
-        </Text>
-      </Button>
+        {name}
+        <Icon icon="chevron-down" />
+      </button>
       <div
-        className={selectVariants({ flow, variant })}
+        className={selectVariants({ variant })}
         x-show={`name == "${name}"`}
         x-transition:enter="transition ease-out duration-100"
         x-transition:enter-start="transform opacity-0 scale-95"

@@ -8,7 +8,7 @@ const menuVariants = cva([], {
   variants: {
     variant: {
       horizontal: "flex items-center",
-      vertical: "flex flex-col gap-4 overflow-y-auto p-4",
+      vertical: "flex flex-col overflow-y-auto p-4",
     },
   },
   defaultVariants: {
