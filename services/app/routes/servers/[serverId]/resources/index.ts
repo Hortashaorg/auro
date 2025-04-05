@@ -1,1 +1,1 @@
-export { resourcesRoute } from "./Resources.page.tsx";
+export { playerResourcesRoute } from "./Resources.page.tsx";

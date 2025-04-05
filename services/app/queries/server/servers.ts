@@ -1,6 +1,6 @@
 import { db } from "@package/database";
 import { and, eq, schema } from "@package/database";
-
+import { throwError } from "@package/common";
 export const serversWhereUserIsAdmin = async (email: string) => {
   const res = await db.select({
     id: schema.server.id,
@@ -28,4 +28,12 @@ export const onlineServers = async () => {
   );
 
   return res;
+};
+
+export const getServer = async (serverId: string) => {
+  const res = await db.select().from(schema.server).where(
+    eq(schema.server.id, serverId),
+  );
+
+  return res[0] ?? throwError("Server not found");
 };

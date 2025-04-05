@@ -3,8 +3,8 @@ import { isPlayerOfServer } from "@permissions/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { getUserByEmail } from "@queries/user/getUserByEmail.ts";
-import { ResourcesTable } from "./ResourcesTable.section.tsx";
 import { createEvents } from "@comp/utils/events.ts";
+import { ActionsSection } from "./ActionsSection.section.tsx";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -31,7 +31,7 @@ const ExecuteAction = async () => {
         },
       ]),
     );
-    return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
+    return <ActionsSection hx-swap-oob="true" />;
   }
 
   const possibleRewards = await db.select()
@@ -112,7 +112,7 @@ const ExecuteAction = async () => {
       },
     ]),
   );
-  return <ResourcesTable serverId={serverId} hx-swap-oob="true" />;
+  return <ActionsSection hx-swap-oob="true" />;
 };
 
 export const executeActionRoute = createRoute({

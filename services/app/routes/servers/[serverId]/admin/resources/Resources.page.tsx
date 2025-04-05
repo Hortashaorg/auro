@@ -20,7 +20,7 @@ const Resources = () => {
   );
 };
 
-export const resourcesRoute = createRoute({
+export const adminResourcesRoute = createRoute({
   path: "/servers/:serverId/admin/resources",
   component: Resources,
   permission: {
