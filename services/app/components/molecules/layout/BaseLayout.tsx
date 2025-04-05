@@ -43,7 +43,9 @@ export const BaseLayout: FC<Props> = ({
         <title>{title}</title>
       </head>
       <body className="dark:bg-surface-dark bg-surface" x-data="{}">
-        {children}
+        <div id="main">
+          {children}
+        </div>
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
         <script
           defer
@@ -51,6 +53,7 @@ export const BaseLayout: FC<Props> = ({
         >
         </script>
         <script src="/public/darkmode.js"></script>
+        <script src="/public/transitions.js"></script>
       </body>
     </html>
   );

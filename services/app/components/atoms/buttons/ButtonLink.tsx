@@ -3,6 +3,7 @@ import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { cva } from "class-variance-authority";
 import type { NonNullableProps } from "@comp/utils/types.ts";
+import { Link } from "@comp/atoms/buttons/index.ts";
 
 const buttonLinkVariants = cva([
   "whitespace-nowrap",
@@ -94,12 +95,12 @@ export const ButtonLink: FC<ButtonLinkProps> = ({
   ...rest
 }: ButtonLinkProps) => {
   return (
-    <a
+    <Link
       {...rest}
       role="button"
       className={cn(buttonLinkVariants({ variant, buttonSize }), className)}
     >
       {children}
-    </a>
+    </Link>
   );
 };

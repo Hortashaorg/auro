@@ -118,6 +118,24 @@ export const Link: FC<Props> = (
     ...rest
   }: Props,
 ) => {
+  rest["x-on:click"] = `viewTransition($event, async () => {
+    const href = '${rest.href}';
+    const res = await fetch(href);
+    const html = await res.text();
+    const dom = new DOMParser().parseFromString(html, 'text/html');
+    const newContent = dom.querySelector('#main');
+    const newTitle = dom.querySelector('title')?.innerText;
+  
+    // Replace the main content
+    document.querySelector('#main')?.replaceWith(newContent);
+  
+    // Set the document title
+    if (newTitle) document.title = newTitle;
+  
+    // Push to browser history
+    window.history.pushState({ href }, newTitle || '', href);
+    htmx.process(document.body);
+  })`;
   return (
     <a
       {...rest}
