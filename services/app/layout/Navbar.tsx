@@ -4,7 +4,7 @@ import { MenuSelect } from "@comp/molecules/navigation/index.ts";
 import { getGlobalContext } from "@kalena/framework";
 import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/other/breadcrumbs.ts";
-import { Icon, Text } from "@comp/atoms/typography/index.ts";
+import { Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 
 interface NavLink {
   href: string;
@@ -89,9 +89,7 @@ export const Navbar = async () => {
     },
   ];
 
-  // Define links for the account menu
   const userLinks: (NavLink | NavSelect)[] = [
-    // Account Dropdown (if logged in)
     {
       text: "Account",
       condition: context.var.isLoggedIn,
@@ -99,16 +97,15 @@ export const Navbar = async () => {
         {
           href: "/profile",
           text: "Profile",
-          condition: true, // Handled by parent
+          condition: true,
         },
         {
           href: context.var.logoutUrl,
           text: "Logout",
-          condition: true, // Handled by parent
+          condition: true,
         },
       ],
     },
-    // Login Link (if logged out)
     {
       href: context.var.loginUrl,
       text: "Login",
@@ -117,9 +114,9 @@ export const Navbar = async () => {
   ];
 
   return (
-    <header className="flex flex-col">
+    <header className="flex flex-col" x-data="{ mobileMenuOpen: false }">
       <Nav id="section-navbar" className="flex items-center">
-        <Menu className="h-full">
+        <Menu className="h-full hidden md:flex">
           {pageLinks.map((link) => {
             if (!link.condition) return null;
 
@@ -157,7 +154,7 @@ export const Navbar = async () => {
           })}
         </Menu>
 
-        <Menu x-data="themeData" className="h-full gap-2">
+        <Menu x-data="themeData" className="h-full gap-2 hidden md:flex">
           <button
             type="button"
             aria-label="Toggle dark mode"
@@ -205,7 +202,96 @@ export const Navbar = async () => {
             );
           })}
         </Menu>
+
+        <div className="md:hidden flex-grow"></div>
+        <Menu x-data="themeData" className="h-full gap-2 md:hidden">
+          <button
+            type="button"
+            aria-label="Toggle dark mode"
+            x-on:click="themeToggle"
+            className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
+          >
+            <Text>
+              <Icon icon="sun" x-show="isDarkMode" size="size-7" x-cloak />
+              <Icon icon="moon" x-show="!isDarkMode" size="size-7" x-cloak />
+            </Text>
+          </button>
+          <button
+            type="button"
+            aria-label="Open menu"
+            x-on:click="mobileMenuOpen = !mobileMenuOpen"
+            className="px-2 py-2 hover:bg-surface dark:hover:bg-surface-dark bg-surface-alt dark:bg-surface-dark-alt rounded-full cursor-pointer"
+          >
+            <Icon icon="plus" size="size-7" />
+          </button>
+        </Menu>
       </Nav>
+
+      <Menu
+        x-data="{ name: '' }"
+        variant="vertical"
+        x-show="mobileMenuOpen"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        x-cloak
+        className="fixed inset-0 z-50 flex min-h-screen bg-surface dark:bg-surface-dark md:hidden"
+      >
+        <div className="flex justify-between items-center mb-4 p-4">
+          <Title>Menu</Title>
+          <button
+            type="button"
+            aria-label="Close menu"
+            x-on:click="mobileMenuOpen = false"
+            className="px-2 py-2 hover:bg-surface-alt dark:hover:bg-surface-dark-alt bg-surface dark:bg-surface-dark rounded-full cursor-pointer"
+          >
+            <Icon icon="x" size="size-7" />
+          </button>
+        </div>
+        {pageLinks.map((link) => {
+          if (!link.condition) return null;
+
+          if ("children" in link) {
+            return (
+              <MenuSelect
+                key={link.text}
+                name={link.text}
+                variant="single"
+              >
+                {link.children.map((child) => (
+                  <Link
+                    key={child.text}
+                    href={child.href}
+                    display="block"
+                    active={isActive(child.href)}
+                    activeStyle="background"
+                  >
+                    {child.text}
+                  </Link>
+                ))}
+              </MenuSelect>
+            );
+          }
+
+          return (
+            <Link
+              key={link.text}
+              href={link.href!}
+              display="block"
+              active={isActive(link.href!)}
+              activeStyle="background"
+              x-on:click="mobileMenuOpen = false"
+            >
+              {link.text}
+            </Link>
+          );
+        })}
+
+        <hr className="border-2 dark:border-surface-dark-alt border-surface-alt my-4" />
+      </Menu>
 
       <div className="w-full py-2.5 px-5">
         <Breadcrumbs segments={breadcrumbSegments} />

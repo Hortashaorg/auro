@@ -1,11 +1,28 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { cva } from "class-variance-authority";
+import type { NonNullableProps } from "@comp/utils/types.ts";
 
-type MenuProps = BaseComponentProps;
+const menuVariants = cva([], {
+  variants: {
+    variant: {
+      horizontal: "flex items-center",
+      vertical: "flex flex-col gap-4 overflow-y-auto p-4",
+    },
+  },
+  defaultVariants: {
+    variant: "horizontal",
+  },
+});
 
+type MenuVariants = NonNullableProps<typeof menuVariants>;
+type MenuProps = BaseComponentProps & MenuVariants;
 /**
  * Menu component for navigation items
+ *
+ * @params
+ * - variant: Layout width of the dropdown ('desktop', 'mobile')
  *
  * @example
  * <Menu>
@@ -14,14 +31,14 @@ type MenuProps = BaseComponentProps;
  * </Menu>
  */
 export const Menu: FC<MenuProps> = (
-  { className, children, ...props }: MenuProps,
+  { className, children, variant, ...props },
 ) => {
   return (
     <div
       {...props}
       className={cn(
-        "items-center flex",
-        className || "",
+        menuVariants({ variant }),
+        className,
       )}
     >
       {children}
