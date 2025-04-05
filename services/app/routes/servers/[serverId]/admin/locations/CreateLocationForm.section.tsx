@@ -56,9 +56,8 @@ export const CreateLocationForm = async () => {
           inputName="assetId"
           hint="Choose an image to represent this location"
         >
-          <Label htmlFor="location-asset" required>Location Asset</Label>
+          <Label required>Location Asset</Label>
           <ImageGridInput
-            id="location-asset"
             name="assetId"
             assets={assets}
             required

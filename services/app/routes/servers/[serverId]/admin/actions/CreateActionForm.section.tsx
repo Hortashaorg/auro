@@ -70,9 +70,8 @@ export const CreateActionForm = async () => {
           inputName="assetId"
           hint="Select an image for this action"
         >
-          <Label htmlFor="action-asset" required>Action Asset</Label>
+          <Label required>Action Asset</Label>
           <ImageGridInput
-            id="action-asset"
             name="assetId"
             assets={assets}
             required

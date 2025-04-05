@@ -81,9 +81,8 @@ export const CreateItemForm = async () => {
           inputName="assetId"
           hint="Choose an image to represent this item"
         >
-          <Label htmlFor="item-asset" required>Item Asset</Label>
+          <Label required>Item Asset</Label>
           <ImageGridInput
-            id="item-asset"
             name="assetId"
             assets={assets}
             required
