@@ -17,7 +17,7 @@ export const ToastNotifications: FC = () => {
             })`;
   props["x-data"] = `{
             notifications: [],
-            displayDuration: 8000,
+            displayDuration: 3000,
             soundEffect: false,
     
             addNotification({ variant = 'info', sender = null, title = null, message = null}) {
