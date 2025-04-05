@@ -6,7 +6,7 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 // Default base classes for the Card component
 const cardVariants = cva(
-  "group flex flex-col overflow-hidden rounded-radius border border-outline bg-surface-alt text-on-surface dark:border-outline-dark dark:bg-surface-dark-alt dark:text-on-surface-dark",
+  "group flex flex-col h-full overflow-hidden rounded-radius border border-outline bg-surface-alt text-on-surface dark:border-outline-dark dark:bg-surface-dark-alt dark:text-on-surface-dark",
   {
     variants: {
       width: {

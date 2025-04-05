@@ -6,6 +6,7 @@ import { Badge, Icon } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getServerActions } from "@queries/action/serverActions.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
+import { CardActions } from "@comp/atoms/card/CardActions.tsx";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -19,7 +20,7 @@ export const ActionGrid = async ({ ...props }: Props) => {
 
   return (
     <HtmxWrapper {...props} id="action-section">
-      <Grid>
+      <Grid items="stretch">
         {actions.map((action) => (
           <ActionCard
             key={action.id}
@@ -77,13 +78,14 @@ const ActionCard = ({ action, serverId }: {
             </Badge>
           )}
         </div>
-
+      </CardBody>
+      <CardActions>
         <ButtonLink
           href={`/servers/${serverId}/admin/actions/${action.id}`}
         >
           Configure
         </ButtonLink>
-      </CardBody>
+      </CardActions>
     </Card>
   );
 };
