@@ -30,7 +30,7 @@ export const Navbar = async () => {
     ? context.req.routePath.includes("/admin")
     : false;
 
-  const navLinks: (NavLink | NavSelect)[] = [
+  const pageLinks: (NavLink | NavSelect)[] = [
     {
       href: "/",
       text: "Home",
@@ -89,11 +89,38 @@ export const Navbar = async () => {
     },
   ];
 
+  // Define links for the account menu
+  const userLinks: (NavLink | NavSelect)[] = [
+    // Account Dropdown (if logged in)
+    {
+      text: "Account",
+      condition: context.var.isLoggedIn,
+      children: [
+        {
+          href: "/profile",
+          text: "Profile",
+          condition: true, // Handled by parent
+        },
+        {
+          href: context.var.logoutUrl,
+          text: "Logout",
+          condition: true, // Handled by parent
+        },
+      ],
+    },
+    // Login Link (if logged out)
+    {
+      href: context.var.loginUrl,
+      text: "Login",
+      condition: !context.var.isLoggedIn,
+    },
+  ];
+
   return (
     <header className="flex flex-col">
       <Nav id="section-navbar" className="flex items-center">
         <Menu className="h-full">
-          {navLinks.map((link) => {
+          {pageLinks.map((link) => {
             if (!link.condition) return null;
 
             if ("children" in link) {
@@ -142,35 +169,41 @@ export const Navbar = async () => {
               <Icon icon="moon" x-show="!isDarkMode" size="size-7" x-cloak />
             </Text>
           </button>
-          {context.var.isLoggedIn
-            ? (
-              <MenuSelect name="Account" variant="single" flow="left">
-                <Link
-                  href="/profile"
-                  size="md"
-                  display="block"
-                  background="alt"
-                >
-                  Profile
-                </Link>
-                <Link
-                  href={context.var.logoutUrl}
-                  size="md"
-                  display="block"
-                  background="alt"
-                >
-                  Logout
-                </Link>
-              </MenuSelect>
-            )
-            : (
+          {userLinks.map((link) => {
+            if (!link.condition) return null;
+
+            if ("children" in link) {
+              return (
+                <MenuSelect key={link.text} name={link.text} variant="single">
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.text}
+                      href={child.href!}
+                      size="md"
+                      display="block"
+                      background="alt"
+                      active={isActive(child.href!)}
+                      activeStyle="background"
+                    >
+                      {child.text}
+                    </Link>
+                  ))}
+                </MenuSelect>
+              );
+            }
+
+            return (
               <Link
-                href={context.var.loginUrl}
+                key={link.text}
+                href={link.href!}
                 size="md"
+                activeStyle="background"
+                active={isActive(link.href!)}
               >
-                Login
+                {link.text}
               </Link>
-            )}
+            );
+          })}
         </Menu>
       </Nav>
 
