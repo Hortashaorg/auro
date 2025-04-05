@@ -6,6 +6,12 @@ import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
 import { calculateBreadcrumbSegments } from "@queries/other/breadcrumbs.ts";
 import { Icon, Text } from "@comp/atoms/typography/index.ts";
 
+interface NavLink {
+  href: string;
+  text: string;
+  condition: boolean;
+}
+
 export const Navbar = async () => {
   const context = getGlobalContext();
   const serverId = context.req.param("serverId");
@@ -14,95 +20,89 @@ export const Navbar = async () => {
 
   const currentPath = context.req.path;
   const isActive = (path: string) => currentPath.includes(path);
-  const isAdminPath = context.req.routePath.includes("/admin");
+  const isAdminPath = serverId
+    ? context.req.routePath.includes("/admin")
+    : false;
+
+  const navLinks: NavLink[] = [
+    // Home Link
+    {
+      href: "/",
+      text: "Home",
+      condition: !serverId,
+    },
+    // Servers Link
+    {
+      href: "/servers",
+      text: "Servers",
+      condition: context.var.isLoggedIn && !serverId,
+    },
+    // Server Overview (Player)
+    {
+      href: `/servers/${serverId}`,
+      text: "Overview",
+      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+    },
+    // Server Resources (Player)
+    {
+      href: `/servers/${serverId}/resources`,
+      text: "Resources",
+      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+    },
+    // Server Leaderboard (Player)
+    {
+      href: `/servers/${serverId}/leaderboard`,
+      text: "Leaderboard",
+      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+    },
+    // Admin Overview
+    {
+      href: `/servers/${serverId}/admin`,
+      text: "Admin",
+      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+    },
+    // Admin Locations
+    {
+      href: `/servers/${serverId}/admin/locations`,
+      text: "Locations",
+      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+    },
+    // Admin Actions
+    {
+      href: `/servers/${serverId}/admin/actions`,
+      text: "Actions",
+      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+    },
+    // Admin Resources
+    {
+      href: `/servers/${serverId}/admin/resources`,
+      text: "Resources",
+      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+    },
+    // Admin Items
+    {
+      href: `/servers/${serverId}/admin/items`,
+      text: "Items",
+      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+    },
+  ];
 
   return (
     <header className="flex flex-col">
       <Nav id="section-navbar" className="flex items-center">
         <Menu className="h-full">
-          {!serverId && (
-            <Link
-              href="/"
-              size="md"
-              activeStyle="background"
-              active={currentPath === "/"}
-            >
-              Home
-            </Link>
-          )}
-          {context.var.isLoggedIn && !serverId && (
-            <Link
-              href="/servers"
-              size="md"
-              activeStyle="background"
-              active={currentPath === "/servers"}
-            >
-              Servers
-            </Link>
-          )}
-          {context.var.isLoggedIn && serverId && !isAdminPath && (
-            <>
+          {navLinks.map((link) =>
+            link.condition && (
               <Link
-                href={`/servers/${serverId}`}
+                key={link.text}
+                href={link.href}
                 size="md"
                 activeStyle="background"
-                active={currentPath === `/servers/${serverId}`}
+                active={isActive(link.href)}
               >
-                Overview
+                {link.text}
               </Link>
-              <Link
-                href={`/servers/${serverId}/resources`}
-                size="md"
-                activeStyle="background"
-                active={currentPath === `/servers/${serverId}/resources`}
-              >
-                Resources
-              </Link>
-              <Link
-                href={`/servers/${serverId}/leaderboard`}
-                size="md"
-                activeStyle="background"
-                active={currentPath === `/servers/${serverId}/leaderboard`}
-              >
-                Leaderboard
-              </Link>
-            </>
-          )}
-          {context.var.isLoggedIn && isAdminPath && (
-            <>
-              <Link
-                href={`/servers/${serverId}/admin/locations`}
-                size="md"
-                activeStyle="background"
-                active={isActive(`/servers/${serverId}/admin/locations`)}
-              >
-                Locations
-              </Link>
-              <Link
-                href={`/servers/${serverId}/admin/actions`}
-                size="md"
-                activeStyle="background"
-                active={isActive(`/servers/${serverId}/admin/actions`)}
-              >
-                Actions
-              </Link>
-              <Link
-                href={`/servers/${serverId}/admin/resources`}
-                size="md"
-                activeStyle="background"
-                active={isActive(`/servers/${serverId}/admin/resources`)}
-              >
-                Resources
-              </Link>
-              <Link
-                href={`/servers/${serverId}/admin/items`}
-                size="md"
-                activeStyle="background"
-                active={isActive(`/servers/${serverId}/admin/items`)}
-              >
-                Items
-              </Link>
-            </>
+            )
           )}
         </Menu>
 
