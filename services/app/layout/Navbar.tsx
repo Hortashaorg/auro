@@ -12,78 +12,80 @@ interface NavLink {
   condition: boolean;
 }
 
+interface NavSelect {
+  text: string;
+  condition: boolean;
+  children: NavLink[];
+}
+
 export const Navbar = async () => {
   const context = getGlobalContext();
   const serverId = context.req.param("serverId");
 
   const breadcrumbSegments = await calculateBreadcrumbSegments();
 
-  const currentPath = context.req.path;
-  const isActive = (path: string) => currentPath.includes(path);
+  const currentPath = new URL(context.req.url).pathname;
+  const isActive = (path: string) => currentPath === path;
   const isAdminPath = serverId
     ? context.req.routePath.includes("/admin")
     : false;
 
-  const navLinks: NavLink[] = [
-    // Home Link
+  const navLinks: (NavLink | NavSelect)[] = [
     {
       href: "/",
       text: "Home",
       condition: !serverId,
     },
-    // Servers Link
     {
       href: "/servers",
       text: "Servers",
       condition: context.var.isLoggedIn && !serverId,
     },
-    // Server Overview (Player)
     {
       href: `/servers/${serverId}`,
       text: "Overview",
       condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
     },
-    // Server Resources (Player)
     {
       href: `/servers/${serverId}/resources`,
       text: "Resources",
       condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
     },
-    // Server Leaderboard (Player)
     {
       href: `/servers/${serverId}/leaderboard`,
       text: "Leaderboard",
       condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
     },
-    // Admin Overview
     {
       href: `/servers/${serverId}/admin`,
       text: "Admin",
       condition: context.var.isLoggedIn && !!serverId && isAdminPath,
     },
-    // Admin Locations
     {
-      href: `/servers/${serverId}/admin/locations`,
-      text: "Locations",
+      text: "Configuration",
       condition: context.var.isLoggedIn && !!serverId && isAdminPath,
-    },
-    // Admin Actions
-    {
-      href: `/servers/${serverId}/admin/actions`,
-      text: "Actions",
-      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
-    },
-    // Admin Resources
-    {
-      href: `/servers/${serverId}/admin/resources`,
-      text: "Resources",
-      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
-    },
-    // Admin Items
-    {
-      href: `/servers/${serverId}/admin/items`,
-      text: "Items",
-      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+      children: [
+        {
+          href: `/servers/${serverId}/admin/locations`,
+          text: "Locations",
+          condition: true,
+        },
+        {
+          href: `/servers/${serverId}/admin/actions`,
+          text: "Actions",
+          condition: true,
+        },
+        {
+          href: `/servers/${serverId}/admin/resources`,
+          text: "Resources",
+          condition: true,
+        },
+        {
+          href: `/servers/${serverId}/admin/items`,
+          text: "Items",
+          condition: true,
+        },
+      ],
     },
   ];
 
@@ -91,19 +93,41 @@ export const Navbar = async () => {
     <header className="flex flex-col">
       <Nav id="section-navbar" className="flex items-center">
         <Menu className="h-full">
-          {navLinks.map((link) =>
-            link.condition && (
+          {navLinks.map((link) => {
+            if (!link.condition) return null;
+
+            if ("children" in link) {
+              return (
+                <MenuSelect key={link.text} name={link.text} variant="single">
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.text}
+                      href={child.href!}
+                      size="md"
+                      display="block"
+                      background="alt"
+                      active={isActive(child.href!)}
+                      activeStyle="background"
+                    >
+                      {child.text}
+                    </Link>
+                  ))}
+                </MenuSelect>
+              );
+            }
+
+            return (
               <Link
                 key={link.text}
-                href={link.href}
+                href={link.href!}
                 size="md"
                 activeStyle="background"
-                active={isActive(link.href)}
+                active={isActive(link.href!)}
               >
                 {link.text}
               </Link>
-            )
-          )}
+            );
+          })}
         </Menu>
 
         <Menu x-data="themeData" className="h-full gap-2">
