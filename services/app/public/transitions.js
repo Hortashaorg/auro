@@ -11,7 +11,6 @@ function handleViewTransition(event, transitionFn) {
 globalThis.viewTransition = handleViewTransition;
 
 globalThis.addEventListener("popstate", (_event) => {
-  console.log("popstate");
   const href = document.location.href;
 
   // Optional: use startViewTransition on back too
