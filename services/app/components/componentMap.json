@@ -1,1 +1,437 @@
-{"badge":{"file":"content/Badge.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"img":{"file":"content/Img.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"text":{"file":"content/Text.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"info":{"file":"feedback/Info.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"spinner":{"file":"feedback/Spinner.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"button":{"file":"inputs/Button.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"checkboxgroup":{"file":"inputs/form/CheckboxGroup.tsx","dependencies":["@kalena/framework","./FormControl.tsx","./Label.tsx","class-variance-authority"],"localDependencies":["utils/tailwind.ts","content/Text.tsx","utils/types.ts"]},"form":{"file":"inputs/form/Form.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts","layout/Flex.tsx"]},"formcontrol":{"file":"inputs/form/FormControl.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts","content/Text.tsx"]},"formrow":{"file":"inputs/form/FormRow.tsx","dependencies":["@kalena/framework","class-variance-authority"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"formsection":{"file":"inputs/form/FormSection.tsx","dependencies":["@kalena/framework","class-variance-authority"],"localDependencies":["utils/tailwind.ts","content/Text.tsx","utils/types.ts"]},"imagegridinput":{"file":"inputs/form/ImageGridInput.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","content/Img.tsx"]},"input":{"file":"inputs/form/Input.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"label":{"file":"inputs/form/Label.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"radiogroup":{"file":"inputs/form/RadioGroup.tsx","dependencies":["@kalena/framework","./FormControl.tsx","./Label.tsx","class-variance-authority"],"localDependencies":["utils/tailwind.ts","content/Text.tsx","utils/types.ts"]},"selectinput":{"file":"inputs/form/SelectInput.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"textarea":{"file":"inputs/form/Textarea.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"baselayout":{"file":"layout/BaseLayout.tsx","dependencies":["@kalena/framework"],"localDependencies":[]},"card":{"file":"layout/Card.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"container":{"file":"layout/Container.tsx","dependencies":["@kalena/framework"],"localDependencies":["layout/Flex.tsx"]},"flex":{"file":"layout/Flex.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"grid":{"file":"layout/Grid.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"htmxwrapper":{"file":"layout/HtmxWrapper.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts","layout/Flex.tsx"]},"section":{"file":"layout/Section.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts"]},"breadcrumbs":{"file":"navigation/Breadcrumbs.tsx","dependencies":["@kalena/framework","@queries/breadcrumbs.ts"],"localDependencies":["utils/tailwind.ts"]},"buttonlink":{"file":"navigation/ButtonLink.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"header":{"file":"navigation/Header.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts"]},"link":{"file":"navigation/Link.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["content/Text.tsx","utils/tailwind.ts","utils/types.ts"]},"menu":{"file":"navigation/Menu.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts"]},"navbutton":{"file":"navigation/NavButton.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts"]},"select":{"file":"navigation/Select.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["content/Text.tsx","utils/tailwind.ts","utils/types.ts"]},"tooltip":{"file":"overlay/Tooltip.tsx","dependencies":["class-variance-authority","@kalena/framework"],"localDependencies":["utils/tailwind.ts","utils/types.ts"]},"modal":{"file":"overlay/modal/Modal.tsx","dependencies":["@kalena/framework"],"localDependencies":["utils/tailwind.ts","layout/Flex.tsx","inputs/Button.tsx","content/Text.tsx"]},"modalbutton":{"file":"overlay/modal/ModalButton.tsx","dependencies":["@kalena/framework"],"localDependencies":["inputs/Button.tsx"]},"events":{"file":"utils/events.ts","dependencies":[],"localDependencies":[]},"tailwind":{"file":"utils/tailwind.ts","dependencies":["clsx","tailwind-merge"],"localDependencies":[]},"types":{"file":"utils/types.ts","dependencies":["class-variance-authority"],"localDependencies":[]}}
+{
+  "button": {
+    "file": "atoms/buttons/Button.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "buttongroup": {
+    "file": "atoms/buttons/ButtonGroup.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "buttonlink": {
+    "file": "atoms/buttons/ButtonLink.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/props.ts",
+      "utils/types.ts"
+    ]
+  },
+  "link": {
+    "file": "atoms/buttons/Link.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "index": {
+    "file": "atoms/buttons/index.ts",
+    "dependencies": [],
+    "localDependencies": []
+  },
+  "card": {
+    "file": "atoms/card/Card.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "cardactions": {
+    "file": "atoms/card/CardActions.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": ["utils/props.ts", "utils/tailwind.ts"]
+  },
+  "cardbody": {
+    "file": "atoms/card/CardBody.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "alerttitle": {
+    "file": "atoms/feedback/AlertTitle.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/props.ts",
+      "utils/types.ts"
+    ]
+  },
+  "spinner": {
+    "file": "atoms/feedback/Spinner.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/types.ts",
+      "utils/tailwind.ts",
+      "utils/props.ts"
+    ]
+  },
+  "checkbox": {
+    "file": "atoms/form/Checkbox.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "fieldset": {
+    "file": "atoms/form/Fieldset.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "form": {
+    "file": "atoms/form/Form.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "formfield": {
+    "file": "atoms/form/FormField.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "formrow": {
+    "file": "atoms/form/FormRow.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "input": {
+    "file": "atoms/form/Input.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "label": {
+    "file": "atoms/form/Label.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "legend": {
+    "file": "atoms/form/Legend.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "radiobutton": {
+    "file": "atoms/form/RadioButton.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "range": {
+    "file": "atoms/form/Range.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "selectinput": {
+    "file": "atoms/form/SelectInput.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "switch": {
+    "file": "atoms/form/Switch.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "textarea": {
+    "file": "atoms/form/Textarea.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "image": {
+    "file": "atoms/image/Image.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": []
+  },
+  "flex": {
+    "file": "atoms/layout/Flex.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "grid": {
+    "file": "atoms/layout/Grid.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "htmxwrapper": {
+    "file": "atoms/layout/HtmxWrapper.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "atoms/layout/index.ts",
+      "utils/props.ts"
+    ]
+  },
+  "section": {
+    "file": "atoms/layout/Section.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "menu": {
+    "file": "atoms/navigation/Menu.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "nav": {
+    "file": "atoms/navigation/Nav.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "table": {
+    "file": "atoms/table/Table.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "tablebody": {
+    "file": "atoms/table/TableBody.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts"]
+  },
+  "tablecell": {
+    "file": "atoms/table/TableCell.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts"]
+  },
+  "tableheader": {
+    "file": "atoms/table/TableHeader.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "tablerow": {
+    "file": "atoms/table/TableRow.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/props.ts"]
+  },
+  "tabcontent": {
+    "file": "atoms/tabs/TabContent.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "tabs": {
+    "file": "atoms/tabs/Tabs.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "tabslist": {
+    "file": "atoms/tabs/TabsList.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "tabstrigger": {
+    "file": "atoms/tabs/TabsTrigger.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "badge": {
+    "file": "atoms/typography/Badge.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "icon": {
+    "file": "atoms/typography/Icon.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": ["utils/tailwind.ts", "utils/types.ts"]
+  },
+  "text": {
+    "file": "atoms/typography/Text.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "title": {
+    "file": "atoms/typography/Title.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "mediacardheader": {
+    "file": "molecules/card/MediaCardHeader.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "atoms/image/Image.tsx",
+      "utils/props.ts",
+      "atoms/typography/index.ts"
+    ]
+  },
+  "alert": {
+    "file": "molecules/feedback/Alert.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts",
+      "atoms/typography/index.ts"
+    ]
+  },
+  "toastnotification": {
+    "file": "molecules/feedback/ToastNotification.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": [
+      "molecules/feedback/Alert.tsx",
+      "atoms/feedback/index.ts"
+    ]
+  },
+  "tooltip": {
+    "file": "molecules/feedback/Tooltip.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "checkboxgroup": {
+    "file": "molecules/form/CheckboxGroup.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/props.ts",
+      "molecules/form/index.ts",
+      "atoms/form/index.ts",
+      "atoms/typography/index.ts",
+      "utils/types.ts"
+    ]
+  },
+  "formbutton": {
+    "file": "molecules/form/FormButton.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["atoms/buttons/index.ts"]
+  },
+  "formcontext": {
+    "file": "molecules/form/FormContext.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/props.ts"]
+  },
+  "formcontrol": {
+    "file": "molecules/form/FormControl.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": [
+      "atoms/typography/index.ts",
+      "utils/props.ts",
+      "atoms/form/index.ts"
+    ]
+  },
+  "formsection": {
+    "file": "molecules/form/FormSection.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts",
+      "atoms/typography/index.ts"
+    ]
+  },
+  "imagegridinput": {
+    "file": "molecules/form/ImageGridInput.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": ["utils/tailwind.ts", "utils/props.ts"]
+  },
+  "radiogroup": {
+    "file": "molecules/form/RadioGroup.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/props.ts",
+      "molecules/form/index.ts",
+      "atoms/typography/index.ts"
+    ]
+  },
+  "baselayout": {
+    "file": "molecules/layout/BaseLayout.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["utils/props.ts"]
+  },
+  "modal": {
+    "file": "molecules/modal/Modal.tsx",
+    "dependencies": ["@kalena/framework", "class-variance-authority"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "atoms/layout/index.ts",
+      "atoms/typography/index.ts",
+      "utils/types.ts",
+      "utils/props.ts"
+    ]
+  },
+  "modalbutton": {
+    "file": "molecules/modal/ModalButton.tsx",
+    "dependencies": ["@kalena/framework"],
+    "localDependencies": ["atoms/buttons/index.ts", "utils/props.ts"]
+  },
+  "breadcrumbs": {
+    "file": "molecules/navigation/Breadcrumbs.tsx",
+    "dependencies": ["@kalena/framework", "@queries/other/breadcrumbs.ts"],
+    "localDependencies": [
+      "utils/tailwind.ts",
+      "utils/props.ts",
+      "atoms/buttons/index.ts",
+      "atoms/typography/index.ts"
+    ]
+  },
+  "menuselect": {
+    "file": "molecules/navigation/MenuSelect.tsx",
+    "dependencies": ["class-variance-authority", "@kalena/framework"],
+    "localDependencies": [
+      "atoms/typography/Text.tsx",
+      "utils/tailwind.ts",
+      "utils/types.ts",
+      "utils/props.ts",
+      "atoms/buttons/index.ts",
+      "atoms/typography/index.ts"
+    ]
+  },
+  "events": {
+    "file": "utils/events.ts",
+    "dependencies": [],
+    "localDependencies": []
+  },
+  "props": {
+    "file": "utils/props.ts",
+    "dependencies": [],
+    "localDependencies": []
+  },
+  "tailwind": {
+    "file": "utils/tailwind.ts",
+    "dependencies": ["clsx", "tailwind-merge"],
+    "localDependencies": []
+  },
+  "types": {
+    "file": "utils/types.ts",
+    "dependencies": ["class-variance-authority"],
+    "localDependencies": []
+  }
+}
