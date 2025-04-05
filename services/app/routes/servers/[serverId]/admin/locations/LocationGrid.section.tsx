@@ -55,7 +55,7 @@ const LocationCard = ({ location }: {
         title={location.name}
         description={location.description}
         imageSrc={location.url}
-        imageAlt={location.name}
+        imageAlt={`${location.name} icon`}
       />
     </Card>
   );

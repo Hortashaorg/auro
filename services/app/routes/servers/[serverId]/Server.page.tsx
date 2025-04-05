@@ -64,9 +64,9 @@ const Server = async () => {
 
   return (
     <Layout title={`Server - ${server.name}`}>
-      <Text>
+      <Title level="h1">
         Welcome to {server.name}
-      </Text>
+      </Title>
 
       <ResourcesTable serverId={server.id} />
 
@@ -82,13 +82,13 @@ const Server = async () => {
 
         <Grid>
           {actions.map((action) => (
-            <Card>
+            <Card key={action.id}>
               <CardBody>
                 <MediaCardHeader
                   title={action.name}
                   description={action.description ?? undefined}
                   imageSrc={action.assetUrl}
-                  imageAlt={action.name}
+                  imageAlt={`${action.name} icon`}
                 />
               </CardBody>
               <CardActions>

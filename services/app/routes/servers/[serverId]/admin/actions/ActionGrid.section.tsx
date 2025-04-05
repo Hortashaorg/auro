@@ -54,7 +54,7 @@ const ActionCard = ({ action, serverId }: {
         title={action.name}
         description={action.description}
         imageSrc={action.assetUrl}
-        imageAlt={action.name}
+        imageAlt={`${action.name} icon`}
       />
       <CardBody>
         <div className="flex flex-wrap gap-2">

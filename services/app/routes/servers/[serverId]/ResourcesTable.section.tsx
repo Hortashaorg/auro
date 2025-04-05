@@ -34,7 +34,7 @@ export const ResourcesTable = async ({ serverId, ...props }: Props) => {
               <TableCell>
                 <img
                   src={resource.asset.url}
-                  alt={resource.resource.name}
+                  alt={`${resource.resource.name} icon`}
                   className="w-8 h-8 object-cover rounded"
                 />
               </TableCell>

@@ -60,7 +60,7 @@ const ItemCard = ({ item }: {
         title={item.name}
         description={item.description}
         imageSrc={item.url}
-        imageAlt={item.name}
+        imageAlt={`${item.name} icon`}
       />
     </Card>
   );

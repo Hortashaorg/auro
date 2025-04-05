@@ -52,7 +52,7 @@ const ResourceCard = ({ resource }: {
         title={resource.name}
         description={resource.description ?? undefined}
         imageSrc={resource.url}
-        imageAlt={resource.name}
+        imageAlt={`${resource.name} icon`}
       />
     </Card>
   );
