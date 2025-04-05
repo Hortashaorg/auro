@@ -36,7 +36,7 @@ const myApp = app({
   },
 });
 
-Deno.cron("Job", "*/5 * * * *", async () => {
+Deno.cron("Job", "* * * * *", async () => {
   await increaseAvailableActions();
 });
 

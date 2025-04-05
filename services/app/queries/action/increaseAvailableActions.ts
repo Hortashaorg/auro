@@ -70,7 +70,6 @@ export const increaseAvailableActions = async () => {
       .where(
         and(
           eq(schema.user.serverId, server.id),
-          eq(schema.user.type, "player"),
           lt(schema.user.availableActions, server.maxAvailableActions),
         ),
       );
