@@ -1,7 +1,7 @@
 import { Layout } from "@layout/Layout.tsx";
 import { createRoute } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { hasAccessToServer } from "@permissions/index.ts";
+import { isPlayerOfServer } from "@permissions/index.ts";
 import { Title } from "@comp/atoms/typography/index.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
 import { getServer } from "@queries/server/servers.ts";
@@ -25,7 +25,7 @@ export const serverRoute = createRoute({
   path: "/servers/:serverId",
   component: Server,
   permission: {
-    check: hasAccessToServer,
+    check: isPlayerOfServer,
     redirectPath: "/servers",
   },
   partial: false,
