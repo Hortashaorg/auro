@@ -10,6 +10,7 @@ import {
   serversWhereUserIsAdmin,
 } from "@queries/server/servers.ts";
 import { throwError } from "@package/common";
+import { CardActions } from "@comp/atoms/card/CardActions.tsx";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -64,12 +65,14 @@ const ServerCard = ({ server }: {
         >
           {server.online ? "Online" : "Offline"}
         </Badge>
+      </CardBody>
+      <CardActions>
         <ButtonLink
           href={`/servers/${server.id}`}
         >
           Enter
         </ButtonLink>
-      </CardBody>
+      </CardActions>
     </Card>
   );
 };
@@ -91,12 +94,14 @@ const ServerAdminCard = ({ server }: {
         >
           {server.online ? "Online" : "Offline"}
         </Badge>
+      </CardBody>
+      <CardActions>
         <ButtonLink
           href={`/servers/${server.id}/admin`}
         >
           Enter
         </ButtonLink>
-      </CardBody>
+      </CardActions>
     </Card>
   );
 };

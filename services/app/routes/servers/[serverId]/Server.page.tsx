@@ -11,6 +11,7 @@ import { getServerActions } from "@queries/action/serverActions.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import { ResourcesTable } from "./ResourcesTable.section.tsx";
 import type { InferSelectModel, schema } from "@package/database";
+import { CardActions } from "@comp/atoms/card/CardActions.tsx";
 
 const calculateTimeUntilNextAction = (
   actionRecoveryInterval: InferSelectModel<
@@ -89,13 +90,15 @@ const Server = async () => {
                   imageSrc={action.assetUrl}
                   imageAlt={action.name}
                 />
+              </CardBody>
+              <CardActions>
                 <Button
                   hx-post={`/api/servers/${server.id}/actions/${action.id}/execute`}
                   hx-swap="none"
                 >
                   Do it!
                 </Button>
-              </CardBody>
+              </CardActions>
             </Card>
           ))}
         </Grid>

@@ -23,7 +23,7 @@ export const CardBody: FC<CardBodyProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4",
+        "flex flex-col gap-4 flex-grow",
         className,
       )}
       {...props}

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@comp/utils/tailwind.ts";
 
 const cardActionsVariants = cva(
-  "px-6 pb-4 pt-2",
+  "flex gap-4",
 );
 
 type CardActionsProps =
