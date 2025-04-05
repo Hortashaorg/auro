@@ -8,7 +8,7 @@ import { getServerActions } from "@queries/action/serverActions.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import type { InferSelectModel, schema } from "@package/database";
 import { CardActions } from "@comp/atoms/card/CardActions.tsx";
-import { FC, getGlobalContext } from "@kalena/framework";
+import { type FC, getGlobalContext } from "@kalena/framework";
 
 const calculateTimeUntilNextAction = (
   actionRecoveryInterval: InferSelectModel<
@@ -62,7 +62,7 @@ export const ActionsSection: FC = async (props) => {
   const actions = await getServerActions(server.id);
 
   return (
-    <Section {...props}>
+    <Section id="player-actions-section" {...props}>
       <Title level="h2">Actions</Title>
       <Text>
         You have {user.availableActions} available actions
