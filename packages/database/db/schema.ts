@@ -37,6 +37,8 @@ export const assetCategory = pgEnum("assetcategory", [
   "location",
   "item",
   "resource",
+  "skill",
+  "symbol",
 ]);
 
 export const rarity = pgEnum("rarity", [
