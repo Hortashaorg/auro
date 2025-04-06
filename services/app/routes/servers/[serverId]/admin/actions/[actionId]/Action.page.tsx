@@ -60,10 +60,6 @@ const TabsSection = (
       </TabsList>
 
       <TabContent tabId="rewards">
-        <Title>
-          {actionName}
-        </Title>
-
         <FormContext formId="modify-resource-of-action-form">
           <div className="mb-4">
             <Title>
