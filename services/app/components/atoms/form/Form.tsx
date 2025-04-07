@@ -26,6 +26,7 @@ type FormProps = BaseComponentProps & HTMXProps;
 export const Form: FC<FormProps> = ({
   className,
   children,
+  id,
   ...props
 }) => {
   // Add Alpine.js attributes to props
@@ -35,11 +36,12 @@ export const Form: FC<FormProps> = ({
     "x-on:form-error.document": "errors = $event.detail",
     "x-on:form-clear.document":
       "if ($event.detail?.value) { errors = {}; $el.reset(); }",
+    "x-on:input": `$dispatch('form-input', { formId: '${id}' })`,
     className: cn("space-y-4", className),
   };
 
   return (
-    <form {...formProps}>
+    <form {...formProps} id={id}>
       {children}
     </form>
   );

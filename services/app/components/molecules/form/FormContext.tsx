@@ -30,17 +30,14 @@ export const FormContext: FC<FormContextProps> = ({
   className,
   ...props
 }: FormContextProps) => {
-  // Create Alpine.js data with form state
   const alpineData = JSON.stringify({
     formIsDirty: false,
     isSubmitting: false,
     formId: formId,
   });
 
-  // Add x-data directive
   props["x-data"] = alpineData;
 
-  // Add event listeners for form state management
   props["x-init"] = `
     // Handle form submission start
     document.body.addEventListener('htmx:beforeRequest', function(event) {
@@ -59,14 +56,13 @@ export const FormContext: FC<FormContextProps> = ({
     });
   `;
 
-  // Listen for form-input events from the form
   props["x-on:form-input.window"] = `
     if ($event.detail && $event.detail.formId === '${formId}') {
+      console.log("input");
       formIsDirty = true;
     }
   `;
 
-  // Listen for form-clear events directly
   props["x-on:form-clear.window"] = `
     if ($event.detail && $event.detail.value === true) {
       formIsDirty = false;
