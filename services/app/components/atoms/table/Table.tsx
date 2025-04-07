@@ -27,7 +27,7 @@ export const Table: FC<TableProps> = ({
   const tableComponent = (
     <table
       className={cn(
-        "w-full text-left text-sm text-on-surface dark:text-on-surface-dark",
+        "w-full table-fixed text-left text-sm text-on-surface dark:text-on-surface-dark",
         className,
       )}
       {...props}

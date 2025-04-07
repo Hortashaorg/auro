@@ -1,7 +1,7 @@
 import { isPlayerOfServer } from "@permissions/index.ts";
 import { createRoute } from "@kalena/framework";
 import { Layout } from "@layout/Layout.tsx";
-import { db, desc, eq, schema } from "@package/database";
+import { and, db, desc, eq, schema } from "@package/database";
 import { Badge, Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@comp/atoms/table/index.ts";
 import { throwError } from "@package/common";
+import { currentUser } from "@queries/user/currentUser.ts";
 
 const calculateDuration = (executedAt: Temporal.Instant) => {
   const duration = executedAt.until(
@@ -46,6 +47,8 @@ const ActionLog = async () => {
   const context = actionLogRoute.context();
   const serverId = context.req.param("serverId");
 
+  const user = await currentUser(serverId);
+
   const actionLogsData = await db
     .select()
     .from(schema.actionLog)
@@ -55,7 +58,12 @@ const ActionLog = async () => {
       schema.location,
       eq(schema.action.locationId, schema.location.id),
     )
-    .where(eq(schema.actionLog.serverId, serverId))
+    .where(
+      and(
+        eq(schema.actionLog.userId, user.id),
+        eq(schema.actionLog.serverId, serverId),
+      ),
+    )
     .orderBy(desc(schema.actionLog.executedAt));
 
   const resources = await db
