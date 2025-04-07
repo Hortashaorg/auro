@@ -107,10 +107,10 @@ const ActionLog = async () => {
               <Title level="h2">Resources</Title>
               <Table>
                 <TableHeader>
-                  <TableCell isHeader>
+                  <TableCell isHeader className="w-1/2">
                     Name
                   </TableCell>
-                  <TableCell isHeader>
+                  <TableCell isHeader className="w-1/2">
                     Amount
                   </TableCell>
                 </TableHeader>
