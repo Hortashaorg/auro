@@ -4,3 +4,4 @@ export { changeActionResourceRewardsRoute } from "./ChangeActionResourceRewards.
 export { addResourceCostToActionRoute } from "./AddResourceCostToAction.api.tsx";
 export { updateActionResourceCostsRoute } from "./UpdateActionResourceCosts.api.tsx";
 export { removeResourceCostRoute } from "./RemoveResourceCost.api.tsx";
+export { removeResourceRewardRoute } from "./RemoveResourceReward.api.tsx";
