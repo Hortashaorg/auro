@@ -1,8 +1,9 @@
 import { getGlobalContext } from "@kalena/framework";
 import { db, eq, schema } from "@package/database";
-import { Form } from "@comp/atoms/form/index.ts";
-import { RadioGroup } from "@comp/molecules/form/index.ts";
+import { Form, Label, SelectInput } from "@comp/atoms/form/index.ts";
+import { FormControl } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
+import { Flex } from "@comp/atoms/layout/index.ts";
 
 export const AddResourceToActionForm = async () => {
   const globalContext = getGlobalContext();
@@ -13,24 +14,30 @@ export const AddResourceToActionForm = async () => {
     eq(schema.resource.serverId, serverId),
   );
 
+  const resourceOptions = availableResources.map((resource) => ({
+    value: resource.id,
+    label: resource.name,
+  }));
+
   return (
     <Form
       hx-post={`/api/servers/${serverId}/admin/actions/${actionId}/add-resource-rewards`}
       hx-swap="none"
     >
-      <RadioGroup
-        legend="Select a resource"
-        name="resourceId"
-        options={availableResources.map((resource) => ({
-          label: resource.name,
-          value: resource.id,
-          description: resource.description ?? undefined,
-        }))}
-      />
+      <Flex direction="col" gap="lg">
+        <FormControl inputName="resourceId">
+          <Label required>Select a resource</Label>
+          <SelectInput
+            name="resourceId"
+            options={resourceOptions}
+            required
+          />
+        </FormControl>
 
-      <Button type="submit" variant="primary" className="mt-4">
-        Add resource
-      </Button>
+        <Button type="submit" variant="primary">
+          Add resource
+        </Button>
+      </Flex>
     </Form>
   );
 };

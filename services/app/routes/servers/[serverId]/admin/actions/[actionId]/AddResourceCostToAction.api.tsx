@@ -12,13 +12,12 @@ const AddResourceCostToAction = async () => {
   try {
     const formData = result.output as {
       resourceId: string;
-      quantity: number;
     };
 
     await db.insert(schema.actionResourceCost).values({
       actionId,
       resourceId: formData.resourceId,
-      quantity: formData.quantity,
+      quantity: 1,
     });
 
     context.header(
@@ -59,13 +58,6 @@ const AddResourceCostToAction = async () => {
 
 const formSchema = v.object({
   resourceId: v.pipe(v.string(), v.uuid()),
-  quantity: v.pipe(
-    v.string(),
-    v.transform((value: string) => Number(value)),
-    v.number(),
-    v.integer(),
-    v.minValue(1),
-  ),
 });
 
 export const addResourceCostToActionRoute = createRoute({

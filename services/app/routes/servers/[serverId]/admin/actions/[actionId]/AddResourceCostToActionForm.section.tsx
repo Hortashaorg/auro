@@ -1,5 +1,5 @@
 import { Button, ButtonGroup } from "@comp/atoms/buttons/index.ts";
-import { Form, Input, Label, SelectInput } from "@comp/atoms/form/index.ts";
+import { Form, Label, SelectInput } from "@comp/atoms/form/index.ts";
 import { FormControl } from "@comp/molecules/form/index.ts";
 import { db, eq, schema } from "@package/database";
 import { getGlobalContext, v } from "@kalena/framework";
@@ -7,13 +7,6 @@ import { Flex } from "@comp/atoms/layout/index.ts";
 
 const formSchema = v.object({
   resourceId: v.pipe(v.string(), v.uuid()),
-  quantity: v.pipe(
-    v.string(),
-    v.transform((value: string) => Number(value)),
-    v.number(),
-    v.integer(),
-    v.minValue(1),
-  ),
 });
 
 export const AddResourceCostToActionForm = async () => {
@@ -48,10 +41,6 @@ export const AddResourceCostToActionForm = async () => {
         <FormControl inputName="resourceId">
           <Label required>Resource</Label>
           <SelectInput name="resourceId" options={resourceOptions} required />
-        </FormControl>
-        <FormControl inputName="quantity">
-          <Label required>Quantity</Label>
-          <Input name="quantity" type="number" required min="1" />
         </FormControl>
         <ButtonGroup justify="end">
           <Button type="button" variant="outline" data-dismiss="modal">
