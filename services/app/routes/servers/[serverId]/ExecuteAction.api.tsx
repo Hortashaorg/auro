@@ -105,7 +105,9 @@ const ExecuteAction = async () => {
       version: 1,
       data: {
         resource: rewardUpdates.map((reward) => ({
+          type: "reward",
           resourceId: reward.resourceId,
+          amount: reward.quantity,
         })),
       },
     });

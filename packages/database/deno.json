@@ -2,7 +2,6 @@
   "name": "@package/database",
   "exports": "./mod.ts",
   "imports": {
-    "@valibot/valibot": "jsr:@valibot/valibot@^1.0.0",
     "drizzle-kit": "npm:drizzle-kit@^0.30.6",
     "drizzle-orm": "npm:drizzle-orm@^0.41.0",
     "postgres": "npm:postgres@^3.4.5"

@@ -37,11 +37,9 @@ const actionLogData = customType<{
     return `jsonb`;
   },
   fromDriver(value: string): ActionLogType {
-    console.log(value);
-    return value as ActionLogType;
+    return value as unknown as ActionLogType;
   },
   toDriver(value: ActionLogType): string {
-    console.log(value);
     return JSON.stringify(value);
   },
 });
