@@ -6,6 +6,13 @@ import { Badge, Icon, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { Flex } from "@comp/atoms/layout/index.ts";
+import {
+  Table,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@comp/atoms/table/index.ts";
+import { throwError } from "@package/common";
 
 const calculateDuration = (executedAt: Temporal.Instant) => {
   const duration = executedAt.until(
@@ -51,6 +58,11 @@ const ActionLog = async () => {
     .where(eq(schema.actionLog.serverId, serverId))
     .orderBy(desc(schema.actionLog.executedAt));
 
+  const resources = await db
+    .select()
+    .from(schema.resource)
+    .where(eq(schema.resource.serverId, serverId));
+
   return (
     <Layout title="Action Log">
       <Title level="h1">Action Log</Title>
@@ -74,6 +86,29 @@ const ActionLog = async () => {
                   {log.location.name}
                 </Badge>
               </Flex>
+
+              <Title level="h2">Resources</Title>
+              <Table>
+                <TableHeader>
+                  <TableCell isHeader>
+                    Name
+                  </TableCell>
+                  <TableCell isHeader>
+                    Amount
+                  </TableCell>
+                </TableHeader>
+                {log.action_log.data.resource.map((resource) => {
+                  const resourceData = resources.find(
+                    (r) => r.id === resource.resourceId,
+                  ) ?? throwError("Resource not found");
+                  return (
+                    <TableRow>
+                      <TableCell>{resourceData.name}</TableCell>
+                      <TableCell>{resource.amount}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </Table>
             </CardBody>
           </Card>
         );
