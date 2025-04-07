@@ -56,16 +56,25 @@ export const getServerActions = async (serverId: string, userId?: string) => {
   const actionsWithCosts = actions.map((action) => {
     const actionCosts = costs.filter((cost) => cost.actionId === action.id);
 
-    const canExecute = actionCosts.every((cost) => {
+    const actionCostsWithUserQuantity = actionCosts.map((cost) => {
       const userResource = userResources.find(
         (resource) => resource.resourceId === cost.resourceId,
       );
-      return userResource && userResource.quantity >= cost.quantity;
+      const userQuantity = userResource ? userResource.quantity : 0;
+
+      return {
+        ...cost,
+        userQuantity,
+      };
+    });
+
+    const canExecute = actionCostsWithUserQuantity.every((cost) => {
+      return cost.userQuantity >= cost.quantity;
     });
 
     return {
       ...action,
-      costs: actionCosts,
+      costs: actionCostsWithUserQuantity,
       canExecute,
     };
   });

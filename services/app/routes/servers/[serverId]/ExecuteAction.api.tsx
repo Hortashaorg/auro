@@ -12,7 +12,6 @@ type ResourceEntry = {
   amount: number;
 };
 
-// Define a simpler type for our in-memory tracking
 type UserResource = {
   id: string;
   userId: string;
@@ -127,7 +126,6 @@ const ExecuteAction = async () => {
     },
   );
 
-  // Get all current resources for the user
   const userResourcesWithIds = await db.select({
     id: schema.userResource.id,
     userId: schema.userResource.userId,

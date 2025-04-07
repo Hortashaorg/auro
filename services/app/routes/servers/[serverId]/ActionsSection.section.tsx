@@ -16,6 +16,7 @@ type ResourceCost = {
   quantity: number;
   resourceName: string;
   resourceAssetUrl: string;
+  userQuantity: number;
 };
 
 type ActionWithCosts = {
@@ -76,7 +77,7 @@ export const ActionsSection: FC = async (props) => {
                           style={{ objectFit: "cover" }}
                         />
                         <Text variant={!action.canExecute ? "error" : "body"}>
-                          {cost.quantity}
+                          {`${cost.quantity} (${cost.userQuantity})`}
                         </Text>
                       </Flex>
                     ))}
