@@ -7,7 +7,7 @@ import type { BaseComponentProps } from "@comp/utils/props.ts";
 const flexVariants = cva("flex", {
   variants: {
     direction: {
-      row: "flex-row",
+      row: "flex-row items-center",
       col: "flex-col",
       "row-reverse": "flex-row-reverse",
       "col-reverse": "flex-col-reverse",
@@ -45,7 +45,7 @@ const flexVariants = cva("flex", {
     direction: "row",
     items: "start",
     justify: "start",
-    gap: "none",
+    gap: "sm",
     wrap: "nowrap",
   },
 });

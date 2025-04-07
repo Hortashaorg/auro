@@ -19,7 +19,6 @@
     "npm:drizzle-kit@~0.30.6": "0.30.6_esbuild@0.19.12",
     "npm:drizzle-orm@0.40": "0.40.1_@opentelemetry+api@1.9.0_postgres@3.4.5",
     "npm:drizzle-orm@0.41": "0.41.0_@opentelemetry+api@1.9.0_postgres@3.4.5",
-    "npm:drizzle-orm@~0.39.3": "0.39.3_@opentelemetry+api@1.9.0_postgres@3.4.5",
     "npm:esbuild@0.25": "0.25.0",
     "npm:esbuild@0.25.0": "0.25.0",
     "npm:postgres@^3.4.5": "3.4.5",
@@ -320,13 +319,6 @@
         "esbuild@0.19.12",
         "esbuild-register",
         "gel"
-      ]
-    },
-    "drizzle-orm@0.39.3_@opentelemetry+api@1.9.0_postgres@3.4.5": {
-      "integrity": "sha512-EZ8ZpYvDIvKU9C56JYLOmUskazhad+uXZCTCRN4OnRMsL+xAJ05dv1eCpAG5xzhsm1hqiuC5kAZUCS924u2DTw==",
-      "dependencies": [
-        "@opentelemetry/api",
-        "postgres"
       ]
     },
     "drizzle-orm@0.40.1_@opentelemetry+api@1.9.0_postgres@3.4.5": {
