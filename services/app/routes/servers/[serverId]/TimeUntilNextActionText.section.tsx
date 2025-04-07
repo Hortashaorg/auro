@@ -66,13 +66,15 @@ export const TimeUntilNextActionText: FC<Props> = (props) => {
     >
       <Text>
         You have{" "}
-        <strong className="text-on-primary-dark">
+        <strong className="dark:text-on-primary-dark text-on-primary">
           {user.availableActions} available actions
         </strong>
       </Text>
       <Text>
         More available actions in:{" "}
-        <strong className="text-on-primary-dark">{timeString}</strong>
+        <strong className="dark:text-on-primary-dark text-on-primary">
+          {timeString}
+        </strong>
       </Text>
     </div>
   );
