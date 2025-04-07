@@ -15,6 +15,8 @@ import { AddResourceToActionForm } from "./AddResourceToActionForm.section.tsx";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
 import { FormButton, FormContext } from "@comp/molecules/form/index.ts";
 import { ButtonGroup } from "@comp/atoms/buttons/index.ts";
+import { AddResourceCostToActionForm } from "./AddResourceCostToActionForm.section.tsx";
+import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -24,43 +26,32 @@ const ActionDetail = async () => {
   if (!serverId) throwError("No serverId");
   if (!actionId) throwError("No actionId");
 
-  const actions = await db.select({
+  const action = (await db.select({
     id: schema.action.id,
     name: schema.action.name,
   })
     .from(schema.action)
     .where(
       eq(schema.action.id, actionId),
-    );
-
-  const action = actions[0] ?? throwError("Action not found");
+    ))[0] ?? throwError("Action not found");
 
   return (
     <Layout title={`Action - ${action.name}`}>
-      <TabsSection
-        actionName={action.name}
-      />
+      <TabsSection />
     </Layout>
   );
 };
 
-type TabsSectionProps = {
-  actionName: string;
-};
-
-const TabsSection = (
-  { actionName }: TabsSectionProps,
-) => {
+const TabsSection = () => {
   return (
     <Tabs initialTabId="rewards">
       <TabsList>
         <TabsTrigger tabId="rewards">Rewards</TabsTrigger>
-        <TabsTrigger tabId="history">History</TabsTrigger>
-        <TabsTrigger tabId="settings">Settings</TabsTrigger>
+        <TabsTrigger tabId="costs">Costs</TabsTrigger>
       </TabsList>
 
       <TabContent tabId="rewards">
-        <FormContext formId="modify-resource-of-action-form">
+        <FormContext formId="modify-resource-reward-of-action-form">
           <div className="mb-4">
             <Title>
               Resource Rewards
@@ -75,37 +66,62 @@ const TabsSection = (
           <ButtonGroup className="mt-4">
             <ModalButton
               variant="inverse"
-              modalRef="addResourceModal"
+              modalRef="addResourceRewardModal"
               className="flex items-center gap-2"
             >
-              <Icon icon="plus" variant="inverse" />Add Resource
+              <Icon icon="plus" variant="inverse" />Add Reward
             </ModalButton>
             <FormButton
-              formId="modify-resource-of-action-form"
+              formId="modify-resource-reward-of-action-form"
               variant="primary"
               disableWhenClean
               disableDuringSubmit
             >
-              Save Resources
+              Save Rewards
             </FormButton>
           </ButtonGroup>
 
-          <Modal modalRef="addResourceModal" title="Add Resource">
+          <Modal modalRef="addResourceRewardModal" title="Add Resource Reward">
             <AddResourceToActionForm />
           </Modal>
         </FormContext>
       </TabContent>
 
-      <TabContent tabId="history">
-        <Title>
-          Usage History for {actionName}
-        </Title>
-      </TabContent>
+      <TabContent tabId="costs">
+        <FormContext formId="modify-resource-cost-of-action-form">
+          <div className="mb-4">
+            <Title>
+              Resource Costs
+            </Title>
+            <Text>
+              Resources consumed when performing this action
+            </Text>
+          </div>
 
-      <TabContent tabId="settings">
-        <Title>
-          {actionName} Settings
-        </Title>
+          <ModifyResourceCostOfActionForm />
+
+          <ButtonGroup className="mt-4">
+            <ModalButton
+              variant="inverse"
+              modalRef="addResourceCostModal"
+              className="flex items-center gap-2"
+            >
+              <Icon icon="plus" variant="inverse" />Add Cost
+            </ModalButton>
+            <FormButton
+              formId="modify-resource-cost-of-action-form"
+              variant="primary"
+              disableWhenClean
+              disableDuringSubmit
+            >
+              Save Costs
+            </FormButton>
+          </ButtonGroup>
+
+          <Modal modalRef="addResourceCostModal" title="Add Resource Cost">
+            <AddResourceCostToActionForm />
+          </Modal>
+        </FormContext>
       </TabContent>
     </Tabs>
   );

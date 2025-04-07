@@ -47,7 +47,7 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
       {...props}
       hx-post={`/api/servers/${serverId}/admin/actions/${actionId}/change-resource-rewards`}
       hx-swap="none"
-      id="modify-resource-of-action-form"
+      id="modify-resource-reward-of-action-form"
     >
       <Table>
         <TableHeader>
