@@ -14,4 +14,5 @@ export type HTMXProps = {
   "hx-target"?: string;
   "hx-trigger"?: string;
   "hx-indicator"?: string;
+  "hx-confirm"?: string;
 };

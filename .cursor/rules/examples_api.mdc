@@ -5,77 +5,248 @@ alwaysApply: true
 ---
 # Rule: API Code Examples & Common Patterns
 
-When an API endpoint successfully processes a request (especially after a POST/PUT/DELETE), it needs to update the UI appropriately and provide feedback.
+When an API endpoint processes a request (especially after POST/PUT/DELETE operations), it needs to update the UI appropriately and provide feedback. This document outlines standard patterns to follow.
 
-### 1. Updating the UI (HTMX Swaps)
+## 1. API Path Structure & Naming
+
+API endpoints should follow a consistent structure and naming convention:
+
+* **File Names:** Use PascalCase, verb-first naming (e.g., `UpdateItem.api.tsx`, `CreateResource.api.tsx`)
+* **Path Structure:** Follow resource hierarchy in paths (without `/api/` prefix)
+
+```typescript
+// Resource-based path structure
+export const updateItemRoute = createRoute({
+  path: "/resource-type/:resourceId/action",
+  // ...
+});
+
+// Nested resources pattern
+export const updateNestedItemRoute = createRoute({
+  path: "/parent-resources/:parentId/child-resources/:childId/action",
+  // ...
+});
+```
+
+## 2. Updating the UI (HTMX Swaps)
 
 Choose a swap strategy based on the scope of the change:
 
-*   **Out-of-Band (OOB) Swap:** Ideal for updating a specific, self-contained section without replacing the element that triggered the request (like a form in a modal).
-    *   **Implementation:** Return the *updated component* (e.g., `<AccountNicknameFlex />`) from the API handler. Add the `hx-swap-oob="true"` attribute directly to the root element of the returned component JSX. HTMX will find the element in the main DOM with the matching ID and swap it.
-*   **Targeted Swap (Full Component):** Simpler when updating involves re-rendering a larger component, like a whole table after one row changes.
-    *   **Implementation:** Return the complete, updated parent component (e.g., `<ServerNicknamesTable />`) from the API handler. Ensure the *triggering form* has `hx-target` pointing to the parent component's ID (e.g., `hx-target="#server-nicknames-section"`) and `hx-swap="outerHTML"`.
+* **Out-of-Band (OOB) Swap:** Update a specific component without replacing the triggering element.
+  ```typescript
+  // Component with OOB swap to update specific section
+  return <ItemComponent hx-swap-oob="true" />;
+  ```
 
----
+* **Targeted Swap:** Replace a larger component when more extensive updates are needed.
+  ```typescript
+  // In the API handler - return updated component
+  return <CompleteListComponent />;
+  
+  // In the triggering form - target parent element
+  <Form 
+    hx-post="/resource/action" 
+    hx-target="#parent-component-id" 
+    hx-swap="outerHTML"
+  >
+    {/* form content */}
+  </Form>
+  ```
 
-### 2. Standard User Feedback (HX-Trigger Events)
+## 3. Standard API Response Patterns
 
-Use the `HX-Trigger` header to send events back to the client for standard feedback patterns. Import `createEvents` from `@comp/utils/events.ts`.
+All API endpoints should follow consistent patterns for both success and error cases:
 
-*   **On Success (Form in Modal):** Always trigger `dialog-close` to close the modal.
-    ```typescript
+```typescript
+// Complete pattern for API handlers
+const GenericApiHandler = async () => {
+  const context = apiRoute.context();
+  
+  try {
+    // 1. Validate input (for POST/PUT)
+    const result = context.req.valid("form");
+    const validatedData = result.output;
+    
+    // 2. Perform operation
+    await db.operation(schema.table).values({
+      // use validatedData
+    });
+    
+    // 3. Return success response with appropriate feedback
     context.header(
       "HX-Trigger",
-      createEvents([{ name: "dialog-close", values: { value: true } }])
+      createEvents([
+        // For modal forms
+        { name: "dialog-close", values: { value: true } },
+        // Success notification
+        {
+          name: "toast-show",
+          values: {
+            message: "Operation completed successfully",
+            variant: "success",
+            title: "Success",
+          },
+        },
+      ]),
     );
-    ```
-*   **On Success (General):** Trigger `toast-show` to display a success message. Include `message`, `variant` (`success`, `info`, etc.), and `title`.
-    ```typescript
+    
+    // 4. Return updated UI component with OOB swap
+    return <UpdatedComponent hx-swap-oob="true" />;
+  } catch (error) {
+    // 5. Handle errors appropriately
+    console.error("Error:", error);
+    
+    // Specific constraint violations
+    if (error instanceof PostgresError && 
+        error.constraint_name === "unique_constraint") {
+      context.header(
+        "HX-Trigger",
+        createEvents([{
+          name: "form-error",
+          values: { fieldName: "This value already exists" },
+        }]),
+      );
+      context.status(400);
+      return <p>Validation error</p>;
+    }
+    
+    // Generic error response
     context.header(
       "HX-Trigger",
       createEvents([{
         name: "toast-show",
-        values: { message: "Action successful!", variant: "success", title: "Success" }
-      }])
+        values: {
+          message: "An error occurred",
+          variant: "danger", // Always use "danger" for errors
+          title: "Error",
+        },
+      }]),
     );
-    ```
-    *(Combine multiple events in one `createEvents` array if needed)*
-*   **On Validation Error:** Trigger `form-error`. The `values` should be a `Record<string, string>` mapping input names (or a general key like 'form') to error messages. The `Form` component should automatically display these.
-    ```typescript
-    const errorEvents: Record<string, string> = { /* ... map field keys to error messages ... */ };
-    context.header(
-      "HX-Trigger",
-      createEvents([{ name: "form-error", values: errorEvents }])
-    );
-    context.status(400); // Set appropriate status code
-    ```
----
+    context.status(500);
+    return <p>Error occurred</p>;
+  }
+};
+```
 
-### 3. Handling Specific Database Errors
+## 4. Database Operations
 
-Inside `catch` blocks, check for expected `PostgresError` types, particularly unique constraint violations using `error.constraint_name`. Provide specific feedback to the user via a `form-error` trigger instead of a generic server error.
+### Transaction Pattern for Multiple Updates
+
+When updating multiple records, use transactions to ensure atomicity:
+
+```typescript
+// Using transactions for batch operations
+await db.transaction(async (tx) => {
+  for (const item of items) {
+    await tx.update(schema.table)
+      .set({ field: newValue })
+      .where(eq(schema.table.id, item.id));
+  }
+});
+```
+
+### Handling Database Constraints
 
 ```typescript
 try {
-  // ... database operation ...
+  await db.insert(schema.table).values({
+    uniqueField: potentiallyDuplicateValue,
+    // other fields
+  });
+  // Success handling
 } catch (error) {
-  if (
-    error instanceof PostgresError &&
-    error.constraint_name === "your_unique_constraint_name" // Check specific constraint
-  ) {
+  if (error instanceof PostgresError && 
+      error.constraint_name === "constraint_name") {
+    // Handle specific constraint violation
     context.header(
       "HX-Trigger",
-      createEvents([
-        { name: "form-error", values: { fieldName: "This value is already taken." } },
-      ]),
+      createEvents([{
+        name: "form-error",
+        values: { fieldName: "This value must be unique" },
+      }]),
     );
-    context.status(400); // Bad Request (user error)
-    return <p>Constraint Violation</p>; // Simple response body
+    context.status(400);
+    return <p>Validation error</p>;
   }
-  // Handle other errors (generic DB error, unexpected errors)
-  // ...
-  throw error; // Re-throw unexpected errors
+  // Handle other errors
 }
 ```
 
----
+## 5. Standard Event Types
+
+Common events to use with `createEvents` from `@comp/utils/events.ts`:
+
+| Event Name | Purpose | Example Values |
+|------------|---------|----------------|
+| `dialog-close` | Close a modal | `{ value: true }` |
+| `toast-show` | Show notification | `{ message, variant, title }` |
+| `form-error` | Display form validation errors | `{ fieldName: "Error message" }` |
+| `form-clear` | Reset a form | `{ value: true }` |
+
+```typescript
+// Example with multiple events
+context.header(
+  "HX-Trigger",
+  createEvents([
+    { name: "dialog-close", values: { value: true } },
+    { name: "toast-show", values: {
+      message: "Item created successfully",
+      variant: "success",
+      title: "Success"
+    }}
+  ]),
+);
+```
+
+## 6. Delete Confirmation Pattern
+
+For delete operations, use a modal confirmation pattern instead of browser alert:
+
+```typescript
+// 1. In the DeleteConfirmation.section.tsx component:
+export const DeleteConfirmation = ({ itemName, itemType, deleteEndpoint }) => (
+  <Flex direction="col" gap="md">
+    <div>
+      Are you sure you want to delete <strong>{itemName}</strong>?
+    </div>
+    <ButtonGroup justify="end">
+      <Button
+        variant="danger"
+        hx-post={deleteEndpoint}
+        hx-swap="none"
+        data-dismiss="modal"
+      >
+        Delete
+      </Button>
+    </ButtonGroup>
+  </Flex>
+);
+
+// 2. In the list component showing items:
+{items.map((item, index) => {
+  const modalRef = `deleteItem${index}`; // No hyphens in modal refs!
+  return (
+    <tr key={item.id}>
+      <td>{item.name}</td>
+      <td>
+        <ModalButton
+          variant="danger"
+          modalRef={modalRef}
+        >
+          Delete
+        </ModalButton>
+        <Modal 
+          modalRef={modalRef}
+          title={`Delete ${item.name}`}
+        >
+          <DeleteConfirmation
+            itemName={item.name}
+            itemType="Item"
+            deleteEndpoint={`/resources/${item.id}/delete`}
+          />
+        </Modal>
+      </td>
+    </tr>
+  );
+})}
+```

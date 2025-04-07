@@ -135,6 +135,14 @@ const ChangeActionResourceRewards = async () => {
           name: "form-clear",
           values: { value: true },
         },
+        {
+          name: "toast-show",
+          values: {
+            message: "Resource rewards updated successfully",
+            variant: "success",
+            title: "Success",
+          },
+        },
       ]),
     );
 
@@ -143,7 +151,21 @@ const ChangeActionResourceRewards = async () => {
   } catch (error) {
     console.error("Error updating resources:", error);
 
-    throw error;
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        {
+          name: "toast-show",
+          values: {
+            message: "Failed to update resource rewards",
+            variant: "danger",
+            title: "Error",
+          },
+        },
+      ]),
+    );
+    context.status(500);
+    return <p>Error updating resource rewards</p>;
   }
 };
 

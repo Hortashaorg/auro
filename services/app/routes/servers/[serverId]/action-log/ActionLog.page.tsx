@@ -107,10 +107,13 @@ const ActionLog = async () => {
               <Title level="h2">Resources</Title>
               <Table>
                 <TableHeader>
-                  <TableCell isHeader className="w-1/2">
+                  <TableCell isHeader className="w-1/3">
                     Name
                   </TableCell>
-                  <TableCell isHeader className="w-1/2">
+                  <TableCell isHeader className="w-1/3">
+                    Type
+                  </TableCell>
+                  <TableCell isHeader className="w-1/3">
                     Amount
                   </TableCell>
                 </TableHeader>
@@ -121,7 +124,25 @@ const ActionLog = async () => {
                   return (
                     <TableRow key={resource.resourceId}>
                       <TableCell>{resourceData.name}</TableCell>
-                      <TableCell>{resource.amount}</TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={resource.type === "reward"
+                            ? "success"
+                            : "danger"}
+                        >
+                          {resource.type === "reward" ? "Reward" : "Cost"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Text
+                          variant={resource.type === "reward"
+                            ? "body"
+                            : "error"}
+                        >
+                          {resource.type === "reward" ? "+" : "-"}
+                          {Math.abs(resource.amount)}
+                        </Text>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

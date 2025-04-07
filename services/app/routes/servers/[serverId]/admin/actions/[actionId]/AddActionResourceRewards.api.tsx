@@ -45,6 +45,14 @@ const AddActionResourceRewards = async () => {
       createEvents([
         { name: "dialog-close", values: { value: true } },
         { name: "form-clear", values: { value: true } },
+        {
+          name: "toast-show",
+          values: {
+            message: "Resource reward added successfully",
+            variant: "success",
+            title: "Success",
+          },
+        },
       ]),
     );
 

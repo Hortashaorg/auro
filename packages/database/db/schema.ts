@@ -277,3 +277,24 @@ export const userItem = pgTable(
     index("user_item_user_id_idx").on(table.userId),
   ],
 );
+
+export const actionResourceCost = pgTable(
+  "action_resource_cost",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    actionId: uuid().references(() => action.id, { onDelete: "cascade" })
+      .notNull(),
+    resourceId: uuid().references(() => resource.id, { onDelete: "cascade" })
+      .notNull(),
+    quantity: integer().notNull(),
+    createdAt: temporalTimestamp().notNull().default(sql`now()`),
+    updatedAt: temporalTimestamp().notNull().default(sql`now()`),
+  },
+  (table) => [
+    unique("unique_action_resource_cost").on(
+      table.actionId,
+      table.resourceId,
+    ),
+    index("action_resource_cost_action_id_idx").on(table.actionId),
+  ],
+);

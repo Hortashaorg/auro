@@ -19,6 +19,7 @@ const buttonVariants = cva([
   "active:outline-offset-0",
   "disabled:opacity-75",
   "disabled:cursor-not-allowed",
+  "cursor-pointer",
 ], {
   variants: {
     variant: {

@@ -9,6 +9,10 @@ import {
 } from "@comp/atoms/table/index.ts";
 import { db, eq, schema } from "@package/database";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
+import { ModalButton } from "@comp/molecules/modal/index.ts";
+import { Modal } from "@comp/molecules/modal/index.ts";
+import { DeleteConfirmation } from "./DeleteConfirmation.section.tsx";
+import { Text } from "@comp/atoms/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["form"];
 /**
@@ -43,68 +47,101 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
     );
 
   return (
-    <Form
-      {...props}
-      hx-post={`/api/servers/${serverId}/admin/actions/${actionId}/change-resource-rewards`}
-      hx-swap="none"
-      id="modify-resource-of-action-form"
-    >
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableCell isHeader>Resource</TableCell>
-            <TableCell isHeader>Drop Rate (%)</TableCell>
-            <TableCell isHeader>Min Quantity</TableCell>
-            <TableCell isHeader>Max Quantity</TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {resourceRewards.map((resourceReward) => (
-            <TableRow key={resourceReward.id} hoverable>
-              <TableCell>
-                {resourceReward.resourceName}
-              </TableCell>
-              <TableCell>
-                <FormControl
-                  inputName={`resource_${resourceReward.resourceId}_chance`}
-                >
-                  <Range
-                    name={`resource_${resourceReward.resourceId}_chance`}
-                    min={0}
-                    max={100}
-                    defaultValue={resourceReward.chance}
-                    unitSuffix="%"
-                  />
-                </FormControl>
-              </TableCell>
-              <TableCell>
-                <FormControl
-                  inputName={`resource_${resourceReward.resourceId}_min`}
-                >
-                  <Input
-                    type="number"
-                    name={`resource_${resourceReward.resourceId}_min`}
-                    value={resourceReward.quantityMin}
-                    min={1}
-                  />
-                </FormControl>
-              </TableCell>
-              <TableCell>
-                <FormControl
-                  inputName={`resource_${resourceReward.resourceId}_max`}
-                >
-                  <Input
-                    type="number"
-                    name={`resource_${resourceReward.resourceId}_max`}
-                    value={resourceReward.quantityMax}
-                    min={1}
-                  />
-                </FormControl>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Form>
+    <>
+      <Form
+        {...props}
+        hx-post={`/api/servers/${serverId}/admin/actions/${actionId}/change-resource-rewards`}
+        hx-swap="none"
+        id="modify-resource-reward-of-action-form"
+      >
+        {resourceRewards.length === 0
+          ? (
+            <Text variant="body">
+              No resource rewards added yet. Click "Add Reward" to add one.
+            </Text>
+          )
+          : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell isHeader>Resource</TableCell>
+                  <TableCell isHeader>Drop Rate (%)</TableCell>
+                  <TableCell isHeader>Min Quantity</TableCell>
+                  <TableCell isHeader>Max Quantity</TableCell>
+                  <TableCell isHeader>Actions</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {resourceRewards.map((resourceReward, index) => {
+                  const modalRef = `deleteReward${index}`;
+                  return (
+                    <TableRow key={resourceReward.id} hoverable>
+                      <TableCell>
+                        {resourceReward.resourceName}
+                      </TableCell>
+                      <TableCell>
+                        <FormControl
+                          inputName={`resource_${resourceReward.resourceId}_chance`}
+                        >
+                          <Range
+                            name={`resource_${resourceReward.resourceId}_chance`}
+                            min={0}
+                            max={100}
+                            defaultValue={resourceReward.chance}
+                            unitSuffix="%"
+                          />
+                        </FormControl>
+                      </TableCell>
+                      <TableCell>
+                        <FormControl
+                          inputName={`resource_${resourceReward.resourceId}_min`}
+                        >
+                          <Input
+                            type="number"
+                            name={`resource_${resourceReward.resourceId}_min`}
+                            value={resourceReward.quantityMin}
+                            min={1}
+                          />
+                        </FormControl>
+                      </TableCell>
+                      <TableCell>
+                        <FormControl
+                          inputName={`resource_${resourceReward.resourceId}_max`}
+                        >
+                          <Input
+                            type="number"
+                            name={`resource_${resourceReward.resourceId}_max`}
+                            value={resourceReward.quantityMax}
+                            min={1}
+                          />
+                        </FormControl>
+                      </TableCell>
+                      <TableCell>
+                        <ModalButton
+                          size="xs"
+                          variant="danger"
+                          modalRef={modalRef}
+                        >
+                          Delete
+                        </ModalButton>
+                        <Modal
+                          modalRef={modalRef}
+                          title={`Delete ${resourceReward.resourceName}`}
+                        >
+                          <DeleteConfirmation
+                            itemName={resourceReward.resourceName}
+                            itemType="Reward"
+                            deleteEndpoint={`/servers/${serverId}/admin/actions/${actionId}/remove-reward/${resourceReward.id}`}
+                          />
+                        </Modal>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          )}
+      </Form>
+    </>
   );
 };
