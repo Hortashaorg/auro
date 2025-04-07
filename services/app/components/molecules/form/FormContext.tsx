@@ -58,7 +58,6 @@ export const FormContext: FC<FormContextProps> = ({
 
   props["x-on:form-input.window"] = `
     if ($event.detail && $event.detail.formId === '${formId}') {
-      console.log("input");
       formIsDirty = true;
     }
   `;
