@@ -29,9 +29,6 @@ export const EditAccountNicknameForm: FC<EditAccountNicknameFormProps> = (
         />
       </FormControl>
       <ButtonGroup justify="end">
-        <Button type="button" variant="outline" data-dismiss="modal">
-          Cancel
-        </Button>
         <Button type="submit" variant="primary">
           Save Changes
         </Button>
