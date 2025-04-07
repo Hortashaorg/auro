@@ -9,7 +9,10 @@ import {
 } from "@comp/atoms/table/index.ts";
 import { db, eq, schema } from "@package/database";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
-import { Button } from "@comp/atoms/buttons/index.ts";
+import { ModalButton } from "@comp/molecules/modal/index.ts";
+import { Modal } from "@comp/molecules/modal/index.ts";
+import { DeleteConfirmation } from "./DeleteConfirmation.section.tsx";
+import { Text } from "@comp/atoms/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["form"];
 
@@ -36,61 +39,74 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
     );
 
   return (
-    <Form
-      {...props}
-      hx-post={`/servers/${serverId}/admin/actions/${actionId}/update-costs`}
-      hx-swap="none"
-      id="modify-resource-cost-of-action-form"
-    >
-      {resourceCosts.length === 0
-        ? (
-          <div className="text-gray-500 italic p-4 text-center">
-            No resource costs added yet. Click "Add Cost" to add one.
-          </div>
-        )
-        : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableCell isHeader>Resource</TableCell>
-                <TableCell isHeader>Quantity</TableCell>
-                <TableCell isHeader className="w-3xs">Actions</TableCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {resourceCosts.map((resourceCost) => (
-                <TableRow key={resourceCost.id} hoverable>
-                  <TableCell>
-                    {resourceCost.resourceName}
-                  </TableCell>
-                  <TableCell>
-                    <FormControl
-                      inputName={`resource_${resourceCost.resourceId}_quantity`}
-                    >
-                      <Input
-                        type="number"
-                        name={`resource_${resourceCost.resourceId}_quantity`}
-                        value={resourceCost.quantity}
-                        min={1}
-                      />
-                    </FormControl>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="danger"
-                      aria-label={`Remove ${resourceCost.resourceName}`}
-                      hx-post={`/servers/${serverId}/admin/actions/${actionId}/remove-cost/${resourceCost.id}`}
-                      hx-swap="none"
-                      hx-confirm={`Are you sure you want to remove ${resourceCost.resourceName} cost from this action?`}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
+    <>
+      <Form
+        {...props}
+        hx-post={`/servers/${serverId}/admin/actions/${actionId}/update-costs`}
+        hx-swap="none"
+        id="modify-resource-cost-of-action-form"
+      >
+        {resourceCosts.length === 0
+          ? (
+            <Text variant="body">
+              No resource costs added yet. Click "Add Cost" to add one.
+            </Text>
+          )
+          : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell isHeader>Resource</TableCell>
+                  <TableCell isHeader>Quantity</TableCell>
+                  <TableCell isHeader>Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-    </Form>
+              </TableHeader>
+              <TableBody>
+                {resourceCosts.map((resourceCost, index) => {
+                  const modalRef = `deleteCost${index}`;
+                  return (
+                    <TableRow key={resourceCost.id} hoverable>
+                      <TableCell>
+                        {resourceCost.resourceName}
+                      </TableCell>
+                      <TableCell>
+                        <FormControl
+                          inputName={`resource_${resourceCost.resourceId}_quantity`}
+                        >
+                          <Input
+                            type="number"
+                            name={`resource_${resourceCost.resourceId}_quantity`}
+                            value={resourceCost.quantity}
+                            min={1}
+                          />
+                        </FormControl>
+                      </TableCell>
+                      <TableCell>
+                        <ModalButton
+                          size="xs"
+                          variant="danger"
+                          modalRef={modalRef}
+                        >
+                          Delete
+                        </ModalButton>
+                        <Modal
+                          modalRef={modalRef}
+                          title={`Delete ${resourceCost.resourceName}`}
+                        >
+                          <DeleteConfirmation
+                            itemName={resourceCost.resourceName}
+                            itemType="Cost"
+                            deleteEndpoint={`/servers/${serverId}/admin/actions/${actionId}/remove-cost/${resourceCost.id}`}
+                          />
+                        </Modal>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          )}
+      </Form>
+    </>
   );
 };

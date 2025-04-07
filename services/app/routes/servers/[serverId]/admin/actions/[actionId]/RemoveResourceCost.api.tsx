@@ -6,10 +6,7 @@ import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm
 
 const RemoveResourceCost = async () => {
   const context = removeResourceCostRoute.context();
-  const actionId = context.req.param("actionId");
   const costId = context.req.param("costId");
-
-  console.log("Removing resource cost", { actionId, costId });
 
   try {
     await db.delete(schema.actionResourceCost)

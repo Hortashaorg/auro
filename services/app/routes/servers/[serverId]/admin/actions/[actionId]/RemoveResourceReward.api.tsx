@@ -6,17 +6,12 @@ import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section
 
 const RemoveResourceReward = async () => {
   const context = removeResourceRewardRoute.context();
-  const actionId = context.req.param("actionId");
   const rewardId = context.req.param("rewardId");
 
-  console.log("Removing resource reward", { actionId, rewardId });
-
   try {
-    // Delete the reward
     await db.delete(schema.actionResourceReward)
       .where(eq(schema.actionResourceReward.id, rewardId));
 
-    // Return success response
     context.header(
       "HX-Trigger",
       createEvents([
@@ -31,7 +26,6 @@ const RemoveResourceReward = async () => {
       ]),
     );
 
-    // Return the updated form
     return <ModifyResourceOfActionForm hx-swap-oob="true" />;
   } catch (error) {
     console.error("Error removing resource reward:", error);
