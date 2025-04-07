@@ -10,6 +10,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
+import type { ActionLogType } from "./validation.ts";
 
 const temporalTimestamp = customType<
   {
@@ -25,6 +26,23 @@ const temporalTimestamp = customType<
   },
   toDriver(value: Temporal.Instant): string {
     return value.toString();
+  },
+});
+
+const actionLogData = customType<{
+  data: ActionLogType;
+  driverData: string;
+}>({
+  dataType() {
+    return `jsonb`;
+  },
+  fromDriver(value: string): ActionLogType {
+    console.log(value);
+    return value as ActionLogType;
+  },
+  toDriver(value: ActionLogType): string {
+    console.log(value);
+    return JSON.stringify(value);
   },
 });
 
@@ -60,6 +78,16 @@ export const intervals = pgEnum("intervals", [
   "12hour",
   "1day",
 ]);
+
+export const actionLog = pgTable("action_log", {
+  id: uuid().primaryKey().defaultRandom(),
+  serverId: uuid().references(() => server.id).notNull(),
+  userId: uuid().references(() => user.id).notNull(),
+  actionId: uuid().references(() => action.id).notNull(),
+  version: integer().notNull(),
+  data: actionLogData().notNull(),
+  executedAt: temporalTimestamp().notNull().default(sql`now()`),
+});
 
 export const asset = pgTable("asset", {
   id: uuid().primaryKey().defaultRandom(),

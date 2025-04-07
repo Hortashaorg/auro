@@ -7,6 +7,7 @@
     "jsr:@std/fs@^1.0.15": "1.0.15",
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
+    "jsr:@valibot/valibot@1": "1.0.0",
     "jsr:@valibot/valibot@1.0.0": "1.0.0",
     "npm:@opentelemetry/api@1.9.0": "1.9.0",
     "npm:@opentelemetry/api@^1.9.0": "1.9.0",
@@ -520,6 +521,7 @@
       },
       "packages/database": {
         "dependencies": [
+          "jsr:@valibot/valibot@1",
           "npm:drizzle-kit@~0.30.6",
           "npm:drizzle-orm@0.41",
           "npm:postgres@^3.4.5"

@@ -97,6 +97,18 @@ const ExecuteAction = async () => {
         availableActions: user.availableActions - 1,
       })
       .where(eq(schema.user.id, user.id));
+
+    await tx.insert(schema.actionLog).values({
+      serverId: serverId,
+      actionId: actionId,
+      userId: user.id,
+      version: 1,
+      data: {
+        resource: rewardUpdates.map((reward) => ({
+          resourceId: reward.resourceId,
+        })),
+      },
+    });
   });
 
   context.header(

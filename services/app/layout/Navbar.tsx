@@ -58,6 +58,11 @@ export const Navbar = async () => {
       condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
     },
     {
+      href: `/servers/${serverId}/action-log`,
+      text: "Action Log",
+      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+    },
+    {
       href: `/servers/${serverId}/admin`,
       text: "Admin",
       condition: context.var.isLoggedIn && !!serverId && isAdminPath,
