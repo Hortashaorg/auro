@@ -12,6 +12,14 @@ type ResourceEntry = {
   amount: number;
 };
 
+// Define a simpler type for our in-memory tracking
+type UserResource = {
+  id: string;
+  userId: string;
+  resourceId: string;
+  quantity: number;
+};
+
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
   const params = context.req.valid("param");
@@ -119,31 +127,50 @@ const ExecuteAction = async () => {
     },
   );
 
-  const currentResources = await db.select()
+  // Get all current resources for the user
+  const userResourcesWithIds = await db.select({
+    id: schema.userResource.id,
+    userId: schema.userResource.userId,
+    resourceId: schema.userResource.resourceId,
+    quantity: schema.userResource.quantity,
+  })
     .from(schema.userResource)
     .where(eq(schema.userResource.userId, user.id));
 
   await db.transaction(async (tx) => {
+    const updatedResources: UserResource[] = [...userResourcesWithIds];
+
     for (const cost of costs) {
-      const currentResource = currentResources.find(
+      const resourceIndex = updatedResources.findIndex(
         (resource) => resource.resourceId === cost.resourceId,
       );
 
-      if (currentResource) {
-        await tx.update(schema.userResource)
-          .set({
-            quantity: currentResource.quantity - cost.quantity,
-          })
-          .where(eq(schema.userResource.id, currentResource.id));
-      }
+      const currentResource = updatedResources[resourceIndex];
+
+      if (!currentResource) continue;
+
+      await tx.update(schema.userResource)
+        .set({
+          quantity: currentResource.quantity - cost.quantity,
+        })
+        .where(eq(schema.userResource.id, currentResource.id));
+
+      updatedResources[resourceIndex] = {
+        ...currentResource,
+        quantity: currentResource.quantity - cost.quantity,
+      };
     }
 
     for (const reward of rewardUpdates) {
-      const currentResource = currentResources.find((resource) =>
-        resource.resourceId === reward.resourceId
+      const resourceIndex = updatedResources.findIndex(
+        (resource) => resource.resourceId === reward.resourceId,
       );
 
-      if (currentResource) {
+      if (resourceIndex !== -1) {
+        const currentResource = updatedResources[resourceIndex];
+
+        if (!currentResource) continue;
+
         await tx.update(schema.userResource)
           .set({
             quantity: currentResource.quantity + reward.quantity,
