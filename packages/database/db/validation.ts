@@ -1,6 +1,6 @@
 export type ActionLogType = {
   resource: {
-    type: "reward";
+    type: "reward" | "cost";
     resourceId: string;
     amount: number;
   }[];

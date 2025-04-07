@@ -1,6 +1,6 @@
 import { db, eq, schema } from "@package/database";
 
-export const getServerActions = async (serverId: string) => {
+export const getServerActions = async (serverId: string, userId?: string) => {
   const actions = await db.select({
     id: schema.action.id,
     name: schema.action.name,
@@ -16,5 +16,59 @@ export const getServerActions = async (serverId: string) => {
       eq(schema.action.serverId, serverId),
     );
 
-  return actions;
+  if (!userId) {
+    return actions;
+  }
+
+  const costs = await db.select({
+    actionId: schema.actionResourceCost.actionId,
+    resourceId: schema.actionResourceCost.resourceId,
+    quantity: schema.actionResourceCost.quantity,
+    resourceName: schema.resource.name,
+    resourceAssetUrl: schema.asset.url,
+  })
+    .from(schema.actionResourceCost)
+    .innerJoin(
+      schema.resource,
+      eq(schema.actionResourceCost.resourceId, schema.resource.id),
+    )
+    .innerJoin(
+      schema.asset,
+      eq(schema.resource.assetId, schema.asset.id),
+    )
+    .innerJoin(
+      schema.action,
+      eq(schema.actionResourceCost.actionId, schema.action.id),
+    )
+    .where(
+      eq(schema.action.serverId, serverId),
+    );
+
+  const userResources = await db.select({
+    resourceId: schema.userResource.resourceId,
+    quantity: schema.userResource.quantity,
+  })
+    .from(schema.userResource)
+    .where(
+      eq(schema.userResource.userId, userId),
+    );
+
+  const actionsWithCosts = actions.map((action) => {
+    const actionCosts = costs.filter((cost) => cost.actionId === action.id);
+
+    const canExecute = actionCosts.every((cost) => {
+      const userResource = userResources.find(
+        (resource) => resource.resourceId === cost.resourceId,
+      );
+      return userResource && userResource.quantity >= cost.quantity;
+    });
+
+    return {
+      ...action,
+      costs: actionCosts,
+      canExecute,
+    };
+  });
+
+  return actionsWithCosts;
 };

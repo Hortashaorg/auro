@@ -6,6 +6,12 @@ import { getUserByEmail } from "@queries/user/getUserByEmail.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
 
+type ResourceEntry = {
+  type: "reward" | "cost";
+  resourceId: string;
+  amount: number;
+};
+
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
   const params = context.req.valid("param");
@@ -32,6 +38,52 @@ const ExecuteAction = async () => {
       ]),
     );
     return <ActionsSection hx-swap-oob="true" />;
+  }
+
+  const costs = await db.select({
+    resourceId: schema.actionResourceCost.resourceId,
+    quantity: schema.actionResourceCost.quantity,
+    resourceName: schema.resource.name,
+  })
+    .from(schema.actionResourceCost)
+    .innerJoin(
+      schema.resource,
+      eq(schema.actionResourceCost.resourceId, schema.resource.id),
+    )
+    .where(
+      eq(schema.actionResourceCost.actionId, actionId),
+    );
+
+  const userResources = await db.select({
+    resourceId: schema.userResource.resourceId,
+    quantity: schema.userResource.quantity,
+  })
+    .from(schema.userResource)
+    .where(
+      eq(schema.userResource.userId, user.id),
+    );
+
+  for (const cost of costs) {
+    const userResource = userResources.find(
+      (resource) => resource.resourceId === cost.resourceId,
+    );
+
+    if (!userResource || userResource.quantity < cost.quantity) {
+      context.header(
+        "HX-Trigger",
+        createEvents([
+          {
+            name: "toast-show",
+            values: {
+              message: `You don't have enough ${cost.resourceName}`,
+              title: "Insufficient Resources",
+              variant: "danger",
+            },
+          },
+        ]),
+      );
+      return <ActionsSection hx-swap-oob="true" />;
+    }
   }
 
   const possibleRewards = await db.select()
@@ -72,6 +124,20 @@ const ExecuteAction = async () => {
     .where(eq(schema.userResource.userId, user.id));
 
   await db.transaction(async (tx) => {
+    for (const cost of costs) {
+      const currentResource = currentResources.find(
+        (resource) => resource.resourceId === cost.resourceId,
+      );
+
+      if (currentResource) {
+        await tx.update(schema.userResource)
+          .set({
+            quantity: currentResource.quantity - cost.quantity,
+          })
+          .where(eq(schema.userResource.id, currentResource.id));
+      }
+    }
+
     for (const reward of rewardUpdates) {
       const currentResource = currentResources.find((resource) =>
         resource.resourceId === reward.resourceId
@@ -98,18 +164,25 @@ const ExecuteAction = async () => {
       })
       .where(eq(schema.user.id, user.id));
 
+    const resourceEntries: ResourceEntry[] = [
+      ...costs.map((cost): ResourceEntry => ({
+        type: "cost",
+        resourceId: cost.resourceId,
+        amount: cost.quantity,
+      })),
+      ...rewardUpdates.map((reward): ResourceEntry => ({
+        type: "reward",
+        resourceId: reward.resourceId,
+        amount: reward.quantity,
+      })),
+    ];
+
     await tx.insert(schema.actionLog).values({
-      serverId: serverId,
-      actionId: actionId,
+      serverId,
+      actionId,
       userId: user.id,
       version: 1,
-      data: {
-        resource: rewardUpdates.map((reward) => ({
-          type: "reward",
-          resourceId: reward.resourceId,
-          amount: reward.quantity,
-        })),
-      },
+      data: { resource: resourceEntries },
     });
   });
 
