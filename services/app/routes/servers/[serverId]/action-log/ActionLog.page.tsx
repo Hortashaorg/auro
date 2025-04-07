@@ -2,7 +2,7 @@ import { isPlayerOfServer } from "@permissions/index.ts";
 import { createRoute } from "@kalena/framework";
 import { Layout } from "@layout/Layout.tsx";
 import { db, desc, eq, schema } from "@package/database";
-import { Badge, Icon, Title } from "@comp/atoms/typography/index.ts";
+import { Badge, Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { Flex } from "@comp/atoms/layout/index.ts";
@@ -66,6 +66,15 @@ const ActionLog = async () => {
   return (
     <Layout title="Action Log">
       <Title level="h1">Action Log</Title>
+      {actionLogsData.length === 0 && (
+        <Card>
+          <CardBody>
+            <Text>
+              No action logs found. Complete actions to see them here.
+            </Text>
+          </CardBody>
+        </Card>
+      )}
       {actionLogsData.map((log) => {
         return (
           <Card key={log.action_log.id}>
@@ -102,7 +111,7 @@ const ActionLog = async () => {
                     (r) => r.id === resource.resourceId,
                   ) ?? throwError("Resource not found");
                   return (
-                    <TableRow>
+                    <TableRow key={resource.resourceId}>
                       <TableCell>{resourceData.name}</TableCell>
                       <TableCell>{resource.amount}</TableCell>
                     </TableRow>
