@@ -1,38 +1,60 @@
 import { createRoute, v } from "@kalena/framework";
 import { isAdminOfServer } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
+import { db, PostgresError, schema } from "@package/database";
+import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
 
-/**
- * Handler for adding a resource cost to an action
- * Note: This is a placeholder until actionResourceCost schema is created
- */
-const AddResourceCostToAction = () => {
+const AddResourceCostToAction = async () => {
   const context = addResourceCostToActionRoute.context();
   const result = context.req.valid("form");
+  const actionId = context.req.param("actionId");
 
-  console.log("Adding resource cost to action");
-  console.log("Form data:", result.output);
+  try {
+    const formData = result.output as {
+      resourceId: string;
+      quantity: number;
+    };
 
-  // Return success response
-  context.header(
-    "HX-Trigger",
-    createEvents([
-      { name: "dialog-close", values: { value: true } },
-      {
-        name: "toast-show",
-        values: {
-          message: "Resource cost added successfully",
-          variant: "success",
-          title: "Success",
+    await db.insert(schema.actionResourceCost).values({
+      actionId,
+      resourceId: formData.resourceId,
+      quantity: formData.quantity,
+    });
+
+    context.header(
+      "HX-Trigger",
+      createEvents([
+        { name: "dialog-close", values: { value: true } },
+        {
+          name: "toast-show",
+          values: {
+            message: "Resource cost added successfully",
+            variant: "success",
+            title: "Success",
+          },
         },
-      },
-    ]),
-  );
+      ]),
+    );
 
-  return (
-    <div id="modify-resource-cost-of-action-form" hx-swap-oob="true">
-    </div>
-  );
+    return <ModifyResourceCostOfActionForm hx-swap-oob="true" />;
+  } catch (error) {
+    if (error instanceof PostgresError) {
+      if (error.constraint_name === "unique_action_resource_cost") {
+        context.header(
+          "HX-Trigger",
+          createEvents([{
+            name: "form-error",
+            values: {
+              resourceId: "This resource is already a cost for this action",
+            },
+          }]),
+        );
+        context.status(400);
+        return <p>Failed to add resource cost</p>;
+      }
+    }
+    throw error;
+  }
 };
 
 const formSchema = v.object({

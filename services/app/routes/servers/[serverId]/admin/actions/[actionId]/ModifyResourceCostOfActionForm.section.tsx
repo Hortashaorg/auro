@@ -7,10 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
+import { db, eq, schema } from "@package/database";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
-import { IconButton } from "@comp/atoms/buttons/IconButton.tsx";
+import { Button } from "@comp/atoms/buttons/index.ts";
 
 type Props = JSX.IntrinsicElements["form"];
+
 export const ModifyResourceCostOfActionForm: FC<Props> = async (
   { ...props },
 ) => {
@@ -18,12 +20,20 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
   const serverId = globalContext.req.param("serverId");
   const actionId = globalContext.req.param("actionId");
 
-  const resourceCosts: {
-    id: string;
-    resourceId: string;
-    resourceName: string;
-    quantity: number;
-  }[] = [];
+  const resourceCosts = await db.select({
+    id: schema.actionResourceCost.id,
+    resourceId: schema.resource.id,
+    resourceName: schema.resource.name,
+    quantity: schema.actionResourceCost.quantity,
+  })
+    .from(schema.actionResourceCost)
+    .innerJoin(
+      schema.resource,
+      eq(schema.actionResourceCost.resourceId, schema.resource.id),
+    )
+    .where(
+      eq(schema.actionResourceCost.actionId, actionId),
+    );
 
   return (
     <Form
@@ -44,7 +54,7 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
               <TableRow>
                 <TableCell isHeader>Resource</TableCell>
                 <TableCell isHeader>Quantity</TableCell>
-                <TableCell isHeader>Actions</TableCell>
+                <TableCell isHeader className="w-3xs">Actions</TableCell>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -66,16 +76,15 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
                     </FormControl>
                   </TableCell>
                   <TableCell>
-                    <IconButton
-                      type="button"
-                      size="xs"
-                      icon="trash"
+                    <Button
                       variant="danger"
                       aria-label={`Remove ${resourceCost.resourceName}`}
                       hx-post={`/servers/${serverId}/admin/actions/${actionId}/remove-cost/${resourceCost.id}`}
                       hx-swap="none"
                       hx-confirm={`Are you sure you want to remove ${resourceCost.resourceName} cost from this action?`}
-                    />
+                    >
+                      Delete
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
