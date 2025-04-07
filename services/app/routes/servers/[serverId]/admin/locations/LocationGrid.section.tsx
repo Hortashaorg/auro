@@ -50,7 +50,7 @@ const LocationCard = ({ location }: {
   };
 }) => {
   return (
-    <Card className="w-3xs">
+    <Card>
       <MediaCardHeader
         title={location.name}
         description={location.description}

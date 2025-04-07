@@ -1,6 +1,6 @@
 import { Layout } from "@layout/Layout.tsx";
 import { createRoute, getGlobalContext } from "@kalena/framework";
-import { hasAccessToServer } from "@permissions/index.ts";
+import { isPlayerOfServer } from "@permissions/index.ts";
 import { Title } from "@comp/atoms/typography/index.ts";
 import { ResourcesTable } from "./ResourcesTable.section.tsx";
 import { throwError } from "@package/common";
@@ -22,7 +22,7 @@ export const playerResourcesRoute = createRoute({
   path: "/servers/:serverId/resources",
   component: ResourcesPage,
   permission: {
-    check: hasAccessToServer,
+    check: isPlayerOfServer,
     redirectPath: "/servers",
   },
   partial: false,

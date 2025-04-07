@@ -45,7 +45,7 @@ const CreateServer = async () => {
           accountId: customContext.account?.id ??
             throwError("No account found"),
           serverId: server?.id ?? throwError("No server id"),
-          availableActions: 0,
+          availableActions: 15,
           name: customContext.account?.nickname,
           type: "admin",
         });

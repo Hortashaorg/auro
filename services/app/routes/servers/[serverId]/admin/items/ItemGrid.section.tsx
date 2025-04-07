@@ -55,7 +55,7 @@ const ItemCard = ({ item }: {
   };
 }) => {
   return (
-    <Card className="w-3xs">
+    <Card>
       <MediaCardHeader
         title={item.name}
         description={item.description}

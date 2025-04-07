@@ -1,5 +1,6 @@
 import type { GlobalContext } from "@kalena/framework";
-import { and, db, eq, schema, sql } from "@package/database";
+import { and, db, eq, schema } from "@package/database";
+import { throwError } from "@package/common";
 
 export const isPublic = (): boolean => {
   return true;
@@ -7,35 +8,6 @@ export const isPublic = (): boolean => {
 
 export const isDenied = (): boolean => {
   return false;
-};
-
-export const hasAccessToServer = async (
-  c: GlobalContext,
-): Promise<boolean> => {
-  const serverId = c.req.param("serverId");
-
-  // Check if server exists and is online
-  const [server] = await db.select({
-    id: schema.server.id,
-    name: schema.server.name,
-    online: schema.server.online,
-    updatedAt: schema.server.updatedAt,
-    createdAt: schema.server.createdAt,
-    userIsAdmin: sql<boolean>`${eq(schema.user.type, "admin")}`,
-  })
-    .from(schema.server)
-    .leftJoin(
-      schema.user,
-      eq(schema.server.id, schema.user.serverId),
-    )
-    .where(eq(schema.server.id, serverId));
-
-  const isLoggedInAndServerAccessable = !!server && server.online &&
-    !!c.var.isLoggedIn;
-
-  const isServerAdmin = !!server && server.userIsAdmin;
-
-  return isLoggedInAndServerAccessable || isServerAdmin;
 };
 
 export const isPlayerOfServer = async (c: GlobalContext): Promise<boolean> => {
@@ -59,7 +31,32 @@ export const isPlayerOfServer = async (c: GlobalContext): Promise<boolean> => {
     ),
   );
 
-  return !!data && data.server.id === serverId;
+  if (!data) {
+    const [serverData] = await db.select().from(schema.server).where(
+      eq(schema.server.id, serverId),
+    );
+
+    const server = serverData ?? throwError("Server not found");
+    if (!server.online) return false;
+
+    const [accountData] = await db.select().from(schema.account).where(
+      eq(schema.account.email, email),
+    );
+
+    const account = accountData ?? throwError("Account not found");
+
+    const [userData] = await db.insert(schema.user).values({
+      serverId,
+      type: "player",
+      accountId: account.id,
+      name: account.nickname,
+      availableActions: server.startingAvailableActions,
+    }).returning();
+
+    return !!userData && server.id === serverId && server.online;
+  }
+
+  return !!data && data.server.id === serverId && data.server.online;
 };
 
 export const isAdminOfServer = async (c: GlobalContext): Promise<boolean> => {

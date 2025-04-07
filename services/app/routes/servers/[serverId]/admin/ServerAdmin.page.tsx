@@ -1,7 +1,7 @@
 import { Layout } from "@layout/Layout.tsx";
 import { createRoute } from "@kalena/framework";
 import { throwError } from "@package/common";
-import { hasAccessToServer } from "@permissions/index.ts";
+import { isAdminOfServer } from "@permissions/index.ts";
 import { serverAndUser } from "@queries/user/serverAndUser.ts";
 import { ServerStatusCard } from "./ServerStatusCard.section.tsx";
 
@@ -20,7 +20,7 @@ export const serverAdminRoute = createRoute({
   path: "/servers/:serverId/admin",
   component: ServerAdmin,
   permission: {
-    check: hasAccessToServer,
+    check: isAdminOfServer,
     redirectPath: "/servers",
   },
   partial: false,

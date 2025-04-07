@@ -47,7 +47,7 @@ const ResourceCard = ({ resource }: {
   };
 }) => {
   return (
-    <Card className="w-3xs">
+    <Card>
       <MediaCardHeader
         title={resource.name}
         description={resource.description ?? undefined}
