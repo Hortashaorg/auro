@@ -22,6 +22,10 @@
         "app:tailwind"
       ]
     },
+    "local:test": "doppler run --project auro --config local -- deno run test",
+    "ci:test": "doppler run -- playwright test",
+    "test": "playwright test",
+    "test:codegen": "playwright codegen",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
     "app:start": "deno run -A scripts/task.ts '@service/app' start",
     "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
@@ -45,7 +49,10 @@
     "jsxImportSource": "jsr:@hono/hono@4.7.5/jsx"
   },
   "imports": {
+    "@playwright/test": "npm:@playwright/test@^1.51.1",
     "@std/fs": "jsr:@std/fs@^1.0.15",
-    "@std/path": "jsr:@std/path@^1.0.8"
+    "@std/path": "jsr:@std/path@^1.0.8",
+    "playwright": "npm:playwright@^1.51.1",
+    "@base/": "./base/"
   }
 }
