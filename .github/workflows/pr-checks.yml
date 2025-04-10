@@ -72,3 +72,4 @@ jobs:
         with:
           name: test-results
           path: test-results/
+          include-hidden-files: true
