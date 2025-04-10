@@ -303,12 +303,17 @@ async function seedAssets() {
   );
 }
 
-export const setAdminUser = async () => {
+const setAdminUser = async () => {
   await db.insert(schema.account).values({
     email: "eidemartin_303@hotmail.com",
     nickname: "Martin",
     canCreateServer: true,
-  }).onConflictDoNothing();
+  }).onConflictDoUpdate({
+    target: [schema.account.email],
+    set: {
+      canCreateServer: true,
+    },
+  });
 };
 
 // Main seeding function

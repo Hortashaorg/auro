@@ -33,6 +33,7 @@
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
     "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
     "db:seed": "deno run -A scripts/task.ts '@package/database' seed",
+    "db:seed:e2e": "deno run -A scripts/task.ts '@package/database' seed:e2e",
     "comp:build": "deno run -A scripts/task.ts '@service/app' comp:build"
   },
   "compilerOptions": {

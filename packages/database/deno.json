@@ -12,7 +12,8 @@
     "fmt": "deno fmt .",
     "generate": "deno run -A --node-modules-dir --unstable-temporal npm:drizzle-kit generate",
     "migrate": "deno run -A --node-modules-dir npm:drizzle-kit migrate",
-    "seed": "deno run -A --node-modules-dir scripts/seed.ts"
+    "seed": "deno run -A --node-modules-dir scripts/seed.ts",
+    "seed:e2e": "deno run -A --node-modules-dir scripts/seed.e2e.ts"
   },
   "exclude": ["drizzle/"],
   "lint": {
