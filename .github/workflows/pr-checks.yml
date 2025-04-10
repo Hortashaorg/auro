@@ -62,4 +62,6 @@ jobs:
         run: |
           deno run db:migrate
           deno run db:seed
+          deno run app:start > logs.txt 2>&1 &
+          sleep 5
           deno run ci:test
