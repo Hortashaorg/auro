@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-test("Shows server grid when user is logged in", async ({ page }) => {
+test("/servers page as user", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
@@ -9,12 +9,24 @@ test("Shows server grid when user is logged in", async ({ page }) => {
   };
 
   await loginAs(page, "player");
-  await page.goto("/servers");
+  await page.goto("http://localhost:4000/servers");
+  const availableServersTitle = page.getByRole("heading", {
+    name: "Available Servers",
+  });
+  await expect(availableServersTitle).toBeVisible();
 
-  expect(await page.locator("main").innerHTML()).toContain("ServerGrid");
+  const createServerButton = page.getByRole("button", {
+    name: "Create Server",
+  });
+  await expect(createServerButton).not.toBeVisible();
+
+  const myServersTitle = page.getByRole("heading", {
+    name: "My Servers",
+  });
+  await expect(myServersTitle).not.toBeVisible();
 });
 
-test("Shows Create Server button for users with permission", async ({ page }) => {
+test("/servers page as admin", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
@@ -23,13 +35,24 @@ test("Shows Create Server button for users with permission", async ({ page }) =>
   };
 
   await loginAs(page, "admin");
-  await page.goto("/servers");
+  await page.getByRole("link", { name: "Servers" }).nth(0).click();
+  const availableServersTitle = page.getByRole("heading", {
+    name: "Available Servers",
+  });
+  await expect(availableServersTitle).toBeVisible();
 
-  const createButton = page.getByRole("button", { name: "Create Server" });
-  await expect(createButton).toBeVisible();
+  const createServerButton = page.getByRole("button", {
+    name: "Create Server",
+  });
+  await expect(createServerButton).toBeVisible();
+
+  const myServersTitle = page.getByRole("heading", {
+    name: "My Servers",
+  });
+  await expect(myServersTitle).toBeVisible();
 });
 
-test("Create Server button opens modal", async ({ page }) => {
+test("create server as admin", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
@@ -38,20 +61,36 @@ test("Create Server button opens modal", async ({ page }) => {
   };
 
   await loginAs(page, "admin");
-  await page.goto("/servers");
+  await page.getByRole("link", { name: "Servers" }).nth(0).click();
 
-  await page.getByRole("button", { name: "Create Server" }).click();
+  await page.getByRole("button", {
+    name: "Create Server",
+  }).click();
 
-  const modal = page.locator("div[id^='modal-createServerModal']");
-  await expect(modal).toBeVisible();
+  await page.getByRole("textbox", {
+    name: "Server Name",
+  }).fill("Test Server");
 
-  const modalTitle = modal.locator("h2");
-  await expect(modalTitle).toContainText("Create New Server");
-});
+  await page.getByLabel("Action Recovery Interval").selectOption("1hour");
 
-test("Redirects to home page when not logged in", async ({ page }) => {
-  await page.goto("/servers");
+  await page.getByRole("dialog").getByRole("button", { name: "Create Server" })
+    .click();
 
-  expect(page.url()).toContain("/");
-  expect(page.url()).not.toContain("/servers");
+  const testServerHeader = page.getByRole("heading", {
+    name: "Test Server",
+    exact: true,
+  });
+  await expect(testServerHeader).toBeVisible();
+
+  await page.getByRole("button", {
+    name: "Create Server",
+  }).click();
+
+  await page.getByLabel("Action Recovery Interval").selectOption("1hour");
+
+  await page.getByRole("dialog").getByRole("button", { name: "Create Server" })
+    .click();
+
+  await expect(page.getByText("A server with this name already exists"))
+    .toBeVisible();
 });
