@@ -2,8 +2,8 @@ import { db, schema } from "../mod.ts";
 
 const setAdminUser = async () => {
   await db.insert(schema.account).values({
-    email: Deno.env.get("TEST_USER_ADMIN_EMAIL") as string,
-    nickname: Deno.env.get("TEST_USER_ADMIN") as string,
+    email: "testuseradmin@kalena.site",
+    nickname: "testuseradmin",
     canCreateServer: true,
   }).onConflictDoUpdate({
     target: [schema.account.email],
