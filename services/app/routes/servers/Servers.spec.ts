@@ -104,3 +104,12 @@ test("create server as admin", async ({ page }) => {
 
   await page.close();
 });
+
+test("redirect when not logged in", async ({ page }) => {
+  await page.goto("http://localhost:4000/servers");
+  await page.waitForURL("http://localhost:4000/");
+
+  expect(page.url()).not.toContain("/servers");
+
+  await page.close();
+});
