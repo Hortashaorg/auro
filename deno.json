@@ -23,7 +23,8 @@
       ]
     },
     "local:test": "doppler run --project auro --config local -- deno run test",
-    "ci:test": "doppler run -- playwright test",
+    "ci:test": "doppler run -- deno run test",
+    "check-specs": "deno run --allow-read scripts/check-specs.ts",
     "test": "playwright test",
     "test:codegen": "playwright codegen",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
@@ -32,6 +33,7 @@
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
     "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
     "db:seed": "deno run -A scripts/task.ts '@package/database' seed",
+    "db:seed:e2e": "deno run -A scripts/task.ts '@package/database' seed:e2e",
     "comp:build": "deno run -A scripts/task.ts '@service/app' comp:build"
   },
   "compilerOptions": {

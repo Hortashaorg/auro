@@ -10,3 +10,4 @@ UI:
 
 Technical:
 - Introducing Testing
+- Playwright in CI/CD
