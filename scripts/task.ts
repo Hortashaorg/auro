@@ -63,6 +63,7 @@ const tasks = workspaceWithValidTask.map(async (workspace) => {
     console.error(
       `[${workspace.name}] Task failed with exit code ${status.code}`,
     );
+    Deno.exit(status.code);
   }
 });
 
