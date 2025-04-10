@@ -86,6 +86,10 @@ test("create server as admin", async ({ page }) => {
     name: "Create Server",
   }).click();
 
+  await page.getByRole("textbox", {
+    name: "Server Name",
+  }).fill("Test Server");
+
   await page.getByLabel("Action Recovery Interval").selectOption("1hour");
 
   await page.getByRole("dialog").getByRole("button", { name: "Create Server" })
