@@ -53,9 +53,13 @@ jobs:
       - name: Install Doppler CLI
         uses: dopplerhq/cli-action@v3
 
+      - name: Install playwright
+        run: deno run --allow-all npm:playwright install --with-deps
+
       - name: Setup PostgreSQL
         env:
           DOPPLER_TOKEN: ${{ secrets.AURO_LOCAL_DOPPLER_TOKEN }}
         run: |
           deno run db:migrate
           deno run db:seed
+          deno run ci:test
