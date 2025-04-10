@@ -24,6 +24,8 @@ test("/servers page as user", async ({ page }) => {
     name: "My Servers",
   });
   await expect(myServersTitle).not.toBeVisible();
+
+  await page.close();
 });
 
 test("/servers page as admin", async ({ page }) => {
@@ -50,6 +52,8 @@ test("/servers page as admin", async ({ page }) => {
     name: "My Servers",
   });
   await expect(myServersTitle).toBeVisible();
+
+  await page.close();
 });
 
 test("create server as admin", async ({ page }) => {
@@ -97,4 +101,6 @@ test("create server as admin", async ({ page }) => {
 
   await expect(page.getByText("A server with this name already exists"))
     .toBeVisible();
+
+  await page.close();
 });
