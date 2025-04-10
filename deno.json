@@ -24,6 +24,7 @@
     },
     "local:test": "doppler run --project auro --config local -- deno run test",
     "ci:test": "doppler run -- deno run test",
+    "check-specs": "deno run --allow-read scripts/check-specs.ts",
     "test": "playwright test",
     "test:codegen": "playwright codegen",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",

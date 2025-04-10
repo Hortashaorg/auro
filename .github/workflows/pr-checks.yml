@@ -25,6 +25,10 @@ jobs:
       
       - name: Run type checking
         run: deno task all:typecheck
+
+      - name: Check specs
+        run: deno task check-specs
+
   test:
     runs-on: ubuntu-latest
     services:
