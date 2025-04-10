@@ -23,7 +23,7 @@
       ]
     },
     "local:test": "doppler run --project auro --config local -- deno run test",
-    "ci:test": "doppler run -- playwright test",
+    "ci:test": "doppler run -- deno run test",
     "test": "playwright test",
     "test:codegen": "playwright codegen",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
