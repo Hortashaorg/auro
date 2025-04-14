@@ -22,8 +22,6 @@ test("Server admin page loads for admin user", async ({ page }) => {
     "http://localhost:4000/servers/5bbcb026-e240-48d8-b66d-7105df74cf9f/admin",
   );
 
-  await page.screenshot({ path: "screenshot.png" });
-
   await page.close();
 });
 
