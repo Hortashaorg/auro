@@ -12,7 +12,6 @@ test("Profile page loads for player user", async ({ page }) => {
   await page.getByRole("button", { name: "Account" }).nth(0).click();
   await page.getByRole("link", { name: "Profile" }).click();
 
-  // Check that we've landed on the profile page
   const profileTitle = page.getByRole("heading", { name: "Profile" });
   await expect(profileTitle).toBeVisible();
 
@@ -31,7 +30,6 @@ test("Profile page loads for admin user", async ({ page }) => {
   await page.getByRole("button", { name: "Account" }).nth(0).click();
   await page.getByRole("link", { name: "Profile" }).click();
 
-  // Check that we've landed on the profile page
   const profileTitle = page.getByRole("heading", { name: "Profile" });
   await expect(profileTitle).toBeVisible();
 
@@ -62,7 +60,7 @@ test("Edit nickname functionality", async ({ page }) => {
   await page.close();
 });
 
-test("@target Redirect when not logged in", async ({ page }) => {
+test("Redirect when not logged in", async ({ page }) => {
   await page.goto("http://localhost:4000/profile");
   await page.waitForURL("http://localhost:4000/");
 

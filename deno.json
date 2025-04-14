@@ -26,7 +26,7 @@
     "ci:test": "doppler run -- deno run test",
     "check-specs": "deno run --allow-read scripts/check-specs.ts",
     "test": "playwright test",
-    "test:codegen": "playwright codegen",
+    "test:codegen": "playwright codegen --target=javascript",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
     "app:start": "deno run -A scripts/task.ts '@service/app' start",
     "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",

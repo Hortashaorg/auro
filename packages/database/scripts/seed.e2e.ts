@@ -15,6 +15,7 @@ const setAdminUser = async () => {
 
 const setupTestServer = async () => {
   let [server] = await db.insert(schema.server).values({
+    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     actionRecoveryInterval: "15min",
     name: "Populated Test Server",
     online: true,
