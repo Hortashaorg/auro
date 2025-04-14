@@ -1,10 +1,10 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@hono/hono@4.7.5": "4.7.5",
+    "jsr:@hono/hono@4.7.6": "4.7.6",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
-    "jsr:@std/encoding@^1.0.8": "1.0.8",
-    "jsr:@std/fs@^1.0.15": "1.0.15",
+    "jsr:@std/encoding@^1.0.9": "1.0.9",
+    "jsr:@std/fs@^1.0.16": "1.0.16",
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@valibot/valibot@1.0.0": "1.0.0",
@@ -28,7 +28,8 @@
     "npm:playwright@^1.51.1": "1.51.1",
     "npm:postgres@^3.4.5": "3.4.5",
     "npm:tailwind-merge@3.0.1": "3.0.1",
-    "npm:tailwind-merge@^3.1.0": "3.1.0",
+    "npm:tailwind-merge@^3.1.0": "3.2.0",
+    "npm:tailwind-merge@^3.2.0": "3.2.0",
     "npm:tailwindcss@^4.1.3": "4.1.3",
     "npm:zod@*": "3.24.2"
   },
@@ -36,17 +37,17 @@
     "@hono/hono@4.7.0": {
       "integrity": "1eb10e1976d3dda22ab43115ecfa348a43cd17c8aea5c0039c9757ebded624f8"
     },
-    "@hono/hono@4.7.5": {
-      "integrity": "36a7e1b3db8a58e5dc2bd36a76be53346f0966e04c24c635c4d6f58875575b0a"
+    "@hono/hono@4.7.6": {
+      "integrity": "407da752c13d4644bb9d363f8349db7542e21abc3db8c13ca90cf69d8ab675ad"
     },
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
     },
-    "@std/encoding@1.0.8": {
-      "integrity": "a6c8f3f933ab1bed66244f435d1dc0fd23a888e07195532122ddc3d5f8f0e6b4"
+    "@std/encoding@1.0.9": {
+      "integrity": "025b8f18eb1749bc30d1353bf48b77d1eb5e35610220fa226f5a046b9240c5d7"
     },
-    "@std/fs@1.0.15": {
-      "integrity": "c083fb479889d6440d768e498195c3fc499d426fbf9a6592f98f53884d1d3f41",
+    "@std/fs@1.0.16": {
+      "integrity": "81878f62b6eeda0bf546197fc3daa5327c132fee1273f6113f940784a468b036",
       "dependencies": [
         "jsr:@std/path@^1.0.8"
       ]
@@ -327,8 +328,8 @@
       "dependencies": [
         "@drizzle-team/brocli",
         "@esbuild-kit/esm-loader",
-        "esbuild@0.19.12",
         "esbuild-register",
+        "esbuild@0.19.12",
         "gel"
       ]
     },
@@ -359,15 +360,15 @@
     "esbuild@0.18.20": {
       "integrity": "sha512-ceqxoedUrcayh7Y7ZX6NdbbDzGROiyVBgC4PriJThBKSVPWnnFHZAkfI1lJT8QFkOwH4qOS2SJkS4wvpGl8BpA==",
       "dependencies": [
-        "@esbuild/android-arm@0.18.20",
         "@esbuild/android-arm64@0.18.20",
+        "@esbuild/android-arm@0.18.20",
         "@esbuild/android-x64@0.18.20",
         "@esbuild/darwin-arm64@0.18.20",
         "@esbuild/darwin-x64@0.18.20",
         "@esbuild/freebsd-arm64@0.18.20",
         "@esbuild/freebsd-x64@0.18.20",
-        "@esbuild/linux-arm@0.18.20",
         "@esbuild/linux-arm64@0.18.20",
+        "@esbuild/linux-arm@0.18.20",
         "@esbuild/linux-ia32@0.18.20",
         "@esbuild/linux-loong64@0.18.20",
         "@esbuild/linux-mips64el@0.18.20",
@@ -387,15 +388,15 @@
       "integrity": "sha512-aARqgq8roFBj054KvQr5f1sFu0D65G+miZRCuJyJ0G13Zwx7vRar5Zhn2tkQNzIXcBrNVsv/8stehpj+GAjgbg==",
       "dependencies": [
         "@esbuild/aix-ppc64@0.19.12",
-        "@esbuild/android-arm@0.19.12",
         "@esbuild/android-arm64@0.19.12",
+        "@esbuild/android-arm@0.19.12",
         "@esbuild/android-x64@0.19.12",
         "@esbuild/darwin-arm64@0.19.12",
         "@esbuild/darwin-x64@0.19.12",
         "@esbuild/freebsd-arm64@0.19.12",
         "@esbuild/freebsd-x64@0.19.12",
-        "@esbuild/linux-arm@0.19.12",
         "@esbuild/linux-arm64@0.19.12",
+        "@esbuild/linux-arm@0.19.12",
         "@esbuild/linux-ia32@0.19.12",
         "@esbuild/linux-loong64@0.19.12",
         "@esbuild/linux-mips64el@0.19.12",
@@ -415,15 +416,15 @@
       "integrity": "sha512-BXq5mqc8ltbaN34cDqWuYKyNhX8D/Z0J1xdtdQ8UcIIIyJyz+ZMKUt58tF3SrZ85jcfN/PZYhjR5uDQAYNVbuw==",
       "dependencies": [
         "@esbuild/aix-ppc64@0.25.0",
-        "@esbuild/android-arm@0.25.0",
         "@esbuild/android-arm64@0.25.0",
+        "@esbuild/android-arm@0.25.0",
         "@esbuild/android-x64@0.25.0",
         "@esbuild/darwin-arm64@0.25.0",
         "@esbuild/darwin-x64@0.25.0",
         "@esbuild/freebsd-arm64@0.25.0",
         "@esbuild/freebsd-x64@0.25.0",
-        "@esbuild/linux-arm@0.25.0",
         "@esbuild/linux-arm64@0.25.0",
+        "@esbuild/linux-arm@0.25.0",
         "@esbuild/linux-ia32@0.25.0",
         "@esbuild/linux-loong64@0.25.0",
         "@esbuild/linux-mips64el@0.25.0",
@@ -502,8 +503,8 @@
     "tailwind-merge@3.0.1": {
       "integrity": "sha512-AvzE8FmSoXC7nC+oU5GlQJbip2UO7tmOhOfQyOmPhrStOGXHU08j8mZEHZ4BmCqY5dWTCo4ClWkNyRNx1wpT0g=="
     },
-    "tailwind-merge@3.1.0": {
-      "integrity": "sha512-aV27Oj8B7U/tAOMhJsSGdWqelfmudnGMdXIlMnk1JfsjwSjts6o8HyfN7SFH3EztzH4YH8kk6GbLTHzITJO39Q=="
+    "tailwind-merge@3.2.0": {
+      "integrity": "sha512-FQT/OVqCD+7edmmJpsgCsY820RTD5AkBryuG5IUqR5YQZSdj5xlH5nLgH7YPths7WsLPSpSBNneJdM8aS8aeFA=="
     },
     "tailwindcss@4.1.3": {
       "integrity": "sha512-2Q+rw9vy1WFXu5cIxlvsabCwhU2qUwodGq03ODhLJ0jW4ek5BUtoCsnLB0qG+m8AHgEsSJcJGDSDe06FXlP74g=="
@@ -978,8 +979,8 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@hono/hono@4.7.5",
-      "jsr:@std/fs@^1.0.15",
+      "jsr:@hono/hono@4.7.6",
+      "jsr:@std/fs@^1.0.16",
       "jsr:@std/path@^1.0.8",
       "npm:@playwright/test@^1.51.1",
       "npm:playwright@^1.51.1"
@@ -988,7 +989,7 @@
       "packages/common": {
         "dependencies": [
           "jsr:@std/crypto@^1.0.4",
-          "jsr:@std/encoding@^1.0.8"
+          "jsr:@std/encoding@^1.0.9"
         ]
       },
       "packages/database": {
@@ -1000,7 +1001,7 @@
       },
       "packages/framework": {
         "dependencies": [
-          "jsr:@hono/hono@4.7.5",
+          "jsr:@hono/hono@4.7.6",
           "jsr:@valibot/valibot@1.0.0",
           "npm:@opentelemetry/api@1.9.0"
         ]
@@ -1009,7 +1010,7 @@
         "dependencies": [
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
-          "npm:tailwind-merge@^3.1.0",
+          "npm:tailwind-merge@^3.2.0",
           "npm:tailwindcss@^4.1.3"
         ]
       }

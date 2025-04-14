@@ -48,11 +48,11 @@
     "noImplicitThis": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "precompile",
-    "jsxImportSource": "jsr:@hono/hono@4.7.5/jsx"
+    "jsxImportSource": "jsr:@hono/hono@4.7.6/jsx"
   },
   "imports": {
     "@playwright/test": "npm:@playwright/test@^1.51.1",
-    "@std/fs": "jsr:@std/fs@^1.0.15",
+    "@std/fs": "jsr:@std/fs@^1.0.16",
     "@std/path": "jsr:@std/path@^1.0.8",
     "playwright": "npm:playwright@^1.51.1",
     "@base/": "./base/"

@@ -5,7 +5,7 @@
   "imports": {
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
     "clsx": "npm:clsx@^2.1.1",
-    "tailwind-merge": "npm:tailwind-merge@^3.1.0",
+    "tailwind-merge": "npm:tailwind-merge@^3.2.0",
     "tailwindcss": "npm:tailwindcss@^4.1.3",
     "@comp/": "./components/",
     "@permissions/": "./permissions/",
