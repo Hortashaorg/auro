@@ -36,22 +36,21 @@ const setupTestServer = async () => {
     throw new Error("Account or server not found");
   }
 
-  const [user] = await db.insert(schema.user).values({
+  let [user] = await db.insert(schema.user).values({
     accountId: account.id,
     serverId: server.id,
     type: "admin",
     availableActions: 15,
   })
     .returning()
-    .onConflictDoUpdate({
-      target: schema.user.id,
-      set: {
-        type: "admin",
-        availableActions: 15,
-      },
-    });
+    .onConflictDoNothing();
 
-  console.log(user);
+  if (!user) {
+    user = await db.query.user.findFirst({
+      where: eq(schema.user.accountId, account.id),
+    });
+  }
+
   if (!user) {
     throw new Error("User not found");
   }

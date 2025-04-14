@@ -138,7 +138,13 @@ export const user = pgTable(
   },
   (
     table,
-  ) => [unique("unique_user_name_per_server").on(table.serverId, table.name)],
+  ) => [
+    unique("unique_user_name_per_server").on(table.serverId, table.name),
+    unique("unique_user_on_server_per_account").on(
+      table.serverId,
+      table.accountId,
+    ),
+  ],
 );
 
 export const location = pgTable(
