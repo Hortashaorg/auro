@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-test("Create item functionality", async ({ page }) => {
+test("Create resource functionality", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
@@ -15,31 +15,32 @@ test("Create item functionality", async ({ page }) => {
   await page.locator("section").filter({ hasText: "My ServersPopulated Test" })
     .getByRole("button").click();
   await page.getByRole("button", { name: "Configuration" }).click();
-  await page.getByRole("link", { name: "Items" }).click();
+  await page.getByRole("link", { name: "Resources" }).click();
   await page.waitForTimeout(300);
 
-  await page.getByRole("button", { name: "Create Item" }).click();
+  await page.getByRole("button", { name: "Create Resource" }).click();
 
-  await page.getByRole("textbox", { name: "Item Name*" }).fill(
-    "Test Item",
+  await page.getByRole("textbox", { name: "Resource Name*" }).fill(
+    "Test Resource",
   );
   await page.getByRole("textbox", { name: "Description" }).fill(
-    "Test item description",
+    "Test resource description",
   );
-  await page.getByLabel("Rarity*").selectOption("legendary");
-  await page.getByRole("img", { name: "Sword 3" }).click();
+
+  await page.getByRole("switch").locator("..").click();
+
+  await page.getByRole("img", { name: "Fish 1" }).click();
   await page.getByRole("dialog").getByRole("button", {
-    name: "Create Item",
+    name: "Create Resource",
   }).click();
 
-  const itemName = page.getByText("Test Item").first();
-
-  await expect(itemName).toBeVisible();
+  const resourceName = page.getByText("Test Resource").first();
+  await expect(resourceName).toBeVisible();
 
   await page.close();
 });
 
-test("Player cannot access items admin page", async ({ page }) => {
+test("Player cannot access resources admin page", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
@@ -50,7 +51,7 @@ test("Player cannot access items admin page", async ({ page }) => {
   await loginAs(page, "player");
 
   await page.goto(
-    "http://localhost:4000/servers/5bbcb026-e240-48d8-b66d-7105df74cf9f/admin/items",
+    "http://localhost:4000/servers/5bbcb026-e240-48d8-b66d-7105df74cf9f/admin/resources",
   );
 
   await page.waitForURL("http://localhost:4000/servers");
