@@ -1,11 +1,15 @@
 import { db, eq, schema } from "../mod.ts";
 
 const setAdminUser = async () => {
-  await db.insert(schema.account).values({
+  await db.insert(schema.account).values([{
     email: "testuseradmin@kalena.site",
     nickname: "testuseradmin",
     canCreateServer: true,
-  }).onConflictDoUpdate({
+  }, {
+    email: "testuserplayer@kalena.site",
+    nickname: "testuserplayer",
+    canCreateServer: true,
+  }]).onConflictDoUpdate({
     target: [schema.account.email],
     set: {
       canCreateServer: true,
