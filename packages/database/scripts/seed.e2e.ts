@@ -56,18 +56,17 @@ const setupTestServer = async () => {
     throw new Error("User not found");
   }
 
-  const asset = await db.query.asset.findFirst({
+  const locationAsset = await db.query.asset.findFirst({
     where: eq(schema.asset.name, "Castle 1"),
   });
-
-  if (!asset) {
+  if (!locationAsset) {
     throw new Error("Asset not found");
   }
 
   let [location] = await db.insert(schema.location).values({
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     serverId: server.id,
-    assetId: asset.id,
+    assetId: locationAsset.id,
     name: "Test Location",
     description: "A location for e2e tests.",
   }).returning().onConflictDoNothing();
@@ -80,6 +79,89 @@ const setupTestServer = async () => {
 
   if (!location) {
     throw new Error("Location not found");
+  }
+
+  const resourceAsset = await db.query.asset.findFirst({
+    where: eq(schema.asset.name, "Gold 1"),
+  });
+  if (!resourceAsset) {
+    throw new Error("Asset not found");
+  }
+
+  let [resource1, resource2] = await db.insert(schema.resource).values([{
+    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
+    serverId: server.id,
+    assetId: resourceAsset.id,
+    name: "Test Resource",
+    description: "A resource for e2e tests.",
+    leaderboard: true,
+  }, {
+    id: "05645ee0-8a62-4c2e-ae05-7f6d237cf6b7",
+    serverId: server.id,
+    assetId: resourceAsset.id,
+    name: "Test Resource 2",
+    description: "A resource for e2e tests.",
+    leaderboard: true,
+  }]).returning().onConflictDoNothing();
+
+  if (!resource1) {
+    resource1 = await db.query.resource.findFirst({
+      where: eq(schema.resource.name, "Test Resource"),
+    });
+  }
+
+  if (!resource2) {
+    resource2 = await db.query.resource.findFirst({
+      where: eq(schema.resource.name, "Test Resource 2"),
+    });
+  }
+
+  if (!resource1 || !resource2) {
+    throw new Error("Resource not found");
+  }
+
+  const actionAsset = await db.query.asset.findFirst({
+    where: eq(schema.asset.name, "Fishing 2"),
+  });
+  if (!actionAsset) {
+    throw new Error("Asset not found");
+  }
+
+  let [action] = await db.insert(schema.action).values({
+    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
+    serverId: server.id,
+    name: "Populated Test Action",
+    description: "A action for e2e tests.",
+    assetId: actionAsset.id,
+  }).returning().onConflictDoNothing();
+
+  if (!action) {
+    action = await db.query.action.findFirst({
+      where: eq(schema.action.name, "Populated Test Action"),
+    });
+  }
+
+  if (!action) {
+    throw new Error("Action not found");
+  }
+
+  let [actionReward] = await db.insert(schema.actionResourceReward).values({
+    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
+    actionId: action.id,
+    resourceId: resource2.id,
+    chance: 100,
+    quantityMax: 1,
+    quantityMin: 1,
+  }).returning().onConflictDoNothing();
+
+  if (!actionReward) {
+    actionReward = await db.query.actionResourceReward.findFirst({
+      where: eq(schema.actionResourceReward.actionId, action.id),
+    });
+  }
+
+  if (!actionReward) {
+    throw new Error("Action reward not found");
   }
 };
 
