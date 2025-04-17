@@ -55,6 +55,32 @@ const setupTestServer = async () => {
   if (!user) {
     throw new Error("User not found");
   }
+
+  const asset = await db.query.asset.findFirst({
+    where: eq(schema.asset.name, "Castle 1"),
+  });
+
+  if (!asset) {
+    throw new Error("Asset not found");
+  }
+
+  let [location] = await db.insert(schema.location).values({
+    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
+    serverId: server.id,
+    assetId: asset.id,
+    name: "Test Location",
+    description: "A location for e2e tests.",
+  }).returning().onConflictDoNothing();
+
+  if (!location) {
+    location = await db.query.location.findFirst({
+      where: eq(schema.location.name, "Test Location"),
+    });
+  }
+
+  if (!location) {
+    throw new Error("Location not found");
+  }
 };
 
 async function main() {
