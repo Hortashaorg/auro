@@ -29,30 +29,45 @@ const setupTestServer = async () => {
     });
   }
 
-  const account = await db.query.account.findFirst({
+  const adminAccount = await db.query.account.findFirst({
     where: eq(schema.account.email, "testuseradmin@kalena.site"),
   });
 
-  if (!account || !server) {
+  const playerAccount = await db.query.account.findFirst({
+    where: eq(schema.account.email, "testuserplayer@kalena.site"),
+  });
+
+  if (!adminAccount || !playerAccount || !server) {
     throw new Error("Account or server not found");
   }
 
-  let [user] = await db.insert(schema.user).values({
-    accountId: account.id,
+  let [admin, player] = await db.insert(schema.user).values([{
+    accountId: adminAccount.id,
     serverId: server.id,
     type: "admin",
     availableActions: 15,
-  })
+  }, {
+    accountId: playerAccount.id,
+    serverId: server.id,
+    type: "player",
+    availableActions: 15,
+  }])
     .returning()
     .onConflictDoNothing();
 
-  if (!user) {
-    user = await db.query.user.findFirst({
-      where: eq(schema.user.accountId, account.id),
+  if (!admin) {
+    admin = await db.query.user.findFirst({
+      where: eq(schema.user.accountId, adminAccount.id),
     });
   }
 
-  if (!user) {
+  if (!player) {
+    player = await db.query.user.findFirst({
+      where: eq(schema.user.accountId, playerAccount.id),
+    });
+  }
+
+  if (!admin || !player) {
     throw new Error("User not found");
   }
 
@@ -163,6 +178,16 @@ const setupTestServer = async () => {
   if (!actionReward) {
     throw new Error("Action reward not found");
   }
+
+  await db.insert(schema.userResource).values([{
+    userId: player.id,
+    resourceId: resource1.id,
+    quantity: 100,
+  }, {
+    userId: player.id,
+    resourceId: resource2.id,
+    quantity: 100,
+  }]).onConflictDoNothing();
 };
 
 async function main() {
