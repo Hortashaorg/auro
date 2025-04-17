@@ -138,7 +138,13 @@ export const user = pgTable(
   },
   (
     table,
-  ) => [unique("unique_user_name_per_server").on(table.serverId, table.name)],
+  ) => [
+    unique("unique_user_name_per_server").on(table.serverId, table.name),
+    unique("unique_user_on_server_per_account").on(
+      table.serverId,
+      table.accountId,
+    ),
+  ],
 );
 
 export const location = pgTable(
@@ -163,7 +169,7 @@ export const action = pgTable(
     id: uuid().primaryKey().defaultRandom(),
     serverId: uuid().references(() => server.id).notNull(),
     assetId: uuid().references(() => asset.id).notNull(),
-    locationId: uuid().references(() => location.id),
+    locationId: uuid().references(() => location.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
     description: varchar({ length: 500 }),
     cooldownMinutes: integer().notNull().default(0),

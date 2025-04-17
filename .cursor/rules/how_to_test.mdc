@@ -1,0 +1,91 @@
+---
+description: How to correctly test
+globs: 
+alwaysApply: false
+---
+# How To: Write Tests
+
+This rule defines the conventions and requirements for writing and maintaining tests in this project.
+
+---
+
+## 1. Where to Put Tests
+
+- Place `.spec.ts` files in the same directory as the feature/page/component they test.
+- Name the test file after the file it tests (e.g. `Actions.page.tsx` → `Actions.spec.ts`).
+
+---
+
+## 2. Test Structure & Style
+
+- Use Playwright for end-to-end and UI tests.
+- Do not add comments in test files unless absolutely necessary.
+- Use the shared `loginAs` helper for authentication. Import it dynamically:
+  ```ts
+  const { loginAs } = await import(
+    `file:///${Deno.cwd()}/playwright/login.ts`
+  ) as {
+    loginAs: (page: Page, user: "admin" | "player") => Promise<void>;
+  };
+  ```
+- Use hardcoded UUIDs for test servers, locations, and other entities. These should match the values seeded in `seed.e2e.ts`.
+- Use robust selectors (`getByRole`, `getByLabel`, `getByText`) for all UI interactions and assertions.
+
+---
+
+## 3. What to Test
+
+- The main user flow (e.g. creating an action as admin and verifying it appears).
+- Permission checks (e.g. player is redirected from admin pages).
+- Form interactions (open modal, fill form, submit, verify result).
+- Only test what is necessary for confidence in the feature.
+
+---
+
+## 4. Test Data
+
+- Tests are designed to run in CI pipelines, not in production or dev environments.
+- Use the same hardcoded IDs and names in both the seed script and tests.
+- Always select assets and locations by name or ID that are guaranteed to exist from the seed.
+
+---
+
+## 5. Example Pattern
+
+```ts
+import { expect, type Page, test } from "@playwright/test";
+
+test("admin can create a new action and see it in the grid", async ({ page }) => {
+  const cwd = Deno.cwd();
+  const { loginAs } = await import(
+    `file:///${cwd}/playwright/login.ts`
+  ) as {
+    loginAs: (page: Page, user: "admin" | "player") => Promise<void>;
+  };
+
+  await loginAs(page, "admin");
+  await page.goto("http://localhost:4000/servers/5bbcb026-e240-48d8-b66d-7105df74cf9f/admin/actions");
+  await page.getByRole("button", { name: "Create Action" }).click();
+  await page.getByRole("textbox", { name: "Action Name" }).fill("Test Action");
+  await page.getByRole("img", { name: "Fishing 2" }).click();
+  await page.getByLabel("Location").selectOption("5bbcb026-e240-48d8-b66d-7105df74cf9f");
+  await page.getByRole("dialog").getByRole("button", { name: "Create Action" }).click();
+  await expect(page.getByText("Test Action").first()).toBeVisible();
+});
+```
+
+---
+
+## 6. Maintenance
+
+- When changing test data or IDs, update both the seed script and all affected tests.
+- Avoid tests that depend on timing, random data, or external state.
+
+---
+
+## 7. Future
+
+- Add more examples or patterns as the project grows.
+- Consider a high-level `concept_testing` rule if testing strategy becomes more complex.
+
+--- 

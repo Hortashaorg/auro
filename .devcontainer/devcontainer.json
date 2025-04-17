@@ -9,7 +9,8 @@
         "GitHub.vscode-github-actions",
         "bradlc.vscode-tailwindcss",
         "CraigRBroughton.htmx-attributes",
-        "denoland.vscode-deno"
+        "denoland.vscode-deno",
+        "ms-playwright.playwright"
       ]
     }
   },

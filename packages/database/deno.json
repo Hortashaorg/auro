@@ -2,8 +2,8 @@
   "name": "@package/database",
   "exports": "./mod.ts",
   "imports": {
-    "drizzle-kit": "npm:drizzle-kit@^0.30.6",
-    "drizzle-orm": "npm:drizzle-orm@^0.41.0",
+    "drizzle-kit": "npm:drizzle-kit@^0.31.0",
+    "drizzle-orm": "npm:drizzle-orm@^0.42.0",
     "postgres": "npm:postgres@^3.4.5"
   },
   "tasks": {
@@ -12,7 +12,8 @@
     "fmt": "deno fmt .",
     "generate": "deno run -A --node-modules-dir --unstable-temporal npm:drizzle-kit generate",
     "migrate": "deno run -A --node-modules-dir npm:drizzle-kit migrate",
-    "seed": "deno run -A --node-modules-dir scripts/seed.ts"
+    "seed": "deno run -A --node-modules-dir --unstable-temporal scripts/seed.ts",
+    "seed:e2e": "deno run -A --node-modules-dir --unstable-temporal scripts/seed.e2e.ts"
   },
   "exclude": ["drizzle/"],
   "lint": {

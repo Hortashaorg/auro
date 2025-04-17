@@ -5,8 +5,8 @@
   "imports": {
     "class-variance-authority": "npm:class-variance-authority@^0.7.1",
     "clsx": "npm:clsx@^2.1.1",
-    "tailwind-merge": "npm:tailwind-merge@^3.1.0",
-    "tailwindcss": "npm:tailwindcss@^4.1.3",
+    "tailwind-merge": "npm:tailwind-merge@^3.2.0",
+    "tailwindcss": "npm:tailwindcss@^4.1.4",
     "@comp/": "./components/",
     "@permissions/": "./permissions/",
     "@queries/": "./queries/",
@@ -15,7 +15,7 @@
   "tasks": {
     "typecheck": "deno check .",
     "lint": "deno lint .",
-    "fmt": "deno fmt .",
+    "fmt": "deno fmt --ignore=./main.css",
     "tailwind": "./tailwindcli -i ./main.css -o ./public/main.css --minify --watch",
     "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --unstable-cron --allow-net --allow-read --allow-env --watch ./main.ts",
     "start": "doppler run -- deno run --unstable-otel --unstable-temporal --unstable-cron --allow-net --allow-read --allow-env --watch ./main.ts",

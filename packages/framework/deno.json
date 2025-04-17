@@ -4,14 +4,14 @@
   "license": "MIT",
   "exports": "./mod.ts",
   "imports": {
-    "@hono/hono": "jsr:@hono/hono@4.7.5",
+    "@hono/hono": "jsr:@hono/hono@4.7.7",
     "@opentelemetry/api": "npm:@opentelemetry/api@1.9.0",
     "@valibot/valibot": "jsr:@valibot/valibot@1.0.0"
   },
   "tasks": {
     "typecheck": "deno check .",
     "lint": "deno lint .",
-    "fmt": "deno fmt .",
+    "fmt": "deno fmt",
     "publish": "deno publish --allow-slow-types"
   }
 }
