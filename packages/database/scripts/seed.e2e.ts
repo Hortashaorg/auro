@@ -8,13 +8,8 @@ const setAdminUser = async () => {
   }, {
     email: "testuserplayer@kalena.site",
     nickname: "testuserplayer",
-    canCreateServer: true,
-  }]).onConflictDoUpdate({
-    target: [schema.account.email],
-    set: {
-      canCreateServer: true,
-    },
-  });
+    canCreateServer: false,
+  }]).onConflictDoNothing();
 };
 
 const setupTestServer = async () => {

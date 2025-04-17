@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-test("@target player can execute an action on the server page", async ({ page }) => {
+test("player can execute an action on the server page", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
