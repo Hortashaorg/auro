@@ -42,7 +42,7 @@ export const FormContext: FC<FormContextProps> = ({
     // Handle form submission start
     document.body.addEventListener('htmx:beforeRequest', function(event) {
       const form = event.detail.elt;
-      if (form.id === '${formId}') {
+      if (formId === '${formId}') {
         isSubmitting = true;
       }
     });
@@ -50,7 +50,8 @@ export const FormContext: FC<FormContextProps> = ({
     // Handle form submission completion
     document.body.addEventListener('htmx:afterRequest', function(event) {
       const form = event.detail.elt;
-      if (form.id === '${formId}') {
+      if (formId === '${formId}') {
+        formIsDirty = false;
         isSubmitting = false;
       }
     });
@@ -59,13 +60,6 @@ export const FormContext: FC<FormContextProps> = ({
   props["x-on:form-input.window"] = `
     if ($event.detail && $event.detail.formId === '${formId}') {
       formIsDirty = true;
-    }
-  `;
-
-  props["x-on:form-clear.window"] = `
-    if ($event.detail && $event.detail.value === true) {
-      formIsDirty = false;
-      isSubmitting = false;
     }
   `;
 
