@@ -147,6 +147,7 @@ const setupTestServer = async () => {
     name: "Populated Test Action",
     description: "A action for e2e tests.",
     assetId: actionAsset.id,
+    locationId: location.id,
   }).returning().onConflictDoNothing();
 
   if (!action) {
