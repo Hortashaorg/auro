@@ -1,4 +1,4 @@
-import { db, eq, schema } from "../mod.ts";
+import { db, eq, schema, sql } from "../mod.ts";
 
 const setAdminUser = async () => {
   await db.insert(schema.account).values([{
@@ -44,15 +44,22 @@ const setupTestServer = async () => {
     accountId: adminAccount.id,
     serverId: server.id,
     type: "admin",
+    name: "testuseradmin",
     availableActions: 15,
   }, {
     accountId: playerAccount.id,
     serverId: server.id,
     type: "player",
+    name: "testuserplayer",
     availableActions: 15,
   }])
     .returning()
-    .onConflictDoNothing();
+    .onConflictDoUpdate({
+      target: [schema.user.accountId, schema.user.serverId],
+      set: {
+        name: sql`excluded.name`,
+      },
+    });
 
   if (!admin) {
     admin = await db.query.user.findFirst({
