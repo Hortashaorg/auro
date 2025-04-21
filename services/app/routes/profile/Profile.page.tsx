@@ -5,6 +5,7 @@ import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Layout } from "@layout/Layout.tsx";
 import { GameNicknamesTable } from "./GameNicknamesTable.section.tsx";
 import { AccountNicknameFlex } from "./AccountNicknameFlex.section.tsx";
+import { accountContext } from "@contexts/accountContext.ts";
 
 const Profile = () => {
   return (
@@ -43,6 +44,7 @@ const Profile = () => {
 export const profileRoute = createRoute({
   path: "/profile",
   component: Profile,
+  customContext: accountContext,
   permission: {
     check: isLoggedIn,
     redirectPath: "/",

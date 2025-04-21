@@ -1,9 +1,9 @@
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
-import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
 import { db, eq, PostgresError, schema } from "@package/database";
 import { AccountNicknameFlex } from "./AccountNicknameFlex.section.tsx";
+import { accountContext } from "@contexts/accountContext.ts";
 
 const UpdateAccountNickname = async () => {
   const context = updateAccountNicknameRoute.context();
@@ -23,12 +23,12 @@ const UpdateAccountNickname = async () => {
     return <p>Validation Failure</p>;
   }
 
-  const email = context.var.email ?? throwError("Email not found");
-
   try {
+    const account = await updateAccountNicknameRoute.customContext();
+
     await db.update(schema.account)
       .set({ nickname: result.output.nickname })
-      .where(eq(schema.account.email, email));
+      .where(eq(schema.account.id, account.id));
 
     context.header(
       "HX-Trigger",
@@ -71,6 +71,7 @@ const updateNicknameSchema = v.object({
 export const updateAccountNicknameRoute = createRoute({
   path: "/api/profile/update-account-nickname",
   component: UpdateAccountNickname,
+  customContext: accountContext,
   permission: { check: isLoggedIn, redirectPath: "/" },
   formValidationSchema: updateNicknameSchema,
   partial: true,

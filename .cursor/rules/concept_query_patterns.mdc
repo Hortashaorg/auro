@@ -1,0 +1,131 @@
+---
+description: Concept of database query patterns
+globs: 
+alwaysApply: false
+---
+# Concept: Query & Data Access Patterns
+
+This rule defines the standard patterns for acquiring, selecting, and mutating data in the application. Following these patterns ensures maintainability, security, and predictability across the codebase.
+
+---
+
+## 1. User Metadata via Contexts
+
+- **Location:** `services/app/contexts/`
+- **Pattern:**
+  - Context functions provide access to user-related data (account, user) and handle authentication checks.
+  - Each context function takes a `GlobalContext` and returns the relevant data.
+  - Use `customContext` in `createRoute()` to inject these contexts.
+  - Context functions should be imported from the `contexts/` folder using the `@contexts/` alias.
+  
+- **Current Implementations:**
+  - `accountContext` - Provides account data based on user email from the GlobalContext.
+  - `userContext` - Provides user data for a specific game based on email and gameId.
+
+- **Example Usage:**
+  ```typescript
+  import { userContext } from "@contexts/userContext.ts";
+  
+  export const someRoute = createRoute({
+    path: "/games/:gameId/some-route",
+    customContext: userContext,
+    component: SomeComponent,
+  });
+  
+  const SomeComponent = async (props) => {
+    // Access context data by calling the route's customContext function
+    const user = await someRoute.customContext();
+    
+    // ... component logic ...
+    return <div>Hello, {user.account.email}</div>;
+  }
+  ```
+
+- **Rationale:** Centralizes authentication/authorization and user context logic, reducing duplication and making it easy to reason about and update.
+
+---
+
+## 2. Data Selectors (Read-Only Queries)
+
+- **Location:** `services/app/queries/selects/` (or within domain folders like `queries/game/`, `queries/user/`)
+- **Pattern:**
+  - All data-fetching functions must be defined in the queries folder.
+  - These functions should take IDs or context objects and return the required data.
+  - Never directly use `db.select` in UI components or route handlers.
+  - Example:
+    ```typescript
+    import { getInventoryByUserId } from "@queries/game/inventory.ts";
+    const inventory = await getInventoryByUserId(user.id);
+    ```
+- **Rationale:** Encourages reusability, makes it easy to find and optimize selectors, and prevents direct DB access in UI files.
+
+---
+
+## 3. Mutations (Insert/Update/Delete)
+
+- **Location:** `services/app/queries/mutations/` (or within domain folders)
+- **Pattern:**
+  - All data-modifying operations must be performed via utility functions in the queries folder.
+  - These functions must:
+    - Handle batch operations
+    - Correctly update `updatedAt`, `createdAt`, and other side effects
+    - Use transactions for multi-step operations to ensure atomicity
+  - Example:
+    ```typescript
+    import { updateInventory } from "@queries/game/updateInventory.ts";
+    await updateInventory({ userId, items });
+    ```
+- **Rationale:** Ensures data integrity, auditability, and consistent handling of side effects.
+
+---
+
+## 4. Prohibition of Direct DB Access in UI Files
+
+- **Pattern:**
+  - Never use `db.select`, `db.insert`, `db.update`, or similar DB calls directly in `.tsx` files (UI, routes, or API handlers).
+  - Only import and use query/mutation functions from the queries folder.
+  - Use context functions to handle authentication and user data access.
+- **Rationale:** Keeps data access logic centralized, auditable, and testable.
+
+---
+
+## 5. Naming Conventions
+
+- **Selectors:** `getXByY`, `findX`, `listX`, etc.
+- **Mutations:** `createX`, `updateY`, `deleteZ`, etc.
+- **Contexts:** `userContext`, `accountContext`, etc.
+
+---
+
+## 6. Example Folder Structure
+
+```
+services/app/
+  contexts/
+    userContext.ts     - For user data in a game context
+    accountContext.ts  - For account-level data
+  queries/
+    game/
+      getInventory.ts  - Query functions for game-related data
+      updateInventory.ts
+    user/
+      getUserDetails.ts
+      updateUserProfile.ts
+```
+
+---
+
+## 7. Migration Strategy
+
+For existing code that uses direct DB queries in UI files:
+1. Identify the query pattern
+2. Move it to an appropriate query function in the queries folder
+3. Import and use the query function instead
+4. For authentication/user data, use context functions
+
+---
+
+## 8. See Also
+- [concept_repo_structure.mdc](mdc:concept_repo_structure.mdc)
+- [examples_api.mdc](mdc:examples_api.mdc)
+- [examples_contexts.mdc](mdc:examples_contexts.mdc)
