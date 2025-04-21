@@ -1,32 +1,29 @@
 import { db, eq, schema } from "@package/database";
 
-export const getGameActions = async (gameId: string, userId?: string) => {
-  const actions = await db.select({
-    id: schema.action.id,
-    name: schema.action.name,
-    description: schema.action.description,
-    cooldownMinutes: schema.action.cooldownMinutes,
-    repeatable: schema.action.repeatable,
-    assetUrl: schema.asset.url,
-    locationName: schema.location.name,
-  }).from(schema.action)
+/**
+ * Selects basic game action details joined with assets and locations.
+ * Used primarily for admin views or listings where user context isn't needed.
+ * @param gameId The ID of the game.
+ */
+export const selectBaseGameActions = async (gameId: string) => {
+  const actions = await db.select().from(schema.action)
     .innerJoin(schema.asset, eq(schema.action.assetId, schema.asset.id))
     .leftJoin(schema.location, eq(schema.action.locationId, schema.location.id))
     .where(
       eq(schema.action.gameId, gameId),
     );
+  return actions;
+};
 
-  if (!userId) {
-    return actions;
-  }
+/**
+ * Selects game actions, including resource costs and execution status for a specific user.
+ * @param gameId The ID of the game.
+ * @param userId The ID of the user whose context (resources) should be used.
+ */
+export const selectUserGameActions = async (gameId: string, userId: string) => {
+  const actions = await selectBaseGameActions(gameId);
 
-  const costs = await db.select({
-    actionId: schema.actionResourceCost.actionId,
-    resourceId: schema.actionResourceCost.resourceId,
-    quantity: schema.actionResourceCost.quantity,
-    resourceName: schema.resource.name,
-    resourceAssetUrl: schema.asset.url,
-  })
+  const costs = await db.select()
     .from(schema.actionResourceCost)
     .innerJoin(
       schema.resource,
@@ -54,11 +51,13 @@ export const getGameActions = async (gameId: string, userId?: string) => {
     );
 
   const actionsWithCosts = actions.map((action) => {
-    const actionCosts = costs.filter((cost) => cost.actionId === action.id);
+    const actionCosts = costs.filter((cost) =>
+      cost.action.id === action.action.id
+    );
 
     const actionCostsWithUserQuantity = actionCosts.map((cost) => {
       const userResource = userResources.find(
-        (resource) => resource.resourceId === cost.resourceId,
+        (resource) => resource.resourceId === cost.resource.id,
       );
       const userQuantity = userResource ? userResource.quantity : 0;
 
@@ -69,12 +68,17 @@ export const getGameActions = async (gameId: string, userId?: string) => {
     });
 
     const canExecute = actionCostsWithUserQuantity.every((cost) => {
-      return cost.userQuantity >= cost.quantity;
+      return cost.userQuantity >= cost.action_resource_cost.quantity;
     });
 
     return {
       ...action,
-      costs: actionCostsWithUserQuantity,
+      costs: actionCostsWithUserQuantity.map((cost) => ({
+        userQuantity: cost.userQuantity,
+        resource: cost.resource,
+        resourceAsset: cost.asset,
+        cost: cost.action_resource_cost.quantity,
+      })),
       canExecute,
     };
   });

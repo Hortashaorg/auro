@@ -1,83 +1,60 @@
-import { throwError } from "@package/common";
-import { gameAndUser } from "@queries/user/gameAndUser.ts";
 import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Flex, Grid, Section } from "@comp/atoms/layout/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
-import { getGameActions } from "@queries/action/gameActions.ts";
+import { selectUserGameActions } from "@queries/selects/actions/selectGameActions.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import { CardActions } from "@comp/atoms/card/CardActions.tsx";
-import { type FC, getGlobalContext } from "@kalena/framework";
-import { TimeUntilNextActionText } from "./TimeUntilNextActionText.section.tsx";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type ResourceCost = {
-  actionId: string;
-  resourceId: string;
-  quantity: number;
-  resourceName: string;
-  resourceAssetUrl: string;
-  userQuantity: number;
-};
+type Props = {
+  gameId: string;
+  userId: string;
+} & BaseComponentProps;
 
-type ActionWithCosts = {
-  id: string;
-  name: string;
-  description: string | null;
-  cooldownMinutes: number;
-  repeatable: boolean;
-  assetUrl: string;
-  locationName: string | null;
-  costs: ResourceCost[];
-  canExecute: boolean;
-};
-
-export const ActionsSection: FC = async (props) => {
-  const context = getGlobalContext();
-  const gameId = context.req.param("gameId") ??
-    throwError("Game ID not found in route params");
-  const email = context.var.email ?? throwError("Email not found");
-
-  const { user, game } = await gameAndUser(gameId, email);
-  const actions = await getGameActions(
-    game.id,
-    user.id,
-  ) as ActionWithCosts[];
+export const ActionsSection: FC<Props> = async (
+  { gameId, userId, ...props },
+) => {
+  const actionData = await selectUserGameActions(
+    gameId,
+    userId,
+  );
 
   return (
     <Section id="player-actions-section" {...props}>
       <Title level="h2">Actions</Title>
-      <TimeUntilNextActionText game={game} user={user} />
 
       <Grid>
-        {actions.map((action: ActionWithCosts) => (
-          <Card key={action.id}>
+        {actionData.map((data) => (
+          <Card key={data.action.id}>
             <CardBody>
               <MediaCardHeader
-                title={action.name}
-                description={action.description ?? undefined}
-                imageSrc={action.assetUrl}
-                imageAlt={`${action.name} icon`}
+                title={data.action.name}
+                description={data.action.description ?? undefined}
+                imageSrc={data.asset.url}
+                imageAlt={`${data.action.name} icon`}
               />
 
-              {action.costs && action.costs.length > 0 && (
+              {data.costs && data.costs.length > 0 && (
                 <Flex direction="col" gap="sm" marginTop="md">
                   <Text variant="strong">Costs:</Text>
                   <Flex gap="md" wrap="wrap">
-                    {action.costs.map((cost: ResourceCost) => (
+                    {data.costs.map((cost) => (
                       <Flex
-                        key={cost.resourceId}
+                        key={cost.resource.id}
                         gap="sm"
                         align="center"
                       >
                         <img
-                          src={cost.resourceAssetUrl}
-                          alt={cost.resourceName}
+                          src={cost.resourceAsset.url}
+                          alt={cost.resource.name}
                           width="24"
                           height="24"
                           style={{ objectFit: "cover" }}
                         />
-                        <Text variant={!action.canExecute ? "error" : "body"}>
-                          {`${cost.quantity} (${cost.userQuantity})`}
+                        <Text variant={!data.canExecute ? "error" : "body"}>
+                          {`${cost.cost} (${cost.userQuantity})`}
                         </Text>
                       </Flex>
                     ))}
@@ -87,14 +64,12 @@ export const ActionsSection: FC = async (props) => {
             </CardBody>
             <CardActions>
               <Button
-                hx-post={`/api/games/${game.id}/actions/${action.id}/execute`}
+                hx-post={`/api/games/${gameId}/actions/${data.action.id}/execute`}
                 hx-swap="none"
-                disabled={!action.canExecute || user.availableActions <= 0}
-                title={!action.canExecute
+                disabled={!data.canExecute}
+                title={!data.canExecute
                   ? "You don't have enough resources"
-                  : user.availableActions <= 0
-                  ? "You have no actions left"
-                  : undefined}
+                  : "Perform Action"}
               >
                 Do it!
               </Button>

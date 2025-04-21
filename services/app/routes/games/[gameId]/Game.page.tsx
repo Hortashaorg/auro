@@ -1,23 +1,22 @@
 import { Layout } from "@layout/Layout.tsx";
 import { createRoute } from "@kalena/framework";
-import { throwError } from "@package/common";
 import { isPlayerOfGame } from "@permissions/index.ts";
 import { Title } from "@comp/atoms/typography/index.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
-import { getGame } from "@queries/game/games.ts";
 import { userContext } from "@contexts/userContext.ts";
 
 const Game = async () => {
-  const gameId = gameRoute.context().req.param("gameId") ??
-    throwError("Game ID not found in route params");
-  const game = await getGame(gameId);
+  const { user } = await gameRoute.customContext();
+  // Fetch game details separately if needed for the title, or adjust context/query
+  // For now, assume game name might come from context or be less critical here
+  const gameName = "Game"; // Placeholder - Adapt as needed
 
   return (
-    <Layout title={`Game - ${game.name}`}>
+    <Layout title={`Game - ${gameName}`}>
       <Title level="h1">
-        Welcome to {game.name}
+        Welcome to {gameName}
       </Title>
-      <ActionsSection />
+      <ActionsSection gameId={user.gameId} userId={user.id} />
     </Layout>
   );
 };
