@@ -58,66 +58,83 @@ Choose a swap strategy based on the scope of the change:
 All API endpoints should follow consistent patterns for both success and error cases:
 
 ```typescript
-// Complete pattern for API handlers
-const GenericApiHandler = async () => {
-  const context = apiRoute.context();
-  
+// Import the specific mutation function
+import { updateUserNickname } from "@queries/mutations/profile/updateUserNickname.ts";
+// Import select function if needed to return updated UI data
+import { selectAccountNicknameData } from "@queries/selects/profile/selectAccountNicknameData.ts";
+// Import the component to be returned
+import { AccountNicknameFlex } from "path/to/AccountNicknameFlex.section.tsx";
+// Other necessary imports (createRoute, v, createEvents, contexts, PostgresError etc.)
+import { createRoute, v } from "@kalena/framework";
+import { createEvents } from "@comp/utils/events.ts";
+import { accountContext } from "@contexts/accountContext.ts";
+import { PostgresError } from "@package/database";
+
+const UpdateNicknameHandler = async () => {
+  const context = updateAccountNicknameRoute.context();
+  // Use appropriate context (e.g., accountContext)
+  const account = await updateAccountNicknameRoute.customContext();
+
   try {
-    // 1. Validate input (for POST/PUT)
-    const result = context.req.valid("form");
-    const validatedData = result.output;
-    
-    // 2. Perform operation
-    await db.operation(schema.table).values({
-      // use validatedData
+    // 1. Validate input
+    const result = context.req.valid("form"); // Assuming form validation schema is set
+    const validatedData = result.output; // e.g., { nickname: "new name" }
+
+    // 2. Perform operation using mutation function
+    await updateUserNickname({
+      accountId: account.id,
+      nickname: validatedData.nickname,
     });
-    
+
     // 3. Return success response with appropriate feedback
     context.header(
       "HX-Trigger",
       createEvents([
-        // For modal forms
         { name: "dialog-close", values: { value: true } },
-        // Success notification
         {
           name: "toast-show",
           values: {
-            message: "Operation completed successfully",
+            message: "Nickname updated successfully",
             variant: "success",
             title: "Success",
           },
         },
       ]),
     );
-    
-    // 4. Return updated UI component with OOB swap
-    return <UpdatedComponent hx-swap-oob="true" />;
+
+    // 4. Optionally fetch fresh data and return updated UI component with OOB swap
+    // (Alternative: Mutation function could return needed data)
+    const updatedData = await selectAccountNicknameData(account.id);
+    return <AccountNicknameFlex hx-swap-oob="true" nicknameData={updatedData} />;
+
   } catch (error) {
     // 5. Handle errors appropriately
-    console.error("Error:", error);
-    
-    // Specific constraint violations
-    if (error instanceof PostgresError && 
-        error.constraint_name === "unique_constraint") {
+    console.error("Error updating nickname:", error);
+
+    // Specific constraint violations (Example)
+    if (error instanceof PostgresError &&
+        error.constraint_name === "account_nickname_unique") {
       context.header(
         "HX-Trigger",
         createEvents([{
           name: "form-error",
-          values: { fieldName: "This value already exists" },
+          values: { nickname: "This nickname is already taken." },
         }]),
       );
       context.status(400);
-      return <p>Validation error</p>;
+      // Return the form or relevant error display section
+      // return <EditAccountNicknameForm errors={...} />;
+      return <p>Validation error: Nickname taken</p>;
     }
-    
+
     // Generic error response
     context.header(
       "HX-Trigger",
       createEvents([{
         name: "toast-show",
         values: {
-          message: "An error occurred",
-          variant: "danger", // Always use "danger" for errors
+          message: "An error occurred while updating nickname",
+          variant: "danger",
           title: "Error",
         },
       }]),
@@ -126,6 +143,20 @@ const GenericApiHandler = async () => {
     return <p>Error occurred</p>;
   }
 };
+
+// Example schema (replace with actual schema)
+const updateNicknameSchema = v.object({ nickname: v.string().min(3) });
+
+// Route definition using the handler
+export const updateAccountNicknameRoute = createRoute({
+  path: "/api/profile/update-account-nickname",
+  component: UpdateNicknameHandler,
+  formValidationSchema: updateNicknameSchema,
+  permission: { check: /* isLoggedIn */ () => true, redirectPath: "/" }, // Example permission
+  customContext: accountContext, // Use appropriate context
+  partial: true,
+  // ... other options
+});
 ```
 
 ## 4. Database Operations

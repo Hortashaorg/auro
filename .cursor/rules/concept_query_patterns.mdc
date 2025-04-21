@@ -5,7 +5,7 @@ alwaysApply: false
 ---
 # Concept: Query & Data Access Patterns
 
-This rule defines the standard patterns for acquiring, selecting, and mutating data in the application. Following these patterns ensures maintainability, security, and predictability across the codebase.
+This document defines the standard patterns for acquiring, selecting, and mutating data in the application. Following these patterns ensures maintainability, security, and predictability across the codebase.
 
 ---
 
@@ -17,115 +17,107 @@ This rule defines the standard patterns for acquiring, selecting, and mutating d
   - Each context function takes a `GlobalContext` and returns the relevant data.
   - Use `customContext` in `createRoute()` to inject these contexts.
   - Context functions should be imported from the `contexts/` folder using the `@contexts/` alias.
-  
 - **Current Implementations:**
   - `accountContext` - Provides account data based on user email from the GlobalContext.
   - `userContext` - Provides user data for a specific game based on email and gameId.
-
-- **Example Usage:**
-  ```typescript
-  import { userContext } from "@contexts/userContext.ts";
-  
-  export const someRoute = createRoute({
-    path: "/games/:gameId/some-route",
-    customContext: userContext,
-    component: SomeComponent,
-  });
-  
-  const SomeComponent = async (props) => {
-    // Access context data by calling the route's customContext function
-    const user = await someRoute.customContext();
-    
-    // ... component logic ...
-    return <div>Hello, {user.account.email}</div>;
-  }
-  ```
-
+- **Example Usage:** Refer to [examples_contexts.mdc](mdc:.cursor/rules/examples_contexts.mdc)
 - **Rationale:** Centralizes authentication/authorization and user context logic, reducing duplication and making it easy to reason about and update.
 
 ---
 
 ## 2. Data Selectors (Read-Only Queries)
 
-- **Location:** `services/app/queries/selects/` (or within domain folders like `queries/game/`, `queries/user/`)
+- **Location:** `services/app/queries/selects/`
+- **Organization:** Organize by domain/feature (e.g., `selects/users/`, `selects/games/`, `selects/actions/`).
 - **Pattern:**
-  - All data-fetching functions must be defined in the queries folder.
-  - These functions should take IDs or context objects and return the required data.
-  - Never directly use `db.select` in UI components or route handlers.
-  - Example:
-    ```typescript
-    import { getInventoryByUserId } from "@queries/game/inventory.ts";
-    const inventory = await getInventoryByUserId(user.id);
-    ```
-- **Rationale:** Encourages reusability, makes it easy to find and optimize selectors, and prevents direct DB access in UI files.
+  - All data-fetching (`SELECT`) functions **must** be defined in this directory structure.
+  - Functions should accept necessary parameters (like IDs, filters).
+  - Return data fetched, often the direct result from `db.select()`, including joined data.
+  - **Type Safety:** Utilize Drizzle's `InferSelectModel` where appropriate for return types if specific shaping occurs, but often returning the raw Drizzle result is preferred.
+  - **Splitting Logic:** Often create separate functions for fetching base data vs. data requiring user context (e.g., inventory, execution status). Example: `selectBaseGameActions(gameId)` vs. `selectUserGameActions(gameId, userId)`. See [selectGameActions.ts](mdc:services/app/queries/selects/actions/selectGameActions.ts).
+- **Rationale:** Encourages reusability, makes it easy to find and optimize selectors, prevents direct DB access in UI/route files, and centralizes read logic.
 
 ---
 
 ## 3. Mutations (Insert/Update/Delete)
 
-- **Location:** `services/app/queries/mutations/` (or within domain folders)
+- **Location:** `services/app/queries/mutations/`
+- **Organization:** Organize by domain/feature (e.g., `mutations/users/`, `mutations/locations/`).
 - **Pattern:**
-  - All data-modifying operations must be performed via utility functions in the queries folder.
-  - These functions must:
-    - Handle batch operations
-    - Correctly update `updatedAt`, `createdAt`, and other side effects
-    - Use transactions for multi-step operations to ensure atomicity
-  - Example:
-    ```typescript
-    import { updateInventory } from "@queries/game/updateInventory.ts";
-    await updateInventory({ userId, items });
-    ```
-- **Rationale:** Ensures data integrity, auditability, and consistent handling of side effects.
+  - All data-modifying operations (`INSERT`, `UPDATE`, `DELETE`) **must** be performed via utility functions in this directory structure.
+  - Functions should accept necessary data, often typed using `InferInsertModel` or specific interfaces.
+  - Handle transactions internally if multiple database operations are required for atomicity.
+  - Standardize handling of timestamps (`createdAt`, `updatedAt`) if needed, potentially within these functions or via database defaults.
+  - Return minimal necessary information (e.g., nothing, the ID of a created record, success status). See [createLocation.ts](mdc:services/app/queries/mutations/locations/createLocation.ts) or [createResource.ts](mdc:services/app/queries/mutations/resources/createResource.ts).
+- **Rationale:** Ensures data integrity, auditability, consistent handling of side effects, prevents direct DB modification in UI/route files, and centralizes write logic.
 
 ---
 
-## 4. Prohibition of Direct DB Access in UI Files
+## 4. Usage in Routes & Components (Data Flow)
 
-- **Pattern:**
-  - Never use `db.select`, `db.insert`, `db.update`, or similar DB calls directly in `.tsx` files (UI, routes, or API handlers).
-  - Only import and use query/mutation functions from the queries folder.
-  - Use context functions to handle authentication and user data access.
-- **Rationale:** Keeps data access logic centralized, auditable, and testable.
+- **Route Handlers/API Endpoints (`.api.tsx`):**
+  - Use `customContext` (Section 1) to get user/account data.
+  - Validate input.
+  - Call appropriate mutation functions from `@queries/mutations/...` for CUD operations (Section 3).
+  - Handle success/error responses (e.g., HX-Triggers, status codes). Refer to [examples_api.mdc](mdc:.cursor/rules/examples_api.mdc).
+  - If returning updated UI fragments, call select functions from `@queries/selects/...` to get fresh data for the components being returned (Section 2). Example: [CreateLocation.api.tsx](mdc:services/app/routes/games/[gameId]/admin/locations/CreateLocation.api.tsx).
+- **Page Components (`.page.tsx`):**
+  - Use `customContext` (Section 1) if user/account data is needed.
+  - Fetch necessary initial data by calling functions from `@queries/selects/...` (Section 2).
+  - Pass required data (from context and selects) down as props to child section components.
+- **Section Components (`.section.tsx`):**
+  - Accept data as props.
+  - **Data Mapping:** Perform necessary mapping/transformation of props for display (e.g., handling joined data structures returned by select queries).
+  - **Avoid Data Fetching:** Should generally **not** fetch their own data (neither via context nor select functions), unless specifically designed as self-contained, complex data-fetching units (prefer passing data down).
 
 ---
 
 ## 5. Naming Conventions
 
-- **Selectors:** `getXByY`, `findX`, `listX`, etc.
+- **Selectors:** `selectBaseX`, `selectUserX`, `getXByY`, `findX`, `listX`, etc.
 - **Mutations:** `createX`, `updateY`, `deleteZ`, etc.
 - **Contexts:** `userContext`, `accountContext`, etc.
 
 ---
 
-## 6. Example Folder Structure
+## 6. Example Folder Structure (Target)
 
 ```
 services/app/
   contexts/
-    userContext.ts     - For user data in a game context
-    accountContext.ts  - For account-level data
+    userContext.ts
+    accountContext.ts
   queries/
-    game/
-      getInventory.ts  - Query functions for game-related data
-      updateInventory.ts
-    user/
-      getUserDetails.ts
-      updateUserProfile.ts
+    selects/
+      games/
+        selectGameDetails.ts
+      users/
+        selectUserProfile.ts
+      actions/
+        selectGameActions.ts
+    mutations/
+      games/
+        createGame.ts
+      users/
+        updateUserProfile.ts
+      locations/
+        createLocation.ts
 ```
 
 ---
 
 ## 7. Migration Strategy
 
-For existing code that uses direct DB queries in UI files:
-1. Identify the query pattern
-2. Move it to an appropriate query function in the queries folder
-3. Import and use the query function instead
-4. For authentication/user data, use context functions
+For existing code that uses direct DB queries or queries outside the `selects`/`mutations` structure:
+1. Identify the query pattern (read vs. write).
+2. Determine if user context is needed.
+3. Create or relocate the logic to an appropriate function in `queries/selects/...` or `queries/mutations/...`.
+4. Update the calling code (.tsx file) to import and use the new query function.
+5. Replace direct user/account data fetching with context functions where applicable (Section 1).
 
 ---
 
 ## 8. See Also
 - [concept_repo_structure.mdc](mdc:concept_repo_structure.mdc)
-- [examples_api.mdc](mdc:examples_api.mdc)
-- [examples_contexts.mdc](mdc:examples_contexts.mdc)
+- [examples_api.mdc](mdc:.cursor/rules/examples_api.mdc)
+- [examples_contexts.mdc](mdc:.cursor/rules/examples_contexts.mdc)
