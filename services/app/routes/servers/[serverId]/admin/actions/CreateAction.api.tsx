@@ -40,7 +40,8 @@ const CreateAction = async () => {
         description: result.output.description,
         serverId,
         assetId: result.output.assetId,
-        locationId: result.output.locationId,
+        locationId: result.output.locationId ??
+          throwError("Location ID is required"),
         cooldownMinutes: result.output.cooldownMinutes,
         repeatable: result.output.repeatable === "true",
       });
