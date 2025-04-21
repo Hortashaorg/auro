@@ -5,6 +5,7 @@ import { isPlayerOfGame } from "@permissions/index.ts";
 import { Title } from "@comp/atoms/typography/index.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
 import { getGame } from "@queries/game/games.ts";
+import { userContext } from "@contexts/userContext.ts";
 
 const Game = async () => {
   const gameId = gameRoute.context().req.param("gameId") ??
@@ -30,4 +31,5 @@ export const gameRoute = createRoute({
   },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
+  customContext: userContext,
 });

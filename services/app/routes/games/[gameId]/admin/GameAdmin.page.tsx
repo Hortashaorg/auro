@@ -1,13 +1,13 @@
 import { Layout } from "@layout/Layout.tsx";
 import { createRoute } from "@kalena/framework";
-import { throwError } from "@package/common";
 import { isAdminOfGame } from "@permissions/index.ts";
-import { gameAndUser } from "@queries/user/gameAndUser.ts";
 import { GameStatusCard } from "./GameStatusCard.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
+import { getGame } from "@queries/game/games.ts";
 
 const GameAdmin = async () => {
-  const context = await gameAdminRoute.customContext();
-  const game = context.game;
+  const { user } = await gameAdminRoute.customContext();
+  const game = await getGame(user.gameId);
 
   return (
     <Layout title={`Game Admin - ${game.name}`}>
@@ -25,10 +25,5 @@ export const gameAdminRoute = createRoute({
   },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
-  customContext: (c) => {
-    const gameId = c.req.param("gameId");
-    const email = c.var.email ?? throwError("Email not found");
-
-    return gameAndUser(gameId, email);
-  },
+  customContext: userContext,
 });

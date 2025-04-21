@@ -3,12 +3,12 @@ import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { GameGrid } from "./GameGrid.section.tsx";
 import { createRoute } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
-import { db } from "@package/database";
 import { CreateGameForm } from "./CreateGameForm.section.tsx";
+import { accountContext } from "@contexts/accountContext.ts";
 
 const Games = async () => {
-  const customContext = await gamesRoute.customContext();
-  const canCreateGame = customContext.account?.canCreateGame ?? false;
+  const account = await gamesRoute.customContext();
+  const canCreateGame = account?.canCreateGame ?? false;
 
   return (
     <Layout title="Game Selection">
@@ -38,14 +38,5 @@ export const gamesRoute = createRoute({
   },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
-  customContext: async (c) => {
-    let account;
-    const email = c.var.email;
-    if (email) {
-      account = await db.query.account.findFirst({
-        where: (account, { eq }) => eq(account.email, email),
-      });
-    }
-    return { account };
-  },
+  customContext: accountContext,
 });

@@ -1,6 +1,7 @@
 import type { GlobalContext } from "@kalena/framework";
 import { and, db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
+import { accountContext } from "@contexts/accountContext.ts";
 
 export const isPublic = (): boolean => {
   return true;
@@ -85,4 +86,14 @@ export const isAdminOfGame = async (c: GlobalContext): Promise<boolean> => {
 
 export const isLoggedIn = (c: GlobalContext): boolean => {
   return !!c.var.isLoggedIn;
+};
+
+export const canCreateGame = async (c: GlobalContext): Promise<boolean> => {
+  try {
+    const account = await accountContext(c);
+    return account?.canCreateGame ?? false;
+  } catch (error) {
+    console.error("Permission check failed:", error);
+    return false;
+  }
 };
