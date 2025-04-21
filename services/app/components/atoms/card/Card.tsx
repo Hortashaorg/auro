@@ -72,6 +72,7 @@ export const Card: FC<CardProps> = ({
 }: CardProps) => {
   return (
     <Element
+      data-card="true"
       className={cn(
         cardVariants({ width, border, padding }),
         className,

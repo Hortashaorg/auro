@@ -1,24 +1,4 @@
-import { type Page, test as base } from "@playwright/test";
-
-export const test = base.extend<{
-  loginAs: (user: "admin" | "player") => Promise<void>;
-}>({
-  loginAs: async ({ page }, use) => {
-    await use(async (user: "admin" | "player") => {
-      await page.goto("http://localhost:4000/");
-      await page.getByRole("link", { name: "Login" }).click();
-      if (user === "admin") {
-        await page.getByRole("textbox", { name: "Username" }).fill("Testuser");
-        await page.getByRole("textbox", { name: "Password" }).fill("password");
-      }
-      if (user === "player") {
-        await page.getByRole("textbox", { name: "Username" }).fill("Testuser");
-        await page.getByRole("textbox", { name: "Password" }).fill("password");
-      }
-      await page.getByRole("button", { name: "Sign In" }).click();
-    });
-  },
-});
+import type { Page } from "@playwright/test";
 
 export const loginAs = async (page: Page, user: "admin" | "player") => {
   await page.goto("http://localhost:4000/");

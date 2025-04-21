@@ -24,4 +24,57 @@ jobs:
         run: deno task all:lint
       
       - name: Run type checking
-        run: deno task all:typecheck 
+        run: deno task all:typecheck
+
+      - name: Check specs
+        run: deno task check-specs
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.3
+        env:
+          POSTGRES_DB: root
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: root
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U root"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install Doppler CLI
+        uses: dopplerhq/cli-action@v3
+
+      - name: Install playwright
+        run: deno run --allow-all npm:playwright install --with-deps
+
+      - name: Setup PostgreSQL
+        env:
+          DOPPLER_TOKEN: ${{ secrets.AURO_LOCAL_DOPPLER_TOKEN }}
+        run: |
+          deno run db:migrate
+          deno run db:seed
+          deno run db:seed:e2e
+          deno run app:start > logs.txt 2>&1 &
+          sleep 5
+          deno run ci:test
+
+      - name: Upload test results
+        if: failure() || success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          include-hidden-files: true

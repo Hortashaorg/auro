@@ -23,15 +23,17 @@
       ]
     },
     "local:test": "doppler run --project auro --config local -- deno run test",
-    "ci:test": "doppler run -- playwright test",
+    "ci:test": "doppler run -- deno run test",
+    "check-specs": "deno run --allow-read scripts/check-specs.ts",
     "test": "playwright test",
-    "test:codegen": "playwright codegen",
+    "test:codegen": "playwright codegen --target=javascript",
     "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
     "app:start": "deno run -A scripts/task.ts '@service/app' start",
     "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
     "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
     "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
     "db:seed": "deno run -A scripts/task.ts '@package/database' seed",
+    "db:seed:e2e": "deno run -A scripts/task.ts '@package/database' seed:e2e",
     "comp:build": "deno run -A scripts/task.ts '@service/app' comp:build"
   },
   "compilerOptions": {
@@ -46,13 +48,13 @@
     "noImplicitThis": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "precompile",
-    "jsxImportSource": "jsr:@hono/hono@4.7.5/jsx"
+    "jsxImportSource": "jsr:@hono/hono@4.7.7/jsx"
   },
   "imports": {
-    "@playwright/test": "npm:@playwright/test@^1.51.1",
-    "@std/fs": "jsr:@std/fs@^1.0.15",
+    "@playwright/test": "npm:@playwright/test@^1.52.0",
+    "@std/fs": "jsr:@std/fs@^1.0.16",
     "@std/path": "jsr:@std/path@^1.0.8",
-    "playwright": "npm:playwright@^1.51.1",
+    "playwright": "npm:playwright@^1.52.0",
     "@base/": "./base/"
   }
 }

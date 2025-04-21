@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD CONSTRAINT "unique_user_on_server_per_account" UNIQUE("server_id","account_id");
