@@ -195,6 +195,30 @@ const setupTestServer = async () => {
     resourceId: resource2.id,
     quantity: 100,
   }]).onConflictDoNothing();
+
+  // --- Seed an action log entry for the player ---
+  await db.insert(schema.actionLog).values({
+    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
+    serverId: server.id,
+    userId: player.id,
+    actionId: action.id,
+    version: 1,
+    data: {
+      resource: [
+        {
+          resourceId: resource1.id,
+          type: "reward",
+          amount: 10,
+        },
+        {
+          resourceId: resource2.id,
+          type: "cost",
+          amount: 2,
+        },
+      ],
+    },
+    executedAt: Temporal.Now.instant(),
+  }).onConflictDoNothing();
 };
 
 async function main() {
