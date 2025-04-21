@@ -1,18 +1,18 @@
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
 import { and, db, eq, PostgresError, schema } from "@package/database";
-import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
 import { GameNicknamesTable } from "./GameNicknamesTable.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
 
 const formSchema = v.object({
-  gameId: v.string(),
   nickname: v.string(),
 });
 
 const UpdateHandler = async () => {
   const context = updateGameNicknameRoute.context();
-  const email = context.var.email ?? throwError("Email not found");
+
+  const { user, account } = await updateGameNicknameRoute.customContext();
 
   const result = context.req.valid("form");
   if (!result.success) {
@@ -28,20 +28,14 @@ const UpdateHandler = async () => {
     return <p>Validation Error</p>;
   }
 
-  const { gameId, nickname } = result.output;
-
-  const account = await db.query.account.findFirst({
-    columns: { id: true },
-    where: (acc, { eq }) => eq(acc.email, email),
-  }) ?? throwError("Account not found");
-  const accountId = account.id;
+  const { nickname } = result.output;
 
   try {
     await db.update(schema.user)
       .set({ name: nickname })
       .where(and(
-        eq(schema.user.gameId, gameId as string),
-        eq(schema.user.accountId, accountId),
+        eq(schema.user.id, user.id),
+        eq(schema.user.accountId, account.id),
       ));
 
     context.header(
@@ -59,7 +53,7 @@ const UpdateHandler = async () => {
       ]),
     );
 
-    return <GameNicknamesTable hx-swap-oob="true" />;
+    return <GameNicknamesTable hx-swap-oob="true" accountId={account.id} />;
   } catch (error) {
     if (
       error instanceof PostgresError &&
@@ -84,8 +78,9 @@ const UpdateHandler = async () => {
 };
 
 export const updateGameNicknameRoute = createRoute({
-  path: "/api/profile/update-game-nickname",
+  path: "/api/games/:gameId/update-game-nickname",
   component: UpdateHandler,
+  customContext: userContext,
   formValidationSchema: formSchema,
   permission: { check: isLoggedIn, redirectPath: "/" },
   partial: true,

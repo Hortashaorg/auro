@@ -1,4 +1,3 @@
-import { getGlobalContext } from "@kalena/framework";
 import {
   Table,
   TableBody,
@@ -8,16 +7,17 @@ import {
 } from "@comp/atoms/table/index.ts";
 import { Text } from "@comp/atoms/typography/index.ts";
 import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
-import { getAccountWithUsers } from "@queries/account/getAccountWithUsers.ts";
-import { throwError } from "@package/common";
 import { EditGameNicknameForm } from "./EditGameNicknameForm.section.tsx";
 import type { FC } from "@kalena/framework";
+import { selectGamesByAccountId } from "@queries/selects/games/selectGamesByAccountId.ts";
 
-export const GameNicknamesTable: FC = async (props) => {
-  const context = getGlobalContext();
-  const email = context.var.email ?? throwError("Email not found");
-
-  const { userGames } = await getAccountWithUsers(email);
+type Props = {
+  accountId: string;
+};
+export const GameNicknamesTable: FC<Props> = async (
+  { accountId, ...props },
+) => {
+  const userGames = await selectGamesByAccountId(accountId);
 
   return (
     <Table id="game-nicknames-section" {...props}>

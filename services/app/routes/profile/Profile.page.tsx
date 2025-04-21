@@ -7,7 +7,9 @@ import { GameNicknamesTable } from "./GameNicknamesTable.section.tsx";
 import { AccountNicknameFlex } from "./AccountNicknameFlex.section.tsx";
 import { accountContext } from "@contexts/accountContext.ts";
 
-const Profile = () => {
+const Profile = async () => {
+  const account = await profileRoute.customContext();
+
   return (
     <Layout title="Profile Settings">
       <div>
@@ -24,7 +26,7 @@ const Profile = () => {
             This is the name that will be used by default when you join new
             games.
           </Text>
-          <AccountNicknameFlex />
+          <AccountNicknameFlex currentNickname={account.nickname ?? ""} />
         </CardBody>
       </Card>
 
@@ -34,7 +36,7 @@ const Profile = () => {
           <Text variant="body" className="mb-4">
             Customize your name for each game you belong to.
           </Text>
-          <GameNicknamesTable />
+          <GameNicknamesTable accountId={account.id} />
         </CardBody>
       </Card>
     </Layout>

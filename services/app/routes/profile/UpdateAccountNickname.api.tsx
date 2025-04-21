@@ -42,7 +42,12 @@ const UpdateAccountNickname = async () => {
       }]),
     );
 
-    return <AccountNicknameFlex hx-swap-oob="true" />;
+    return (
+      <AccountNicknameFlex
+        hx-swap-oob="true"
+        currentNickname={result.output.nickname}
+      />
+    );
   } catch (error) {
     if (
       error instanceof PostgresError &&
