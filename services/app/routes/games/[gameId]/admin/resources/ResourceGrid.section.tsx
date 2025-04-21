@@ -1,37 +1,30 @@
-import { db, eq, schema } from "@package/database";
-import { getGlobalContext } from "@kalena/framework";
-import { throwError } from "@package/common";
+import type { FC } from "@kalena/framework";
+import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
 import { Card } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
 type Props = {
-  id?: string;
-  className?: string;
-};
+  gameId: string;
+} & BaseComponentProps;
 
-export const ResourceGrid = async ({ ...props }: Props) => {
-  const globalContext = getGlobalContext();
-  const gameId = globalContext.req.param("gameId");
-
-  if (!gameId) throwError("No gameId");
-
-  const resources = await db.select({
-    url: schema.asset.url,
-    name: schema.resource.name,
-    id: schema.resource.id,
-    description: schema.resource.description,
-  }).from(schema.resource)
-    .innerJoin(schema.asset, eq(schema.resource.assetId, schema.asset.id))
-    .where(
-      eq(schema.resource.gameId, gameId),
-    );
+export const ResourceGrid: FC<Props> = async ({ gameId, ...props }) => {
+  const resourcesData = await selectResourcesByGameId(gameId);
 
   return (
     <HtmxWrapper {...props} id="resource-section">
       <Grid>
-        {resources.map((resource) => (
-          <ResourceCard key={resource.id} resource={resource} />
+        {resourcesData.map(({ resource, asset }) => (
+          <ResourceCard
+            key={resource.id}
+            resource={{
+              id: resource.id,
+              name: resource.name,
+              url: asset.url,
+              description: resource.description,
+            }}
+          />
         ))}
       </Grid>
     </HtmxWrapper>
