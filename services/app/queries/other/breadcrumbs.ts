@@ -51,15 +51,15 @@ export const calculateBreadcrumbSegments = async (): Promise<
       let label = segment === "" ? "Home" : segment;
 
       switch (segment) {
-        case ":serverId": {
-          const serverId = urlSegments[index] ??
-            throwError("Server ID not found");
+        case ":gameId": {
+          const gameId = urlSegments[index] ??
+            throwError("Game ID not found");
 
-          const [server] = await db.select().from(schema.server).where(
-            eq(schema.server.id, serverId),
+          const [game] = await db.select().from(schema.game).where(
+            eq(schema.game.id, gameId),
           );
 
-          label = server?.name ?? throwError("Server not found");
+          label = game?.name ?? throwError("Game not found");
 
           break;
         }

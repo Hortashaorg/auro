@@ -43,7 +43,7 @@ export async function getResourceLeaderboard(
   }));
 }
 
-export async function getLeaderboardResources(serverId: string) {
+export async function getLeaderboardResources(gameId: string) {
   return await db
     .select({
       id: schema.resource.id,
@@ -55,7 +55,7 @@ export async function getLeaderboardResources(serverId: string) {
     .innerJoin(schema.asset, eq(schema.resource.assetId, schema.asset.id))
     .where(
       and(
-        eq(schema.resource.serverId, serverId),
+        eq(schema.resource.gameId, gameId),
         eq(schema.resource.leaderboard, true),
       ),
     );

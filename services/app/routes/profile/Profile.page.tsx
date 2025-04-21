@@ -3,7 +3,7 @@ import { isLoggedIn } from "@permissions/index.ts";
 import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Layout } from "@layout/Layout.tsx";
-import { ServerNicknamesTable } from "./ServerNicknamesTable.section.tsx";
+import { GameNicknamesTable } from "./GameNicknamesTable.section.tsx";
 import { AccountNicknameFlex } from "./AccountNicknameFlex.section.tsx";
 
 const Profile = () => {
@@ -12,7 +12,7 @@ const Profile = () => {
       <div>
         <Title level="h1" className="mb-2">Profile Settings</Title>
         <Text variant="body">
-          Manage your account settings and customize your server names.
+          Manage your account settings and customize your game names.
         </Text>
       </div>
 
@@ -21,7 +21,7 @@ const Profile = () => {
           <Title level="h2" className="mb-2">Default Name</Title>
           <Text variant="body" className="mb-4">
             This is the name that will be used by default when you join new
-            servers.
+            games.
           </Text>
           <AccountNicknameFlex />
         </CardBody>
@@ -29,11 +29,11 @@ const Profile = () => {
 
       <Card>
         <CardBody>
-          <Title level="h2">Server-Specific Names</Title>
+          <Title level="h2">Game-Specific Names</Title>
           <Text variant="body" className="mb-4">
-            Customize your name for each server you belong to.
+            Customize your name for each game you belong to.
           </Text>
-          <ServerNicknamesTable />
+          <GameNicknamesTable />
         </CardBody>
       </Card>
     </Layout>

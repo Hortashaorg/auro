@@ -15,7 +15,7 @@ export const increaseAvailableActions = async () => {
   const hour = now.hour;
 
   const intervals: InferSelectModel<
-    typeof schema.server
+    typeof schema.game
   >["actionRecoveryInterval"][] = [];
 
   if (minute % 5 === 0) {
@@ -54,23 +54,23 @@ export const increaseAvailableActions = async () => {
     intervals.push("1day");
   }
 
-  const serversToUpdate = await db.select().from(schema.server).where(
+  const gamesToUpdate = await db.select().from(schema.game).where(
     and(
-      inArray(schema.server.actionRecoveryInterval, intervals),
-      eq(schema.server.online, true),
+      inArray(schema.game.actionRecoveryInterval, intervals),
+      eq(schema.game.online, true),
     ),
   );
 
-  for (const server of serversToUpdate) {
+  for (const game of gamesToUpdate) {
     await db.update(schema.user)
       .set({
         availableActions:
-          sql`${schema.user.availableActions} + ${server.actionRecoveryAmount}`,
+          sql`${schema.user.availableActions} + ${game.actionRecoveryAmount}`,
       })
       .where(
         and(
-          eq(schema.user.serverId, server.id),
-          lt(schema.user.availableActions, server.maxAvailableActions),
+          eq(schema.user.gameId, game.id),
+          lt(schema.user.availableActions, game.maxAvailableActions),
         ),
       );
   }

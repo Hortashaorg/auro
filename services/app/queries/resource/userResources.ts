@@ -1,8 +1,8 @@
 import { and, db, eq, gt, schema } from "@package/database";
 import { currentUser } from "@queries/user/currentUser.ts";
 
-export const getUserResources = async (serverId: string) => {
-  const user = await currentUser(serverId);
+export const getUserResources = async (gameId: string) => {
+  const user = await currentUser(gameId);
 
   const resources = await db.select()
     .from(schema.userResource)
@@ -21,7 +21,7 @@ export const getUserResources = async (serverId: string) => {
     .orderBy(schema.resource.name)
     .where(
       and(
-        eq(schema.user.serverId, serverId),
+        eq(schema.user.gameId, gameId),
         gt(schema.userResource.quantity, 0),
         eq(schema.user.id, user.id),
       ),

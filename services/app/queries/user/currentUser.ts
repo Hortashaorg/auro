@@ -2,7 +2,7 @@ import { getGlobalContext } from "@kalena/framework";
 import { and, db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 
-export const currentUser = async (serverId: string) => {
+export const currentUser = async (gameId: string) => {
   const context = getGlobalContext();
   const email = context.var.email ?? throwError("Email not found");
 
@@ -17,7 +17,7 @@ export const currentUser = async (serverId: string) => {
     .where(
       and(
         eq(schema.account.email, email),
-        eq(schema.user.serverId, serverId),
+        eq(schema.user.gameId, gameId),
       ),
     );
 
