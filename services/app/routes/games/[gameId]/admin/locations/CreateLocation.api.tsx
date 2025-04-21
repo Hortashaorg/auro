@@ -1,12 +1,15 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { LocationGrid } from "./LocationGrid.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
+import { createLocation } from "@queries/mutations/locations/createLocation.ts";
 
 const CreateLocation = async () => {
   const context = createLocationRoute.context();
+  const { user } = await createLocationRoute.customContext();
   const result = context.req.valid("form");
 
   if (!result.success) {
@@ -31,16 +34,15 @@ const CreateLocation = async () => {
     return <p>Failure</p>;
   }
 
-  const gameId = context.req.param("gameId");
+  const gameId = user.gameId;
 
   try {
-    await db.insert(schema.location)
-      .values({
-        name: result.output.name,
-        description: result.output.description,
-        gameId,
-        assetId: result.output.assetId,
-      });
+    await createLocation({
+      name: result.output.name,
+      description: result.output.description,
+      gameId: gameId,
+      assetId: result.output.assetId,
+    });
 
     context.header(
       "HX-Trigger",
@@ -50,7 +52,7 @@ const CreateLocation = async () => {
       ]),
     );
 
-    return <LocationGrid hx-swap-oob="true" />;
+    return <LocationGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
     if (error instanceof PostgresError) {
       if (
@@ -96,4 +98,5 @@ export const createLocationRoute = createRoute({
   partial: true,
   hmr: Deno.env.get("ENV") === "local",
   formValidationSchema: CreateLocationSchema,
+  customContext: userContext,
 });

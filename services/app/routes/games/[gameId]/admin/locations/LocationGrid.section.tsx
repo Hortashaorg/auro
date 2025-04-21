@@ -1,38 +1,27 @@
-import { getGlobalContext, type JSX } from "@kalena/framework";
-import { throwError } from "@package/common";
-import { db, eq, schema } from "@package/database";
+import type { JSX } from "@kalena/framework";
+import { selectLocationsByGameId } from "@queries/selects/locations/selectLocationsByGameId.ts";
 import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
 import { Card } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 
-type Props = JSX.IntrinsicElements["div"];
+type Props = {
+  gameId: string;
+} & JSX.IntrinsicElements["div"];
 
-export const LocationGrid = async ({ ...props }: Props) => {
-  const globalContext = getGlobalContext();
-  const gameId = globalContext.req.param("gameId");
-
-  if (!gameId) throwError("No gameId");
-
-  const locations = await db.select({
-    url: schema.asset.url,
-    name: schema.location.name,
-    id: schema.location.id,
-    description: schema.location.description,
-  }).from(schema.location)
-    .innerJoin(schema.asset, eq(schema.location.assetId, schema.asset.id))
-    .where(
-      eq(schema.location.gameId, gameId),
-    );
+export const LocationGrid = async ({ gameId, ...props }: Props) => {
+  const locationData = await selectLocationsByGameId(gameId);
 
   return (
     <HtmxWrapper {...props} id="location-section">
       <Grid>
-        {locations.map((location) => (
+        {locationData.map((data) => (
           <LocationCard
-            key={location.id}
+            key={data.location.id}
             location={{
-              ...location,
-              description: location.description ?? undefined,
+              id: data.location.id,
+              name: data.location.name,
+              url: data.asset.url,
+              description: data.location.description ?? undefined,
             }}
           />
         ))}
