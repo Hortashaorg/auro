@@ -12,7 +12,7 @@ const setAdminUser = async () => {
   }]).onConflictDoNothing();
 };
 
-const setupTestServer = async () => {
+const setupTestGame = async () => {
   let [game] = await db.insert(schema.game).values({
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     actionRecoveryInterval: "15min",
@@ -224,7 +224,7 @@ const setupTestServer = async () => {
 async function main() {
   console.log("🌱 Starting database seed for e2e tests...");
   await setAdminUser();
-  await setupTestServer();
+  await setupTestGame();
   console.log("✨ Database seeding complete!");
   Deno.exit(0);
 }
