@@ -59,11 +59,11 @@ Each feature or logical page grouping resides in its own directory within `servi
       profile/
         Profile.page.tsx                 # Main page component
         UpdateAccountNickname.api.tsx    # API endpoints (Verb-first PascalCase)
-        UpdateServerNickname.api.tsx
+        UpdateGameNickname.api.tsx
         AccountNicknameFlex.section.tsx  # UI sections (Noun-first PascalCase)
-        ServerNicknamesTable.section.tsx
+        GameNicknamesTable.section.tsx
         EditAccountNicknameForm.section.tsx
-        EditServerNicknameForm.section.tsx
+        EditGameNicknameForm.section.tsx
         index.ts                         # Route exports
     ```
 

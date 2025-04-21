@@ -2,10 +2,10 @@ import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 
 /**
- * Get account data and all associated users across servers by email
+ * Get account data and all associated users across games by email
  *
  * @param email The email address of the account to fetch
- * @returns The account and all associated users across servers
+ * @returns The account and all associated users across games
  * @throws Error if account not found
  */
 export const getAccountWithUsers = async (email: string) => {
@@ -14,18 +14,18 @@ export const getAccountWithUsers = async (email: string) => {
     where: (account, { eq }) => eq(account.email, email),
   }) ?? throwError("Account not found for email");
 
-  // Get all users for this account across servers
-  const userServers = await db.select({
+  // Get all users for this account across games
+  const userGames = await db.select({
     user: schema.user,
-    server: schema.server,
+    game: schema.game,
   })
     .from(schema.user)
-    .innerJoin(schema.server, eq(schema.user.serverId, schema.server.id))
-    .orderBy(schema.server.name)
+    .innerJoin(schema.game, eq(schema.user.gameId, schema.game.id))
+    .orderBy(schema.game.name)
     .where(eq(schema.user.accountId, account.id));
 
   return {
     account,
-    userServers,
+    userGames,
   };
 };

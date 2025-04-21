@@ -10,34 +10,34 @@ export const isDenied = (): boolean => {
   return false;
 };
 
-export const isPlayerOfServer = async (c: GlobalContext): Promise<boolean> => {
-  const serverId = c.req.param("serverId");
+export const isPlayerOfGame = async (c: GlobalContext): Promise<boolean> => {
+  const gameId = c.req.param("gameId");
   const email = c.var.email;
 
-  if (!serverId || !email) {
+  if (!gameId || !email) {
     return false;
   }
 
   const [data] = await db.select().from(schema.user).innerJoin(
-    schema.server,
-    eq(schema.user.serverId, schema.server.id),
+    schema.game,
+    eq(schema.user.gameId, schema.game.id),
   ).innerJoin(
     schema.account,
     eq(schema.user.accountId, schema.account.id),
   ).where(
     and(
-      eq(schema.server.id, serverId),
+      eq(schema.game.id, gameId),
       eq(schema.account.email, email),
     ),
   );
 
   if (!data) {
-    const [serverData] = await db.select().from(schema.server).where(
-      eq(schema.server.id, serverId),
+    const [gameData] = await db.select().from(schema.game).where(
+      eq(schema.game.id, gameId),
     );
 
-    const server = serverData ?? throwError("Server not found");
-    if (!server.online) return false;
+    const game = gameData ?? throwError("Game not found");
+    if (!game.online) return false;
 
     const [accountData] = await db.select().from(schema.account).where(
       eq(schema.account.email, email),
@@ -46,41 +46,41 @@ export const isPlayerOfServer = async (c: GlobalContext): Promise<boolean> => {
     const account = accountData ?? throwError("Account not found");
 
     const [userData] = await db.insert(schema.user).values({
-      serverId,
+      gameId,
       type: "player",
       accountId: account.id,
       name: account.nickname,
-      availableActions: server.startingAvailableActions,
+      availableActions: game.startingAvailableActions,
     }).returning();
 
-    return !!userData && server.id === serverId && server.online;
+    return !!userData && game.id === gameId && game.online;
   }
 
-  return !!data && data.server.id === serverId && data.server.online;
+  return !!data && data.game.id === gameId && data.game.online;
 };
 
-export const isAdminOfServer = async (c: GlobalContext): Promise<boolean> => {
-  const serverId = c.req.param("serverId");
+export const isAdminOfGame = async (c: GlobalContext): Promise<boolean> => {
+  const gameId = c.req.param("gameId");
   const email = c.var.email;
 
-  if (!serverId || !email) {
+  if (!gameId || !email) {
     return false;
   }
 
   const [data] = await db.select().from(schema.user).innerJoin(
-    schema.server,
-    eq(schema.user.serverId, schema.server.id),
+    schema.game,
+    eq(schema.user.gameId, schema.game.id),
   ).innerJoin(
     schema.account,
     eq(schema.user.accountId, schema.account.id),
   ).where(
     and(
-      eq(schema.server.id, serverId),
+      eq(schema.game.id, gameId),
       eq(schema.account.email, email),
     ),
   );
 
-  return !!data && data.user.type === "admin" && data.server.id === serverId;
+  return !!data && data.user.type === "admin" && data.game.id === gameId;
 };
 
 export const isLoggedIn = (c: GlobalContext): boolean => {

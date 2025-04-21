@@ -307,11 +307,11 @@ const setAdminUser = async () => {
   await db.insert(schema.account).values({
     email: "eidemartin_303@hotmail.com",
     nickname: "Martin",
-    canCreateServer: true,
+    canCreateGame: true,
   }).onConflictDoUpdate({
     target: [schema.account.email],
     set: {
-      canCreateServer: true,
+      canCreateGame: true,
     },
   });
 };

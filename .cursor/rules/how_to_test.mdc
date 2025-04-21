@@ -12,7 +12,7 @@ This rule defines the conventions and requirements for writing and maintaining t
 ## 1. Where to Put Tests
 
 - Place `.spec.ts` files in the same directory as the feature/page/component they test.
-- Name the test file after the file it tests (e.g. `Actions.page.tsx` → `Actions.spec.ts`).
+- Name the test file after the file it tests (e.g. `Game.page.tsx` → `Game.spec.ts`).
 
 ---
 
@@ -29,13 +29,15 @@ This rule defines the conventions and requirements for writing and maintaining t
   };
   ```
 - Use hardcoded UUIDs for test servers, locations, and other entities. These should match the values seeded in `seed.e2e.ts`.
-- Use robust selectors (`getByRole`, `getByLabel`, `getByText`) for all UI interactions and assertions.
+- Use robust selectors (`getByRole`, `getByLabel`, `getByText`, `locator().filter()`).
+- For headings or key text, use `exact: true` to avoid false positives from partial matches.
+- When a value may appear multiple times (e.g., player in multiple leaderboards), use `.first()` to assert only the first occurrence.
 
 ---
 
 ## 3. What to Test
 
-- The main user flow (e.g. creating an action as admin and verifying it appears).
+- The main user flow (e.g. executing an action as player and verifying success).
 - Permission checks (e.g. player is redirected from admin pages).
 - Form interactions (open modal, fill form, submit, verify result).
 - Only test what is necessary for confidence in the feature.
@@ -47,6 +49,7 @@ This rule defines the conventions and requirements for writing and maintaining t
 - Tests are designed to run in CI pipelines, not in production or dev environments.
 - Use the same hardcoded IDs and names in both the seed script and tests.
 - Always select assets and locations by name or ID that are guaranteed to exist from the seed.
+- If you need to assert on a user's nickname, ensure it is seeded in the e2e setup for reliability.
 
 ---
 
@@ -55,7 +58,7 @@ This rule defines the conventions and requirements for writing and maintaining t
 ```ts
 import { expect, type Page, test } from "@playwright/test";
 
-test("admin can create a new action and see it in the grid", async ({ page }) => {
+test("player can see the resource leaderboard", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
@@ -63,14 +66,11 @@ test("admin can create a new action and see it in the grid", async ({ page }) =>
     loginAs: (page: Page, user: "admin" | "player") => Promise<void>;
   };
 
-  await loginAs(page, "admin");
-  await page.goto("http://localhost:4000/servers/5bbcb026-e240-48d8-b66d-7105df74cf9f/admin/actions");
-  await page.getByRole("button", { name: "Create Action" }).click();
-  await page.getByRole("textbox", { name: "Action Name" }).fill("Test Action");
-  await page.getByRole("img", { name: "Fishing 2" }).click();
-  await page.getByLabel("Location").selectOption("5bbcb026-e240-48d8-b66d-7105df74cf9f");
-  await page.getByRole("dialog").getByRole("button", { name: "Create Action" }).click();
-  await expect(page.getByText("Test Action").first()).toBeVisible();
+  await loginAs(page, "player");
+  await page.goto("http://localhost:4000/games/5bbcb026-e240-48d8-b66d-7105df74cf9f/leaderboard");
+
+  await expect(page.getByRole("heading", { name: "Leaderboards", exact: true })).toBeVisible();
+  await expect(page.getByText("testuserplayer").first()).toBeVisible();
 });
 ```
 

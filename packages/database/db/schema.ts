@@ -79,7 +79,7 @@ export const intervals = pgEnum("intervals", [
 
 export const actionLog = pgTable("action_log", {
   id: uuid().primaryKey().defaultRandom(),
-  serverId: uuid().references(() => server.id).notNull(),
+  gameId: uuid().references(() => game.id).notNull(),
   userId: uuid().references(() => user.id).notNull(),
   actionId: uuid().references(() => action.id).notNull(),
   version: integer().notNull(),
@@ -96,13 +96,13 @@ export const asset = pgTable("asset", {
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
 });
 
-export const server = pgTable("server", {
+export const game = pgTable("game", {
   id: uuid().primaryKey().defaultRandom(),
   actionRecoveryInterval: intervals().notNull(),
   actionRecoveryAmount: integer().notNull().default(1),
   maxAvailableActions: integer().notNull().default(100),
   startingAvailableActions: integer().notNull().default(15),
-  name: varchar({ length: 50 }).notNull().unique("unique_server_name"),
+  name: varchar({ length: 50 }).notNull().unique("unique_game_name"),
   online: boolean().notNull().default(false),
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   createdAt: temporalTimestamp().notNull().default(sql`now()`),
@@ -112,7 +112,7 @@ export const account = pgTable("account", {
   id: uuid().primaryKey().defaultRandom(),
   email: varchar({ length: 100 }).notNull().unique(),
   nickname: varchar({ length: 50 }).unique(),
-  canCreateServer: boolean().notNull().default(false),
+  canCreateGame: boolean().notNull().default(false),
   createdAt: temporalTimestamp().notNull().default(sql`now()`),
   updatedAt: temporalTimestamp().notNull().default(sql`now()`),
 });
@@ -129,7 +129,7 @@ export const user = pgTable(
   {
     id: uuid().primaryKey().defaultRandom(),
     accountId: uuid().references(() => account.id).notNull(),
-    serverId: uuid().references(() => server.id).notNull(),
+    gameId: uuid().references(() => game.id).notNull(),
     name: varchar({ length: 50 }),
     availableActions: integer().notNull(),
     type: userType().notNull().default("player"),
@@ -139,9 +139,9 @@ export const user = pgTable(
   (
     table,
   ) => [
-    unique("unique_user_name_per_server").on(table.serverId, table.name),
-    unique("unique_user_on_server_per_account").on(
-      table.serverId,
+    unique("unique_user_name_per_game").on(table.gameId, table.name),
+    unique("unique_user_on_game_per_account").on(
+      table.gameId,
       table.accountId,
     ),
   ],
@@ -151,7 +151,7 @@ export const location = pgTable(
   "location",
   {
     id: uuid().primaryKey().defaultRandom(),
-    serverId: uuid().references(() => server.id).notNull(),
+    gameId: uuid().references(() => game.id).notNull(),
     assetId: uuid().references(() => asset.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
     description: varchar({ length: 500 }),
@@ -159,7 +159,7 @@ export const location = pgTable(
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
-    unique("unique_location_name_per_server").on(table.serverId, table.name),
+    unique("unique_location_name_per_game").on(table.gameId, table.name),
   ],
 );
 
@@ -167,7 +167,7 @@ export const action = pgTable(
   "action",
   {
     id: uuid().primaryKey().defaultRandom(),
-    serverId: uuid().references(() => server.id).notNull(),
+    gameId: uuid().references(() => game.id).notNull(),
     assetId: uuid().references(() => asset.id).notNull(),
     locationId: uuid().references(() => location.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
@@ -178,7 +178,7 @@ export const action = pgTable(
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
-    unique("unique_action_name_per_server").on(table.serverId, table.name),
+    unique("unique_action_name_per_game").on(table.gameId, table.name),
   ],
 );
 
@@ -186,7 +186,7 @@ export const item = pgTable(
   "item",
   {
     id: uuid().primaryKey().defaultRandom(),
-    serverId: uuid().references(() => server.id).notNull(),
+    gameId: uuid().references(() => game.id).notNull(),
     assetId: uuid().references(() => asset.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
     description: varchar({ length: 500 }),
@@ -196,7 +196,7 @@ export const item = pgTable(
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
-    unique("unique_item_name_per_server").on(table.serverId, table.name),
+    unique("unique_item_name_per_game").on(table.gameId, table.name),
   ],
 );
 
@@ -204,7 +204,7 @@ export const resource = pgTable(
   "resource",
   {
     id: uuid().primaryKey().defaultRandom(),
-    serverId: uuid().references(() => server.id).notNull(),
+    gameId: uuid().references(() => game.id).notNull(),
     assetId: uuid().references(() => asset.id).notNull(),
     name: varchar({ length: 50 }).notNull(),
     description: varchar({ length: 500 }),
@@ -213,7 +213,7 @@ export const resource = pgTable(
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
   },
   (table) => [
-    unique("unique_resource_name_per_server").on(table.serverId, table.name),
+    unique("unique_resource_name_per_game").on(table.gameId, table.name),
   ],
 );
 
