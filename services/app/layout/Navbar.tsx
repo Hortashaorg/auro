@@ -22,72 +22,70 @@ interface NavSelect {
 
 export const Navbar = async () => {
   const context = getGlobalContext();
-  const serverId = context.req.param("serverId");
+  const gameId = context.req.param("gameId");
 
   const breadcrumbSegments = await calculateBreadcrumbSegments();
 
   const currentPath = new URL(context.req.url).pathname;
-  const isAdminPath = serverId
-    ? context.req.routePath.includes("/admin")
-    : false;
+  const isAdminPath = gameId ? context.req.routePath.includes("/admin") : false;
 
   const pageLinks: (NavLink | NavSelect)[] = [
     {
       href: "/",
       text: "Home",
-      condition: !serverId,
+      condition: !gameId,
     },
     {
-      href: "/servers",
-      text: "Servers",
-      condition: context.var.isLoggedIn && !serverId,
+      href: "/games",
+      text: "Games",
+      condition: context.var.isLoggedIn && !gameId,
     },
     {
-      href: `/servers/${serverId}`,
+      href: `/games/${gameId}`,
       text: "Overview",
-      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+      condition: context.var.isLoggedIn && !!gameId && !isAdminPath,
     },
     {
-      href: `/servers/${serverId}/resources`,
+      href: `/games/${gameId}/resources`,
       text: "Resources",
-      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+      condition: context.var.isLoggedIn && !!gameId && !isAdminPath,
     },
     {
-      href: `/servers/${serverId}/leaderboard`,
+      href: `/games/${gameId}/leaderboard`,
       text: "Leaderboard",
-      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+      condition: context.var.isLoggedIn && !!gameId && !isAdminPath,
     },
     {
-      href: `/servers/${serverId}/action-log`,
+      href: `/games/${gameId}/action-log`,
       text: "Action Log",
-      condition: context.var.isLoggedIn && !!serverId && !isAdminPath,
+      condition: context.var.isLoggedIn && !!gameId && !isAdminPath,
     },
     {
-      href: `/servers/${serverId}/admin`,
+      href: `/games/${gameId}/admin`,
       text: "Admin",
-      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+      condition: context.var.isLoggedIn && !!gameId && isAdminPath,
     },
     {
       text: "Configuration",
-      condition: context.var.isLoggedIn && !!serverId && isAdminPath,
+      condition: context.var.isLoggedIn && !!gameId && isAdminPath,
       children: [
         {
-          href: `/servers/${serverId}/admin/locations`,
+          href: `/games/${gameId}/admin/locations`,
           text: "Locations",
           condition: true,
         },
         {
-          href: `/servers/${serverId}/admin/actions`,
+          href: `/games/${gameId}/admin/actions`,
           text: "Actions",
           condition: true,
         },
         {
-          href: `/servers/${serverId}/admin/resources`,
+          href: `/games/${gameId}/admin/resources`,
           text: "Resources",
           condition: true,
         },
         {
-          href: `/servers/${serverId}/admin/items`,
+          href: `/games/${gameId}/admin/items`,
           text: "Items",
           condition: true,
         },

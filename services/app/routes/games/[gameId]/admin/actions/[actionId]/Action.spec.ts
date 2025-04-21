@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-test("admin can add a resource reward and a cost", async ({ page }) => {
+test("@target admin can add a resource reward and a cost", async ({ page }) => {
   const cwd = Deno.cwd();
   const { loginAs } = await import(
     `file:///${cwd}/playwright/login.ts`
