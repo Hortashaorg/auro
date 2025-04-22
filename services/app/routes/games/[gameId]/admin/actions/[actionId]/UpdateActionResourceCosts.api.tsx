@@ -28,10 +28,8 @@ const UpdateActionResourceCosts = async () => {
       }
     }
 
-    // Fetch all cost IDs for this action
     const costs = await selectResourceCostsByActionId(actionId);
 
-    // Build array of updates
     const updates = costs
       .map((cost) => {
         const newQuantity = resourceQuantities[cost.resourceId];

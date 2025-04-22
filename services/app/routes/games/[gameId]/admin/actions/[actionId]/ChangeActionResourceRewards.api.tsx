@@ -3,7 +3,7 @@ import { isAdminOfGame } from "@permissions/index.ts";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
-import { db, schema, sql } from "@package/database";
+import { updateActionResourceRewards } from "@queries/mutations/actions/updateActionResourceRewards.ts";
 
 const ChangeActionResourceRewards = async () => {
   const context = changeActionResourceRewardsRoute.context();
@@ -103,29 +103,17 @@ const ChangeActionResourceRewards = async () => {
   }
 
   try {
-    // Query
-    await db.insert(schema.actionResourceReward).values(
-      parsedResult.map((entry) => {
-        return {
-          actionId: actionId,
-          resourceId: entry.id,
-          chance: entry.chance,
-          quantityMin: entry.min,
-          quantityMax: entry.max,
-        };
-      }),
-    ).onConflictDoUpdate({
-      set: {
-        chance: sql`excluded.chance`,
-        quantityMin: sql`excluded.quantity_min`,
-        quantityMax: sql`excluded.quantity_max`,
-        updatedAt: sql`now()`,
+    const updates = parsedResult.map((entry) => ({
+      id: entry.id,
+      updates: {
+        chance: entry.chance,
+        quantityMin: entry.min,
+        quantityMax: entry.max,
       },
-      target: [
-        schema.actionResourceReward.actionId,
-        schema.actionResourceReward.resourceId,
-      ],
-    });
+    }));
+    if (updates.length > 0) {
+      await updateActionResourceRewards(updates);
+    }
 
     // Trigger events to update the UI using the correct format
     context.header(
@@ -192,8 +180,7 @@ const inputSchema = v.record(
 );
 
 export const changeActionResourceRewardsRoute = createRoute({
-  path:
-    "/api/games/:gameId/admin/actions/:actionId/change-resource-rewards",
+  path: "/api/games/:gameId/admin/actions/:actionId/change-resource-rewards",
   component: ChangeActionResourceRewards,
   partial: true,
   permission: {
