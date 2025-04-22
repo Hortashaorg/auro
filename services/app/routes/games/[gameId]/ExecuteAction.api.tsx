@@ -2,22 +2,9 @@ import { createRoute, v } from "@kalena/framework";
 import { isPlayerOfGame } from "@permissions/index.ts";
 import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
-import { getUserByEmail } from "@queries/user/getUserByEmail.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
-
-type ResourceEntry = {
-  type: "reward" | "cost";
-  resourceId: string;
-  amount: number;
-};
-
-type UserResource = {
-  id: string;
-  userId: string;
-  resourceId: string;
-  quantity: number;
-};
+import { userContext } from "@contexts/userContext.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -26,9 +13,7 @@ const ExecuteAction = async () => {
     ? params.output
     : throwError("Invalid params");
 
-  const userEmail = context.var.email ?? throwError("Missing user email");
-
-  const user = await getUserByEmail(userEmail, gameId);
+  const { user } = await executeActionRoute.customContext();
 
   if (user.availableActions <= 0) {
     context.header(
@@ -44,7 +29,9 @@ const ExecuteAction = async () => {
         },
       ]),
     );
-    return <ActionsSection hx-swap-oob="true" />;
+    return (
+      <ActionsSection hx-swap-oob="true" gameId={gameId} userId={user.id} />
+    );
   }
 
   const costs = await db.select({
@@ -89,7 +76,9 @@ const ExecuteAction = async () => {
           },
         ]),
       );
-      return <ActionsSection hx-swap-oob="true" />;
+      return (
+        <ActionsSection hx-swap-oob="true" gameId={gameId} userId={user.id} />
+      );
     }
   }
 
@@ -136,7 +125,7 @@ const ExecuteAction = async () => {
     .where(eq(schema.userResource.userId, user.id));
 
   await db.transaction(async (tx) => {
-    const updatedResources: UserResource[] = [...userResourcesWithIds];
+    const updatedResources = [...userResourcesWithIds];
 
     for (const cost of costs) {
       const resourceIndex = updatedResources.findIndex(
@@ -189,14 +178,14 @@ const ExecuteAction = async () => {
       })
       .where(eq(schema.user.id, user.id));
 
-    const resourceEntries: ResourceEntry[] = [
-      ...costs.map((cost): ResourceEntry => ({
-        type: "cost",
+    const resourceEntries = [
+      ...costs.map((cost) => ({
+        type: "cost" as const,
         resourceId: cost.resourceId,
         amount: cost.quantity,
       })),
-      ...rewardUpdates.map((reward): ResourceEntry => ({
-        type: "reward",
+      ...rewardUpdates.map((reward) => ({
+        type: "reward" as const,
         resourceId: reward.resourceId,
         amount: reward.quantity,
       })),
@@ -224,7 +213,7 @@ const ExecuteAction = async () => {
       },
     ]),
   );
-  return <ActionsSection hx-swap-oob="true" />;
+  return <ActionsSection hx-swap-oob="true" gameId={gameId} userId={user.id} />;
 };
 
 export const executeActionRoute = createRoute({
@@ -240,4 +229,5 @@ export const executeActionRoute = createRoute({
   }),
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
+  customContext: userContext,
 });
