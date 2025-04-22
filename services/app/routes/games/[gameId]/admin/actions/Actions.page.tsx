@@ -15,7 +15,9 @@ const Actions = async () => {
         Create Action
       </ModalButton>
       <Modal modalRef="createActionModal" title="Create Action">
-        <CreateActionForm />
+        <CreateActionForm
+          gameId={user.gameId}
+        />
       </Modal>
 
       <ActionGrid gameId={user.gameId} />

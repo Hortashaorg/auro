@@ -8,35 +8,26 @@ import {
 } from "@comp/atoms/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import { ImageGridInput } from "@comp/molecules/form/index.ts";
-import { db, eq, schema } from "@package/database";
-import { getGlobalContext } from "@kalena/framework";
-import { throwError } from "@package/common";
+import type { FC } from "@kalena/framework";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { selectActionAssets } from "@queries/selects/assets/selectActionAssets.ts";
+import { selectLocationsByGameId } from "@queries/selects/locations/selectLocationsByGameId.ts";
 
-export const CreateActionForm = async () => {
-  const globalContext = getGlobalContext();
-  const gameId = globalContext.req.param("gameId");
-  if (!gameId) throwError("No gameId");
+type Props = {
+  gameId: string;
+} & BaseComponentProps;
 
-  const [assets, locations] = await Promise.all([
-    db.select({
-      id: schema.asset.id,
-      name: schema.asset.name,
-      url: schema.asset.url,
-    })
-      .from(schema.asset)
-      .where(eq(schema.asset.type, "action")),
-    db.select({
-      id: schema.location.id,
-      name: schema.location.name,
-    })
-      .from(schema.location)
-      .where(eq(schema.location.gameId, gameId)),
-  ]);
+export const CreateActionForm: FC<Props> = async (
+  { gameId, ...props },
+) => {
+  const assets = await selectActionAssets();
+  const locations = await selectLocationsByGameId(gameId);
 
   return (
     <Form
       hx-post={`/api/games/${gameId}/admin/actions/create-action`}
       hx-swap="none"
+      {...props}
     >
       <div className="space-y-4">
         <FormControl
