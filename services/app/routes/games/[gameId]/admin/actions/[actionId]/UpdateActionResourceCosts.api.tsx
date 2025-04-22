@@ -1,8 +1,9 @@
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createRoute } from "@kalena/framework";
 import { createEvents } from "@comp/utils/events.ts";
-import { db, eq, schema } from "@package/database";
+import { updateActionResourceCosts } from "@queries/mutations/actions/updateActionResourceCosts.ts";
 import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
+import { selectResourceCostsByActionId } from "@queries/selects/actions/selectResourceCostsByActionId.ts";
 
 const UpdateActionResourceCosts = async () => {
   const context = updateActionResourceCostsRoute.context();
@@ -13,32 +14,37 @@ const UpdateActionResourceCosts = async () => {
   try {
     // Get all form entries - no validation needed since we're just parsing fields
     const entries = await context.req.raw.formData();
-    console.log("Form entries:", Object.fromEntries(entries));
-
-    // First, fetch all costs for this action
-    const costs = await db.select({
-      id: schema.actionResourceCost.id,
-      resourceId: schema.actionResourceCost.resourceId,
-    })
-      .from(schema.actionResourceCost)
-      .where(eq(schema.actionResourceCost.actionId, actionId));
-
-    await db.transaction(async (tx) => {
-      for (const cost of costs) {
-        const quantityKey = `resource_${cost.resourceId}_quantity`;
-        const quantityValue = entries.get(quantityKey);
-
-        if (quantityValue) {
-          const newQuantity = parseInt(quantityValue.toString(), 10);
-
-          if (!isNaN(newQuantity) && newQuantity > 0) {
-            await tx.update(schema.actionResourceCost)
-              .set({ quantity: newQuantity })
-              .where(eq(schema.actionResourceCost.id, cost.id));
-          }
+    const resourceQuantities: Record<string, number> = {};
+    for (const [key, value] of entries.entries()) {
+      if (key.startsWith("resource_") && key.endsWith("_quantity")) {
+        const resourceId = key.replace("resource_", "").replace(
+          "_quantity",
+          "",
+        );
+        const quantity = parseInt(value.toString(), 10);
+        if (!isNaN(quantity)) {
+          resourceQuantities[resourceId] = quantity;
         }
       }
-    });
+    }
+
+    // Fetch all cost IDs for this action
+    const costs = await selectResourceCostsByActionId(actionId);
+
+    // Build array of updates
+    const updates = costs
+      .map((cost) => {
+        const newQuantity = resourceQuantities[cost.resourceId];
+        if (typeof newQuantity === "number" && newQuantity > 0) {
+          return { id: cost.id, updates: { quantity: newQuantity } };
+        }
+        return null;
+      })
+      .filter(Boolean) as { id: string; updates: { quantity: number } }[];
+
+    if (updates.length > 0) {
+      await updateActionResourceCosts(updates);
+    }
 
     context.header(
       "HX-Trigger",
