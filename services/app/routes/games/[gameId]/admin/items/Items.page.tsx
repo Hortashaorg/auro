@@ -15,7 +15,7 @@ const Items = async () => {
         Create Item
       </ModalButton>
       <Modal modalRef="createItemModal" title="Create Item">
-        <CreateItemForm />
+        <CreateItemForm gameId={user.gameId} />
       </Modal>
 
       <ItemGrid gameId={user.gameId} />

@@ -15,7 +15,7 @@ const Locations = async () => {
         Create Location
       </ModalButton>
       <Modal modalRef="createLocationModal" title="Create Location">
-        <CreateLocationForm />
+        <CreateLocationForm gameId={user.gameId} />
       </Modal>
 
       <LocationGrid gameId={user.gameId} />

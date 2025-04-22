@@ -15,7 +15,7 @@ const Resources = async () => {
         Create Resource
       </ModalButton>
       <Modal modalRef="createResourceModal" title="Create Resource">
-        <CreateResourceForm />
+        <CreateResourceForm gameId={user.gameId} />
       </Modal>
 
       <ResourceGrid gameId={user.gameId} />
