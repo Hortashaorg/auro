@@ -121,3 +121,31 @@ For existing code that uses direct DB queries or queries outside the `selects`/`
 - [concept_repo_structure.mdc](mdc:concept_repo_structure.mdc)
 - [examples_api.mdc](mdc:.cursor/rules/examples_api.mdc)
 - [examples_contexts.mdc](mdc:.cursor/rules/examples_contexts.mdc)
+
+---
+
+## 9. Additional Conventions (2024 Refactor)
+
+### Mutation & Query Naming
+- All mutation functions that insert a new row into a table should be named `create<TableName>` (e.g., `createItem`, `createResourceCost`).
+- All update functions should be named `update<TableName>` or `update<TableName>s` for batch updates (e.g., `updateActionResourceCosts`, `updateActionResourceRewards`).
+- All delete functions should be named `delete<TableName>` (e.g., `deleteResourceCost`).
+- All select functions should be named `select<TableName>By<Field>` or `select<TableName>sBy<Field>` (e.g., `selectResourceCostsByActionId`).
+- Mutation and query files should match the function name for discoverability and consistency.
+
+### Batch Update Pattern
+- Batch update functions should accept an array of `{ id, updates }` objects.
+- Each update should be performed in a single transaction for atomicity.
+- The update type should be inferred from the schema using `Partial<Omit<InferInsertModel<typeof schema.table>, "id" | "createdAt" | "updatedAt">>`.
+- Always set `updatedAt` to `Temporal.Now.instant()` (or equivalent) on update.
+- Example: see [updateActionResourceCosts.ts](mdc:services/app/queries/mutations/actions/updateActionResourceCosts.ts)
+
+### No Direct DB Access in Handlers
+- Do not use direct `db.select`, `db.insert`, `db.update`, or `db.delete` calls in API handlers or section components.
+- Move all database logic to dedicated query or mutation functions in `queries/selects/` or `queries/mutations/`.
+- This keeps handlers clean, improves testability, and centralizes data access logic.
+
+### Type Inference for Mutations
+- Always infer types for mutation and query props from the schema using Drizzle's `InferInsertModel` or `InferSelectModel`.
+- Do not hand-write types for mutation/query props unless absolutely necessary.
+- This ensures type safety and reduces maintenance overhead.
