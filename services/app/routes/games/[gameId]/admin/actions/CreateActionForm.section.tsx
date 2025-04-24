@@ -78,8 +78,8 @@ export const CreateActionForm: FC<Props> = async (
             id="action-location"
             name="locationId"
             options={locations.map((location) => ({
-              value: location.id,
-              label: location.name,
+              value: location.location.id,
+              label: location.location.name,
             }))}
             placeholder="Select location"
           />

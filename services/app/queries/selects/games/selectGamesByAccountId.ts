@@ -7,10 +7,7 @@ import { db, eq, schema } from "@package/database";
  * @returns A list of user and game objects for the account.
  */
 export const selectGamesByAccountId = async (accountId: string) => {
-  return await db.select({
-    user: schema.user,
-    game: schema.game,
-  })
+  return await db.select()
     .from(schema.user)
     .innerJoin(schema.game, eq(schema.user.gameId, schema.game.id))
     .orderBy(schema.game.name)

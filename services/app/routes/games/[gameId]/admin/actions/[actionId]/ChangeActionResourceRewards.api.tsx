@@ -3,7 +3,7 @@ import { isAdminOfGame } from "@permissions/index.ts";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
-import { updateActionResourceRewards } from "@queries/mutations/actions/updateActionResourceRewards.ts";
+import { updateActionResourceRewards } from "@queries/mutations/actions/upsertActionResourceRewards.ts";
 
 const ChangeActionResourceRewards = async () => {
   const context = changeActionResourceRewardsRoute.context();
