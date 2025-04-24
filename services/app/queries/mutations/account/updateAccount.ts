@@ -12,6 +12,9 @@ export const updateAccount = async (
   updates: AccountUpdate,
 ) => {
   await db.update(schema.account)
-    .set(updates)
+    .set({
+      ...updates,
+      updatedAt: Temporal.Now.instant(),
+    })
     .where(eq(schema.account.id, accountId));
 };

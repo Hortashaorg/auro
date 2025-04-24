@@ -9,6 +9,9 @@ export const updateUser = async (
   updates: UserUpdate,
 ): Promise<void> => {
   await db.update(schema.user)
-    .set(updates)
+    .set({
+      ...updates,
+      updatedAt: Temporal.Now.instant(),
+    })
     .where(eq(schema.user.id, userId));
 };
