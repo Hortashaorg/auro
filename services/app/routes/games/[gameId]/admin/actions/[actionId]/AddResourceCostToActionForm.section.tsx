@@ -1,9 +1,9 @@
 import { Button, ButtonGroup } from "@comp/atoms/buttons/index.ts";
 import { Form, Label, SelectInput } from "@comp/atoms/form/index.ts";
 import { FormControl } from "@comp/molecules/form/index.ts";
-import { db, eq, schema } from "@package/database";
 import { getGlobalContext, v } from "@kalena/framework";
 import { Flex } from "@comp/atoms/layout/index.ts";
+import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
 
 const formSchema = v.object({
   resourceId: v.pipe(v.string(), v.uuid()),
@@ -13,19 +13,10 @@ export const AddResourceCostToActionForm = async () => {
   const globalContext = getGlobalContext();
   const gameId = globalContext.req.param("gameId");
 
-  const resources = await db.select({
-    id: schema.resource.id,
-    name: schema.resource.name,
-  })
-    .from(schema.resource)
-    .where(
-      eq(schema.resource.gameId, gameId),
-    )
-    .orderBy(schema.resource.name);
-
-  const resourceOptions = resources.map((r) => ({
-    value: r.id,
-    label: r.name,
+  const resources = await selectResourcesByGameId(gameId);
+  const resourceOptions = resources.map((data) => ({
+    value: data.resource.id,
+    label: data.resource.name,
   }));
 
   return (
@@ -54,6 +45,3 @@ export const AddResourceCostToActionForm = async () => {
     </Form>
   );
 };
-
-// Note: The actual API endpoint logic will be created in a separate file.
-// This component just provides the form structure.
