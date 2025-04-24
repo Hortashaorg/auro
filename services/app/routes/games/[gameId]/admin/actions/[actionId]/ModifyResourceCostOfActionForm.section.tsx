@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
-import { db, eq, schema } from "@package/database";
+import { selectResourceCostsByActionId } from "@queries/selects/actions/selectResourceCostsByActionId.ts";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
 import { ModalButton } from "@comp/molecules/modal/index.ts";
 import { Modal } from "@comp/molecules/modal/index.ts";
@@ -23,20 +23,7 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
   const gameId = globalContext.req.param("gameId");
   const actionId = globalContext.req.param("actionId");
 
-  const resourceCosts = await db.select({
-    id: schema.actionResourceCost.id,
-    resourceId: schema.resource.id,
-    resourceName: schema.resource.name,
-    quantity: schema.actionResourceCost.quantity,
-  })
-    .from(schema.actionResourceCost)
-    .innerJoin(
-      schema.resource,
-      eq(schema.actionResourceCost.resourceId, schema.resource.id),
-    )
-    .where(
-      eq(schema.actionResourceCost.actionId, actionId),
-    );
+  const resourceCosts = await selectResourceCostsByActionId(actionId);
 
   return (
     <>
@@ -65,18 +52,18 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
                 {resourceCosts.map((resourceCost, index) => {
                   const modalRef = `deleteCost${index}`;
                   return (
-                    <TableRow key={resourceCost.id} hoverable>
+                    <TableRow key={resourceCost.resource.id} hoverable>
                       <TableCell>
-                        {resourceCost.resourceName}
+                        {resourceCost.resource.name}
                       </TableCell>
                       <TableCell>
                         <FormControl
-                          inputName={`resource_${resourceCost.resourceId}_quantity`}
+                          inputName={`resource_${resourceCost.resource.id}_quantity`}
                         >
                           <Input
                             type="number"
-                            name={`resource_${resourceCost.resourceId}_quantity`}
-                            value={resourceCost.quantity}
+                            name={`resource_${resourceCost.resource.id}_quantity`}
+                            value={resourceCost.action_resource_cost.quantity}
                             min={1}
                           />
                         </FormControl>
@@ -91,12 +78,12 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
                         </ModalButton>
                         <Modal
                           modalRef={modalRef}
-                          title={`Delete ${resourceCost.resourceName}`}
+                          title={`Delete ${resourceCost.resource.name}`}
                         >
                           <DeleteConfirmation
-                            itemName={resourceCost.resourceName}
+                            itemName={resourceCost.resource.name}
                             itemType="Cost"
-                            deleteEndpoint={`/games/${gameId}/admin/actions/${actionId}/remove-cost/${resourceCost.id}`}
+                            deleteEndpoint={`/games/${gameId}/admin/actions/${actionId}/remove-cost/${resourceCost.resource.id}`}
                           />
                         </Modal>
                       </TableCell>

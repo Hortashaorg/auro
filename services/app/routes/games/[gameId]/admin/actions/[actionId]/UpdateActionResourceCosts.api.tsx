@@ -32,9 +32,12 @@ const UpdateActionResourceCosts = async () => {
 
     const updates = costs
       .map((cost) => {
-        const newQuantity = resourceQuantities[cost.resourceId];
+        const newQuantity = resourceQuantities[cost.resource.id];
         if (typeof newQuantity === "number" && newQuantity > 0) {
-          return { id: cost.id, updates: { quantity: newQuantity } };
+          return {
+            id: cost.action_resource_cost.id,
+            updates: { quantity: newQuantity },
+          };
         }
         return null;
       })

@@ -7,7 +7,7 @@ export type UserUpdate = Partial<
 export const updateUser = async (
   userId: string,
   updates: UserUpdate,
-) => {
+): Promise<void> => {
   await db.update(schema.user)
     .set(updates)
     .where(eq(schema.user.id, userId));
