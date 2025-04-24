@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
-import { db, eq, schema } from "@package/database";
+import { selectResourceRewardsByActionId } from "@queries/selects/actions/selectResourceRewardsByActionId.ts";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
 import { ModalButton } from "@comp/molecules/modal/index.ts";
 import { Modal } from "@comp/molecules/modal/index.ts";
@@ -29,22 +29,7 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
   const gameId = globalContext.req.param("gameId");
   const actionId = globalContext.req.param("actionId");
 
-  const resourceRewards = await db.select({
-    id: schema.actionResourceReward.id,
-    resourceId: schema.resource.id,
-    resourceName: schema.resource.name,
-    chance: schema.actionResourceReward.chance,
-    quantityMin: schema.actionResourceReward.quantityMin,
-    quantityMax: schema.actionResourceReward.quantityMax,
-  })
-    .from(schema.actionResourceReward)
-    .innerJoin(
-      schema.resource,
-      eq(schema.actionResourceReward.resourceId, schema.resource.id),
-    )
-    .where(
-      eq(schema.actionResourceReward.actionId, actionId),
-    );
+  const resourceRewards = await selectResourceRewardsByActionId(actionId);
 
   return (
     <>
@@ -75,43 +60,46 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
                 {resourceRewards.map((resourceReward, index) => {
                   const modalRef = `deleteReward${index}`;
                   return (
-                    <TableRow key={resourceReward.id} hoverable>
+                    <TableRow key={resourceReward.resource.id} hoverable>
                       <TableCell>
-                        {resourceReward.resourceName}
+                        {resourceReward.resource.name}
                       </TableCell>
                       <TableCell>
                         <FormControl
-                          inputName={`resource_${resourceReward.resourceId}_chance`}
+                          inputName={`resource_${resourceReward.resource.id}_chance`}
                         >
                           <Range
-                            name={`resource_${resourceReward.resourceId}_chance`}
+                            name={`resource_${resourceReward.resource.id}_chance`}
                             min={0}
                             max={100}
-                            defaultValue={resourceReward.chance}
+                            defaultValue={resourceReward.action_resource_reward
+                              .chance}
                             unitSuffix="%"
                           />
                         </FormControl>
                       </TableCell>
                       <TableCell>
                         <FormControl
-                          inputName={`resource_${resourceReward.resourceId}_min`}
+                          inputName={`resource_${resourceReward.resource.id}_min`}
                         >
                           <Input
                             type="number"
-                            name={`resource_${resourceReward.resourceId}_min`}
-                            value={resourceReward.quantityMin}
+                            name={`resource_${resourceReward.resource.id}_min`}
+                            value={resourceReward.action_resource_reward
+                              .quantityMin}
                             min={1}
                           />
                         </FormControl>
                       </TableCell>
                       <TableCell>
                         <FormControl
-                          inputName={`resource_${resourceReward.resourceId}_max`}
+                          inputName={`resource_${resourceReward.resource.id}_max`}
                         >
                           <Input
                             type="number"
-                            name={`resource_${resourceReward.resourceId}_max`}
-                            value={resourceReward.quantityMax}
+                            name={`resource_${resourceReward.resource.id}_max`}
+                            value={resourceReward.action_resource_reward
+                              .quantityMax}
                             min={1}
                           />
                         </FormControl>
@@ -126,12 +114,12 @@ export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
                         </ModalButton>
                         <Modal
                           modalRef={modalRef}
-                          title={`Delete ${resourceReward.resourceName}`}
+                          title={`Delete ${resourceReward.resource.name}`}
                         >
                           <DeleteConfirmation
-                            itemName={resourceReward.resourceName}
+                            itemName={resourceReward.resource.name}
                             itemType="Reward"
-                            deleteEndpoint={`/games/${gameId}/admin/actions/${actionId}/remove-reward/${resourceReward.id}`}
+                            deleteEndpoint={`/games/${gameId}/admin/actions/${actionId}/remove-reward/${resourceReward.resource.id}`}
                           />
                         </Modal>
                       </TableCell>
