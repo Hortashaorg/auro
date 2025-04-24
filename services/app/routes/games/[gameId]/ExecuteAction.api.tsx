@@ -1,10 +1,10 @@
 import { createRoute, v } from "@kalena/framework";
 import { isPlayerOfGame } from "@permissions/index.ts";
-import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
+import { executeAction } from "@queries/mutations/actions/executeAction.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -15,15 +15,17 @@ const ExecuteAction = async () => {
 
   const { user } = await executeActionRoute.customContext();
 
-  if (user.availableActions <= 0) {
+  const result = await executeAction(actionId, user.id);
+
+  if (!result.success) {
     context.header(
       "HX-Trigger",
       createEvents([
         {
           name: "toast-show",
           values: {
-            message: "You have no actions left",
-            title: "No Actions Left",
+            message: result.error || "Failed to execute action",
+            title: "Action Failed",
             variant: "danger",
           },
         },
@@ -33,172 +35,6 @@ const ExecuteAction = async () => {
       <ActionsSection hx-swap-oob="true" gameId={gameId} userId={user.id} />
     );
   }
-
-  const costs = await db.select({
-    resourceId: schema.actionResourceCost.resourceId,
-    quantity: schema.actionResourceCost.quantity,
-    resourceName: schema.resource.name,
-  })
-    .from(schema.actionResourceCost)
-    .innerJoin(
-      schema.resource,
-      eq(schema.actionResourceCost.resourceId, schema.resource.id),
-    )
-    .where(
-      eq(schema.actionResourceCost.actionId, actionId),
-    );
-
-  const userResources = await db.select({
-    resourceId: schema.userResource.resourceId,
-    quantity: schema.userResource.quantity,
-  })
-    .from(schema.userResource)
-    .where(
-      eq(schema.userResource.userId, user.id),
-    );
-
-  for (const cost of costs) {
-    const userResource = userResources.find(
-      (resource) => resource.resourceId === cost.resourceId,
-    );
-
-    if (!userResource || userResource.quantity < cost.quantity) {
-      context.header(
-        "HX-Trigger",
-        createEvents([
-          {
-            name: "toast-show",
-            values: {
-              message: `You don't have enough ${cost.resourceName}`,
-              title: "Insufficient Resources",
-              variant: "danger",
-            },
-          },
-        ]),
-      );
-      return (
-        <ActionsSection hx-swap-oob="true" gameId={gameId} userId={user.id} />
-      );
-    }
-  }
-
-  const possibleRewards = await db.select()
-    .from(schema.actionResourceReward)
-    .innerJoin(
-      schema.resource,
-      eq(schema.actionResourceReward.resourceId, schema.resource.id),
-    )
-    .where(eq(schema.actionResourceReward.actionId, actionId));
-
-  const earnedRewards = possibleRewards.filter((reward) => {
-    const roll = Math.floor(Math.random() * 100) + 1;
-    return roll <= reward.action_resource_reward.chance;
-  });
-
-  const rewardUpdates = earnedRewards.map(
-    (reward) => {
-      if (
-        reward.action_resource_reward.quantityMin >
-          reward.action_resource_reward.quantityMax
-      ) throwError("Invalid quantity range");
-
-      const quantity = Math.floor(
-        Math.random() *
-          (reward.action_resource_reward.quantityMax -
-            reward.action_resource_reward.quantityMin + 1),
-      ) + reward.action_resource_reward.quantityMin;
-
-      return {
-        resourceId: reward.resource.id,
-        quantity,
-      };
-    },
-  );
-
-  const userResourcesWithIds = await db.select({
-    id: schema.userResource.id,
-    userId: schema.userResource.userId,
-    resourceId: schema.userResource.resourceId,
-    quantity: schema.userResource.quantity,
-  })
-    .from(schema.userResource)
-    .where(eq(schema.userResource.userId, user.id));
-
-  await db.transaction(async (tx) => {
-    const updatedResources = [...userResourcesWithIds];
-
-    for (const cost of costs) {
-      const resourceIndex = updatedResources.findIndex(
-        (resource) => resource.resourceId === cost.resourceId,
-      );
-
-      const currentResource = updatedResources[resourceIndex];
-
-      if (!currentResource) continue;
-
-      await tx.update(schema.userResource)
-        .set({
-          quantity: currentResource.quantity - cost.quantity,
-        })
-        .where(eq(schema.userResource.id, currentResource.id));
-
-      updatedResources[resourceIndex] = {
-        ...currentResource,
-        quantity: currentResource.quantity - cost.quantity,
-      };
-    }
-
-    for (const reward of rewardUpdates) {
-      const resourceIndex = updatedResources.findIndex(
-        (resource) => resource.resourceId === reward.resourceId,
-      );
-
-      if (resourceIndex !== -1) {
-        const currentResource = updatedResources[resourceIndex];
-
-        if (!currentResource) continue;
-
-        await tx.update(schema.userResource)
-          .set({
-            quantity: currentResource.quantity + reward.quantity,
-          })
-          .where(eq(schema.userResource.id, currentResource.id));
-      } else {
-        await tx.insert(schema.userResource).values({
-          userId: user.id,
-          resourceId: reward.resourceId,
-          quantity: reward.quantity,
-        });
-      }
-    }
-
-    await tx.update(schema.user)
-      .set({
-        availableActions: user.availableActions - 1,
-      })
-      .where(eq(schema.user.id, user.id));
-
-    const resourceEntries = [
-      ...costs.map((cost) => ({
-        type: "cost" as const,
-        resourceId: cost.resourceId,
-        amount: cost.quantity,
-      })),
-      ...rewardUpdates.map((reward) => ({
-        type: "reward" as const,
-        resourceId: reward.resourceId,
-        amount: reward.quantity,
-      })),
-    ];
-
-    await tx.insert(schema.actionLog).values({
-      gameId,
-      actionId,
-      userId: user.id,
-      version: 1,
-      data: { resource: resourceEntries },
-    });
-  });
 
   context.header(
     "HX-Trigger",
