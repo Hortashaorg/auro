@@ -1,9 +1,10 @@
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
-import { and, db, eq, PostgresError, schema } from "@package/database";
 import { createEvents } from "@comp/utils/events.ts";
 import { GameNicknamesTable } from "./GameNicknamesTable.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
+import { updateUser } from "@queries/mutations/user/updateUser.ts";
+import { PostgresError } from "@package/database";
 
 const formSchema = v.object({
   nickname: v.string(),
@@ -31,12 +32,7 @@ const UpdateHandler = async () => {
   const { nickname } = result.output;
 
   try {
-    await db.update(schema.user)
-      .set({ name: nickname })
-      .where(and(
-        eq(schema.user.id, user.id),
-        eq(schema.user.accountId, account.id),
-      ));
+    await updateUser(user.id, { name: nickname });
 
     context.header(
       "HX-Trigger",
@@ -54,10 +50,11 @@ const UpdateHandler = async () => {
     );
 
     return <GameNicknamesTable hx-swap-oob="true" accountId={account.id} />;
-  } catch (error) {
+  } catch (error: unknown) {
     if (
       error instanceof PostgresError &&
-      error.constraint_name === "unique_user_name_per_game"
+      (error as InstanceType<typeof PostgresError>).constraint_name ===
+        "unique_user_name_per_game"
     ) {
       context.header(
         "HX-Trigger",
