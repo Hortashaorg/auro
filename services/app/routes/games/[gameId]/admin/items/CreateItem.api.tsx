@@ -1,10 +1,11 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { ItemGrid } from "./ItemGrid.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
+import { createItem } from "@queries/mutations/items/createItem.ts";
 
 const CreateItem = async () => {
   const context = createItemRoute.context();
@@ -36,15 +37,14 @@ const CreateItem = async () => {
   const gameId = user.gameId;
 
   try {
-    await db.insert(schema.item)
-      .values({
-        name: result.output.name,
-        description: result.output.description,
-        gameId,
-        assetId: result.output.assetId,
-        rarity: result.output.rarity,
-        stackable: false,
-      });
+    await createItem({
+      name: result.output.name,
+      description: result.output.description,
+      gameId,
+      assetId: result.output.assetId,
+      rarity: result.output.rarity,
+      stackable: false,
+    });
 
     context.header(
       "HX-Trigger",

@@ -102,6 +102,7 @@ export const executeAction = async (
         .set({
           quantity: currentResource.quantity -
             cost.action_resource_cost.quantity,
+          updatedAt: Temporal.Now.instant(),
         })
         .where(eq(schema.userResource.id, currentResource.id));
       updatedResources[resourceIndex] = {
@@ -119,6 +120,7 @@ export const executeAction = async (
         await tx.update(schema.userResource)
           .set({
             quantity: currentResource.quantity + reward.quantity,
+            updatedAt: Temporal.Now.instant(),
           })
           .where(eq(schema.userResource.id, currentResource.id));
       } else {
@@ -132,6 +134,7 @@ export const executeAction = async (
     await tx.update(schema.user)
       .set({
         availableActions: user.availableActions - 1,
+        updatedAt: Temporal.Now.instant(),
       })
       .where(eq(schema.user.id, userId));
     const resourceEntries = [

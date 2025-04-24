@@ -2,7 +2,8 @@ import { isAdminOfGame } from "@permissions/index.ts";
 import { createRoute, v } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
-import { db, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
+import { createActionResourceReward } from "@queries/mutations/actions/createActionResourceReward.ts";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
 
 const AddActionResourceRewards = async () => {
@@ -32,12 +33,12 @@ const AddActionResourceRewards = async () => {
   const actionId = context.req.param("actionId");
 
   try {
-    await db.insert(schema.actionResourceReward).values({
+    await createActionResourceReward({
       actionId,
       resourceId: result.output.resourceId,
-      chance: 100,
-      quantityMax: 1,
       quantityMin: 1,
+      quantityMax: 1,
+      chance: 100,
     });
 
     context.header(
