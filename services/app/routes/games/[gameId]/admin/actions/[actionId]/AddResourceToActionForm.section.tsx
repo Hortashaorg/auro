@@ -1,5 +1,5 @@
 import { getGlobalContext } from "@kalena/framework";
-import { db, eq, schema } from "@package/database";
+import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
 import { Form, Label, SelectInput } from "@comp/atoms/form/index.ts";
 import { FormControl } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
@@ -10,13 +10,11 @@ export const AddResourceToActionForm = async () => {
   const gameId = globalContext.req.param("gameId");
   const actionId = globalContext.req.param("actionId");
 
-  const availableResources = await db.select().from(schema.resource).where(
-    eq(schema.resource.gameId, gameId),
-  );
+  const availableResources = await selectResourcesByGameId(gameId);
 
-  const resourceOptions = availableResources.map((resource) => ({
-    value: resource.id,
-    label: resource.name,
+  const resourceOptions = availableResources.map((data) => ({
+    value: data.resource.id,
+    label: data.resource.name,
   }));
 
   return (
