@@ -1,5 +1,5 @@
 import { db, eq, schema } from "@package/database";
-
+import { throwError } from "@package/common";
 /**
  * Selects basic game action details joined with assets and locations.
  * Used primarily for admin views or listings where user context isn't needed.
@@ -84,4 +84,18 @@ export const selectUserGameActions = async (gameId: string, userId: string) => {
   });
 
   return actionsWithCosts;
+};
+
+/**
+ * Selects a single action by its ID, returning id and name.
+ * @param actionId The ID of the action.
+ */
+export const selectActionById = async (actionId: string) => {
+  const actions = await db.select({
+    id: schema.action.id,
+    name: schema.action.name,
+  })
+    .from(schema.action)
+    .where(eq(schema.action.id, actionId));
+  return actions[0] ?? throwError("Action not found");
 };
