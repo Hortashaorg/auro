@@ -15,6 +15,7 @@ export const userContext = async (ctx: GlobalContext) => {
 
   const [user] = await db.select().from(schema.account)
     .innerJoin(schema.user, eq(schema.account.id, schema.user.accountId))
+    .innerJoin(schema.game, eq(schema.user.gameId, schema.game.id))
     .where(
       and(
         eq(schema.account.email, email),

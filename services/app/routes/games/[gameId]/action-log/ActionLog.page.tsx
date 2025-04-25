@@ -1,7 +1,7 @@
 import { isPlayerOfGame } from "@permissions/index.ts";
 import { createRoute } from "@kalena/framework";
 import { Layout } from "@layout/Layout.tsx";
-import { and, db, desc, eq, schema } from "@package/database";
+import { db, desc, eq, schema } from "@package/database";
 import { Badge, Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
@@ -13,7 +13,9 @@ import {
   TableRow,
 } from "@comp/atoms/table/index.ts";
 import { throwError } from "@package/common";
-import { currentUser } from "@queries/user/currentUser.ts";
+import { userContext } from "@contexts/userContext.ts";
+import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
+import { selectActionLogsByUserId } from "@queries/selects/actions/selectActionLogsByUserId.ts";
 
 const calculateDuration = (executedAt: Temporal.Instant) => {
   const duration = executedAt.until(
@@ -44,32 +46,11 @@ const calculateDuration = (executedAt: Temporal.Instant) => {
 };
 
 const ActionLog = async () => {
-  const context = actionLogRoute.context();
-  const gameId = context.req.param("gameId");
+  const { user, game } = await actionLogRoute.customContext();
 
-  const user = await currentUser(gameId);
+  const actionLogsData = await selectActionLogsByUserId(user.id);
 
-  const actionLogsData = await db
-    .select()
-    .from(schema.actionLog)
-    .innerJoin(schema.action, eq(schema.actionLog.actionId, schema.action.id))
-    .innerJoin(schema.asset, eq(schema.action.assetId, schema.asset.id))
-    .innerJoin(
-      schema.location,
-      eq(schema.action.locationId, schema.location.id),
-    )
-    .where(
-      and(
-        eq(schema.actionLog.userId, user.id),
-        eq(schema.actionLog.gameId, gameId),
-      ),
-    )
-    .orderBy(desc(schema.actionLog.executedAt));
-
-  const resources = await db
-    .select()
-    .from(schema.resource)
-    .where(eq(schema.resource.gameId, gameId));
+  const resources = await selectResourcesByGameId(game.id);
 
   return (
     <Layout title="Action Log">
@@ -162,6 +143,7 @@ export const actionLogRoute = createRoute({
     check: isPlayerOfGame,
     redirectPath: "/games",
   },
+  customContext: userContext,
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
 });
