@@ -1,19 +1,22 @@
 import { Text, Title } from "@comp/atoms/typography/index.ts";
 import { Section } from "@comp/atoms/layout/index.ts";
-import { getLeaderboardResources } from "@queries/resource/resourceLeaderboard.ts";
 import { ResourceLeaderboard } from "./ResourceLeaderboard.section.tsx";
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
 import { Layout } from "@layout/Layout.tsx";
+import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
 
 const LeaderboardPage = async () => {
   const context = leaderboardRoute.context();
   const gameId = context.req.param("gameId");
-  const resources = await getLeaderboardResources(gameId);
+  const resources = await selectResourcesByGameId(gameId);
+  const resourcesWithLeaderboard = resources.filter(
+    (resource) => resource.resource.leaderboard,
+  );
 
   return (
     <Layout title="Resource Leaderboards">
-      {resources.length === 0
+      {resourcesWithLeaderboard.length === 0
         ? (
           <Section>
             <Title level="h1">Leaderboards</Title>
@@ -24,10 +27,10 @@ const LeaderboardPage = async () => {
           <Section>
             <Title level="h1">Leaderboards</Title>
             <div className="space-y-8">
-              {resources.map((resource) => (
+              {resourcesWithLeaderboard.map((data) => (
                 <ResourceLeaderboard
-                  key={resource.id}
-                  resourceId={resource.id}
+                  key={data.resource.id}
+                  resourceId={data.resource.id}
                 />
               ))}
             </div>
