@@ -1,7 +1,6 @@
 import { isPlayerOfGame } from "@permissions/index.ts";
 import { createRoute } from "@kalena/framework";
 import { Layout } from "@layout/Layout.tsx";
-import { db, desc, eq, schema } from "@package/database";
 import { Badge, Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
@@ -100,11 +99,11 @@ const ActionLog = async () => {
                 </TableHeader>
                 {log.action_log.data.resource.map((resource) => {
                   const resourceData = resources.find(
-                    (r) => r.id === resource.resourceId,
+                    (r) => r.resource.id === resource.resourceId,
                   ) ?? throwError("Resource not found");
                   return (
                     <TableRow key={resource.resourceId}>
-                      <TableCell>{resourceData.name}</TableCell>
+                      <TableCell>{resourceData.resource.name}</TableCell>
                       <TableCell>
                         <Badge
                           variant={resource.type === "reward"
