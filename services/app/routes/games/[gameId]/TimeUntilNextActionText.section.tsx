@@ -55,8 +55,10 @@ const calculateTimeUntilNextAction = (
 export const TimeUntilNextActionText: FC<Props> = async (props) => {
   const { gameId, email } = props;
 
-  const user = await selectUserByEmail(email);
-  const game = await selectGameById(gameId);
+  const [user, game] = await Promise.all([
+    selectUserByEmail(email),
+    selectGameById(gameId),
+  ]);
 
   const timeString = calculateTimeUntilNextAction(
     game.actionRecoveryInterval,

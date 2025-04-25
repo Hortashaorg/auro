@@ -14,7 +14,7 @@ import { selectGamesByAccountId } from "@queries/selects/games/selectGamesByAcco
 type Props = {
   accountId: string;
 };
-export const GameNicknamesTable: FC<Props> = async (
+export const UserNicknamesTable: FC<Props> = async (
   { accountId, ...props },
 ) => {
   const userGames = await selectGamesByAccountId(accountId);

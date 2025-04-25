@@ -1,7 +1,7 @@
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
-import { GameNicknamesTable } from "./GameNicknamesTable.section.tsx";
+import { UserNicknamesTable } from "./UserNicknamesTable.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
 import { updateUser } from "@queries/mutations/user/updateUser.ts";
 import { PostgresError } from "@package/database";
@@ -11,9 +11,9 @@ const formSchema = v.object({
 });
 
 const UpdateHandler = async () => {
-  const context = updateGameNicknameRoute.context();
+  const context = updateUserNicknameRoute.context();
 
-  const { user, account } = await updateGameNicknameRoute.customContext();
+  const { user, account } = await updateUserNicknameRoute.customContext();
 
   const result = context.req.valid("form");
   if (!result.success) {
@@ -49,7 +49,7 @@ const UpdateHandler = async () => {
       ]),
     );
 
-    return <GameNicknamesTable hx-swap-oob="true" accountId={account.id} />;
+    return <UserNicknamesTable hx-swap-oob="true" accountId={account.id} />;
   } catch (error: unknown) {
     if (
       error instanceof PostgresError &&
@@ -74,7 +74,7 @@ const UpdateHandler = async () => {
   }
 };
 
-export const updateGameNicknameRoute = createRoute({
+export const updateUserNicknameRoute = createRoute({
   path: "/api/games/:gameId/update-game-nickname",
   component: UpdateHandler,
   customContext: userContext,

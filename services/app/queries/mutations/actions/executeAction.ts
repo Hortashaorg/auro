@@ -1,4 +1,4 @@
-import { db, eq, schema } from "@package/database";
+import { db, eq, schema, sql } from "@package/database";
 import { throwError } from "@package/common";
 
 export interface ExecuteActionResult {
@@ -110,27 +110,22 @@ export const executeAction = async (
         quantity: currentResource.quantity - cost.action_resource_cost.quantity,
       };
     }
-    for (const reward of rewardUpdates) {
-      const resourceIndex = updatedResources.findIndex(
-        (resource) => resource.resourceId === reward.resourceId,
-      );
-      if (resourceIndex !== -1) {
-        const currentResource = updatedResources[resourceIndex];
-        if (!currentResource) continue;
-        await tx.update(schema.userResource)
-          .set({
-            quantity: currentResource.quantity + reward.quantity,
-            updatedAt: Temporal.Now.instant(),
-          })
-          .where(eq(schema.userResource.id, currentResource.id));
-      } else {
-        await tx.insert(schema.userResource).values({
+
+    await tx
+      .insert(schema.userResource)
+      .values(
+        rewardUpdates.map((reward) => ({
           userId,
           resourceId: reward.resourceId,
           quantity: reward.quantity,
-        });
-      }
-    }
+        })),
+      )
+      .onConflictDoUpdate({
+        target: [schema.userResource.userId, schema.userResource.resourceId],
+        set: {
+          quantity: sql`excluded.quantity`,
+        },
+      });
     await tx.update(schema.user)
       .set({
         availableActions: user.availableActions - 1,

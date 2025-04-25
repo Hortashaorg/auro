@@ -1,7 +1,7 @@
 import { db, eq, schema } from "@package/database";
 
-export const selectUserResourcesByUserId = (userId: string) => {
-  return db.select()
+export const selectUserResourcesByUserId = async (userId: string) => {
+  return await db.select()
     .from(schema.userResource)
     .innerJoin(
       schema.resource,
