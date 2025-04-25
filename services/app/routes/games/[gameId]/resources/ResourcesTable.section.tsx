@@ -5,14 +5,15 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
-import { getUserResources } from "@queries/resource/userResources.ts";
+import { selectUserResourcesByUserId } from "@queries/selects/resources/selectUserResourcesByUserId.ts";
+import type { FC } from "@kalena/framework";
 
 type Props = {
-  gameId: string;
+  userId: string;
 };
 
-export const ResourcesTable = async ({ gameId, ...props }: Props) => {
-  const resources = await getUserResources(gameId);
+export const ResourcesTable: FC<Props> = async ({ userId, ...props }) => {
+  const resources = await selectUserResourcesByUserId(userId);
 
   return (
     <Table id="player-resources" {...props}>

@@ -1,19 +1,17 @@
 import { Layout } from "@layout/Layout.tsx";
-import { createRoute, getGlobalContext } from "@kalena/framework";
+import { createRoute } from "@kalena/framework";
 import { isPlayerOfGame } from "@permissions/index.ts";
 import { Title } from "@comp/atoms/typography/index.ts";
 import { ResourcesTable } from "./ResourcesTable.section.tsx";
-import { throwError } from "@package/common";
+import { userContext } from "@contexts/userContext.ts";
 
-const ResourcesPage = () => {
-  const context = getGlobalContext();
-  const gameId = context.req.param("gameId") ??
-    throwError("Game ID not found in route params");
+const ResourcesPage = async () => {
+  const userContext = await playerResourcesRoute.customContext();
 
   return (
     <Layout title="Resources">
       <Title level="h1">Resources</Title>
-      <ResourcesTable gameId={gameId} />
+      <ResourcesTable userId={userContext.user.id} />
     </Layout>
   );
 };
@@ -25,6 +23,7 @@ export const playerResourcesRoute = createRoute({
     check: isPlayerOfGame,
     redirectPath: "/games",
   },
+  customContext: userContext,
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
 });
