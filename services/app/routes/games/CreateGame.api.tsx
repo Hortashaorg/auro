@@ -3,10 +3,12 @@ import { db, PostgresError, schema } from "@package/database";
 import { GameGrid } from "./GameGrid.section.tsx";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
+import { accountContext } from "@contexts/accountContext.ts";
+import { canCreateGame } from "@permissions/index.ts";
 
 const CreateGame = async () => {
   const context = createGameRoute.context();
-  const customContext = await createGameRoute.customContext();
+  const account = await createGameRoute.customContext();
   const result = context.req.valid("form");
 
   if (!result.success) {
@@ -42,11 +44,11 @@ const CreateGame = async () => {
 
       await tx.insert(schema.user)
         .values({
-          accountId: customContext.account?.id ??
+          accountId: account?.id ??
             throwError("No account found"),
           gameId: game?.id ?? throwError("No game id"),
           availableActions: 15,
-          name: customContext.account?.nickname,
+          name: account?.nickname,
           type: "admin",
         });
     });
@@ -97,31 +99,11 @@ export const createGameRoute = createRoute({
   path: "/api/games/create-game",
   component: CreateGame,
   permission: {
-    check: async (c) => {
-      const email = c.var.email;
-      if (email) {
-        const account = await db.query.account.findFirst({
-          where: (account, { eq }) => eq(account.email, email),
-        });
-
-        return account?.canCreateGame ?? false;
-      }
-
-      return false;
-    },
+    check: canCreateGame,
     redirectPath: "/",
   },
   partial: true,
   hmr: Deno.env.get("ENV") === "local",
   formValidationSchema: CreateGameSchema,
-  customContext: async (c) => {
-    let account;
-    const email = c.var.email;
-    if (email) {
-      account = await db.query.account.findFirst({
-        where: (account, { eq }) => eq(account.email, email),
-      });
-    }
-    return { account };
-  },
+  customContext: accountContext,
 });

@@ -2,7 +2,6 @@ import { createRoute, getGlobalContext } from "@kalena/framework";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { Layout } from "@layout/Layout.tsx";
 import { Icon, Text, Title } from "@comp/atoms/typography/index.ts";
-import { db, eq, schema } from "@package/database";
 import { throwError } from "@package/common";
 import {
   TabContent,
@@ -17,6 +16,7 @@ import { FormButton, FormContext } from "@comp/molecules/form/index.ts";
 import { ButtonGroup } from "@comp/atoms/buttons/index.ts";
 import { AddResourceCostToActionForm } from "./AddResourceCostToActionForm.section.tsx";
 import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
+import { selectActionById } from "@queries/selects/actions/selectGameActions.ts";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
@@ -26,14 +26,7 @@ const ActionDetail = async () => {
   if (!gameId) throwError("No gameId");
   if (!actionId) throwError("No actionId");
 
-  const action = (await db.select({
-    id: schema.action.id,
-    name: schema.action.name,
-  })
-    .from(schema.action)
-    .where(
-      eq(schema.action.id, actionId),
-    ))[0] ?? throwError("Action not found");
+  const action = await selectActionById(actionId);
 
   return (
     <Layout title={`Action - ${action.name}`}>

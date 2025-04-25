@@ -10,7 +10,8 @@
     "@comp/": "./components/",
     "@permissions/": "./permissions/",
     "@queries/": "./queries/",
-    "@layout/": "./layout/"
+    "@layout/": "./layout/",
+    "@contexts/": "./contexts/"
   },
   "tasks": {
     "typecheck": "deno check .",

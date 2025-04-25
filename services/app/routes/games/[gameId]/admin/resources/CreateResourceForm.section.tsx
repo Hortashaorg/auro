@@ -8,22 +8,10 @@ import {
 } from "@comp/atoms/form/index.ts";
 import { ImageGridInput } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
-import { db, eq, schema } from "@package/database";
-import { getGlobalContext } from "@kalena/framework";
-import { throwError } from "@package/common";
+import { selectResourceAssets } from "@queries/selects/assets/selectResourceAssets.ts";
 
-export const CreateResourceForm = async () => {
-  const globalContext = getGlobalContext();
-  const gameId = globalContext.req.param("gameId");
-  if (!gameId) throwError("No gameId");
-
-  const assets = await db.select({
-    id: schema.asset.id,
-    url: schema.asset.url,
-    name: schema.asset.name,
-  })
-    .from(schema.asset)
-    .where(eq(schema.asset.type, "resource"));
+export const CreateResourceForm = async ({ gameId }: { gameId: string }) => {
+  const assets = await selectResourceAssets();
 
   return (
     <Form

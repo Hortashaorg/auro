@@ -1,12 +1,15 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { ItemGrid } from "./ItemGrid.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
+import { createItem } from "@queries/mutations/items/createItem.ts";
 
 const CreateItem = async () => {
   const context = createItemRoute.context();
+  const { user } = await createItemRoute.customContext();
   const result = context.req.valid("form");
 
   if (!result.success) {
@@ -31,18 +34,17 @@ const CreateItem = async () => {
     return <p>Failure</p>;
   }
 
-  const gameId = context.req.param("gameId");
+  const gameId = user.gameId;
 
   try {
-    await db.insert(schema.item)
-      .values({
-        name: result.output.name,
-        description: result.output.description,
-        gameId,
-        assetId: result.output.assetId,
-        rarity: result.output.rarity,
-        stackable: false,
-      });
+    await createItem({
+      name: result.output.name,
+      description: result.output.description,
+      gameId,
+      assetId: result.output.assetId,
+      rarity: result.output.rarity,
+      stackable: false,
+    });
 
     context.header(
       "HX-Trigger",
@@ -52,7 +54,7 @@ const CreateItem = async () => {
       ]),
     );
 
-    return <ItemGrid hx-swap-oob="true" />;
+    return <ItemGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
     if (error instanceof PostgresError) {
       if (
@@ -105,4 +107,5 @@ export const createItemRoute = createRoute({
   partial: true,
   hmr: Deno.env.get("ENV") === "local",
   formValidationSchema: CreateItemSchema,
+  customContext: userContext,
 });

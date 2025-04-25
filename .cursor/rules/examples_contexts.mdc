@@ -1,0 +1,115 @@
+---
+description: Examples of using contexts
+globs: 
+alwaysApply: false
+---
+# Rule: Context Usage Examples
+
+This rule provides concrete examples of how to use contexts in routes and components. Use these patterns when implementing new features that need access to user data.
+
+---
+
+## 1. Basic Context Usage in Routes
+
+### Context Integration with `createRoute`
+
+When creating a route that needs access to user or account data, use the appropriate context:
+
+```typescript
+import { userContext } from "@contexts/userContext.ts";
+import { createRoute } from "@kalena/framework";
+
+export const gameActionRoute = createRoute({
+  path: "/games/:gameId/action/:actionId",
+  customContext: userContext,
+  component: GameActionPage,
+});
+```
+
+### Accessing Context in Components
+
+The context is accessed by calling the route's customContext function:
+
+```typescript
+const GameActionPage = async () => {
+  // Access user data from context
+  const user = await gameActionRoute.customContext();
+  
+  // Now you can use user.account, user.user, etc.
+  return (
+    <PageLayout>
+      <h1>Welcome, {user.account.email}</h1>
+      {/* Rest of the component */}
+    </PageLayout>
+  );
+};
+```
+
+---
+
+## 2. Context-Based Data Fetching
+
+Context should be used to fetch user-specific data through query functions:
+
+```typescript
+import { getUserResources } from "@queries/game/resources.ts";
+
+export const resourcesRoute = createRoute({
+  path: "/games/:gameId/resources",
+  customContext: userContext,
+  component: ResourcesPage,
+});
+
+const ResourcesPage = async () => {
+  // Get user data from context
+  const user = await resourcesRoute.customContext();
+  
+  // Pass the user.user.id to the query function
+  const resources = await getUserResources(user.user.id);
+  
+  return (
+    <ResourcesDisplay resources={resources} />
+  );
+};
+```
+
+---
+
+## 3. Context in API Endpoints
+
+API endpoints can use contexts too:
+
+```typescript
+import { userContext } from "@contexts/userContext.ts";
+
+export const executeActionRoute = createRoute({
+  path: "/games/:gameId/execute-action/:actionId",
+  customContext: userContext,
+  component: ExecuteActionHandler,
+});
+
+const ExecuteActionHandler = async (props) => {
+  const { actionId } = props.params;
+  
+  try {
+    // Get user from context
+    const user = await executeActionRoute.customContext();
+    
+    const result = await executeAction({
+      userId: user.user.id, 
+      actionId
+    });
+    
+    return <ActionResult result={result} />;
+  } catch (error) {
+    // Handle error
+    return <ActionError message={error.message} />;
+  }
+};
+```
+
+---
+
+## 4. See Also
+- [concept_query_patterns.mdc](mdc:concept_query_patterns.mdc)
+- [examples_api.mdc](mdc:examples_api.mdc)

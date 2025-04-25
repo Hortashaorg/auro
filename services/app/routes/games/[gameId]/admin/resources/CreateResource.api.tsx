@@ -1,12 +1,15 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { ResourceGrid } from "./ResourceGrid.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
+import { createResource } from "@queries/mutations/resources/createResource.ts";
 
 const CreateResource = async () => {
   const context = createResourceRoute.context();
+  const { user } = await createResourceRoute.customContext();
   const result = context.req.valid("form");
 
   if (!result.success) {
@@ -31,17 +34,16 @@ const CreateResource = async () => {
     return <p>Failure</p>;
   }
 
-  const gameId = context.req.param("gameId");
+  const gameId = user.gameId;
 
   try {
-    await db.insert(schema.resource)
-      .values({
-        name: result.output.name,
-        description: result.output.description,
-        gameId,
-        assetId: result.output.assetId,
-        leaderboard: result.output.leaderboard,
-      });
+    await createResource({
+      name: result.output.name,
+      description: result.output.description,
+      gameId: gameId,
+      assetId: result.output.assetId,
+      leaderboard: result.output.leaderboard,
+    });
 
     context.header(
       "HX-Trigger",
@@ -51,7 +53,7 @@ const CreateResource = async () => {
       ]),
     );
 
-    return <ResourceGrid hx-swap-oob="true" />;
+    return <ResourceGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
     if (error instanceof PostgresError) {
       if (
@@ -101,4 +103,5 @@ export const createResourceRoute = createRoute({
   partial: true,
   hmr: Deno.env.get("ENV") === "local",
   formValidationSchema: CreateResourceSchema,
+  customContext: userContext,
 });

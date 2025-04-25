@@ -1,32 +1,34 @@
-import { getGlobalContext, type JSX } from "@kalena/framework";
-import { throwError } from "@package/common";
+import type { FC } from "@kalena/framework";
 import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Badge, Icon } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
-import { getGameActions } from "@queries/action/gameActions.ts";
+import { selectBaseGameActions } from "@queries/selects/actions/selectGameActions.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { CardActions } from "@comp/atoms/card/CardActions.tsx";
+import type { BaseComponentProps } from "@comp/utils/props.ts";
 
-type Props = JSX.IntrinsicElements["div"];
+type Props = {
+  gameId: string;
+} & BaseComponentProps;
 
-export const ActionGrid = async ({ ...props }: Props) => {
-  const globalContext = getGlobalContext();
-  const gameId = globalContext.req.param("gameId");
-
-  if (!gameId) throwError("No gameId");
-
-  const actions = await getGameActions(gameId);
+export const ActionGrid: FC<Props> = async ({ gameId, ...props }) => {
+  const actionsData = await selectBaseGameActions(gameId);
 
   return (
     <HtmxWrapper {...props} id="action-section">
       <Grid items="stretch">
-        {actions.map((action) => (
+        {actionsData.map(({ action, asset, location }) => (
           <ActionCard
             key={action.id}
             action={{
-              ...action,
+              id: action.id,
+              name: action.name,
               description: action.description || undefined,
+              cooldownMinutes: action.cooldownMinutes,
+              repeatable: action.repeatable,
+              assetUrl: asset.url,
+              locationName: location?.name ?? null,
             }}
             gameId={gameId}
           />

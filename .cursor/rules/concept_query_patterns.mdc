@@ -1,0 +1,151 @@
+---
+description: Concept of database query patterns
+globs: 
+alwaysApply: false
+---
+# Concept: Query & Data Access Patterns
+
+This document defines the standard patterns for acquiring, selecting, and mutating data in the application. Following these patterns ensures maintainability, security, and predictability across the codebase.
+
+---
+
+## 1. User Metadata via Contexts
+
+- **Location:** `services/app/contexts/`
+- **Pattern:**
+  - Context functions provide access to user-related data (account, user) and handle authentication checks.
+  - Each context function takes a `GlobalContext` and returns the relevant data.
+  - Use `customContext` in `createRoute()` to inject these contexts.
+  - Context functions should be imported from the `contexts/` folder using the `@contexts/` alias.
+- **Current Implementations:**
+  - `accountContext` - Provides account data based on user email from the GlobalContext.
+  - `userContext` - Provides user data for a specific game based on email and gameId.
+- **Example Usage:** Refer to [examples_contexts.mdc](mdc:.cursor/rules/examples_contexts.mdc)
+- **Rationale:** Centralizes authentication/authorization and user context logic, reducing duplication and making it easy to reason about and update.
+
+---
+
+## 2. Data Selectors (Read-Only Queries)
+
+- **Location:** `services/app/queries/selects/`
+- **Organization:** Organize by domain/feature (e.g., `selects/users/`, `selects/games/`, `selects/actions/`).
+- **Pattern:**
+  - All data-fetching (`SELECT`) functions **must** be defined in this directory structure.
+  - Functions should accept necessary parameters (like IDs, filters).
+  - Return data fetched, often the direct result from `db.select()`, including joined data.
+  - **Type Safety:** Utilize Drizzle's `InferSelectModel` where appropriate for return types if specific shaping occurs, but often returning the raw Drizzle result is preferred.
+  - **Splitting Logic:** Often create separate functions for fetching base data vs. data requiring user context (e.g., inventory, execution status). Example: `selectBaseGameActions(gameId)` vs. `selectUserGameActions(gameId, userId)`. See [selectGameActions.ts](mdc:services/app/queries/selects/actions/selectGameActions.ts).
+- **Rationale:** Encourages reusability, makes it easy to find and optimize selectors, prevents direct DB access in UI/route files, and centralizes read logic.
+
+---
+
+## 3. Mutations (Insert/Update/Delete)
+
+- **Location:** `services/app/queries/mutations/`
+- **Organization:** Organize by domain/feature (e.g., `mutations/users/`, `mutations/locations/`).
+- **Pattern:**
+  - All data-modifying operations (`INSERT`, `UPDATE`, `DELETE`) **must** be performed via utility functions in this directory structure.
+  - Functions should accept necessary data, often typed using `InferInsertModel` or specific interfaces.
+  - Handle transactions internally if multiple database operations are required for atomicity.
+  - Standardize handling of timestamps (`createdAt`, `updatedAt`) if needed, potentially within these functions or via database defaults.
+  - Return minimal necessary information (e.g., nothing, the ID of a created record, success status). See [createLocation.ts](mdc:services/app/queries/mutations/locations/createLocation.ts) or [createResource.ts](mdc:services/app/queries/mutations/resources/createResource.ts).
+- **Rationale:** Ensures data integrity, auditability, consistent handling of side effects, prevents direct DB modification in UI/route files, and centralizes write logic.
+
+---
+
+## 4. Usage in Routes & Components (Data Flow)
+
+- **Route Handlers/API Endpoints (`.api.tsx`):**
+  - Use `customContext` (Section 1) to get user/account data.
+  - Validate input.
+  - Call appropriate mutation functions from `@queries/mutations/...` for CUD operations (Section 3).
+  - Handle success/error responses (e.g., HX-Triggers, status codes). Refer to [examples_api.mdc](mdc:.cursor/rules/examples_api.mdc).
+  - If returning updated UI fragments, call select functions from `@queries/selects/...` to get fresh data for the components being returned (Section 2). Example: [CreateLocation.api.tsx](mdc:services/app/routes/games/[gameId]/admin/locations/CreateLocation.api.tsx).
+- **Page Components (`.page.tsx`):**
+  - Use `customContext` (Section 1) if user/account data is needed.
+  - Fetch necessary initial data by calling functions from `@queries/selects/...` (Section 2).
+  - Pass required data (from context and selects) down as props to child section components.
+- **Section Components (`.section.tsx`):**
+  - Accept data as props.
+  - **Data Mapping:** Perform necessary mapping/transformation of props for display (e.g., handling joined data structures returned by select queries).
+  - **Avoid Data Fetching:** Should generally **not** fetch their own data (neither via context nor select functions), unless specifically designed as self-contained, complex data-fetching units (prefer passing data down).
+
+---
+
+## 5. Naming Conventions
+
+- **Selectors:** `selectBaseX`, `selectUserX`, `getXByY`, `findX`, `listX`, etc.
+- **Mutations:** `createX`, `updateY`, `deleteZ`, etc.
+- **Contexts:** `userContext`, `accountContext`, etc.
+
+---
+
+## 6. Example Folder Structure (Target)
+
+```
+services/app/
+  contexts/
+    userContext.ts
+    accountContext.ts
+  queries/
+    selects/
+      games/
+        selectGameDetails.ts
+      users/
+        selectUserProfile.ts
+      actions/
+        selectGameActions.ts
+    mutations/
+      games/
+        createGame.ts
+      users/
+        updateUserProfile.ts
+      locations/
+        createLocation.ts
+```
+
+---
+
+## 7. Migration Strategy
+
+For existing code that uses direct DB queries or queries outside the `selects`/`mutations` structure:
+1. Identify the query pattern (read vs. write).
+2. Determine if user context is needed.
+3. Create or relocate the logic to an appropriate function in `queries/selects/...` or `queries/mutations/...`.
+4. Update the calling code (.tsx file) to import and use the new query function.
+5. Replace direct user/account data fetching with context functions where applicable (Section 1).
+
+---
+
+## 8. See Also
+- [concept_repo_structure.mdc](mdc:concept_repo_structure.mdc)
+- [examples_api.mdc](mdc:.cursor/rules/examples_api.mdc)
+- [examples_contexts.mdc](mdc:.cursor/rules/examples_contexts.mdc)
+
+---
+
+## 9. Additional Conventions (2024 Refactor)
+
+### Mutation & Query Naming
+- All mutation functions that insert a new row into a table should be named `create<TableName>` (e.g., `createItem`, `createResourceCost`).
+- All update functions should be named `update<TableName>` or `update<TableName>s` for batch updates (e.g., `updateActionResourceCosts`, `updateActionResourceRewards`).
+- All delete functions should be named `delete<TableName>` (e.g., `deleteResourceCost`).
+- All select functions should be named `select<TableName>By<Field>` or `select<TableName>sBy<Field>` (e.g., `selectResourceCostsByActionId`).
+- Mutation and query files should match the function name for discoverability and consistency.
+
+### Batch Update Pattern
+- Batch update functions should accept an array of `{ id, updates }` objects.
+- Each update should be performed in a single transaction for atomicity.
+- The update type should be inferred from the schema using `Partial<Omit<InferInsertModel<typeof schema.table>, "id" | "createdAt" | "updatedAt">>`.
+- Always set `updatedAt` to `Temporal.Now.instant()` (or equivalent) on update.
+- Example: see [updateActionResourceCosts.ts](mdc:services/app/queries/mutations/actions/updateActionResourceCosts.ts)
+
+### No Direct DB Access in Handlers
+- Do not use direct `db.select`, `db.insert`, `db.update`, or `db.delete` calls in API handlers or section components.
+- Move all database logic to dedicated query or mutation functions in `queries/selects/` or `queries/mutations/`.
+- This keeps handlers clean, improves testability, and centralizes data access logic.
+
+### Type Inference for Mutations
+- Always infer types for mutation and query props from the schema using Drizzle's `InferInsertModel` or `InferSelectModel`.
+- Do not hand-write types for mutation/query props unless absolutely necessary.
+- This ensures type safety and reduces maintenance overhead.

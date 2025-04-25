@@ -1,10 +1,12 @@
 import { Text } from "@comp/atoms/typography/index.ts";
 import type { FC } from "@kalena/framework";
 import type { InferSelectModel, schema } from "@package/database";
+import { selectUserByEmail } from "@queries/selects/user/selectUserByEmail.ts";
+import { selectGameById } from "@queries/selects/games/selectGameById.ts";
 
 interface Props {
-  game: InferSelectModel<typeof schema.game>;
-  user: InferSelectModel<typeof schema.user>;
+  gameId: string;
+  email: string;
 }
 
 const calculateTimeUntilNextAction = (
@@ -50,8 +52,13 @@ const calculateTimeUntilNextAction = (
   return "less than a minute";
 };
 
-export const TimeUntilNextActionText: FC<Props> = (props) => {
-  const { game, user } = props;
+export const TimeUntilNextActionText: FC<Props> = async (props) => {
+  const { gameId, email } = props;
+
+  const [user, game] = await Promise.all([
+    selectUserByEmail(email),
+    selectGameById(gameId),
+  ]);
 
   const timeString = calculateTimeUntilNextAction(
     game.actionRecoveryInterval,

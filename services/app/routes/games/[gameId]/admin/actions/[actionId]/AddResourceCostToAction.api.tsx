@@ -1,7 +1,8 @@
 import { createRoute, v } from "@kalena/framework";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
-import { db, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
+import { createResourceCost } from "@queries/mutations/actions/createResourceCost.ts";
 import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
 
 const AddResourceCostToAction = async () => {
@@ -14,7 +15,7 @@ const AddResourceCostToAction = async () => {
       resourceId: string;
     };
 
-    await db.insert(schema.actionResourceCost).values({
+    await createResourceCost({
       actionId,
       resourceId: formData.resourceId,
       quantity: 1,

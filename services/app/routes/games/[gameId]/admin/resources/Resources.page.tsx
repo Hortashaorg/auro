@@ -4,18 +4,21 @@ import { Layout } from "@layout/Layout.tsx";
 import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { ResourceGrid } from "./ResourceGrid.section.tsx";
 import { CreateResourceForm } from "./CreateResourceForm.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
 
-const Resources = () => {
+const Resources = async () => {
+  const { user } = await adminResourcesRoute.customContext();
+
   return (
     <Layout title="Admin - Resources">
       <ModalButton modalRef="createResourceModal">
         Create Resource
       </ModalButton>
       <Modal modalRef="createResourceModal" title="Create Resource">
-        <CreateResourceForm />
+        <CreateResourceForm gameId={user.gameId} />
       </Modal>
 
-      <ResourceGrid />
+      <ResourceGrid gameId={user.gameId} />
     </Layout>
   );
 };
@@ -29,4 +32,5 @@ export const adminResourcesRoute = createRoute({
   },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
+  customContext: userContext,
 });

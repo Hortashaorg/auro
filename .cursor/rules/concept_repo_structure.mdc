@@ -31,8 +31,11 @@ The `services/app/` directory contains the core web application code:
     *   `organisms/`: More complex component structures (potentially Header, Sidebar - *if used*).
 *   `routes/`: Contains all application routes, features, pages, and associated API endpoints and UI sections. See "Route Structure" below.
 *   `layout/`: Defines the main page layout structure(s).
-*   `queries/`: Contains database query functions, organized by domain.
+*   `queries/`: Contains database query functions, organized by domain into standard subdirectories:
+    *   `selects/`: Functions for fetching data (`SELECT`).
+    *   `mutations/`: Functions for creating, updating, or deleting data (`INSERT`, `UPDATE`, `DELETE`).
 *   `permissions/`: Defines access control logic and checks.
+*   `contexts/`: Contains reusable context functions (e.g., `accountContext`, `userContext`) for `createRoute`.
 *   `utils/`: Holds shared utility functions specific to the application.
 *   `public/`: Static assets served directly.
 

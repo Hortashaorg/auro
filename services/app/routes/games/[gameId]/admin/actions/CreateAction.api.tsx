@@ -1,12 +1,15 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { ActionGrid } from "./ActionGrid.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
+import { createAction } from "@queries/mutations/actions/createAction.ts";
 
 const CreateAction = async () => {
   const context = createActionRoute.context();
+  const { user } = await createActionRoute.customContext();
   const result = context.req.valid("form");
 
   if (!result.success) {
@@ -31,20 +34,18 @@ const CreateAction = async () => {
     return <p>Failure</p>;
   }
 
-  const gameId = context.req.param("gameId");
+  const gameId = user.gameId;
 
   try {
-    await db.insert(schema.action)
-      .values({
-        name: result.output.name,
-        description: result.output.description,
-        gameId,
-        assetId: result.output.assetId,
-        locationId: result.output.locationId ??
-          throwError("Location ID is required"),
-        cooldownMinutes: result.output.cooldownMinutes,
-        repeatable: result.output.repeatable === "true",
-      });
+    await createAction({
+      name: result.output.name,
+      description: result.output.description,
+      gameId: gameId,
+      assetId: result.output.assetId,
+      locationId: result.output.locationId,
+      cooldownMinutes: result.output.cooldownMinutes,
+      repeatable: result.output.repeatable === "true",
+    });
 
     context.header(
       "HX-Trigger",
@@ -54,7 +55,7 @@ const CreateAction = async () => {
       ]),
     );
 
-    return <ActionGrid hx-swap-oob="true" />;
+    return <ActionGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
     if (error instanceof PostgresError) {
       if (
@@ -88,7 +89,7 @@ const CreateActionSchema = v.object({
     }),
   )),
   assetId: v.pipe(v.string(), v.uuid()),
-  locationId: v.optional(v.pipe(v.string(), v.uuid())),
+  locationId: v.pipe(v.string(), v.uuid()),
   cooldownMinutes: v.pipe(
     v.string(),
     v.transform((val: string) => parseInt(val, 10)),
@@ -108,4 +109,5 @@ export const createActionRoute = createRoute({
   partial: true,
   hmr: Deno.env.get("ENV") === "local",
   formValidationSchema: CreateActionSchema,
+  customContext: userContext,
 });

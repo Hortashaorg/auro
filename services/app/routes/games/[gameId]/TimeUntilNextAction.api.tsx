@@ -2,17 +2,13 @@ import { createRoute } from "@kalena/framework";
 import { isPlayerOfGame } from "@permissions/index.ts";
 import { TimeUntilNextActionText } from "./TimeUntilNextActionText.section.tsx";
 import { throwError } from "@package/common";
-import { gameAndUser } from "@queries/user/gameAndUser.ts";
-
-const Handler = async () => {
+const Handler = () => {
   const context = timeUntilNextActionRoute.context();
   const gameId = context.req.param("gameId") ??
     throwError("Game ID not found in route params");
   const email = context.var.email ?? throwError("Email not found");
 
-  const { user, game } = await gameAndUser(gameId, email);
-
-  return <TimeUntilNextActionText game={game} user={user} />;
+  return <TimeUntilNextActionText gameId={gameId} email={email} />;
 };
 
 export const timeUntilNextActionRoute = createRoute({

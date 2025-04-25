@@ -14,7 +14,7 @@ export const EditGameNicknameForm: FC<EditGameNicknameFormProps> = (
 ) => {
   return (
     <Form
-      hx-post="/api/profile/update-game-nickname"
+      hx-post={`/api/games/${gameId}/update-game-nickname`}
       hx-swap="none"
     >
       <input type="hidden" name="gameId" value={gameId} />

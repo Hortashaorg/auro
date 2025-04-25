@@ -1,9 +1,10 @@
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
-import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
-import { db, eq, PostgresError, schema } from "@package/database";
+import { PostgresError } from "@package/database";
 import { AccountNicknameFlex } from "./AccountNicknameFlex.section.tsx";
+import { accountContext } from "@contexts/accountContext.ts";
+import { updateAccount } from "@queries/mutations/account/updateAccount.ts";
 
 const UpdateAccountNickname = async () => {
   const context = updateAccountNicknameRoute.context();
@@ -23,12 +24,10 @@ const UpdateAccountNickname = async () => {
     return <p>Validation Failure</p>;
   }
 
-  const email = context.var.email ?? throwError("Email not found");
-
   try {
-    await db.update(schema.account)
-      .set({ nickname: result.output.nickname })
-      .where(eq(schema.account.email, email));
+    const account = await updateAccountNicknameRoute.customContext();
+
+    await updateAccount(account.id, { nickname: result.output.nickname });
 
     context.header(
       "HX-Trigger",
@@ -42,7 +41,12 @@ const UpdateAccountNickname = async () => {
       }]),
     );
 
-    return <AccountNicknameFlex hx-swap-oob="true" />;
+    return (
+      <AccountNicknameFlex
+        hx-swap-oob="true"
+        currentNickname={result.output.nickname}
+      />
+    );
   } catch (error) {
     if (
       error instanceof PostgresError &&
@@ -71,6 +75,7 @@ const updateNicknameSchema = v.object({
 export const updateAccountNicknameRoute = createRoute({
   path: "/api/profile/update-account-nickname",
   component: UpdateAccountNickname,
+  customContext: accountContext,
   permission: { check: isLoggedIn, redirectPath: "/" },
   formValidationSchema: updateNicknameSchema,
   partial: true,

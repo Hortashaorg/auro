@@ -5,9 +5,10 @@ import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Badge, Title } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getGlobalContext, type JSX } from "@kalena/framework";
-import { gamesWhereUserIsAdmin, onlineGames } from "@queries/game/games.ts";
 import { throwError } from "@package/common";
 import { CardActions } from "@comp/atoms/card/CardActions.tsx";
+import { selectGamesByEmail } from "@queries/selects/games/selectGamesByEmail.ts";
+import { selectGames } from "@queries/selects/games/selectGames.ts";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -16,9 +17,11 @@ export const GameGrid = async ({ ...props }: Props) => {
 
   const email = globalContext.var.email ?? throwError("No email");
 
-  // Split games into admin and public sections
-  const adminGames = await gamesWhereUserIsAdmin(email);
-  const games = await onlineGames();
+  const adminGames = (await selectGamesByEmail(email)).filter((game) =>
+    game.user.type === "admin"
+  );
+
+  const games = (await selectGames()).filter((game) => game.online);
 
   return (
     <HtmxWrapper {...props} id="game-section">
@@ -26,8 +29,8 @@ export const GameGrid = async ({ ...props }: Props) => {
         <Section>
           <Title level="h2">My Games</Title>
           <Grid gap="md" content="small">
-            {adminGames.map((game) => (
-              <GameAdminCard key={game.id} game={game} />
+            {adminGames.map((data) => (
+              <GameAdminCard key={data.game.id} game={data.game} />
             ))}
           </Grid>
         </Section>

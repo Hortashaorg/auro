@@ -4,18 +4,23 @@ import { Layout } from "@layout/Layout.tsx";
 import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { ActionGrid } from "./ActionGrid.section.tsx";
 import { CreateActionForm } from "./CreateActionForm.section.tsx";
+import { userContext } from "@contexts/userContext.ts";
 
-const Actions = () => {
+const Actions = async () => {
+  const { user } = await actionsRoute.customContext();
+
   return (
     <Layout title="Admin - Actions">
       <ModalButton modalRef="createActionModal">
         Create Action
       </ModalButton>
       <Modal modalRef="createActionModal" title="Create Action">
-        <CreateActionForm />
+        <CreateActionForm
+          gameId={user.gameId}
+        />
       </Modal>
 
-      <ActionGrid />
+      <ActionGrid gameId={user.gameId} />
     </Layout>
   );
 };
@@ -29,4 +34,5 @@ export const actionsRoute = createRoute({
   },
   partial: false,
   hmr: Deno.env.get("ENV") === "local",
+  customContext: userContext,
 });
