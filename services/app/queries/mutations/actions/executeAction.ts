@@ -123,7 +123,7 @@ export const executeAction = async (
       .onConflictDoUpdate({
         target: [schema.userResource.userId, schema.userResource.resourceId],
         set: {
-          quantity: sql`excluded.quantity`,
+          quantity: sql`excluded.quantity + ${schema.userResource.quantity}`,
         },
       });
     await tx.update(schema.user)
