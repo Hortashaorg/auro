@@ -48,7 +48,7 @@
     "noImplicitThis": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "precompile",
-    "jsxImportSource": "jsr:@hono/hono@4.7.7/jsx"
+    "jsxImportSource": "jsr:@hono/hono@4.7.8/jsx"
   },
   "imports": {
     "@playwright/test": "npm:@playwright/test@^1.52.0",

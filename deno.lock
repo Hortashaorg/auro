@@ -1,7 +1,7 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@hono/hono@4.7.7": "4.7.7",
+    "jsr:@hono/hono@4.7.8": "4.7.8",
     "jsr:@std/crypto@^1.0.4": "1.0.4",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/fs@^1.0.17": "1.0.17",
@@ -32,15 +32,15 @@
     "npm:tailwind-merge@3.0.1": "3.0.1",
     "npm:tailwind-merge@^3.1.0": "3.2.0",
     "npm:tailwind-merge@^3.2.0": "3.2.0",
-    "npm:tailwindcss@^4.1.4": "4.1.4",
+    "npm:tailwindcss@^4.1.5": "4.1.5",
     "npm:zod@*": "3.24.2"
   },
   "jsr": {
     "@hono/hono@4.7.0": {
       "integrity": "1eb10e1976d3dda22ab43115ecfa348a43cd17c8aea5c0039c9757ebded624f8"
     },
-    "@hono/hono@4.7.7": {
-      "integrity": "74ea9985cb405fada079a922538f6baa06fa1ee150ce409c5bdae2c89ac05cba"
+    "@hono/hono@4.7.8": {
+      "integrity": "620b1eaab065196d4ebe02cff31f8d3a78c94f736ce2ca86ee14f5f26fe48ecd"
     },
     "@std/crypto@1.0.4": {
       "integrity": "cee245c453bd5366207f4d8aa25ea3e9c86cecad2be3fefcaa6cb17203d79340"
@@ -636,8 +636,8 @@
     "tailwind-merge@3.2.0": {
       "integrity": "sha512-FQT/OVqCD+7edmmJpsgCsY820RTD5AkBryuG5IUqR5YQZSdj5xlH5nLgH7YPths7WsLPSpSBNneJdM8aS8aeFA=="
     },
-    "tailwindcss@4.1.4": {
-      "integrity": "sha512-1ZIUqtPITFbv/DxRmDr5/agPqJwF69d24m9qmM1939TJehgY539CtzeZRjbLt5G6fSy/7YqqYsfvoTEw9xUI2A=="
+    "tailwindcss@4.1.5": {
+      "integrity": "sha512-nYtSPfWGDiWgCkwQG/m+aX83XCwf62sBgg3bIlNiiOcggnS1x3uVRDAuyelBFL+vJdOPPCGElxv9DjHJjRHiVA=="
     },
     "undici-types@6.19.8": {
       "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
@@ -1109,7 +1109,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@hono/hono@4.7.7",
+      "jsr:@hono/hono@4.7.8",
       "jsr:@std/fs@^1.0.17",
       "jsr:@std/path@^1.0.9",
       "npm:@playwright/test@^1.52.0",
@@ -1131,7 +1131,7 @@
       },
       "packages/framework": {
         "dependencies": [
-          "jsr:@hono/hono@4.7.7",
+          "jsr:@hono/hono@4.7.8",
           "jsr:@valibot/valibot@1.0.0",
           "npm:@opentelemetry/api@1.9.0"
         ]
@@ -1141,7 +1141,7 @@
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
           "npm:tailwind-merge@^3.2.0",
-          "npm:tailwindcss@^4.1.4"
+          "npm:tailwindcss@^4.1.5"
         ]
       }
     }
