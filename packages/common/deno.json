@@ -7,7 +7,7 @@
     "fmt": "deno fmt ."
   },
   "imports": {
-    "@std/crypto": "jsr:@std/crypto@^1.0.4",
+    "@std/crypto": "jsr:@std/crypto@^1.0.5",
     "@std/encoding": "jsr:@std/encoding@^1.0.10"
   }
 }
