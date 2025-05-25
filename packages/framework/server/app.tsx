@@ -375,6 +375,9 @@ export const app = <TProvider extends "google" | "keycloak">(
           });
           throw error;
         } finally {
+          span.setStatus({
+            code: SpanStatusCode.OK,
+          });
           span.end();
         }
       });
@@ -551,6 +554,9 @@ export const app = <TProvider extends "google" | "keycloak">(
           });
           throw error;
         } finally {
+          span.setStatus({
+            code: SpanStatusCode.OK,
+          });
           span.end();
         }
       });
@@ -665,6 +671,9 @@ export const app = <TProvider extends "google" | "keycloak">(
           });
           throw error;
         } finally {
+          span.setStatus({
+            code: SpanStatusCode.OK,
+          });
           span.end();
         }
       });
