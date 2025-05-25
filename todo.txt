@@ -8,6 +8,6 @@ UI:
 - Loading states / Optimistic updates pattern
 - Component Testing
 
-Technical:
-- Introducing Testing
-- Playwright in CI/CD
+Bugs:
+- Lost the counting.
+- Apperently refresh is happening on pretty much every request?
