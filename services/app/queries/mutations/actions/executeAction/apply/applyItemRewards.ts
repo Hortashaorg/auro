@@ -6,7 +6,7 @@ export const applyItemRewards = async (
   user: User,
   action: Action,
 ) => {
-  const itemsGained = [];
+  const itemChanges = [];
 
   for (const itemReward of action.actionItemRewards) {
     // Check if item should be given based on chance (0-100)
@@ -20,11 +20,12 @@ export const applyItemRewards = async (
           itemId: itemReward.itemId,
         });
 
-      itemsGained.push({
+      itemChanges.push({
         itemId: itemReward.itemId,
+        event: "create",
       });
     }
   }
 
-  return { itemsGained };
+  return { itemChanges };
 };

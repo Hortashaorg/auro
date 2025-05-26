@@ -9,22 +9,22 @@ export const executeAction = async (
 ) => {
   const userResult = await validateUser(userId);
   if ("error" in userResult) {
-    return userResult;
+    return { success: false, error: userResult.error.message };
   }
 
   const actionResult = await validateAction(actionId);
   if ("error" in actionResult) {
-    return actionResult;
+    return { success: false, error: actionResult.error.message };
   }
 
   const executionResult = validateExecution(userResult, actionResult);
   if ("error" in executionResult) {
-    return executionResult;
+    return { success: false, error: executionResult.error.message };
   }
 
   const transactionResult = await executeTransaction(userResult, actionResult);
   if ("error" in transactionResult) {
-    return transactionResult;
+    return { success: false, error: transactionResult.error.message };
   }
 
   return transactionResult;

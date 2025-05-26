@@ -2,6 +2,7 @@ import { db } from "@package/database";
 import type { Action, User } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
 import {
+  applyActionLog,
   applyItemRewards,
   applyResourceChanges,
   applyUserActionCost,
@@ -17,12 +18,15 @@ export const executeTransaction = async (
       const userResult = await applyUserActionCost(tx, user);
       const resourceResult = await applyResourceChanges(tx, user, action);
       const itemsResult = await applyItemRewards(tx, user, action);
+      await applyActionLog(tx, user, action, resourceResult.resourceChanges);
 
-      return {
+      const result = {
         ...userResult,
         ...resourceResult,
         ...itemsResult,
       };
+
+      return result;
     });
 
     return result;
