@@ -1,6 +1,7 @@
 import { validateUser } from "./validateUser.ts";
 import { validateAction } from "./validateAction.ts";
 import { validateExecution } from "./validateExecution.ts";
+import { executeTransaction } from "./executeTransaction.ts";
 
 export const executeAction = async (
   actionId: string,
@@ -21,9 +22,10 @@ export const executeAction = async (
     return executionResult;
   }
 
-  const user = userResult;
-  const action = actionResult;
-  console.log(user, "is typesafe user about to do action", action);
+  const transactionResult = await executeTransaction(userResult, actionResult);
+  if ("error" in transactionResult) {
+    return transactionResult;
+  }
 
-  return "result";
+  return transactionResult;
 };

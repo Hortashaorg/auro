@@ -1,4 +1,4 @@
-import type { InferSelectModel, schema } from "@package/database";
+import type { db, InferSelectModel, schema } from "@package/database";
 
 export interface ModuleFailure {
   error: {
@@ -28,5 +28,7 @@ export const ERROR_CODES = {
   DATABASE_ERROR: "DATABASE_ERROR",
   INVALID_REWARD_CONFIG: "INVALID_REWARD_CONFIG",
 } as const;
+
+export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
 export type ErrorCode = typeof ERROR_CODES[keyof typeof ERROR_CODES];
