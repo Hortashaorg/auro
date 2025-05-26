@@ -111,21 +111,23 @@ export const executeAction = async (
       };
     }
 
-    await tx
-      .insert(schema.userResource)
-      .values(
-        rewardUpdates.map((reward) => ({
-          userId,
-          resourceId: reward.resourceId,
-          quantity: reward.quantity,
-        })),
-      )
-      .onConflictDoUpdate({
-        target: [schema.userResource.userId, schema.userResource.resourceId],
-        set: {
-          quantity: sql`excluded.quantity + ${schema.userResource.quantity}`,
-        },
-      });
+    if (rewardUpdates.length > 0) {
+      await tx
+        .insert(schema.userResource)
+        .values(
+          rewardUpdates.map((reward) => ({
+            userId,
+            resourceId: reward.resourceId,
+            quantity: reward.quantity,
+          })),
+        )
+        .onConflictDoUpdate({
+          target: [schema.userResource.userId, schema.userResource.resourceId],
+          set: {
+            quantity: sql`excluded.quantity + ${schema.userResource.quantity}`,
+          },
+        });
+    }
     await tx.update(schema.user)
       .set({
         availableActions: user.availableActions - 1,
