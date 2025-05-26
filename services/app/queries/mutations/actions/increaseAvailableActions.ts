@@ -66,6 +66,7 @@ export const increaseAvailableActions = async () => {
       .set({
         availableActions:
           sql`${schema.user.availableActions} + ${game.actionRecoveryAmount}`,
+        updatedAt: Temporal.Now.instant(),
       })
       .where(
         and(
