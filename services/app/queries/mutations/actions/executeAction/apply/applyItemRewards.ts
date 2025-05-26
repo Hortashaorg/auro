@@ -5,7 +5,7 @@ export const applyItemRewards = async (
   tx: Transaction,
   user: User,
   action: Action,
-): Promise<void> => {
+) => {
   for (const itemReward of action.actionItemRewards) {
     // Check if item should be given based on chance (0-100)
     const shouldGiveItem = Math.random() * 100 < itemReward.chance;

@@ -2,9 +2,10 @@ import { db } from "@package/database";
 import type { Action, ModuleFailure, User } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
 import {
-  applyActionCost,
   applyItemRewards,
+  applyResourceCosts,
   applyResourceRewards,
+  applyUserActionCost,
 } from "./apply/index.ts";
 
 export const executeTransaction = async (
@@ -14,7 +15,8 @@ export const executeTransaction = async (
   try {
     await db.transaction(async (tx) => {
       // Apply all changes in sequence
-      await applyActionCost(tx, user, action);
+      await applyUserActionCost(tx, user);
+      await applyResourceCosts(tx, user, action);
       await applyResourceRewards(tx, user, action);
       await applyItemRewards(tx, user, action);
     });
