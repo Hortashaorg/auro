@@ -1,5 +1,6 @@
 import { validateUser } from "./validateUser.ts";
 import { validateAction } from "./validateAction.ts";
+import { validateExecution } from "./validateExecution.ts";
 
 export const executeAction = async (
   actionId: string,
@@ -13,6 +14,11 @@ export const executeAction = async (
   const actionResult = await validateAction(actionId);
   if ("error" in actionResult) {
     return actionResult;
+  }
+
+  const executionResult = validateExecution(userResult, actionResult);
+  if ("error" in executionResult) {
+    return executionResult;
   }
 
   const user = userResult;
