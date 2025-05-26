@@ -2,6 +2,7 @@ import { createRoute } from "@kalena/framework";
 import { isPlayerOfGame } from "@permissions/index.ts";
 import { TimeUntilNextActionText } from "./TimeUntilNextActionText.section.tsx";
 import { throwError } from "@package/common";
+
 const Handler = () => {
   const context = timeUntilNextActionRoute.context();
   const gameId = context.req.param("gameId") ??

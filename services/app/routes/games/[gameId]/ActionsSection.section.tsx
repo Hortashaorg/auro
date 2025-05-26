@@ -5,8 +5,10 @@ import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { selectUserGameActions } from "@queries/selects/actions/selectGameActions.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import { CardActions } from "@comp/atoms/card/CardActions.tsx";
-import type { FC } from "@kalena/framework";
+import { type FC, getGlobalContext } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { TimeUntilNextActionText } from "./TimeUntilNextActionText.section.tsx";
+import { throwError } from "@package/common";
 
 type Props = {
   gameId: string;
@@ -21,9 +23,17 @@ export const ActionsSection: FC<Props> = async (
     userId,
   );
 
+  const email = getGlobalContext().var.email ?? throwError(
+    "Email not found in global context",
+  );
+
   return (
     <Section id="player-actions-section" {...props}>
       <Title level="h2">Actions</Title>
+      <TimeUntilNextActionText
+        gameId={gameId}
+        email={email}
+      />
 
       <Grid>
         {actionData.map((data) => (

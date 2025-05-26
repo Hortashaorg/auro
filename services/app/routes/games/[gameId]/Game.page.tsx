@@ -6,15 +6,12 @@ import { ActionsSection } from "./ActionsSection.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
 
 const Game = async () => {
-  const { user } = await gameRoute.customContext();
-  // Fetch game details separately if needed for the title, or adjust context/query
-  // For now, assume game name might come from context or be less critical here
-  const gameName = "Game"; // Placeholder - Adapt as needed
+  const { user, game } = await gameRoute.customContext();
 
   return (
-    <Layout title={`Game - ${gameName}`}>
+    <Layout title={`Game - ${game.name}`}>
       <Title level="h1">
-        Welcome to {gameName}
+        Welcome to {game.name}
       </Title>
       <ActionsSection gameId={user.gameId} userId={user.id} />
     </Layout>

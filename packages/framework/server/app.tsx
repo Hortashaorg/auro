@@ -384,184 +384,226 @@ export const app = <TProvider extends "google" | "keycloak">(
     });
 
     app.use("/*", async (c, next) => {
-      const accessToken = getCookie(c, "access_token");
-      const refreshToken = getCookie(c, "refresh_token");
-      if (!accessToken) {
-        await tracer.startActiveSpan("refresh", async (span) => {
-          try {
-            if (authProvider.providerConfig.provider === "google") {
-              try {
-                const email = getCookie(c, "email");
+      await tracer.startActiveSpan("refresh", async (span) => {
+        try {
+          if (authProvider.providerConfig.provider === "google") {
+            try {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
 
-                if (!accessToken && refreshToken && email) {
-                  refreshCounter.add(1);
-                  const params = new URLSearchParams({
-                    client_id: authProvider.providerConfig.clientId,
-                    client_secret: authProvider.providerConfig.clientSecret,
-                    grant_type: "refresh_token",
-                    refresh_token: refreshToken,
+              if (!accessToken && refreshToken && email) {
+                refreshCounter.add(1);
+                const params = new URLSearchParams({
+                  client_id: authProvider.providerConfig.clientId,
+                  client_secret: authProvider.providerConfig.clientSecret,
+                  grant_type: "refresh_token",
+                  refresh_token: refreshToken,
+                });
+
+                const googleBaseUrl = "https://oauth2.googleapis.com";
+                const res = await fetch(
+                  `${googleBaseUrl}/token`,
+                  {
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    method: "POST",
+                    body: params,
+                  },
+                );
+
+                if (res.ok) {
+                  const responseSchema = v.object({
+                    access_token: v.string(),
+                    id_token: v.string(),
+                    expires_in: v.number(),
                   });
 
-                  const googleBaseUrl = "https://oauth2.googleapis.com";
-                  const res = await fetch(
-                    `${googleBaseUrl}/token`,
-                    {
-                      headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                      },
-                      method: "POST",
-                      body: params,
-                    },
-                  );
+                  const tokens = v.parse(responseSchema, await res.json());
 
-                  if (res.ok) {
-                    const responseSchema = v.object({
-                      access_token: v.string(),
-                      id_token: v.string(),
-                      expires_in: v.number(),
-                    });
+                  const result = {
+                    success: true,
+                    accessToken: tokens.access_token,
+                    refreshToken,
+                    email,
+                    expires_in: tokens.expires_in,
+                  };
 
-                    const tokens = v.parse(responseSchema, await res.json());
-
-                    const result = {
-                      success: true,
-                      accessToken: tokens.access_token,
-                      refreshToken,
-                      email,
-                      expires_in: tokens.expires_in,
-                    };
-
-                    setCookie(c, "access_token", result.accessToken, {
-                      maxAge: result.expires_in,
-                      httpOnly: true,
-                      secure: true,
-                      sameSite: "Lax",
-                    });
-
-                    await authProvider.refreshHook?.(
-                      result as RefreshHookTypes<TProvider>,
-                    );
-                  } else {
-                    const result = {
-                      success: false,
-                      error: new Error("Failed to refresh token"),
-                    } as RefreshHookTypes<TProvider>;
-                    await authProvider.refreshHook?.(result);
-                  }
-                }
-              } catch (error) {
-                const result = {
-                  success: false,
-                  error,
-                } as RefreshHookTypes<TProvider>;
-                await authProvider.refreshHook?.(result);
-              }
-            }
-
-            if (authProvider.providerConfig.provider === "keycloak") {
-              try {
-                const accessToken = getCookie(c, "access_token");
-                const refreshToken = getCookie(c, "refresh_token");
-                const email = getCookie(c, "email");
-
-                if (!accessToken && refreshToken && email) {
-                  refreshCounter.add(1);
-                  const params = new URLSearchParams({
-                    client_id: authProvider.providerConfig.clientId,
-                    client_secret: authProvider.providerConfig.clientSecret,
-                    grant_type: "refresh_token",
-                    refresh_token: refreshToken,
+                  setCookie(c, "access_token", result.accessToken, {
+                    maxAge: result.expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
                   });
 
-                  const keycloakBaseUrl =
-                    `${authProvider.providerConfig.baseUrl}/realms/${authProvider.providerConfig.realm}/protocol/openid-connect`;
-                  const res = await fetch(
-                    `${keycloakBaseUrl}/token`,
-                    {
-                      headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                      },
-                      method: "POST",
-                      body: params,
-                    },
+                  await authProvider.refreshHook?.(
+                    result as RefreshHookTypes<TProvider>,
                   );
-
-                  if (res.ok) {
-                    const responseSchema = v.object({
-                      access_token: v.string(),
-                      refresh_token: v.string(),
-                      id_token: v.string(),
-                      expires_in: v.number(),
-                    });
-
-                    const tokens = v.parse(responseSchema, await res.json());
-
-                    const email = v.parse(
-                      v.string(),
-                      decode(tokens.id_token).payload.email,
-                    );
-
-                    const result = {
-                      success: true,
-                      accessToken: tokens.access_token,
-                      refreshToken: tokens.refresh_token,
-                      email,
-                      expires_in: tokens.expires_in,
-                      refresh_token_expires_in: 3600 * 72, // 3 days
-                    };
-
-                    setCookie(c, "access_token", result.accessToken, {
-                      maxAge: result.expires_in,
-                      httpOnly: true,
-                      secure: true,
-                      sameSite: "Lax",
-                    });
-                    setCookie(c, "refresh_token", result.refreshToken, {
-                      maxAge: result.refresh_token_expires_in,
-                      httpOnly: true,
-                      secure: true,
-                      sameSite: "Lax",
-                    });
-                    setCookie(c, "email", result.email, {
-                      maxAge: result.refresh_token_expires_in,
-                      httpOnly: true,
-                      secure: true,
-                      sameSite: "Lax",
-                    });
-
-                    await authProvider.refreshHook?.(
-                      result as RefreshHookTypes<TProvider>,
-                    );
-                  } else {
-                    const result = {
-                      success: false,
-                      error: new Error("Failed to refresh token"),
-                    } as RefreshHookTypes<TProvider>;
-                    await authProvider.refreshHook?.(result);
-                  }
+                } else {
+                  const result = {
+                    success: false,
+                    error: new Error("Failed to refresh token"),
+                  } as RefreshHookTypes<TProvider>;
+                  await authProvider.refreshHook?.(result);
                 }
-              } catch (error) {
-                const result = {
-                  success: false,
-                  error,
-                } as RefreshHookTypes<TProvider>;
-                await authProvider.refreshHook?.(result);
               }
+            } catch (error) {
+              const result = {
+                success: false,
+                error,
+              } as RefreshHookTypes<TProvider>;
+              await authProvider.refreshHook?.(result);
             }
-          } catch (error) {
-            span.setStatus({
-              code: SpanStatusCode.ERROR,
-              message: (error as Error).message,
-            });
-            throw error;
-          } finally {
-            span.setStatus({
-              code: SpanStatusCode.OK,
-            });
-            span.end();
           }
-        });
-      }
+
+          if (authProvider.providerConfig.provider === "keycloak") {
+            try {
+              const accessToken = getCookie(c, "access_token");
+              const refreshToken = getCookie(c, "refresh_token");
+              const email = getCookie(c, "email");
+
+              if (!accessToken && refreshToken && email) {
+                refreshCounter.add(1);
+                const params = new URLSearchParams({
+                  client_id: authProvider.providerConfig.clientId,
+                  client_secret: authProvider.providerConfig.clientSecret,
+                  grant_type: "refresh_token",
+                  refresh_token: refreshToken,
+                });
+
+                const keycloakBaseUrl =
+                  `${authProvider.providerConfig.baseUrl}/realms/${authProvider.providerConfig.realm}/protocol/openid-connect`;
+                const res = await fetch(
+                  `${keycloakBaseUrl}/token`,
+                  {
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    method: "POST",
+                    body: params,
+                  },
+                );
+
+                if (res.ok) {
+                  const responseSchema = v.object({
+                    access_token: v.string(),
+                    refresh_token: v.string(),
+                    id_token: v.string(),
+                    expires_in: v.number(),
+                  });
+
+                  const tokens = v.parse(responseSchema, await res.json());
+
+                  const email = v.parse(
+                    v.string(),
+                    decode(tokens.id_token).payload.email,
+                  );
+
+                  const result = {
+                    success: true,
+                    accessToken: tokens.access_token,
+                    refreshToken: tokens.refresh_token,
+                    email,
+                    expires_in: tokens.expires_in,
+                    refresh_token_expires_in: 3600 * 72, // 3 days
+                  };
+
+                  setCookie(c, "access_token", result.accessToken, {
+                    maxAge: result.expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "refresh_token", result.refreshToken, {
+                    maxAge: result.refresh_token_expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "email", result.email, {
+                    maxAge: result.refresh_token_expires_in,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+
+                  await authProvider.refreshHook?.(
+                    result as RefreshHookTypes<TProvider>,
+                  );
+                } else {
+                  const result = {
+                    success: false,
+                    error: new Error("Failed to refresh token"),
+                  } as RefreshHookTypes<TProvider>;
+                  await authProvider.refreshHook?.(result);
+
+                  // Clear cookies
+                  setCookie(c, "access_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "refresh_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "email", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+
+                  throw new Error("Failed to refresh token");
+                }
+              }
+            } catch (error) {
+              const result = {
+                success: false,
+                error,
+              } as RefreshHookTypes<TProvider>;
+              await authProvider.refreshHook?.(result);
+
+              // Clear cookies
+              setCookie(c, "access_token", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+              setCookie(c, "refresh_token", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+              setCookie(c, "email", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+
+              throw new Error("Failed to refresh token");
+            }
+          }
+        } catch (error) {
+          span.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: (error as Error).message,
+          });
+          throw error;
+        } finally {
+          span.setStatus({
+            code: SpanStatusCode.OK,
+          });
+          span.end();
+        }
+      });
       await next();
     });
 

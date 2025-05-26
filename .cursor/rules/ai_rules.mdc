@@ -9,17 +9,17 @@ This rule outlines how to effectively leverage and maintain the project's define
 
 ## 1. Understand the Project Structure & Consult Rules
 
-*   **Workspace Root:** The project root contains directories like `packages/`, `services/`, and `scripts/`. The main application code resides within `services/app/`. **Important:** When referencing application paths (e.g., in imports or tool commands), always start from `services/app/...`. Avoid incorrect prefixes like `app/services/...`. Refer to `concept_organisation` for details.
+*   **Workspace Root:** The project root contains directories like `packages/`, `services/`, and `scripts/`. The main application code resides within `services/app/`. **Important:** When referencing application paths (e.g., in imports or tool commands), always start from `services/app/...`. Avoid incorrect prefixes like `app/services/...`. Refer to `concept_repo_structure` for details.
 *   **Consult Rules First:** Before beginning *any* coding task, **always** check for relevant project rules. This ensures alignment and prevents rework.
 *   **Rule Categories & Purpose:** Understand the different types of rules available:
-    *   `concept_*` **(Principles & Guidelines):** Explain high-level approaches, conventions, and the "why" behind certain choices (e.g., `concept_organisation`, `concept_features`, `concept_event_naming`). Consult these to understand the overall strategy and conventions.
-    *   `how_to_*` **(Definition Requirements):** Detail the specific steps, syntax, and mandatory requirements for *creating* core artifacts like reusable components or API endpoints (e.g., `how_to_component`, `how_to_api`). Consult these when defining these specific types of items.
-    *   `examples_*` **(Implementation Patterns):** Provide concrete code snippets for common, established patterns (e.g., `examples_features` for UI patterns like modals/inline edits, `examples_api` for backend patterns like OOB swaps/HX-Triggers). **Consult these first** when implementing common features or API responses.
+    *   `concept_*` **(Principles & Guidelines):** Explain high-level approaches, conventions, and the "why" behind certain choices (e.g., `concept_repo_structure`, `concept_event_naming`, `concept_business_logic`). Consult these to understand the overall strategy and conventions.
+    *   `how_to_*` **(Definition Requirements):** Detail the specific steps, syntax, and mandatory requirements for *creating* core artifacts like reusable components or API endpoints (e.g., `how_to_component`, `how_to_api`, `how_to_refactor`). Consult these when defining these specific types of items.
+    *   `examples_*` **(Implementation Patterns):** Provide concrete code snippets for common, established patterns (e.g., `examples_features` for UI patterns like modals/inline edits, `examples_api` for backend patterns like OOB swaps/HX-Triggers, `examples_business_logic` for complex functions). **Consult these first** when implementing common features or API responses.
 *   **Suggested Workflow:**
-    1.  Understand the task.
-    2.  Consult `concept_organisation` (file location/naming) & relevant `concept_` rules (approach).
+    1.  Understand the task and identify its type (UI component, API endpoint, business logic, etc.).
+    2.  Consult `concept_repo_structure` (file location/naming) & relevant `concept_` rules (approach).
     3.  Check `examples_` rules for matching implementation patterns.
-    4.  Consult `how_to_` rules if defining new core components/APIs.
+    4.  Consult `how_to_` rules if defining new core components/APIs or refactoring complex code.
     5.  Implement step-by-step, seeking review (`Section 4`).
 
 ## 2. Handling Rule Discrepancies & Prioritizing Code Examples
@@ -51,3 +51,17 @@ This rule outlines how to effectively leverage and maintain the project's define
 *   **Avoid Boilerplate:** Eliminate unnecessary variables, complex structures, or repetitive code where simpler alternatives exist.
 *   **Clarity Over Premature Optimization:** Ensure code remains readable and maintainable.
 *   **Self-Explanatory Code:** Write code that clearly expresses its intent, minimizing comments outside required JSDocs (for reusable components only, see `how_to_component`).
+
+## 6. Complex Business Logic Guidelines
+
+*   **Function Size:** When functions exceed ~50 lines or handle multiple responsibilities, consult `how_to_refactor` for breaking them down.
+*   **Critical Functions:** For business-critical functions (like [executeAction.ts](mdc:services/app/queries/mutations/actions/executeAction.ts)), prioritize maintainability over brevity. See `examples_business_logic` for patterns.
+*   **Testing:** Complex business logic should be testable in isolation. Consult `examples_testing` for patterns.
+*   **Error Handling:** Business logic should have comprehensive error handling and clear return types. See `concept_error_handling` for patterns.
+
+## 7. When to Deviate from Patterns
+
+*   **Performance Critical:** When performance requirements conflict with standard patterns, discuss trade-offs with the user first.
+*   **Framework Limitations:** When the framework doesn't support a standard pattern, document the deviation and reasoning.
+*   **Domain-Specific Logic:** Complex business rules may require custom patterns - document these in `examples_business_logic`.
+*   **Always Document:** Any deviation from established patterns should be documented with reasoning.
