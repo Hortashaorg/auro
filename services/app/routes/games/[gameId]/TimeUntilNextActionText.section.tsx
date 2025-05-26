@@ -56,7 +56,7 @@ export const TimeUntilNextActionText: FC<Props> = async (props) => {
   const { gameId, email } = props;
 
   const [user, game] = await Promise.all([
-    selectUserByEmail(email),
+    selectUserByEmail(email, gameId),
     selectGameById(gameId),
   ]);
 

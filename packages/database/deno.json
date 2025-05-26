@@ -4,7 +4,7 @@
   "imports": {
     "drizzle-kit": "npm:drizzle-kit@^0.31.1",
     "drizzle-orm": "npm:drizzle-orm@^0.43.1",
-    "postgres": "npm:postgres@^3.4.5"
+    "postgres": "npm:postgres@^3.4.7"
   },
   "tasks": {
     "typecheck": "deno check .",

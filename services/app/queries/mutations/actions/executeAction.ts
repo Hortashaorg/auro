@@ -128,6 +128,7 @@ export const executeAction = async (
           },
         });
     }
+
     await tx.update(schema.user)
       .set({
         availableActions: user.availableActions - 1,
