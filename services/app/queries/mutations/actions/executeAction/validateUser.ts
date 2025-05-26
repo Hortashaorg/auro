@@ -1,16 +1,21 @@
-import { db, eq, type InferSelectModel, schema } from "@package/database";
-import type { ModuleFailure } from "./types.ts";
+import { db, eq, schema } from "@package/database";
+import type { ModuleFailure, User } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
+import { throwError } from "@package/common";
 
 export const validateUser = async (
   userId: string,
-): Promise<ModuleFailure | InferSelectModel<typeof schema.user>> => {
+): Promise<ModuleFailure | User> => {
   try {
-    const [user] = await db.select()
+    const userData = await db.select()
       .from(schema.user)
+      .leftJoin(
+        schema.userResource,
+        eq(schema.user.id, schema.userResource.userId),
+      )
       .where(eq(schema.user.id, userId));
 
-    if (!user) {
+    if (userData.length === 0) {
       return {
         error: {
           code: ERROR_CODES.USER_NOT_FOUND,
@@ -19,6 +24,8 @@ export const validateUser = async (
         },
       };
     }
+
+    const user = userData[0]?.user ?? throwError("User should exist here");
 
     if (user.availableActions <= 0) {
       return {
@@ -30,7 +37,14 @@ export const validateUser = async (
       };
     }
 
-    return user;
+    const userResources = userData.map((data) => data.user_resource).filter(
+      (userResource) => userResource !== null,
+    );
+
+    return {
+      user,
+      userResources,
+    };
   } catch (error) {
     console.error("Error validating user:", error);
     return {

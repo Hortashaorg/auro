@@ -1,3 +1,5 @@
+import type { InferSelectModel, schema } from "@package/database";
+
 export interface ModuleFailure {
   error: {
     code: string;
@@ -5,6 +7,18 @@ export interface ModuleFailure {
     context: Record<string, unknown>;
   };
 }
+
+export type User = {
+  user: InferSelectModel<typeof schema.user>;
+  userResources: InferSelectModel<typeof schema.userResource>[];
+};
+
+export type Action = {
+  action: InferSelectModel<typeof schema.action>;
+  actionResourceCosts: InferSelectModel<typeof schema.actionResourceCost>[];
+  actionResourceRewards: InferSelectModel<typeof schema.actionResourceReward>[];
+  actionItemRewards: InferSelectModel<typeof schema.actionItemReward>[];
+};
 
 export const ERROR_CODES = {
   USER_NOT_FOUND: "USER_NOT_FOUND",
