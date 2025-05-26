@@ -537,6 +537,28 @@ export const app = <TProvider extends "google" | "keycloak">(
                     error: new Error("Failed to refresh token"),
                   } as RefreshHookTypes<TProvider>;
                   await authProvider.refreshHook?.(result);
+
+                  // Clear cookies
+                  setCookie(c, "access_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "refresh_token", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+                  setCookie(c, "email", "", {
+                    maxAge: 0,
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Lax",
+                  });
+
+                  throw new Error("Failed to refresh token");
                 }
               }
             } catch (error) {
@@ -545,6 +567,28 @@ export const app = <TProvider extends "google" | "keycloak">(
                 error,
               } as RefreshHookTypes<TProvider>;
               await authProvider.refreshHook?.(result);
+
+              // Clear cookies
+              setCookie(c, "access_token", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+              setCookie(c, "refresh_token", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+              setCookie(c, "email", "", {
+                maxAge: 0,
+                httpOnly: true,
+                secure: true,
+                sameSite: "Lax",
+              });
+
+              throw new Error("Failed to refresh token");
             }
           }
         } catch (error) {

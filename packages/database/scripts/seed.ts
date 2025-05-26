@@ -304,11 +304,14 @@ async function seedAssets() {
 }
 
 const setAdminUser = async () => {
-  await db.insert(schema.account).values({
+  await db.insert(schema.account).values([{
     email: "eidemartin_303@hotmail.com",
     nickname: "Martin",
     canCreateGame: true,
-  }).onConflictDoUpdate({
+  }, {
+    email: "andreas.ander.li@gmail.com",
+    canCreateGame: true,
+  }]).onConflictDoUpdate({
     target: [schema.account.email],
     set: {
       canCreateGame: true,

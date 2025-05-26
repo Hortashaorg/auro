@@ -2,10 +2,12 @@
   "version": "5",
   "specifiers": {
     "jsr:@hono/hono@4.7.10": "4.7.10",
+    "jsr:@std/crypto@^1.0.5": "1.0.5",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
     "jsr:@std/fs@^1.0.17": "1.0.17",
     "jsr:@std/path@*": "1.0.9",
     "jsr:@std/path@^1.0.9": "1.0.9",
+    "jsr:@valibot/valibot@1.1.0": "1.1.0",
     "npm:@opentelemetry/api@1.9.0": "1.9.0",
     "npm:@opentelemetry/api@^1.9.0": "1.9.0",
     "npm:@playwright/test@1.52.0": "1.52.0",
@@ -43,6 +45,9 @@
     "@hono/hono@4.7.10": {
       "integrity": "e59029e252af371abe43e8e4f9a115e38974c6bd5972022372bf89f763269cc7"
     },
+    "@std/crypto@1.0.5": {
+      "integrity": "0dcfbb319fe0bba1bd3af904ceb4f948cde1b92979ec1614528380ed308a3b40"
+    },
     "@std/encoding@1.0.10": {
       "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
     },
@@ -54,6 +59,9 @@
     },
     "@std/path@1.0.9": {
       "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
+    },
+    "@valibot/valibot@1.1.0": {
+      "integrity": "2617f02b532011b8140926899d420a3e1bbb0fcb7cdf8e7b669df89e7edd7f5f"
     }
   },
   "npm": {
