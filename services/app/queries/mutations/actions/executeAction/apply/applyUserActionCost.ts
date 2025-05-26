@@ -4,7 +4,7 @@ import type { Transaction, User } from "../types.ts";
 export const applyUserActionCost = async (
   tx: Transaction,
   user: User,
-): Promise<void> => {
+) => {
   // Decrease user's available actions
   await tx
     .update(schema.user)
@@ -13,4 +13,8 @@ export const applyUserActionCost = async (
       updatedAt: Temporal.Now.instant(),
     })
     .where(eq(schema.user.id, user.user.id));
+
+  return {
+    actionsRemaining: user.user.availableActions - 1,
+  };
 };

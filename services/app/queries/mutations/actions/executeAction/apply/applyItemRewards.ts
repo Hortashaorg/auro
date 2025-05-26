@@ -6,6 +6,8 @@ export const applyItemRewards = async (
   user: User,
   action: Action,
 ) => {
+  const itemsGained = [];
+
   for (const itemReward of action.actionItemRewards) {
     // Check if item should be given based on chance (0-100)
     const shouldGiveItem = Math.random() * 100 < itemReward.chance;
@@ -17,6 +19,12 @@ export const applyItemRewards = async (
           userId: user.user.id,
           itemId: itemReward.itemId,
         });
+
+      itemsGained.push({
+        itemId: itemReward.itemId,
+      });
     }
   }
+
+  return { itemsGained };
 };

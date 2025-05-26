@@ -1,27 +1,31 @@
 import { db } from "@package/database";
-import type { Action, ModuleFailure, User } from "./types.ts";
+import type { Action, User } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
 import {
   applyItemRewards,
-  applyResourceCosts,
-  applyResourceRewards,
+  applyResourceChanges,
   applyUserActionCost,
 } from "./apply/index.ts";
 
 export const executeTransaction = async (
   user: User,
   action: Action,
-): Promise<ModuleFailure | { success: true }> => {
+) => {
   try {
-    await db.transaction(async (tx) => {
-      // Apply all changes in sequence
-      await applyUserActionCost(tx, user);
-      await applyResourceCosts(tx, user, action);
-      await applyResourceRewards(tx, user, action);
-      await applyItemRewards(tx, user, action);
+    const result = await db.transaction(async (tx) => {
+      // Apply all changes in sequence and collect results
+      const userResult = await applyUserActionCost(tx, user);
+      const resourceResult = await applyResourceChanges(tx, user, action);
+      const itemsResult = await applyItemRewards(tx, user, action);
+
+      return {
+        ...userResult,
+        ...resourceResult,
+        ...itemsResult,
+      };
     });
 
-    return { success: true };
+    return result;
   } catch (error) {
     console.error("Error executing action transaction:", error);
     return {
