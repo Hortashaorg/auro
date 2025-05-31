@@ -1,26 +1,27 @@
 {
-  "version": "0.0.1",
-  "name": "@service/app",
-  "exports": "./main.ts",
-  "imports": {
-    "class-variance-authority": "npm:class-variance-authority@^0.7.1",
-    "clsx": "npm:clsx@^2.1.1",
-    "tailwind-merge": "npm:tailwind-merge@^3.3.0",
-    "tailwindcss": "npm:tailwindcss@^4.1.8",
-    "@comp/": "./components/",
-    "@permissions/": "./permissions/",
-    "@queries/": "./queries/",
-    "@layout/": "./layout/",
-    "@contexts/": "./contexts/"
-  },
-  "tasks": {
-    "typecheck": "deno check .",
-    "lint": "deno lint .",
-    "fmt": "deno fmt --ignore=./main.css",
-    "tailwind": "./tailwindcli -i ./main.css -o ./public/main.css --minify --watch",
-    "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --unstable-cron --allow-net --allow-read --allow-env --watch ./main.ts",
-    "start": "doppler run -- deno run --unstable-otel --unstable-temporal --unstable-cron --allow-net --allow-read --allow-env --watch ./main.ts",
-    "comp:build": "deno run --allow-read --allow-write components/createStructure.ts"
-  },
-  "exclude": ["public/main.css"]
+    "version": "0.0.1",
+    "name": "@service/app",
+    "exports": "./main.ts",
+    "imports": {
+        "@tailwindcss/cli": "npm:@tailwindcss/cli@^4.1.8",
+        "class-variance-authority": "npm:class-variance-authority@^0.7.1",
+        "clsx": "npm:clsx@^2.1.1",
+        "tailwind-merge": "npm:tailwind-merge@^3.3.0",
+        "tailwindcss": "npm:tailwindcss@^4.1.8",
+        "@comp/": "./components/",
+        "@permissions/": "./permissions/",
+        "@queries/": "./queries/",
+        "@layout/": "./layout/",
+        "@contexts/": "./contexts/"
+    },
+    "tasks": {
+        "typecheck": "deno check .",
+        "lint": "deno lint .",
+        "fmt": "deno fmt --ignore=./main.css",
+        "tailwind": "deno run -A npm:@tailwindcss/cli -i ./main.css -o ./public/main.css --minify --watch",
+        "dev": "doppler run --project auro --config local -- deno run --unstable-otel --unstable-temporal --unstable-cron --allow-net --allow-read --allow-env --watch ./main.ts",
+        "start": "doppler run -- deno run --unstable-otel --unstable-temporal --unstable-cron --allow-net --allow-read --allow-env --watch ./main.ts",
+        "comp:build": "deno run --allow-read --allow-write components/createStructure.ts"
+    },
+    "exclude": ["public/main.css"]
 }

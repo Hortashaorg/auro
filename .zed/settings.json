@@ -1,31 +1,26 @@
 {
-  "lsp": {
-    "deno": {
-      "settings": {
+    "lsp": {
         "deno": {
-          "enable": true
+            "settings": {
+                "deno": {
+                    "enable": true
+                }
+            }
+        },
+        "tailwindcss-language-server": {
+            "settings": {
+                "classFunctions": ["cva", "cx"]
+            }
         }
-      }
-    }
-  },
-  "languages": {
-    "TypeScript": {
-      "language_servers": [
-        "deno",
-        "!typescript-language-server",
-        "!vtsls",
-        "!eslint"
-      ],
-      "formatter": "language_server"
     },
-    "TSX": {
-      "language_servers": [
-        "deno",
-        "!typescript-language-server",
-        "!vtsls",
-        "!eslint"
-      ],
-      "formatter": "language_server"
+    "languages": {
+        "TypeScript": {
+            "language_servers": ["deno", "tailwindcss-language-server"],
+            "formatter": "language_server"
+        },
+        "TSX": {
+            "language_servers": ["deno", "tailwindcss-language-server"],
+            "formatter": "language_server"
+        }
     }
-  }
 }
