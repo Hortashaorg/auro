@@ -1,5 +1,5 @@
-import { crypto } from "jsr:@std/crypto";
-import { encodeHex } from "jsr:@std/encoding/hex";
+import { crypto } from "@std/crypto";
+import { encodeHex } from "@std/encoding/hex";
 
 export const throwError = (message: string): never => {
   throw new Error(message);
