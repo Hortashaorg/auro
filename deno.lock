@@ -2,11 +2,8 @@
   "version": "5",
   "specifiers": {
     "jsr:@hono/hono@4.7.10": "4.7.10",
-    "jsr:@std/crypto@^1.0.5": "1.0.5",
-    "jsr:@std/encoding@^1.0.10": "1.0.10",
-    "jsr:@std/fs@^1.0.17": "1.0.17",
-    "jsr:@std/path@*": "1.0.9",
-    "jsr:@std/path@^1.0.9": "1.0.9",
+    "jsr:@std/fs@^1.0.18": "1.0.18",
+    "jsr:@std/path@^1.1.0": "1.1.0",
     "jsr:@valibot/valibot@1.1.0": "1.1.0",
     "npm:@opentelemetry/api@1.9.0": "1.9.0",
     "npm:@opentelemetry/api@^1.9.0": "1.9.0",
@@ -21,7 +18,7 @@
     "npm:drizzle-kit@0.31": "0.31.1_esbuild@0.25.4",
     "npm:drizzle-kit@~0.30.6": "0.30.6_esbuild@0.19.12",
     "npm:drizzle-kit@~0.31.1": "0.31.1_esbuild@0.25.4",
-    "npm:drizzle-orm@~0.43.1": "0.43.1_@opentelemetry+api@1.9.0_postgres@3.4.7",
+    "npm:drizzle-orm@~0.44.1": "0.44.1_@opentelemetry+api@1.9.0_postgres@3.4.7",
     "npm:esbuild@0.25": "0.25.0",
     "npm:esbuild@0.25.0": "0.25.0",
     "npm:playwright@*": "1.52.0",
@@ -32,8 +29,7 @@
     "npm:tailwind-merge@^3.1.0": "3.3.0",
     "npm:tailwind-merge@^3.2.0": "3.3.0",
     "npm:tailwind-merge@^3.3.0": "3.3.0",
-    "npm:tailwindcss@^4.1.5": "4.1.7",
-    "npm:tailwindcss@^4.1.7": "4.1.7",
+    "npm:tailwindcss@^4.1.8": "4.1.8",
     "npm:zod@*": "3.24.2"
   },
   "jsr": {
@@ -43,20 +39,14 @@
     "@hono/hono@4.7.10": {
       "integrity": "e59029e252af371abe43e8e4f9a115e38974c6bd5972022372bf89f763269cc7"
     },
-    "@std/crypto@1.0.5": {
-      "integrity": "0dcfbb319fe0bba1bd3af904ceb4f948cde1b92979ec1614528380ed308a3b40"
-    },
-    "@std/encoding@1.0.10": {
-      "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
-    },
-    "@std/fs@1.0.17": {
-      "integrity": "1c00c632677c1158988ef7a004cb16137f870aafdb8163b9dce86ec652f3952b",
+    "@std/fs@1.0.18": {
+      "integrity": "24bcad99eab1af4fde75e05da6e9ed0e0dce5edb71b7e34baacf86ffe3969f3a",
       "dependencies": [
-        "jsr:@std/path@^1.0.9"
+        "jsr:@std/path"
       ]
     },
-    "@std/path@1.0.9": {
-      "integrity": "260a49f11edd3db93dd38350bf9cd1b4d1366afa98e81b86167b4e3dd750129e"
+    "@std/path@1.1.0": {
+      "integrity": "ddc94f8e3c275627281cbc23341df6b8bcc874d70374f75fec2533521e3d6886"
     },
     "@valibot/valibot@1.1.0": {
       "integrity": "2617f02b532011b8140926899d420a3e1bbb0fcb7cdf8e7b669df89e7edd7f5f"
@@ -740,8 +730,8 @@
       ],
       "bin": true
     },
-    "drizzle-orm@0.43.1_@opentelemetry+api@1.9.0_postgres@3.4.7": {
-      "integrity": "sha512-dUcDaZtE/zN4RV/xqGrVSMpnEczxd5cIaoDeor7Zst9wOe/HzC/7eAaulywWGYXdDEc9oBPMjayVEDg0ziTLJA==",
+    "drizzle-orm@0.44.1_@opentelemetry+api@1.9.0_postgres@3.4.7": {
+      "integrity": "sha512-prIWOlwJbiYInvcJxE+IMiJCtMiFVrSUJCwx6AXSJvGOdLu35qZ46QncTZDgloiLNCG0XxTC8agQElSmsl++TA==",
       "dependencies": [
         "@opentelemetry/api",
         "postgres"
@@ -963,8 +953,8 @@
     "tailwind-merge@3.3.0": {
       "integrity": "sha512-fyW/pEfcQSiigd5SNn0nApUOxx0zB/dm6UDU/rEwc2c3sX2smWUNbapHv+QRqLGVp9GWX3THIa7MUGPo+YkDzQ=="
     },
-    "tailwindcss@4.1.7": {
-      "integrity": "sha512-kr1o/ErIdNhTz8uzAYL7TpaUuzKIE6QPQ4qmSdxnoX/lo+5wmUHQA6h3L5yIqEImSRnAAURDirLu/BgiXGPAhg=="
+    "tailwindcss@4.1.8": {
+      "integrity": "sha512-kjeW8gjdxasbmFKpVGrGd5T4i40mV5J2Rasw48QARfYeQ8YS9x02ON9SFWax3Qf616rt4Cp3nVNIj6Hd1mP3og=="
     },
     "undici-types@6.19.8": {
       "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
@@ -1438,8 +1428,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@4.7.10",
-      "jsr:@std/fs@^1.0.17",
-      "jsr:@std/path@^1.0.9",
+      "jsr:@std/fs@^1.0.18",
+      "jsr:@std/path@^1.1.0",
       "npm:@playwright/test@^1.52.0",
       "npm:playwright@^1.52.0"
     ],
@@ -1453,7 +1443,7 @@
       "packages/database": {
         "dependencies": [
           "npm:drizzle-kit@~0.31.1",
-          "npm:drizzle-orm@~0.43.1",
+          "npm:drizzle-orm@~0.44.1",
           "npm:postgres@^3.4.7"
         ]
       },
@@ -1469,7 +1459,7 @@
           "npm:class-variance-authority@~0.7.1",
           "npm:clsx@^2.1.1",
           "npm:tailwind-merge@^3.3.0",
-          "npm:tailwindcss@^4.1.7"
+          "npm:tailwindcss@^4.1.8"
         ]
       }
     }
