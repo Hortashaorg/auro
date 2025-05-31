@@ -12,7 +12,7 @@ export const executeAction = async (
     return { success: false, error: actionResult.error.message };
   }
 
-  const userResult = await validateUser(userId, actionResult);
+  const userResult = await validateUser(userId);
   if ("error" in userResult) {
     return { success: false, error: userResult.error.message };
   }
