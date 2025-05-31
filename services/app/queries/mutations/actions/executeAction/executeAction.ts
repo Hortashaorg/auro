@@ -7,14 +7,14 @@ export const executeAction = async (
   actionId: string,
   userId: string,
 ) => {
-  const userResult = await validateUser(userId);
-  if ("error" in userResult) {
-    return { success: false, error: userResult.error.message };
-  }
-
   const actionResult = await validateAction(actionId);
   if ("error" in actionResult) {
     return { success: false, error: actionResult.error.message };
+  }
+
+  const userResult = await validateUser(userId, actionResult);
+  if ("error" in userResult) {
+    return { success: false, error: userResult.error.message };
   }
 
   const executionResult = validateExecution(userResult, actionResult);

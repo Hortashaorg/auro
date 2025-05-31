@@ -6,33 +6,10 @@ export const validateAction = async (
   actionId: string,
 ): Promise<ModuleFailure | Action> => {
   try {
-    const actionData = await db.select()
+    const [action] = await db.select()
       .from(schema.action)
-      .leftJoin(
-        schema.actionResourceCost,
-        eq(schema.action.id, schema.actionResourceCost.actionId),
-      )
-      .leftJoin(
-        schema.actionResourceReward,
-        eq(schema.action.id, schema.actionResourceReward.actionId),
-      )
-      .leftJoin(
-        schema.actionItemReward,
-        eq(schema.action.id, schema.actionItemReward.actionId),
-      )
       .where(eq(schema.action.id, actionId));
 
-    if (actionData.length === 0) {
-      return {
-        error: {
-          code: ERROR_CODES.ACTION_NOT_FOUND,
-          message: "Action not found",
-          context: { actionId },
-        },
-      };
-    }
-
-    const action = actionData[0]?.action;
     if (!action) {
       return {
         error: {
@@ -43,17 +20,17 @@ export const validateAction = async (
       };
     }
 
-    const actionResourceCosts = actionData
-      .map((data) => data.action_resource_cost)
-      .filter((cost) => cost !== null);
+    const actionResourceCosts = await db.select()
+      .from(schema.actionResourceCost)
+      .where(eq(schema.actionResourceCost.actionId, actionId));
 
-    const actionResourceRewards = actionData
-      .map((data) => data.action_resource_reward)
-      .filter((reward) => reward !== null);
+    const actionResourceRewards = await db.select()
+      .from(schema.actionResourceReward)
+      .where(eq(schema.actionResourceReward.actionId, actionId));
 
-    const actionItemRewards = actionData
-      .map((data) => data.action_item_reward)
-      .filter((reward) => reward !== null);
+    const actionItemRewards = await db.select()
+      .from(schema.actionItemReward)
+      .where(eq(schema.actionItemReward.actionId, actionId));
 
     return {
       action,

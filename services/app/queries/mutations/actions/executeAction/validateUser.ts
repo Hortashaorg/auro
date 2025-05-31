@@ -1,21 +1,17 @@
-import { db, eq, schema } from "@package/database";
-import type { ModuleFailure, User } from "./types.ts";
+import { db, eq, inArray, schema } from "@package/database";
+import type { Action, ModuleFailure, User } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
-import { throwError } from "@package/common";
 
 export const validateUser = async (
   userId: string,
+  action: Action,
 ): Promise<ModuleFailure | User> => {
   try {
-    const userData = await db.select()
+    const [user] = await db.select()
       .from(schema.user)
-      .leftJoin(
-        schema.userResource,
-        eq(schema.user.id, schema.userResource.userId),
-      )
       .where(eq(schema.user.id, userId));
 
-    if (userData.length === 0) {
+    if (!user) {
       return {
         error: {
           code: ERROR_CODES.USER_NOT_FOUND,
@@ -24,8 +20,6 @@ export const validateUser = async (
         },
       };
     }
-
-    const user = userData[0]?.user ?? throwError("User should exist here");
 
     if (user.availableActions <= 0) {
       return {
@@ -37,10 +31,14 @@ export const validateUser = async (
       };
     }
 
-    const userResources = userData.map((data) => data.user_resource).filter(
-      (userResource) => userResource !== null,
-    );
-
+    const userResources = await db.select()
+      .from(schema.userResource)
+      .where(
+        inArray(
+          schema.userResource.resourceId,
+          action.actionResourceCosts.map((cost) => cost.resourceId),
+        ),
+      );
     return {
       user,
       userResources,
