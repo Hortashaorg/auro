@@ -1,6 +1,6 @@
 FROM debian:12.9-slim AS base
 
-WORKDIR /app
+WORKDIR /auro
 
 # Apt Update
 RUN apt-get update && \
