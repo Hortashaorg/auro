@@ -35,13 +35,6 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 RUN echo "Port 2222" >> /etc/ssh/sshd_config
 
-# Install Zed remote server
-RUN curl -L https://github.com/zed-industries/zed/releases/download/v0.188.5/zed-remote-server-linux-x86_64.gz -o zed-remote-server.gz && \
-    gunzip zed-remote-server.gz && \
-    chmod +x zed-remote-server && \
-    mv zed-remote-server /usr/local/bin/
-
-
 # Install Playwright
 RUN deno run --allow-all npm:playwright install --with-deps
 

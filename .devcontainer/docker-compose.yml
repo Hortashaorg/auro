@@ -6,9 +6,9 @@ services:
       target: local
     network_mode: host
     volumes:
-      - ./..:/app
+      - ./..:/auro
       - ~/.ssh:/root/.ssh
-    command: bash -c "mkdir -p /var/run/sshd && /usr/sbin/sshd && /usr/local/bin/zed-remote-server & sleep infinity"
+    command: bash -c "service ssh start && sleep infinity"
 
   postgres:
     image: postgres:16.3

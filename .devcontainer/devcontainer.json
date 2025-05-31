@@ -16,6 +16,6 @@
   },
   "dockerComposeFile": "./docker-compose.yml",
   "service": "local",
-  "workspaceFolder": "/app",
+  "workspaceFolder": "/auro",
   "postCreateCommand": "read -p 'Enter your git email: ' email && git config --global user.email \"$email\" && read -p 'Enter your git username: ' username && git config --global user.name \"$username\""
 }

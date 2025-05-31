@@ -33,5 +33,12 @@
     "use_new_terminal": true,
     "allow_concurrent_runs": true,
     "reveal": "always"
+  },
+  {
+    "label": "Clean SSH Keys",
+    "command": "ssh-keygen -R '[0.0.0.0]:2222'",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "never"
   }
 ]
