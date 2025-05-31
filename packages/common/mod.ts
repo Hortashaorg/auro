@@ -10,6 +10,5 @@ export const hashString = async (str: string): Promise<string> => {
   const data = encoder.encode(str);
 
   const buffer = await crypto.subtle.digest("SHA-256", data);
-
   return encodeHex(buffer);
 };

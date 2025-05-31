@@ -17,10 +17,7 @@
     "all:fmt": "deno run -A scripts/task.ts '@*/*' fmt",
     "framework:publish": "deno run -A scripts/task.ts '@kalena/framework' publish",
     "dev": {
-      "dependencies": [
-        "app:dev",
-        "app:tailwind"
-      ]
+      "dependencies": ["app:dev", "app:tailwind"]
     },
     "local:test": "doppler run --project auro --config local -- deno run test",
     "ci:test": "doppler run -- deno run test",
@@ -52,8 +49,8 @@
   },
   "imports": {
     "@playwright/test": "npm:@playwright/test@^1.52.0",
-    "@std/fs": "jsr:@std/fs@^1.0.17",
-    "@std/path": "jsr:@std/path@^1.0.9",
+    "@std/fs": "jsr:@std/fs@^1.0.18",
+    "@std/path": "jsr:@std/path@^1.1.0",
     "playwright": "npm:playwright@^1.52.0",
     "@base/": "./base/"
   }
