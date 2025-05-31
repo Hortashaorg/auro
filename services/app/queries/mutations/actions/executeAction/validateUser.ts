@@ -1,10 +1,9 @@
-import { and, db, eq, inArray, schema } from "@package/database";
-import type { Action, ModuleFailure, User } from "./types.ts";
+import { db, eq, schema } from "@package/database";
+import type { ModuleFailure, User } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
 
 export const validateUser = async (
   userId: string,
-  action: Action,
 ): Promise<ModuleFailure | User> => {
   try {
     const [user] = await db.select()
@@ -34,12 +33,7 @@ export const validateUser = async (
     const userResources = await db.select()
       .from(schema.userResource)
       .where(
-        and(
-          inArray(
-            schema.userResource.resourceId,
-            action.actionResourceCosts.map((cost) => cost.resourceId),
-          ),
-        ),
+        eq(schema.userResource.userId, userId),
       );
     return {
       user,
