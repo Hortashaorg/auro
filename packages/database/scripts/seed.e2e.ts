@@ -1,4 +1,4 @@
-import { catchConstraintByName, db, eq, queries, schema } from "@db/mod.ts";
+import { catchConstraintByName, queries, type schema } from "@db/mod.ts";
 import type { InferSelectModel } from "drizzle-orm";
 import { throwError } from "@package/common";
 
