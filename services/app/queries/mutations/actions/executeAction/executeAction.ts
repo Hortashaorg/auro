@@ -14,22 +14,22 @@ export const executeAction = async (
   } | ModuleFailure
 > => {
   const actionResult = await validateAction(actionId);
-  if ("error" in actionResult) {
+  if (!actionResult.success) {
     return actionResult;
   }
 
   const userResult = await validateUser(userId);
-  if ("error" in userResult) {
+  if (!userResult.success) {
     return userResult;
   }
 
   const executionResult = validateExecution(userResult, actionResult);
-  if ("error" in executionResult) {
+  if (!executionResult.success) {
     return executionResult;
   }
 
   const transactionResult = await executeTransaction(userResult, actionResult);
-  if (transactionResult.success) {
+  if (!transactionResult.success) {
     return transactionResult;
   }
 

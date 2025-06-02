@@ -4,7 +4,7 @@ import { ERROR_CODES } from "./types.ts";
 export const validateExecution = (
   user: User,
   action: Action,
-): ModuleFailure | { canExecute: true } => {
+): ModuleFailure | { success: true; canExecute: true } => {
   // Check if user has sufficient resources for all action costs
   for (const cost of action.actionResourceCosts) {
     const userResource = user.userResources.find(
@@ -31,5 +31,5 @@ export const validateExecution = (
     }
   }
 
-  return { canExecute: true };
+  return { success: true, canExecute: true };
 };

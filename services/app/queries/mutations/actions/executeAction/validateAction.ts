@@ -34,11 +34,12 @@ export const validateAction = async (
       .where(eq(schema.actionItemReward.actionId, actionId));
 
     return {
+      success: true,
       action,
       actionResourceCosts,
       actionResourceRewards,
       actionItemRewards,
-    };
+    } as const;
   } catch (error) {
     console.error("Error validating action:", error);
     return {

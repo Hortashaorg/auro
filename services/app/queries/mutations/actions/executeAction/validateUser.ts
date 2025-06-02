@@ -38,6 +38,7 @@ export const validateUser = async (
         eq(schema.userResource.userId, userId),
       );
     return {
+      success: true,
       user,
       userResources,
     };

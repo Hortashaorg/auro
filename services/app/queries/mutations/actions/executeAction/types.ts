@@ -10,11 +10,13 @@ export interface ModuleFailure {
 }
 
 export type User = {
+  success: true;
   user: InferSelectModel<typeof schema.user>;
   userResources: InferSelectModel<typeof schema.userResource>[];
 };
 
 export type Action = {
+  success: true;
   action: InferSelectModel<typeof schema.action>;
   actionResourceCosts: InferSelectModel<typeof schema.actionResourceCost>[];
   actionResourceRewards: InferSelectModel<typeof schema.actionResourceReward>[];
