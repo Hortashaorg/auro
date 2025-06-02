@@ -10,6 +10,7 @@ export type ActionResourceRewardUpdate = Partial<
 export const updateActionResourceRewards = async (
   updates: { id: string; updates: ActionResourceRewardUpdate }[],
 ) => {
+  console.log(updates)
   await db.transaction(async (tx) => {
     for (const { id, updates: updateFields } of updates) {
       await tx.update(schema.actionResourceReward)

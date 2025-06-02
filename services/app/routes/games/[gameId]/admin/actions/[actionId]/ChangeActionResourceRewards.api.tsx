@@ -111,6 +111,7 @@ const ChangeActionResourceRewards = async () => {
         quantityMax: entry.max,
       },
     }));
+
     if (updates.length > 0) {
       await updateActionResourceRewards(updates);
     }

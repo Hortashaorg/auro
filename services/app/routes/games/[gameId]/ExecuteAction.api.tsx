@@ -4,7 +4,7 @@ import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
-import { executeAction } from "@queries/mutations/actions/executeAction.ts";
+import { executeAction } from "@queries/mutations/actions/executeAction/executeAction.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -16,6 +16,7 @@ const ExecuteAction = async () => {
   const { user } = await executeActionRoute.customContext();
 
   const result = await executeAction(actionId, user.id);
+  console.log(result)
 
   if (!result.success) {
     context.header(

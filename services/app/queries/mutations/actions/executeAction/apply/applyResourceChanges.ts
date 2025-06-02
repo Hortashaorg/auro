@@ -32,7 +32,7 @@ export const applyResourceChanges = async (
     if (shouldGiveReward && rewardQuantity > 0) {
       resourceChanges.push({
         resourceId: reward.resourceId,
-        change: -rewardQuantity,
+        change: rewardQuantity,
       });
     }
   }
@@ -71,6 +71,8 @@ export const applyResourceChanges = async (
           quantity: netChange,
         });
     } else {
+      console.log(existingUserResource);
+      console.log(netChange);
       // This should not happen due to validation of validation steps.
       throwError(`Impossible`);
     }
