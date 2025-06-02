@@ -64,8 +64,29 @@ const CreateGame = async () => {
     return <GameGrid hx-swap-oob="true" />;
   } catch (error) {
     if (error instanceof PostgresError) {
+      console.log("Postgres Error");
       if (
         error.constraint_name === "unique_game_name"
+      ) {
+        // Unique constraint violation
+        context.header(
+          "HX-Trigger",
+          createEvents([
+            {
+              name: "form-error",
+              values: {
+                name: "A game with this name already exists",
+              },
+            },
+          ]),
+        );
+        return <p>Failure</p>;
+      }
+    }
+    if (error instanceof Error && error.cause instanceof PostgresError) {
+      console.log("Postgres Error");
+      if (
+        error.cause.constraint_name === "unique_game_name"
       ) {
         // Unique constraint violation
         context.header(

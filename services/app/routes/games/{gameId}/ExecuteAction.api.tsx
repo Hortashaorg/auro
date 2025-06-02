@@ -4,7 +4,7 @@ import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
 import { ActionsSection } from "./ActionsSection.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
-import { executeAction } from "@queries/mutations/actions/executeAction.ts";
+import { executeAction } from "@queries/mutations/actions/executeAction/executeAction.ts";
 
 const ExecuteAction = async () => {
   const context = executeActionRoute.context();
@@ -24,7 +24,7 @@ const ExecuteAction = async () => {
         {
           name: "toast-show",
           values: {
-            message: result.error || "Failed to execute action",
+            message: result.error.message || "Failed to execute action",
             title: "Action Failed",
             variant: "danger",
           },

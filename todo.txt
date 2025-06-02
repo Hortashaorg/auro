@@ -1,3 +1,7 @@
+Priority Next Steps:
+1. Refactor executeAction.ts - Break down the complex business logic into maintainable, testable functions
+2. Add location constraints - Players must be at action's location to execute it, plus starter location for games
+
 Administrator:
 - As administrator on a server, I can modify/delete actions available to players.
 - As administrator on a server, I can modify/delete locations.
@@ -7,7 +11,3 @@ Administrator:
 UI:
 - Loading states / Optimistic updates pattern
 - Component Testing
-
-Bugs:
-- Lost the counting.
-- Apperently refresh is happening on pretty much every request?
