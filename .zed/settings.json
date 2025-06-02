@@ -3,14 +3,8 @@
         "deno": {
             "settings": {
                 "deno": {
-                    "enable": true,
-                    "unstable": true
+                    "enable": true
                 }
-            }
-        },
-        "tailwindcss-language-server": {
-            "settings": {
-                "classFunctions": ["cva", "cx"]
             }
         }
     },
