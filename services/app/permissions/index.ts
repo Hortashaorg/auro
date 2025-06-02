@@ -1,6 +1,5 @@
 import type { GlobalContext } from "@kalena/framework";
-import { and, db, eq, schema } from "@package/database";
-import { throwError } from "@package/common";
+import { queries } from "@package/database";
 import { accountContext } from "@contexts/accountContext.ts";
 
 export const isPublic = (): boolean => {
@@ -19,51 +18,28 @@ export const isPlayerOfGame = async (c: GlobalContext): Promise<boolean> => {
     return false;
   }
 
-  const [data] = await db.select().from(schema.user).innerJoin(
-    schema.game,
-    eq(schema.user.gameId, schema.game.id),
-  ).innerJoin(
-    schema.account,
-    eq(schema.user.accountId, schema.account.id),
-  ).where(
-    and(
-      eq(schema.game.id, gameId),
-      eq(schema.account.email, email),
-    ),
-  );
+  const data = await queries.users.getUserByEmail(email, gameId);
 
   if (!data) {
-    const [gameData] = await db.select().from(schema.game).where(
-      eq(schema.game.id, gameId),
-    );
-
-    const game = gameData ?? throwError("Game not found");
+    const game = await queries.games.getGameById(gameId);
     if (!game.online) return false;
 
-    const [accountData] = await db.select().from(schema.account).where(
-      eq(schema.account.email, email),
+    const account = await queries.accounts.getAccountByEmail(email);
+
+    const starterLocation = await queries.locations.getStarterLocationByGameId(
+      game.id,
     );
 
-    const account = accountData ?? throwError("Account not found");
-
-    const locations = await db.select().from(schema.location).where(and(
-      eq(schema.location.gameId, game.id),
-      eq(schema.location.isStarterLocation, true),
-    ));
-
-    const starterLocation = locations[0] ??
-      throwError("There should be one starter location");
-
-    const [userData] = await db.insert(schema.user).values({
+    const user = await queries.users.setUser({
       gameId,
       type: "player",
       accountId: account.id,
       locationId: starterLocation.id,
       name: account.nickname,
       availableActions: game.startingAvailableActions,
-    }).returning();
+    });
 
-    return !!userData && game.id === gameId && game.online;
+    return !!user && game.id === gameId && game.online;
   }
 
   return !!data && data.game.id === gameId && data.game.online;
@@ -76,19 +52,7 @@ export const isAdminOfGame = async (c: GlobalContext): Promise<boolean> => {
   if (!gameId || !email) {
     return false;
   }
-
-  const [data] = await db.select().from(schema.user).innerJoin(
-    schema.game,
-    eq(schema.user.gameId, schema.game.id),
-  ).innerJoin(
-    schema.account,
-    eq(schema.user.accountId, schema.account.id),
-  ).where(
-    and(
-      eq(schema.game.id, gameId),
-      eq(schema.account.email, email),
-    ),
-  );
+  const data = await queries.users.getUserByEmail(email, gameId);
 
   return !!data && data.user.type === "admin" && data.game.id === gameId;
 };
