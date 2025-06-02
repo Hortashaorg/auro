@@ -1,57 +1,57 @@
 {
-  "name": "@monorepo/auro",
-  "exports": "./main.ts",
-  "workspace": [
-    "./packages/common",
-    "./packages/database",
-    "./packages/framework",
-    "./services/app"
-  ],
-  "nodeModulesDir": "auto",
-  "tasks": {
-    "typecheck": "deno check scripts",
-    "lint": "deno lint scripts",
-    "fmt": "deno fmt scripts",
-    "all:typecheck": "deno run -A scripts/task.ts '@*/*' typecheck",
-    "all:lint": "deno run -A scripts/task.ts '@*/*' lint",
-    "all:fmt": "deno run -A scripts/task.ts '@*/*' fmt",
-    "framework:publish": "deno run -A scripts/task.ts '@kalena/framework' publish",
-    "dev": {
-      "dependencies": ["app:dev", "app:tailwind"]
+    "name": "@monorepo/auro",
+    "exports": "./main.ts",
+    "workspace": [
+        "./packages/common",
+        "./packages/database",
+        "./packages/framework",
+        "./services/app"
+    ],
+    "nodeModulesDir": "auto",
+    "tasks": {
+        "typecheck": "deno check scripts",
+        "lint": "deno lint scripts",
+        "fmt": "deno fmt scripts",
+        "all:typecheck": "deno run -A scripts/task.ts '@*/*' typecheck",
+        "all:lint": "deno run -A scripts/task.ts '@*/*' lint",
+        "all:fmt": "deno run -A scripts/task.ts '@*/*' fmt",
+        "framework:publish": "deno run -A scripts/task.ts '@kalena/framework' publish",
+        "dev": {
+            "dependencies": ["app:dev", "app:tailwind"]
+        },
+        "local:test": "doppler run --project auro --config local -- deno run test",
+        "ci:test": "doppler run -- deno run test",
+        "check-specs": "deno run --allow-read scripts/check-specs.ts",
+        "test": "playwright test",
+        "test:codegen": "playwright codegen --target=javascript",
+        "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
+        "app:start": "deno run -A scripts/task.ts '@service/app' start",
+        "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
+        "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
+        "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
+        "db:seed": "deno run -A scripts/task.ts '@package/database' seed",
+        "db:seed:e2e": "deno run -A scripts/task.ts '@package/database' seed:e2e",
+        "comp:build": "deno run -A scripts/task.ts '@service/app' comp:build"
     },
-    "local:test": "doppler run --project auro --config local -- deno run test",
-    "ci:test": "doppler run -- deno run test",
-    "check-specs": "deno run --allow-read scripts/check-specs.ts",
-    "test": "playwright test",
-    "test:codegen": "playwright codegen --target=javascript",
-    "app:dev": "deno run -A scripts/task.ts '@service/app' dev",
-    "app:start": "deno run -A scripts/task.ts '@service/app' start",
-    "app:tailwind": "deno run -A scripts/task.ts '@service/app' tailwind",
-    "db:generate": "deno run -A scripts/task.ts '@package/database' generate",
-    "db:migrate": "deno run -A scripts/task.ts '@package/database' migrate",
-    "db:seed": "deno run -A scripts/task.ts '@package/database' seed",
-    "db:seed:e2e": "deno run -A scripts/task.ts '@package/database' seed:e2e",
-    "comp:build": "deno run -A scripts/task.ts '@service/app' comp:build"
-  },
-  "compilerOptions": {
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "noUncheckedIndexedAccess": true,
-    "jsx": "precompile",
-    "jsxImportSource": "jsr:@hono/hono@4.7.10/jsx"
-  },
-  "imports": {
-    "@playwright/test": "npm:@playwright/test@^1.52.0",
-    "@std/fs": "jsr:@std/fs@^1.0.18",
-    "@std/path": "jsr:@std/path@^1.1.0",
-    "playwright": "npm:playwright@^1.52.0",
-    "@base/": "./base/"
-  }
+    "compilerOptions": {
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "noUncheckedIndexedAccess": true,
+        "jsx": "precompile",
+        "jsxImportSource": "jsr:@hono/hono@4.7.11/jsx"
+    },
+    "imports": {
+        "@playwright/test": "npm:@playwright/test@^1.52.0",
+        "@std/fs": "jsr:@std/fs@^1.0.18",
+        "@std/path": "jsr:@std/path@^1.1.0",
+        "playwright": "npm:playwright@^1.52.0",
+        "@base/": "./base/"
+    }
 }

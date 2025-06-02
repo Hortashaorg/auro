@@ -2,6 +2,7 @@ import { db, schema } from "../mod.ts";
 import { asset } from "../db/schema.ts";
 import type { InferInsertModel } from "drizzle-orm";
 import { notInArray } from "drizzle-orm";
+import { patchLocation } from "./patch.ts";
 
 async function seedAssets() {
   const assets: InferInsertModel<typeof asset>[] = [
@@ -325,6 +326,7 @@ async function main() {
 
   await seedAssets();
   await setAdminUser();
+  await patchLocation();
   console.log("✨ Database seeding complete!");
   Deno.exit(0);
 }
