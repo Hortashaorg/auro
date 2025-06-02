@@ -40,16 +40,43 @@ const setupTestGame = async () => {
     throw new Error("Account or game not found");
   }
 
+  const locationAsset = await db.query.asset.findFirst({
+    where: eq(schema.asset.name, "Castle 1"),
+  });
+  if (!locationAsset) {
+    throw new Error("Asset not found");
+  }
+
+  let [location] = await db.insert(schema.location).values({
+    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
+    gameId: game.id,
+    assetId: locationAsset.id,
+    name: "Test Location",
+    description: "A location for e2e tests.",
+  }).returning().onConflictDoNothing();
+
+  if (!location) {
+    location = await db.query.location.findFirst({
+      where: eq(schema.location.name, "Test Location"),
+    });
+  }
+
+  if (!location) {
+    throw new Error("Location not found");
+  }
+
   let [admin, player] = await db.insert(schema.user).values([{
     accountId: adminAccount.id,
     gameId: game.id,
     type: "admin",
+    locationId: location.id,
     name: "testuseradmin",
     availableActions: 15,
   }, {
     accountId: playerAccount.id,
     gameId: game.id,
     type: "player",
+    locationId: location.id,
     name: "testuserplayer",
     availableActions: 15,
   }])
@@ -75,31 +102,6 @@ const setupTestGame = async () => {
 
   if (!admin || !player) {
     throw new Error("User not found");
-  }
-
-  const locationAsset = await db.query.asset.findFirst({
-    where: eq(schema.asset.name, "Castle 1"),
-  });
-  if (!locationAsset) {
-    throw new Error("Asset not found");
-  }
-
-  let [location] = await db.insert(schema.location).values({
-    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
-    gameId: game.id,
-    assetId: locationAsset.id,
-    name: "Test Location",
-    description: "A location for e2e tests.",
-  }).returning().onConflictDoNothing();
-
-  if (!location) {
-    location = await db.query.location.findFirst({
-      where: eq(schema.location.name, "Test Location"),
-    });
-  }
-
-  if (!location) {
-    throw new Error("Location not found");
   }
 
   const resourceAsset = await db.query.asset.findFirst({

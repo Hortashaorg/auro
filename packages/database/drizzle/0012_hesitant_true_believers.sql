@@ -1,0 +1,1 @@
+ALTER TABLE "user" ALTER COLUMN "location_id" SET NOT NULL;

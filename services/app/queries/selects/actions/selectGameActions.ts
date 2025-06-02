@@ -22,7 +22,6 @@ export const selectBaseGameActions = async (gameId: string) => {
  */
 export const selectUserGameActions = async (gameId: string, userId: string) => {
   const actions = await selectBaseGameActions(gameId);
-
   const costs = await db.select()
     .from(schema.actionResourceCost)
     .innerJoin(

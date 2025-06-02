@@ -1,5 +1,5 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, PostgresError, schema } from "@package/database";
+import { db, eq, PostgresError, schema } from "@package/database";
 import { GameGrid } from "./GameGrid.section.tsx";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
@@ -35,18 +35,38 @@ const CreateGame = async () => {
 
   try {
     await db.transaction(async (tx) => {
-      const [game] = await tx.insert(schema.game)
+      const games = await tx.insert(schema.game)
         .values({
           name: result.output.name,
           actionRecoveryInterval: result.output.action_recovery_interval,
         })
         .returning();
 
+      const game = games[0] ?? throwError("Just created the Game");
+
+      const assets = await tx.select().from(schema.asset).where(
+        eq(schema.asset.name, "Village 2"),
+      );
+
+      const asset = assets[0] ??
+        throwError("asset with name of Village 2 should exist");
+
+      const locations = await tx.insert(schema.location)
+        .values({
+          isStarterLocation: true,
+          gameId: game.id,
+          assetId: asset.id,
+          name: "Starter Location",
+        }).returning();
+
+      const location = locations[0] ?? throwError("Location was just created");
+
       await tx.insert(schema.user)
         .values({
           accountId: account?.id ??
             throwError("No account found"),
-          gameId: game?.id ?? throwError("No game id"),
+          gameId: game.id,
+          locationId: location.id,
           availableActions: 15,
           name: account?.nickname,
           type: "admin",
