@@ -29,6 +29,7 @@ const UpdateAccountNickname = async () => {
     await queries.accounts.setAccount({
       id: account.id,
       nickname: result.output.nickname,
+      canCreateGame: account.canCreateGame,
       email: account.email,
     });
 
