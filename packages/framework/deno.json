@@ -4,7 +4,7 @@
   "license": "MIT",
   "exports": "./mod.ts",
   "imports": {
-    "@hono/hono": "jsr:@hono/hono@4.7.10",
+    "@hono/hono": "jsr:@hono/hono@4.7.11",
     "@opentelemetry/api": "npm:@opentelemetry/api@1.9.0",
     "@valibot/valibot": "jsr:@valibot/valibot@1.1.0"
   },

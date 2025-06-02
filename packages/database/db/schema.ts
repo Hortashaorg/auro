@@ -132,6 +132,7 @@ export const user = pgTable(
     gameId: uuid().references(() => game.id).notNull(),
     name: varchar({ length: 50 }),
     availableActions: integer().notNull(),
+    locationId: uuid().references(() => location.id),
     type: userType().notNull().default("player"),
     createdAt: temporalTimestamp().notNull().default(sql`now()`),
     updatedAt: temporalTimestamp().notNull().default(sql`now()`),
