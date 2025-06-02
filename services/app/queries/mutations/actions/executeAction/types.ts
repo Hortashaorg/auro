@@ -1,6 +1,7 @@
 import type { db, InferSelectModel, schema } from "@package/database";
 
 export interface ModuleFailure {
+  success: false;
   error: {
     code: string;
     message: string;

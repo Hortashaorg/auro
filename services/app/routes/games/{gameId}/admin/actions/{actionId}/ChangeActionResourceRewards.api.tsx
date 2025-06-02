@@ -101,6 +101,7 @@ const ChangeActionResourceRewards = async () => {
     );
     return <p>Invalid form data</p>;
   }
+  console.log(parsedResult);
 
   try {
     const updates = parsedResult.map((entry) => ({
@@ -113,7 +114,7 @@ const ChangeActionResourceRewards = async () => {
     }));
 
     if (updates.length > 0) {
-      await updateActionResourceRewards(updates);
+      await updateActionResourceRewards(updates, actionId);
     }
 
     // Trigger events to update the UI using the correct format

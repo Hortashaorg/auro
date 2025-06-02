@@ -16,7 +16,6 @@ const ExecuteAction = async () => {
   const { user } = await executeActionRoute.customContext();
 
   const result = await executeAction(actionId, user.id);
-  console.log(result)
 
   if (!result.success) {
     context.header(
@@ -25,7 +24,7 @@ const ExecuteAction = async () => {
         {
           name: "toast-show",
           values: {
-            message: result.error || "Failed to execute action",
+            message: result.error.message || "Failed to execute action",
             title: "Action Failed",
             variant: "danger",
           },

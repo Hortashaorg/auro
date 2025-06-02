@@ -12,6 +12,7 @@ export const validateUser = async (
 
     if (!user) {
       return {
+        success: false,
         error: {
           code: ERROR_CODES.USER_NOT_FOUND,
           message: "User not found",
@@ -22,6 +23,7 @@ export const validateUser = async (
 
     if (user.availableActions <= 0) {
       return {
+        success: false,
         error: {
           code: ERROR_CODES.NO_ACTIONS_LEFT,
           message: "No actions left",
@@ -42,6 +44,7 @@ export const validateUser = async (
   } catch (error) {
     console.error("Error validating user:", error);
     return {
+      success: false,
       error: {
         code: ERROR_CODES.DATABASE_ERROR,
         message: "Failed to validate user",

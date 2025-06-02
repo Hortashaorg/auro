@@ -26,13 +26,17 @@ export const executeTransaction = async (
         ...itemsResult,
       };
 
-      return result;
+      return {
+        success: true,
+        result,
+      } as const;
     });
 
     return result;
   } catch (error) {
     console.error("Error executing action transaction:", error);
     return {
+      success: false,
       error: {
         code: ERROR_CODES.DATABASE_ERROR,
         message: "Failed to execute action",
@@ -42,6 +46,6 @@ export const executeTransaction = async (
           originalError: error instanceof Error ? error.message : String(error),
         },
       },
-    };
+    } as const;
   }
 };

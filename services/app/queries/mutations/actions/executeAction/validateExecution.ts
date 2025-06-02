@@ -15,6 +15,7 @@ export const validateExecution = (
 
     if (userQuantity < cost.quantity) {
       return {
+        success: false,
         error: {
           code: ERROR_CODES.INSUFFICIENT_RESOURCES,
           message: "Insufficient resources to execute action",

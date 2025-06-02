@@ -12,6 +12,7 @@ export const validateAction = async (
 
     if (!action) {
       return {
+        success: false,
         error: {
           code: ERROR_CODES.ACTION_NOT_FOUND,
           message: "Action not found",
@@ -41,6 +42,7 @@ export const validateAction = async (
   } catch (error) {
     console.error("Error validating action:", error);
     return {
+      success: false,
       error: {
         code: ERROR_CODES.DATABASE_ERROR,
         message: "Failed to validate action",
