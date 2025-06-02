@@ -46,10 +46,19 @@ export const isPlayerOfGame = async (c: GlobalContext): Promise<boolean> => {
 
     const account = accountData ?? throwError("Account not found");
 
+    const locations = await db.select().from(schema.location).where(and(
+      eq(schema.location.gameId, game.id),
+      eq(schema.location.isStarterLocation, true),
+    ));
+
+    const starterLocation = locations[0] ??
+      throwError("There should be one starter location");
+
     const [userData] = await db.insert(schema.user).values({
       gameId,
       type: "player",
       accountId: account.id,
+      locationId: starterLocation.id,
       name: account.nickname,
       availableActions: game.startingAvailableActions,
     }).returning();

@@ -1,0 +1,1 @@
+ALTER TABLE "location" ADD COLUMN "is_starter_location" boolean DEFAULT false NOT NULL;
