@@ -76,8 +76,7 @@ const setupTestGame = async () => {
 
   const resourceAsset = await queries.assets.getAssetByName("Gold 1");
 
-  // Continue here
-  let [resource1, resource2] = await db.insert(schema.resource).values([{
+  const resources = await queries.resources.setResources([{
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     gameId: game.id,
     assetId: resourceAsset.id,
@@ -91,70 +90,32 @@ const setupTestGame = async () => {
     name: "Test Resource 2",
     description: "A resource for e2e tests.",
     leaderboard: true,
-  }]).returning().onConflictDoNothing();
+  }]);
 
-  if (!resource1) {
-    resource1 = await db.query.resource.findFirst({
-      where: eq(schema.resource.name, "Test Resource"),
-    });
-  }
+  const resource1 = resources[0] ?? throwError("Resource should exist");
+  const resource2 = resources[1] ?? throwError("Resource should exist");
 
-  if (!resource2) {
-    resource2 = await db.query.resource.findFirst({
-      where: eq(schema.resource.name, "Test Resource 2"),
-    });
-  }
+  const actionAsset = await queries.assets.getAssetByName("Fishing 2");
 
-  if (!resource1 || !resource2) {
-    throw new Error("Resource not found");
-  }
-
-  const actionAsset = await db.query.asset.findFirst({
-    where: eq(schema.asset.name, "Fishing 2"),
-  });
-  if (!actionAsset) {
-    throw new Error("Asset not found");
-  }
-
-  let [action] = await db.insert(schema.action).values({
+  const action = await queries.actions.setAction({
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     gameId: game.id,
     name: "Populated Test Action",
     description: "A action for e2e tests.",
     assetId: actionAsset.id,
     locationId: location.id,
-  }).returning().onConflictDoNothing();
+  });
 
-  if (!action) {
-    action = await db.query.action.findFirst({
-      where: eq(schema.action.name, "Populated Test Action"),
-    });
-  }
-
-  if (!action) {
-    throw new Error("Action not found");
-  }
-
-  let [actionReward] = await db.insert(schema.actionResourceReward).values({
+  await queries.actions.setActionResourceReward({
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     actionId: action.id,
     resourceId: resource2.id,
     chance: 100,
     quantityMax: 1,
     quantityMin: 1,
-  }).returning().onConflictDoNothing();
+  });
 
-  if (!actionReward) {
-    actionReward = await db.query.actionResourceReward.findFirst({
-      where: eq(schema.actionResourceReward.actionId, action.id),
-    });
-  }
-
-  if (!actionReward) {
-    throw new Error("Action reward not found");
-  }
-
-  await db.insert(schema.userResource).values([{
+  await queries.users.setUserResources([{
     userId: player.id,
     resourceId: resource1.id,
     quantity: 100,
@@ -162,15 +123,12 @@ const setupTestGame = async () => {
     userId: player.id,
     resourceId: resource2.id,
     quantity: 100,
-  }]).onConflictDoNothing();
+  }]);
 
-  // --- Seed an action log entry for the player ---
-  await db.insert(schema.actionLog).values({
-    id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
+  await queries.actions.insertActionLog({
     gameId: game.id,
     userId: player.id,
     actionId: action.id,
-    version: 1,
     data: {
       resource: [
         {
@@ -186,7 +144,7 @@ const setupTestGame = async () => {
       ],
     },
     executedAt: Temporal.Now.instant(),
-  }).onConflictDoNothing();
+  });
 };
 
 async function main() {
