@@ -1,7 +1,9 @@
-import { db, eq, schema, sql } from "../mod.ts";
+import { catchConstraintByName, db, eq, queries, schema } from "@db/mod.ts";
+import type { InferSelectModel } from "drizzle-orm";
+import { throwError } from "@package/common";
 
-const setAdminUser = async () => {
-  await db.insert(schema.account).values([{
+const setAccounts = async () => {
+  await queries.accounts.setAccounts([{
     email: "testuseradmin@kalena.site",
     nickname: "testuseradmin",
     canCreateGame: true,
@@ -9,108 +11,72 @@ const setAdminUser = async () => {
     email: "testuserplayer@kalena.site",
     nickname: "testuserplayer",
     canCreateGame: false,
-  }]).onConflictDoNothing();
+  }]);
 };
 
 const setupTestGame = async () => {
-  let [game] = await db.insert(schema.game).values({
+  const game = await queries.games.setGame({
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     actionRecoveryInterval: "15min",
     name: "Populated Test Game",
     online: true,
-  })
-    .returning()
-    .onConflictDoNothing();
-
-  if (!game) {
-    game = await db.query.game.findFirst({
-      where: eq(schema.game.name, "Populated Test Game"),
-    });
-  }
-
-  const adminAccount = await db.query.account.findFirst({
-    where: eq(schema.account.email, "testuseradmin@kalena.site"),
   });
 
-  const playerAccount = await db.query.account.findFirst({
-    where: eq(schema.account.email, "testuserplayer@kalena.site"),
-  });
+  const adminAccount = await queries.accounts.getAccountByEmail(
+    "testuseradmin@kalena.site",
+  );
 
-  if (!adminAccount || !playerAccount || !game) {
-    throw new Error("Account or game not found");
-  }
+  const playerAccount = await queries.accounts.getAccountByEmail(
+    "testuserplayer@kalena.site",
+  );
 
-  const locationAsset = await db.query.asset.findFirst({
-    where: eq(schema.asset.name, "Castle 1"),
-  });
-  if (!locationAsset) {
-    throw new Error("Asset not found");
-  }
+  const locationAsset = await queries.assets.getAssetByName("Castle 1");
 
-  let [location] = await db.insert(schema.location).values({
+  const location = await queries.locations.setLocation({
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     gameId: game.id,
     assetId: locationAsset.id,
     name: "Test Location",
     description: "A location for e2e tests.",
-  }).returning().onConflictDoNothing();
-
-  if (!location) {
-    location = await db.query.location.findFirst({
-      where: eq(schema.location.name, "Test Location"),
-    });
-  }
-
-  if (!location) {
-    throw new Error("Location not found");
-  }
-
-  let [admin, player] = await db.insert(schema.user).values([{
-    accountId: adminAccount.id,
-    gameId: game.id,
-    type: "admin",
-    locationId: location.id,
-    name: "testuseradmin",
-    availableActions: 15,
-  }, {
-    accountId: playerAccount.id,
-    gameId: game.id,
-    type: "player",
-    locationId: location.id,
-    name: "testuserplayer",
-    availableActions: 15,
-  }])
-    .returning()
-    .onConflictDoUpdate({
-      target: [schema.user.accountId, schema.user.gameId],
-      set: {
-        name: sql`excluded.name`,
-      },
-    });
-
-  if (!admin) {
-    admin = await db.query.user.findFirst({
-      where: eq(schema.user.accountId, adminAccount.id),
-    });
-  }
-
-  if (!player) {
-    player = await db.query.user.findFirst({
-      where: eq(schema.user.accountId, playerAccount.id),
-    });
-  }
-
-  if (!admin || !player) {
-    throw new Error("User not found");
-  }
-
-  const resourceAsset = await db.query.asset.findFirst({
-    where: eq(schema.asset.name, "Gold 1"),
   });
-  if (!resourceAsset) {
-    throw new Error("Asset not found");
+
+  let admin: InferSelectModel<typeof schema.user> | undefined;
+  let player: InferSelectModel<typeof schema.user> | undefined;
+  try {
+    const users = await queries.users.setUsers([{
+      accountId: adminAccount.id,
+      gameId: game.id,
+      type: "admin",
+      locationId: location.id,
+      name: "testuseradmin",
+      availableActions: 15,
+    }, {
+      accountId: playerAccount.id,
+      gameId: game.id,
+      type: "player",
+      locationId: location.id,
+      name: "testuserplayer",
+      availableActions: 15,
+    }]);
+
+    admin = users[0] ?? throwError("Admin user not found");
+    player = users[1] ?? throwError("Player user not found");
+  } catch (error) {
+    if (catchConstraintByName(error, "unique_user_name_per_game")) {
+      console.log("Users already exist");
+      admin = await queries.users.getUserByName("testuseradmin", game.id);
+      player = await queries.users.getUserByName("testuserplayer", game.id);
+    } else {
+      throw error;
+    }
   }
 
+  console.log("Admin user with ID:", admin.id);
+  console.log("Player user with ID:", player.id);
+
+  const resourceAsset = await queries.assets.getAssetByName("Gold 1");
+
+  // Continue here
   let [resource1, resource2] = await db.insert(schema.resource).values([{
     id: "5bbcb026-e240-48d8-b66d-7105df74cf9f",
     gameId: game.id,
@@ -225,7 +191,7 @@ const setupTestGame = async () => {
 
 async function main() {
   console.log("🌱 Starting database seed for e2e tests...");
-  await setAdminUser();
+  await setAccounts();
   await setupTestGame();
   console.log("✨ Database seeding complete!");
   Deno.exit(0);

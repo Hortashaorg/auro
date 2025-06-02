@@ -26,3 +26,7 @@ export {
 export type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 export const PostgresError = pg.PostgresError;
+
+export type { Transaction } from "./queries/types.ts";
+export { catchConstraintByName } from "./queries/utils.ts";
+export * as queries from "./queries/index.ts";
