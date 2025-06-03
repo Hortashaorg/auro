@@ -4,12 +4,12 @@ import { ResourceLeaderboard } from "./ResourceLeaderboard.section.tsx";
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
 import { Layout } from "@layout/Layout.tsx";
-import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
+import { queries } from "@package/database";
 
 const LeaderboardPage = async () => {
   const context = leaderboardRoute.context();
   const gameId = context.req.param("gameId");
-  const resources = await selectResourcesByGameId(gameId);
+  const resources = await queries.resources.getResourcesByGameId(gameId);
   const resourcesWithLeaderboard = resources.filter(
     (resource) => resource.resource.leaderboard,
   );

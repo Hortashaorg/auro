@@ -7,16 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
-import { selectUserResourcesByResourceId } from "@queries/selects/resources/selectUserResourcesByResourceId.ts";
-import { selectResourceById } from "@queries/selects/resources/selectResourceById.ts";
+import { queries } from "@package/database";
 
 type Props = {
   resourceId: string;
 };
 
 export const ResourceLeaderboard = async ({ resourceId, ...props }: Props) => {
-  const leaderboard = await selectUserResourcesByResourceId(resourceId);
-  const resource = await selectResourceById(resourceId);
+  const leaderboard = await queries.resources.getUserResourcesByResourceId(
+    resourceId,
+  );
+  const resource = await queries.resources.getResourceById(resourceId);
   const firstEntry = leaderboard[0];
 
   if (!firstEntry) {
