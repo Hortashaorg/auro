@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
-import { selectResourceCostsByActionId } from "@queries/selects/actions/selectResourceCostsByActionId.ts";
+import { queries } from "@package/database";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
 import { ModalButton } from "@comp/molecules/modal/index.ts";
 import { Modal } from "@comp/molecules/modal/index.ts";
@@ -23,7 +23,9 @@ export const ModifyResourceCostOfActionForm: FC<Props> = async (
   const gameId = globalContext.req.param("gameId");
   const actionId = globalContext.req.param("actionId");
 
-  const resourceCosts = await selectResourceCostsByActionId(actionId);
+  const resourceCosts = await queries.actions.getResourceCostsByActionId(
+    actionId,
+  );
 
   return (
     <>

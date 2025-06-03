@@ -1,4 +1,5 @@
 import { isPlayerOfGame } from "@permissions/index.ts";
+import { queries } from "@package/database";
 import { createRoute } from "@kalena/framework";
 import { Layout } from "@layout/Layout.tsx";
 import { Badge, Icon, Text, Title } from "@comp/atoms/typography/index.ts";
@@ -13,8 +14,6 @@ import {
 } from "@comp/atoms/table/index.ts";
 import { throwError } from "@package/common";
 import { userContext } from "@contexts/userContext.ts";
-import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
-import { selectActionLogsByUserId } from "@queries/selects/actions/selectActionLogsByUserId.ts";
 
 const calculateDuration = (executedAt: Temporal.Instant) => {
   const duration = executedAt.until(
@@ -47,9 +46,8 @@ const calculateDuration = (executedAt: Temporal.Instant) => {
 const ActionLog = async () => {
   const { user, game } = await actionLogRoute.customContext();
 
-  const actionLogsData = await selectActionLogsByUserId(user.id);
-
-  const resources = await selectResourcesByGameId(game.id);
+  const actionLogsData = await queries.actions.getActionLogsByUserId(user.id);
+  const resources = await queries.resources.getResourcesByGameId(game.id);
 
   return (
     <Layout title="Action Log">

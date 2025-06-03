@@ -2,8 +2,7 @@ import { isAdminOfGame } from "@permissions/index.ts";
 import { createRoute, v } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
-import { PostgresError } from "@package/database";
-import { createActionResourceReward } from "@queries/mutations/actions/createActionResourceReward.ts";
+import { catchConstraintByName, queries } from "@package/database";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
 
 const AddActionResourceRewards = async () => {
@@ -33,7 +32,7 @@ const AddActionResourceRewards = async () => {
   const actionId = context.req.param("actionId");
 
   try {
-    await createActionResourceReward({
+    await queries.actions.setActionResourceReward({
       actionId,
       resourceId: result.output.resourceId,
       quantityMin: 1,
@@ -59,17 +58,15 @@ const AddActionResourceRewards = async () => {
 
     return <ModifyResourceOfActionForm hx-swap-oob="true" />;
   } catch (error) {
-    if (error instanceof PostgresError) {
-      if (error.constraint_name === "unique_action_resource_reward") {
-        context.header(
-          "HX-Trigger",
-          createEvents([{
-            name: "form-error",
-            values: { resourceId: "Resource already exist on action" },
-          }]),
-        );
-        return <p>Failed to add resource reward</p>;
-      }
+    if (catchConstraintByName(error, "unique_action_resource_reward")) {
+      context.header(
+        "HX-Trigger",
+        createEvents([{
+          name: "form-error",
+          values: { resourceId: "Resource already exist on action" },
+        }]),
+      );
+      return <p>Failed to add resource reward</p>;
     }
     throw error;
   }

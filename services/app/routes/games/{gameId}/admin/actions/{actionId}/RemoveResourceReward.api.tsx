@@ -1,7 +1,7 @@
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createRoute } from "@kalena/framework";
 import { createEvents } from "@comp/utils/events.ts";
-import { db, eq, schema } from "@package/database";
+import { queries } from "@package/database";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
 
 const RemoveResourceReward = async () => {
@@ -9,8 +9,7 @@ const RemoveResourceReward = async () => {
   const rewardId = context.req.param("rewardId");
 
   try {
-    await db.delete(schema.actionResourceReward)
-      .where(eq(schema.actionResourceReward.id, rewardId));
+    await queries.actions.deleteActionResourceRewardById(rewardId);
 
     context.header(
       "HX-Trigger",

@@ -2,8 +2,8 @@ import { createRoute, v } from "@kalena/framework";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
+import { queries } from "@package/database";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
-import { updateActionResourceRewards } from "@queries/mutations/actions/upsertActionResourceRewards.ts";
 
 const ChangeActionResourceRewards = async () => {
   const context = changeActionResourceRewardsRoute.context();
@@ -101,20 +101,18 @@ const ChangeActionResourceRewards = async () => {
     );
     return <p>Invalid form data</p>;
   }
-  console.log(parsedResult);
 
   try {
     const updates = parsedResult.map((entry) => ({
-      id: entry.id,
-      updates: {
-        chance: entry.chance,
-        quantityMin: entry.min,
-        quantityMax: entry.max,
-      },
+      actionId: actionId,
+      resourceId: entry.id,
+      chance: entry.chance,
+      quantityMin: entry.min,
+      quantityMax: entry.max,
     }));
 
     if (updates.length > 0) {
-      await updateActionResourceRewards(updates, actionId);
+      await queries.actions.setActionResourceRewards(updates);
     }
 
     // Trigger events to update the UI using the correct format
