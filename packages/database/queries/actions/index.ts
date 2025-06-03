@@ -8,3 +8,4 @@ export * from "./getActionResourceCostsByActionId.ts";
 export * from "./getActionResourceRewardsByActionId.ts";
 export * from "./deleteActionResourceCostById.ts";
 export * from "./deleteActionResourceRewardById.ts";
+export * from "./getActionsByGameId.ts";

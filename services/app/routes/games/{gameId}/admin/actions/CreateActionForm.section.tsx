@@ -10,8 +10,7 @@ import { Button } from "@comp/atoms/buttons/index.ts";
 import { ImageGridInput } from "@comp/molecules/form/index.ts";
 import type { FC } from "@kalena/framework";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
-import { selectActionAssets } from "@queries/selects/assets/selectActionAssets.ts";
-import { selectLocationsByGameId } from "@queries/selects/locations/selectLocationsByGameId.ts";
+import { queries } from "@package/database";
 
 type Props = {
   gameId: string;
@@ -20,8 +19,8 @@ type Props = {
 export const CreateActionForm: FC<Props> = async (
   { gameId, ...props },
 ) => {
-  const assets = await selectActionAssets();
-  const locations = await selectLocationsByGameId(gameId);
+  const assets = await queries.assets.getAssetsByType("action");
+  const locations = await queries.locations.getLocationsByGameId(gameId);
 
   return (
     <Form
