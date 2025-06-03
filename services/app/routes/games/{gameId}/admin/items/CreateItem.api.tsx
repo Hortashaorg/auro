@@ -1,11 +1,10 @@
 import { createRoute, v } from "@kalena/framework";
-import { PostgresError } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { ItemGrid } from "./ItemGrid.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
-import { createItem } from "@queries/mutations/items/createItem.ts";
+import { catchConstraintByName, queries } from "@package/database";
 
 const CreateItem = async () => {
   const context = createItemRoute.context();
@@ -37,7 +36,7 @@ const CreateItem = async () => {
   const gameId = user.gameId;
 
   try {
-    await createItem({
+    await queries.items.setItem({
       name: result.output.name,
       description: result.output.description,
       gameId,
@@ -56,24 +55,22 @@ const CreateItem = async () => {
 
     return <ItemGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
-    if (error instanceof PostgresError) {
-      if (
-        error.constraint_name === "unique_item_name_per_game"
-      ) {
-        // Unique constraint violation
-        context.header(
-          "HX-Trigger",
-          createEvents([
-            {
-              name: "form-error",
-              values: {
-                name: "An item with this name already exists on this game",
-              },
+    if (
+      catchConstraintByName(error, "unique_item_name_per_game")
+    ) {
+      // Unique constraint violation
+      context.header(
+        "HX-Trigger",
+        createEvents([
+          {
+            name: "form-error",
+            values: {
+              name: "An item with this name already exists on this game",
             },
-          ]),
-        );
-        return <p>Failure</p>;
-      }
+          },
+        ]),
+      );
+      return <p>Failure</p>;
     }
     throw error;
   }

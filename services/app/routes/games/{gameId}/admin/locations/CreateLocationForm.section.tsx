@@ -2,10 +2,10 @@ import { FormControl } from "@comp/molecules/form/index.ts";
 import { Form, Input, Label, Textarea } from "@comp/atoms/form/index.ts";
 import { ImageGridInput } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
-import { selectLocationAssets } from "@queries/selects/assets/selectLocationAssets.ts";
+import { queries } from "@package/database";
 
 export const CreateLocationForm = async ({ gameId }: { gameId: string }) => {
-  const assets = await selectLocationAssets();
+  const assets = await queries.assets.getAssetsByType("location");
 
   return (
     <Form
