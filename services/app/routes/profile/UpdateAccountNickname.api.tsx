@@ -26,11 +26,8 @@ const UpdateAccountNickname = async () => {
   try {
     const account = await updateAccountNicknameRoute.customContext();
 
-    await queries.accounts.setAccount({
-      id: account.id,
+    await queries.accounts.updateAccount(account.id, {
       nickname: result.output.nickname,
-      canCreateGame: account.canCreateGame,
-      email: account.email,
     });
 
     context.header(
