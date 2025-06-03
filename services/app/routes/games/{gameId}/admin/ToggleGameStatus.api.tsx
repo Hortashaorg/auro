@@ -1,38 +1,20 @@
 import { createRoute } from "@kalena/framework";
-import { db, schema } from "@package/database";
-import { eq } from "@package/database";
-import { throwError } from "@package/common";
+import { queries } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { GameStatusCard } from "./GameStatusCard.section.tsx";
 
-/**
- * API endpoint to toggle a game's online status
- * Only administrators can toggle game status
- */
 const ToggleGameStatus = async () => {
   const context = toggleGameStatusRoute.context();
   const gameId = context.req.param("gameId");
 
-  // Get current game status
-  const game = await db.query.game.findFirst({
-    where: eq(schema.game.id, gameId),
-    columns: {
-      id: true,
-      online: true,
-    },
-  }) ?? throwError("Game not found");
+  const game = await queries.games.getGameById(gameId);
 
-  // Toggle the status
-  const updatedGame = await db
-    .update(schema.game)
-    .set({ online: !game.online })
-    .where(eq(schema.game.id, gameId))
-    .returning();
+  const updatedGame = await queries.games.setGame({
+    ...game,
+    online: !game.online,
+  });
 
-  const gameData = updatedGame[0] ??
-    throwError("Failed to update game status");
-
-  return <GameStatusCard game={gameData} />;
+  return <GameStatusCard game={updatedGame} />;
 };
 
 export const toggleGameStatusRoute = createRoute({
