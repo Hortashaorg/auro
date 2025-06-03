@@ -48,7 +48,7 @@ export const setAssets = async (data: SetAssetData[], tx?: Transaction) => {
         .insert(schema.asset)
         .values(data)
         .onConflictDoUpdate({
-          target: [schema.asset.name],
+          target: [schema.asset.url],
           set: {
             name: sql`excluded.name`,
             type: sql`excluded.type`,
