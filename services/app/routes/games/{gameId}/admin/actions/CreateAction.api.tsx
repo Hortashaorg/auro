@@ -1,5 +1,5 @@
 import { createRoute, v } from "@kalena/framework";
-import { catchConstraintByName, queries } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
@@ -57,7 +57,7 @@ const CreateAction = async () => {
     return <ActionGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
     if (
-      catchConstraintByName(error, "unique_action_name_per_game")
+      errorCausedByConstraint(error, "unique_action_name_per_game")
     ) {
       context.header(
         "HX-Trigger",

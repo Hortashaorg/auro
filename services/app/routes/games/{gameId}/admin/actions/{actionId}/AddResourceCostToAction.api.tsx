@@ -1,7 +1,7 @@
 import { createRoute, v } from "@kalena/framework";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
-import { catchConstraintByName, queries } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
 
 const AddResourceCostToAction = async () => {
@@ -37,7 +37,7 @@ const AddResourceCostToAction = async () => {
 
     return <ModifyResourceCostOfActionForm hx-swap-oob="true" />;
   } catch (error) {
-    if (catchConstraintByName(error, "unique_action_resource_cost")) {
+    if (errorCausedByConstraint(error, "unique_action_resource_cost")) {
       context.header(
         "HX-Trigger",
         createEvents([{

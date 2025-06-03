@@ -1,5 +1,5 @@
 import { createRoute, v } from "@kalena/framework";
-import { catchConstraintByName, queries } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
@@ -53,7 +53,7 @@ const CreateLocation = async () => {
 
     return <LocationGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
-    if (catchConstraintByName(error, "unique_location_name_per_game")) {
+    if (errorCausedByConstraint(error, "unique_location_name_per_game")) {
       // Unique constraint violation
       context.header(
         "HX-Trigger",

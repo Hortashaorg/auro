@@ -1,6 +1,6 @@
 import { type InferInsertModel, sql } from "drizzle-orm";
 import {
-  catchConstraintByName,
+  errorCausedByConstraint,
   db,
   schema,
   type Transaction,
@@ -30,7 +30,7 @@ export const setAccounts = async (data: SetAccountData[], tx?: Transaction) => {
       })
       .returning();
   } catch (error) {
-    if (catchConstraintByName(error, "account_email_unique")) {
+    if (errorCausedByConstraint(error, "account_email_unique")) {
       return await transaction
         .insert(schema.account)
         .values(data)

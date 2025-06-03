@@ -4,7 +4,7 @@ import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { ItemGrid } from "./ItemGrid.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
-import { catchConstraintByName, queries } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 
 const CreateItem = async () => {
   const context = createItemRoute.context();
@@ -56,7 +56,7 @@ const CreateItem = async () => {
     return <ItemGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
     if (
-      catchConstraintByName(error, "unique_item_name_per_game")
+      errorCausedByConstraint(error, "unique_item_name_per_game")
     ) {
       // Unique constraint violation
       context.header(

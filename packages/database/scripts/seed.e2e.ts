@@ -1,4 +1,4 @@
-import { catchConstraintByName, queries, type schema } from "@db/mod.ts";
+import { errorCausedByConstraint, queries, type schema } from "@db/mod.ts";
 import type { InferSelectModel } from "drizzle-orm";
 import { throwError } from "@package/common";
 
@@ -62,7 +62,7 @@ const setupTestGame = async () => {
     admin = users[0] ?? throwError("Admin user not found");
     player = users[1] ?? throwError("Player user not found");
   } catch (error) {
-    if (catchConstraintByName(error, "unique_user_name_per_game")) {
+    if (errorCausedByConstraint(error, "unique_user_name_per_game")) {
       console.log("Users already exist");
       admin = await queries.users.getUserByName("testuseradmin", game.id);
       player = await queries.users.getUserByName("testuserplayer", game.id);

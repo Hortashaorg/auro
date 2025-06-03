@@ -1,6 +1,6 @@
 import { PostgresError } from "@db/mod.ts";
 
-export const catchConstraintByName = (error: unknown, constraint: string) => {
+export const errorCausedByConstraint = (error: unknown, constraint: string) => {
   if (error instanceof PostgresError) {
     if (error.constraint_name === constraint) {
       return true;

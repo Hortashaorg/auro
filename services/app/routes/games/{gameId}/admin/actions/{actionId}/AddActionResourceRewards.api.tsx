@@ -2,7 +2,7 @@ import { isAdminOfGame } from "@permissions/index.ts";
 import { createRoute, v } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { createEvents } from "@comp/utils/events.ts";
-import { catchConstraintByName, queries } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
 
 const AddActionResourceRewards = async () => {
@@ -58,7 +58,7 @@ const AddActionResourceRewards = async () => {
 
     return <ModifyResourceOfActionForm hx-swap-oob="true" />;
   } catch (error) {
-    if (catchConstraintByName(error, "unique_action_resource_reward")) {
+    if (errorCausedByConstraint(error, "unique_action_resource_reward")) {
       context.header(
         "HX-Trigger",
         createEvents([{

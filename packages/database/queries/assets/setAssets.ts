@@ -1,7 +1,7 @@
 import { type InferInsertModel, sql } from "drizzle-orm";
 import {
-  catchConstraintByName,
   db,
+  errorCausedByConstraint,
   schema,
   type Transaction,
 } from "@db/mod.ts";
@@ -28,7 +28,7 @@ export const setAssets = async (data: SetAssetData[], tx?: Transaction) => {
       })
       .returning();
   } catch (error) {
-    if (catchConstraintByName(error, "asset_name_unique")) {
+    if (errorCausedByConstraint(error, "asset_name_unique")) {
       return await transaction
         .insert(schema.asset)
         .values(data)
@@ -43,7 +43,7 @@ export const setAssets = async (data: SetAssetData[], tx?: Transaction) => {
         })
         .returning();
     }
-    if (catchConstraintByName(error, "asset_url_unique")) {
+    if (errorCausedByConstraint(error, "asset_url_unique")) {
       return await transaction
         .insert(schema.asset)
         .values(data)
