@@ -1,7 +1,7 @@
-import { db, eq, schema } from "@db/mod.ts";
+import { db, eq, inArray, schema } from "@db/mod.ts";
 
-export const getResourceCostsByActionId = (
-  actionId: string,
+export const getResourceCostsByActionIds = (
+  actionIds: string[],
 ) => {
   return db
     .select()
@@ -10,7 +10,17 @@ export const getResourceCostsByActionId = (
       schema.resource,
       eq(schema.actionResourceCost.resourceId, schema.resource.id),
     )
+    .innerJoin(
+      schema.asset,
+      eq(schema.resource.assetId, schema.asset.id),
+    )
     .where(
-      eq(schema.actionResourceCost.actionId, actionId),
+      inArray(schema.actionResourceReward.actionId, actionIds),
     );
+};
+
+export const getResourceCostsByActionId = (
+  actionId: string,
+) => {
+  return getResourceCostsByActionIds([actionId]);
 };

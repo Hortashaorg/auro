@@ -1,7 +1,7 @@
-import { db, eq, schema } from "@package/database";
+import { db, eq, inArray, schema } from "@package/database";
 
-export const getResourceRewardsByActionId = (
-  actionId: string,
+export const getResourceRewardsByActionIds = (
+  actionIds: string[],
 ) => {
   return db
     .select()
@@ -11,6 +11,12 @@ export const getResourceRewardsByActionId = (
       eq(schema.actionResourceReward.resourceId, schema.resource.id),
     )
     .where(
-      eq(schema.actionResourceReward.actionId, actionId),
+      inArray(schema.actionResourceReward.actionId, actionIds),
     );
+};
+
+export const getResourceRewardsByActionId = (
+  actionId: string,
+) => {
+  return getResourceRewardsByActionIds([actionId]);
 };
