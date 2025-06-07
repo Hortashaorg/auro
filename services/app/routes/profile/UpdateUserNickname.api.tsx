@@ -50,7 +50,7 @@ const UpdateHandler = async () => {
       ]),
     );
 
-    return <UserNicknamesTable hx-swap-oob="true" accountId={account.id} />;
+    return <UserNicknamesTable hx-swap-oob="true" email={account.email} />;
   } catch (error: unknown) {
     if (
       errorCausedByConstraint(error, "unique_user_name_per_game")

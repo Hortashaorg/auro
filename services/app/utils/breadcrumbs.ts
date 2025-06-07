@@ -1,5 +1,5 @@
 import { getGlobalContext } from "@kalena/framework";
-import { db, eq, schema } from "@package/database";
+import { queries } from "@package/database";
 import { throwError } from "@package/common";
 
 /**
@@ -55,12 +55,8 @@ export const calculateBreadcrumbSegments = async (): Promise<
           const gameId = urlSegments[index] ??
             throwError("Game ID not found");
 
-          const [game] = await db.select().from(schema.game).where(
-            eq(schema.game.id, gameId),
-          );
-
-          label = game?.name ?? throwError("Game not found");
-
+          const game = await queries.games.getGameById(gameId);
+          label = game.name;
           break;
         }
 
@@ -68,11 +64,8 @@ export const calculateBreadcrumbSegments = async (): Promise<
           const actionId = urlSegments[index] ??
             throwError("Action ID not found");
 
-          const [action] = await db.select().from(schema.action).where(
-            eq(schema.action.id, actionId),
-          );
-
-          label = action?.name ?? throwError("Action not found");
+          const action = await queries.actions.getActionById(actionId);
+          label = action.name;
           break;
         }
       }

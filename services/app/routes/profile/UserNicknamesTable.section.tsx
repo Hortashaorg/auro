@@ -9,15 +9,15 @@ import { Text } from "@comp/atoms/typography/index.ts";
 import { Modal, ModalButton } from "@comp/molecules/modal/index.ts";
 import { EditGameNicknameForm } from "./EditGameNicknameForm.section.tsx";
 import type { FC } from "@kalena/framework";
-import { selectGamesByAccountId } from "@queries/selects/games/selectGamesByAccountId.ts";
+import { queries } from "@package/database";
 
 type Props = {
-  accountId: string;
+  email: string;
 };
 export const UserNicknamesTable: FC<Props> = async (
-  { accountId, ...props },
+  { email, ...props },
 ) => {
-  const userGames = await selectGamesByAccountId(accountId);
+  const userGames = await queries.games.getGamesByEmail(email);
 
   return (
     <Table id="game-nicknames-section" {...props}>

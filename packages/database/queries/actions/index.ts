@@ -9,3 +9,5 @@ export * from "./getActionResourceRewardsByActionId.ts";
 export * from "./deleteActionResourceCostById.ts";
 export * from "./deleteActionResourceRewardById.ts";
 export * from "./getActionsByGameId.ts";
+export * from "./executeAction/executeAction.ts";
+export * from "./increaseAvailableActions.ts";

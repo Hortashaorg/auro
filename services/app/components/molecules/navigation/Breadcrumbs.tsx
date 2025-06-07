@@ -1,6 +1,6 @@
 import { cn } from "@comp/utils/tailwind.ts";
 import type { FC } from "@kalena/framework";
-import type { BreadcrumbSegment } from "@queries/other/breadcrumbs.ts";
+import type { BreadcrumbSegment } from "@utils/breadcrumbs.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
 import { Link } from "@comp/atoms/buttons/index.ts";
 import { Icon, Text } from "@comp/atoms/typography/index.ts";

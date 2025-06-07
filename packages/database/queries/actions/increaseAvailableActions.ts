@@ -7,7 +7,7 @@ import {
   lt,
   schema,
   sql,
-} from "@package/database";
+} from "@db/mod.ts";
 
 export const increaseAvailableActions = async () => {
   const now = Temporal.Now.plainDateTimeISO().round("minute");
