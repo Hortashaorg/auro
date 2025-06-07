@@ -62,7 +62,7 @@ const CreateGame = async () => {
         availableActions: 15,
         name: account?.nickname,
         type: "admin",
-      });
+      }, tx);
     });
 
     context.header(
