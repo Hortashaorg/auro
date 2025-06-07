@@ -1,4 +1,5 @@
-import { db, eq, schema, type Transaction } from "@db/mod.ts";
+import { db, schema, type Transaction } from "@db/mod.ts";
+import { eq } from "drizzle-orm";
 
 export const deleteActionResourceCostById = async (
   costId: string,

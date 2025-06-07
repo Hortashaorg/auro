@@ -1,4 +1,5 @@
-import { and, db, eq, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
+import { and, eq } from "drizzle-orm";
 
 export const getUserByEmail = async (email: string, gameId: string) => {
   const [user] = await db

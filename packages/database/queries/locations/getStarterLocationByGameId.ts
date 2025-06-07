@@ -1,5 +1,6 @@
-import { and, db, eq, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
 import { throwError } from "@package/common";
+import { and, eq } from "drizzle-orm";
 
 export const getStarterLocationByGameId = async (gameId: string) => {
   const [location] = await db.select().from(schema.location).where(and(

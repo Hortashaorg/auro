@@ -1,4 +1,5 @@
-import { db, desc, eq, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
+import { desc, eq } from "drizzle-orm";
 
 export const getActionLogsByUserId = async (
   userId: string,

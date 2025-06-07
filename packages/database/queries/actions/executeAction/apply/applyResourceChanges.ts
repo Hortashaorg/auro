@@ -1,4 +1,5 @@
-import { eq, schema } from "@db/mod.ts";
+import { schema } from "@db/mod.ts";
+import { eq } from "drizzle-orm";
 import type { Action, Transaction, User } from "../types.ts";
 import { throwError } from "@package/common";
 

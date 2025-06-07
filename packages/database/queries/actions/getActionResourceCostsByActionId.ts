@@ -1,4 +1,5 @@
-import { db, eq, inArray, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
+import { eq, inArray } from "drizzle-orm";
 
 export const getResourceCostsByActionIds = (
   actionIds: string[],

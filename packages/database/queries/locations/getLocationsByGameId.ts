@@ -1,4 +1,5 @@
-import { db, eq, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
+import { eq } from "drizzle-orm";
 
 export const getLocationsByGameId = async (gameId: string) => {
   return await db

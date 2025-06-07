@@ -1,9 +1,10 @@
 import { eq } from "drizzle-orm";
-import { db, schema } from "@db/mod.ts";
+import { db, schema, type Transaction } from "@db/mod.ts";
 import { throwError } from "@package/common";
 
-export const getAssetByName = async (name: string) => {
-  const asset = await db.query.asset.findFirst({
+export const getAssetByName = async (name: string, tx?: Transaction) => {
+  const transaction = tx ?? db;
+  const asset = await transaction.query.asset.findFirst({
     where: eq(schema.asset.name, name),
   });
 

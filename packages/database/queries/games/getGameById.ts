@@ -1,4 +1,5 @@
-import { db, eq, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
+import { eq } from "drizzle-orm";
 import { throwError } from "@package/common";
 
 export const getGameById = async (id: string) => {

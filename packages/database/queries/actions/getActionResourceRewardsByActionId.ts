@@ -1,4 +1,5 @@
-import { db, eq, inArray, schema } from "@package/database";
+import { db, schema } from "@package/database";
+import { eq, inArray } from "drizzle-orm";
 
 export const getResourceRewardsByActionIds = (
   actionIds: string[],

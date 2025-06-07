@@ -10,23 +10,8 @@ export const db = drizzle({
 });
 
 export * as schema from "./db/schema.ts";
-
-export {
-  and,
-  desc,
-  eq,
-  exists,
-  gt,
-  inArray,
-  isNull,
-  lt,
-  or,
-  sql,
-} from "drizzle-orm";
 export type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-
 export const PostgresError = pg.PostgresError;
-
 export type { Transaction } from "./queries/types.ts";
 export { errorCausedByConstraint } from "./queries/utils.ts";
 export * as queries from "./queries/index.ts";

@@ -1,4 +1,5 @@
-import { db, eq, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
+import { eq } from "drizzle-orm";
 
 export const getGamesByEmail = async (email: string) => {
   return await db.select()

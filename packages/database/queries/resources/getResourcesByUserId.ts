@@ -1,4 +1,5 @@
-import { db, eq, schema } from "@package/database";
+import { db, schema } from "@package/database";
+import { eq } from "drizzle-orm";
 
 export const getResourcesByUserId = async (userId: string) => {
   return await db.select()

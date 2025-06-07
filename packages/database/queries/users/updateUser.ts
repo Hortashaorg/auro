@@ -1,10 +1,10 @@
 import {
   db,
-  eq,
   type InferInsertModel,
   schema,
   type Transaction,
 } from "@db/mod.ts";
+import { eq } from "drizzle-orm";
 
 export type UserUpdate = Partial<
   Omit<

@@ -1,4 +1,5 @@
-import { db, eq, schema } from "@db/mod.ts";
+import { db, schema } from "@db/mod.ts";
+import { eq } from "drizzle-orm";
 import type { Action, ModuleFailure } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
 
