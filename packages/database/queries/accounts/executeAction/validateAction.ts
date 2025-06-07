@@ -1,4 +1,4 @@
-import { db, eq, schema } from "@package/database";
+import { db, eq, schema } from "@db/mod.ts";
 import type { Action, ModuleFailure } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
 

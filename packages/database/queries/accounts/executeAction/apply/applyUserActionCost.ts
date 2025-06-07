@@ -1,4 +1,4 @@
-import { eq, schema } from "@package/database";
+import { eq, schema } from "@db/mod.ts";
 import type { Transaction, User } from "../types.ts";
 
 export const applyUserActionCost = async (

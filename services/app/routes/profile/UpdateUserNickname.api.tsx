@@ -3,8 +3,7 @@ import { isLoggedIn } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { UserNicknamesTable } from "./UserNicknamesTable.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
-import { updateUser } from "@queries/mutations/user/updateUser.ts";
-import { PostgresError } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 
 const formSchema = v.object({
   nickname: v.string(),
@@ -32,7 +31,9 @@ const UpdateHandler = async () => {
   const { nickname } = result.output;
 
   try {
-    await updateUser(user.id, { name: nickname });
+    await queries.users.updateUser(user.id, {
+      name: nickname,
+    });
 
     context.header(
       "HX-Trigger",
@@ -52,9 +53,7 @@ const UpdateHandler = async () => {
     return <UserNicknamesTable hx-swap-oob="true" accountId={account.id} />;
   } catch (error: unknown) {
     if (
-      error instanceof PostgresError &&
-      (error as InstanceType<typeof PostgresError>).constraint_name ===
-        "unique_user_name_per_game"
+      errorCausedByConstraint(error, "unique_user_name_per_game")
     ) {
       context.header(
         "HX-Trigger",

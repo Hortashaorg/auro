@@ -1,4 +1,4 @@
-import { db } from "@package/database";
+import { db } from "@db/mod.ts";
 import type { Action, User } from "./types.ts";
 import { ERROR_CODES } from "./types.ts";
 import {

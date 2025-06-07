@@ -7,8 +7,7 @@ import { ButtonLink } from "@comp/atoms/buttons/index.ts";
 import { getGlobalContext, type JSX } from "@kalena/framework";
 import { throwError } from "@package/common";
 import { CardActions } from "@comp/atoms/card/CardActions.tsx";
-import { selectGamesByEmail } from "@queries/selects/games/selectGamesByEmail.ts";
-import { selectGames } from "@queries/selects/games/selectGames.ts";
+import { queries } from "@package/database";
 
 type Props = JSX.IntrinsicElements["div"];
 
@@ -17,11 +16,11 @@ export const GameGrid = async ({ ...props }: Props) => {
 
   const email = globalContext.var.email ?? throwError("No email");
 
-  const adminGames = (await selectGamesByEmail(email)).filter((game) =>
-    game.user.type === "admin"
-  );
+  const adminGames = (await queries.games.getGamesByEmail(email)).filter((
+    game,
+  ) => game.user.type === "admin");
 
-  const games = (await selectGames()).filter((game) => game.online);
+  const games = (await queries.games.getGames()).filter((game) => game.online);
 
   return (
     <HtmxWrapper {...props} id="game-section">

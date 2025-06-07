@@ -1,4 +1,4 @@
-import { eq, schema } from "@package/database";
+import { eq, schema } from "@db/mod.ts";
 import type { Action, Transaction, User } from "../types.ts";
 import { throwError } from "@package/common";
 

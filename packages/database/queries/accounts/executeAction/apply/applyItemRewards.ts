@@ -1,4 +1,4 @@
-import { schema } from "@package/database";
+import { schema } from "@db/mod.ts";
 import type { Action, Transaction, User } from "../types.ts";
 
 export const applyItemRewards = async (

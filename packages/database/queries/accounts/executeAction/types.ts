@@ -1,4 +1,4 @@
-import type { db, InferSelectModel, schema } from "@package/database";
+import type { db, InferSelectModel, schema } from "@db/mod.ts";
 
 export interface ModuleFailure {
   success: false;
