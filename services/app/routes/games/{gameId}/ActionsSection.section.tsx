@@ -44,7 +44,7 @@ export const ActionsSection: FC<Props> = async (
             c.action_resource_cost.actionId === data.action.id
           );
 
-          let enaghResources = true;
+          let enoughResources = true;
           const costsAndUserResources = costs.map((cost) => {
             const userResource = userResources.find((a) =>
               a.resourceId === cost.resource.id
@@ -52,7 +52,7 @@ export const ActionsSection: FC<Props> = async (
 
             const userQuantity = userResource?.quantity ?? 0;
             if (cost.action_resource_cost.quantity > userQuantity) {
-              enaghResources = false;
+              enoughResources = false;
             }
             return {
               userResource,
@@ -87,7 +87,7 @@ export const ActionsSection: FC<Props> = async (
                             height="24"
                             style={{ objectFit: "cover" }}
                           />
-                          <Text variant={!enaghResources ? "error" : "body"}>
+                          <Text variant={!enoughResources ? "error" : "body"}>
                             {`${data.cost.action_resource_cost.quantity} (${
                               data.userResource?.quantity ?? 0
                             })`}
@@ -102,8 +102,8 @@ export const ActionsSection: FC<Props> = async (
                 <Button
                   hx-post={`/api/games/${gameId}/actions/${data.action.id}/execute`}
                   hx-swap="none"
-                  disabled={!enaghResources}
-                  title={!enaghResources
+                  disabled={!enoughResources}
+                  title={!enoughResources
                     ? "You don't have enough resources"
                     : "Perform Action"}
                 >

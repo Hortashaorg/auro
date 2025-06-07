@@ -16,7 +16,7 @@ export const getResourceCostsByActionIds = (
       eq(schema.resource.assetId, schema.asset.id),
     )
     .where(
-      inArray(schema.actionResourceReward.actionId, actionIds),
+      inArray(schema.actionResourceCost.actionId, actionIds),
     );
 };
 
