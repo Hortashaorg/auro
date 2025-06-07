@@ -40,7 +40,33 @@ Deno.cron("Job", "* * * * *", async () => {
   await queries.actions.increaseAvailableActions();
 });
 
-Deno.serve({
+const controller = new AbortController();
+
+// Handle shutdown signals
+const shutdown = () => {
+  console.log("Shutting down gracefully...");
+  controller.abort();
+
+  // Force exit after a short delay if graceful shutdown doesn't work
+  setTimeout(() => {
+    console.log("Force exiting...");
+    Deno.exit(0);
+  }, 1000);
+};
+
+Deno.addSignalListener("SIGINT", shutdown); // Ctrl+C
+Deno.addSignalListener("SIGTERM", shutdown); // Container stop
+
+const server = Deno.serve({
   port: 4000,
   hostname: "0.0.0.0",
 }, myApp.fetch);
+
+// Optional: Handle the server shutdown promise
+server.finished.then(() => {
+  console.log("Server closed cleanly");
+  Deno.exit(0);
+}).catch((err) => {
+  console.log("Server shutdown error:", err);
+  Deno.exit(1);
+});

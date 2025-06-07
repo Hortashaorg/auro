@@ -1,6 +1,56 @@
 import { expandGlob } from "@std/fs";
 import { globToRegExp } from "@std/path";
 
+const processes: Deno.ChildProcess[] = [];
+
+// Signal handling for the task runner
+const cleanup = async () => {
+  console.log("🔴 Shutting down all tasks...");
+
+  for (const process of processes) {
+    try {
+      // Kill the entire process group, not just the parent
+      if (process.pid) {
+        // On Unix systems, kill the process group
+        const killCommand = new Deno.Command("pkill", {
+          args: ["-P", process.pid.toString()], // Kill children of this PID
+        });
+        await killCommand.output();
+
+        // Then kill the parent
+        process.kill("SIGTERM");
+
+        // Give it a moment, then force kill if needed
+        setTimeout(() => {
+          try {
+            process.kill("SIGKILL");
+          } catch (e) {
+            // Process already dead, that's fine
+          }
+        }, 1000);
+      }
+    } catch (e) {
+      console.log(`Failed to kill process: ${e}`);
+    }
+  }
+
+  // Also try to kill any remaining deno processes on port 4000
+  try {
+    const killPort = new Deno.Command("bash", {
+      args: ["-c", "lsof -ti:4000 | xargs -r kill -9"]
+    });
+    await killPort.output();
+  } catch (e) {
+    // Ignore errors here
+  }
+
+  Deno.exit(0);
+};
+
+Deno.addSignalListener("SIGINT", cleanup);
+Deno.addSignalListener("SIGTERM", cleanup);
+
+
 const glob = Deno.args[0];
 const task = Deno.args[1];
 
@@ -51,6 +101,7 @@ const tasks = workspaceWithValidTask.map(async (workspace) => {
   });
 
   const process = command.spawn();
+  processes.push(process);
 
   await Promise.all([
     pipeWithPrefix(process.stdout, console.log, workspace.name),
