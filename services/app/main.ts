@@ -40,7 +40,15 @@ Deno.cron("Job", "* * * * *", async () => {
   await queries.actions.increaseAvailableActions();
 });
 
-Deno.serve({
+const controller = new AbortController();
+
+Deno.addSignalListener("SIGINT", () => {
+  console.log("Shutting down gracefully...");
+  controller.abort();
+});
+
+const server = Deno.serve({
   port: 4000,
   hostname: "0.0.0.0",
+  signal: controller.signal,
 }, myApp.fetch);
