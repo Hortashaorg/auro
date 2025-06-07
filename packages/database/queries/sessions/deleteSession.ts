@@ -1,5 +1,5 @@
 import { db, schema, type Transaction } from "@package/database";
-import { eq } from "drizzle-org";
+import { eq } from "drizzle-orm";
 
 export const deleteSession = async (
   refreshTokenHash: string,
