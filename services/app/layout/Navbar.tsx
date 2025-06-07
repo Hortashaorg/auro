@@ -3,7 +3,7 @@ import { Link } from "@comp/atoms/buttons/index.ts";
 import { MenuSelect } from "@comp/molecules/navigation/index.ts";
 import { type FC, getGlobalContext } from "@kalena/framework";
 import { Breadcrumbs } from "@comp/molecules/navigation/index.ts";
-import { calculateBreadcrumbSegments } from "@queries/other/breadcrumbs.ts";
+import { calculateBreadcrumbSegments } from "@utils/breadcrumbs.ts";
 import { Icon, Text, Title } from "@comp/atoms/typography/index.ts";
 import { IconButton } from "@comp/atoms/buttons/index.ts";
 
