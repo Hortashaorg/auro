@@ -6,3 +6,4 @@ export * as locations from "./locations/index.ts";
 export * as resources from "./resources/index.ts";
 export * as actions from "./actions/index.ts";
 export * as items from "./items/index.ts";
+export * as sessions from "./sessions/index.ts";

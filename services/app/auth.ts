@@ -1,5 +1,5 @@
-import { hashString, throwError } from "@package/common";
-import { db, eq, schema, sql } from "@package/database";
+import { hashString } from "@package/common";
+import { db, queries } from "@package/database";
 
 export const afterLoginHook = async (
   loginResult: {
@@ -52,11 +52,8 @@ export const beforeLogoutHook = async (logoutInfo: {
 };
 
 const deleteAuth = async (refreshToken: string) => {
-  const sessionSchema = schema.session;
   const refreshTokenHash = await hashString(refreshToken);
-  await db.delete(sessionSchema).where(
-    eq(sessionSchema.refreshTokenHash, refreshTokenHash),
-  );
+  await queries.sessions.deleteSession(refreshTokenHash);
 };
 
 const setAuth = async (
@@ -64,30 +61,16 @@ const setAuth = async (
   refreshToken: string,
   email: string,
 ) => {
-  const accountSchema = schema.account;
+  await db.transaction(async (tx) => {
+    const account = await queries.accounts.setAccount({
+      email,
+    }, tx);
 
-  const account = (await db
-    .insert(accountSchema)
-    .values({ email })
-    .onConflictDoUpdate({
-      target: accountSchema.email,
-      set: {
-        email: sql`excluded.email`,
-      },
-    })
-    .returning())[0] ?? throwError("Failed to create or read account");
-
-  const sessionSchema = schema.session;
-
-  await db.insert(sessionSchema).values({
-    accountId: account.id,
-    refreshTokenHash: await hashString(refreshToken),
-    accessTokenHash: await hashString(accessToken),
-    expire: Temporal.Now.instant().add({ hours: 72 }),
-  }).onConflictDoUpdate({
-    target: [sessionSchema.refreshTokenHash],
-    set: {
+    await queries.sessions.setSession({
+      accountId: account.id,
+      refreshTokenHash: await hashString(refreshToken),
       accessTokenHash: await hashString(accessToken),
-    },
+      expire: Temporal.Now.instant().add({ hours: 72 }),
+    }, tx);
   });
 };
