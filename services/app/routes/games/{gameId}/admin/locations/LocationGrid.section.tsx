@@ -1,15 +1,15 @@
 import type { JSX } from "@kalena/framework";
-import { selectLocationsByGameId } from "@queries/selects/locations/selectLocationsByGameId.ts";
 import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
 import { Card } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
+import { queries } from "@package/database";
 
 type Props = {
   gameId: string;
 } & JSX.IntrinsicElements["div"];
 
 export const LocationGrid = async ({ gameId, ...props }: Props) => {
-  const locationData = await selectLocationsByGameId(gameId);
+  const locationData = await queries.locations.getLocationsByGameId(gameId);
 
   return (
     <HtmxWrapper {...props} id="location-section">

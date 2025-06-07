@@ -1,9 +1,8 @@
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createRoute } from "@kalena/framework";
 import { createEvents } from "@comp/utils/events.ts";
-import { updateActionResourceCosts } from "@queries/mutations/actions/updateActionResourceCosts.ts";
 import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
-import { selectResourceCostsByActionId } from "@queries/selects/actions/selectResourceCostsByActionId.ts";
+import { queries } from "@package/database";
 
 const UpdateActionResourceCosts = async () => {
   const context = updateActionResourceCostsRoute.context();
@@ -14,7 +13,11 @@ const UpdateActionResourceCosts = async () => {
   try {
     // Get all form entries - no validation needed since we're just parsing fields
     const entries = await context.req.raw.formData();
-    const resourceQuantities: Record<string, number> = {};
+    const inputQuantities: {
+      resourceId: string;
+      actionId: string;
+      quantity: number;
+    }[] = [];
     for (const [key, value] of entries.entries()) {
       if (key.startsWith("resource_") && key.endsWith("_quantity")) {
         const resourceId = key.replace("resource_", "").replace(
@@ -23,28 +26,28 @@ const UpdateActionResourceCosts = async () => {
         );
         const quantity = parseInt(value.toString(), 10);
         if (!isNaN(quantity)) {
-          resourceQuantities[resourceId] = quantity;
+          inputQuantities.push({
+            actionId: actionId,
+            resourceId: resourceId,
+            quantity: quantity,
+          });
         }
       }
     }
 
-    const costs = await selectResourceCostsByActionId(actionId);
+    const costs = await queries.actions.getResourceCostsByActionId(actionId);
 
-    const updates = costs
-      .map((cost) => {
-        const newQuantity = resourceQuantities[cost.resource.id];
-        if (typeof newQuantity === "number" && newQuantity > 0) {
-          return {
-            id: cost.action_resource_cost.id,
-            updates: { quantity: newQuantity },
-          };
-        }
-        return null;
-      })
-      .filter(Boolean) as { id: string; updates: { quantity: number } }[];
+    const updates = inputQuantities.filter((q) => {
+      const previousCost = costs.find((c) =>
+        c.action_resource_cost.actionId === q.actionId &&
+        c.action_resource_cost.resourceId === q.resourceId
+      );
+
+      return previousCost?.action_resource_cost.quantity !== q.quantity;
+    });
 
     if (updates.length > 0) {
-      await updateActionResourceCosts(updates);
+      await queries.actions.setActionResourceCosts(updates);
     }
 
     context.header(

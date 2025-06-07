@@ -3,11 +3,9 @@ import { createRoute } from "@kalena/framework";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { GameStatusCard } from "./GameStatusCard.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
-import { selectGameById } from "@queries/selects/games/selectGameById.ts";
 
 const GameAdmin = async () => {
-  const { user } = await gameAdminRoute.customContext();
-  const game = await selectGameById(user.gameId);
+  const { game } = await gameAdminRoute.customContext();
 
   return (
     <Layout title={`Game Admin - ${game.name}`}>

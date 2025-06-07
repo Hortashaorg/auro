@@ -3,17 +3,17 @@ import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
 import { Card, CardBody } from "@comp/atoms/card/index.ts";
 import { Badge, Icon } from "@comp/atoms/typography/index.ts";
 import { ButtonLink } from "@comp/atoms/buttons/index.ts";
-import { selectBaseGameActions } from "@queries/selects/actions/selectGameActions.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { CardActions } from "@comp/atoms/card/CardActions.tsx";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { queries } from "@package/database";
 
 type Props = {
   gameId: string;
 } & BaseComponentProps;
 
 export const ActionGrid: FC<Props> = async ({ gameId, ...props }) => {
-  const actionsData = await selectBaseGameActions(gameId);
+  const actionsData = await queries.actions.getActionsByGameId(gameId);
 
   return (
     <HtmxWrapper {...props} id="action-section">

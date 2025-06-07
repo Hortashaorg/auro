@@ -36,7 +36,7 @@ const Profile = async () => {
           <Text variant="body" className="mb-4">
             Customize your name for each game you belong to.
           </Text>
-          <UserNicknamesTable accountId={account.id} />
+          <UserNicknamesTable email={account.email} />
         </CardBody>
       </Card>
     </Layout>

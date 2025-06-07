@@ -4,7 +4,7 @@ import { afterLoginHook, beforeLogoutHook, refreshHook } from "./auth.ts";
 import * as routes from "./routes/index.ts";
 import { ErrorPage404 } from "./errors/ErrorPage404.tsx";
 import { ErrorPage500 } from "./errors/ErrorPage500.tsx";
-import { increaseAvailableActions } from "@queries/mutations/actions/increaseAvailableActions.ts";
+import { queries } from "@package/database";
 
 const clientSecret = Deno.env.get("AUTH_CLIENT_SECRET") ??
   throwError("Missing auth client secret");
@@ -37,7 +37,7 @@ const myApp = app({
 });
 
 Deno.cron("Job", "* * * * *", async () => {
-  await increaseAvailableActions();
+  await queries.actions.increaseAvailableActions();
 });
 
 Deno.serve({

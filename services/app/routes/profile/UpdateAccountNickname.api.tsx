@@ -1,10 +1,9 @@
 import { createRoute, v } from "@kalena/framework";
 import { isLoggedIn } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
-import { PostgresError } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 import { AccountNicknameFlex } from "./AccountNicknameFlex.section.tsx";
 import { accountContext } from "@contexts/accountContext.ts";
-import { updateAccount } from "@queries/mutations/account/updateAccount.ts";
 
 const UpdateAccountNickname = async () => {
   const context = updateAccountNicknameRoute.context();
@@ -27,7 +26,9 @@ const UpdateAccountNickname = async () => {
   try {
     const account = await updateAccountNicknameRoute.customContext();
 
-    await updateAccount(account.id, { nickname: result.output.nickname });
+    await queries.accounts.updateAccount(account.id, {
+      nickname: result.output.nickname,
+    });
 
     context.header(
       "HX-Trigger",
@@ -49,8 +50,7 @@ const UpdateAccountNickname = async () => {
     );
   } catch (error) {
     if (
-      error instanceof PostgresError &&
-      error.constraint_name === "account_nickname_unique"
+      errorCausedByConstraint(error, "account_nickname_unique")
     ) {
       context.header(
         "HX-Trigger",

@@ -8,10 +8,10 @@ import {
 } from "@comp/atoms/form/index.ts";
 import { ImageGridInput } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
-import { selectResourceAssets } from "@queries/selects/assets/selectResourceAssets.ts";
+import { queries } from "@package/database";
 
 export const CreateResourceForm = async ({ gameId }: { gameId: string }) => {
-  const assets = await selectResourceAssets();
+  const assets = await queries.assets.getAssetsByType("resource");
 
   return (
     <Form

@@ -1,11 +1,10 @@
 import { createRoute, v } from "@kalena/framework";
-import { PostgresError } from "@package/database";
+import { errorCausedByConstraint, queries } from "@package/database";
 import { isAdminOfGame } from "@permissions/index.ts";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
 import { LocationGrid } from "./LocationGrid.section.tsx";
 import { userContext } from "@contexts/userContext.ts";
-import { createLocation } from "@queries/mutations/locations/createLocation.ts";
 
 const CreateLocation = async () => {
   const context = createLocationRoute.context();
@@ -37,7 +36,7 @@ const CreateLocation = async () => {
   const gameId = user.gameId;
 
   try {
-    await createLocation({
+    await queries.locations.setLocation({
       name: result.output.name,
       description: result.output.description,
       gameId: gameId,
@@ -54,24 +53,20 @@ const CreateLocation = async () => {
 
     return <LocationGrid hx-swap-oob="true" gameId={gameId} />;
   } catch (error) {
-    if (error instanceof PostgresError) {
-      if (
-        error.constraint_name === "unique_location_name_per_game"
-      ) {
-        // Unique constraint violation
-        context.header(
-          "HX-Trigger",
-          createEvents([
-            {
-              name: "form-error",
-              values: {
-                name: "A location with this name already exists on this game",
-              },
+    if (errorCausedByConstraint(error, "unique_location_name_per_game")) {
+      // Unique constraint violation
+      context.header(
+        "HX-Trigger",
+        createEvents([
+          {
+            name: "form-error",
+            values: {
+              name: "A location with this name already exists on this game",
             },
-          ]),
-        );
-        return <p>Failure</p>;
-      }
+          },
+        ]),
+      );
+      return <p>Failure</p>;
     }
     throw error;
   }

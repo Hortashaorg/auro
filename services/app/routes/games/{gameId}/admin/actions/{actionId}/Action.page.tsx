@@ -14,19 +14,17 @@ import { AddResourceToActionForm } from "./AddResourceToActionForm.section.tsx";
 import { ModifyResourceOfActionForm } from "./ModifyResourceOfActionForm.section.tsx";
 import { FormButton, FormContext } from "@comp/molecules/form/index.ts";
 import { ButtonGroup } from "@comp/atoms/buttons/index.ts";
+import { queries } from "@package/database";
 import { AddResourceCostToActionForm } from "./AddResourceCostToActionForm.section.tsx";
 import { ModifyResourceCostOfActionForm } from "./ModifyResourceCostOfActionForm.section.tsx";
-import { selectActionById } from "@queries/selects/actions/selectGameActions.ts";
 
 const ActionDetail = async () => {
   const globalContext = getGlobalContext();
-  const gameId = globalContext.req.param("gameId");
   const actionId = globalContext.req.param("actionId");
 
-  if (!gameId) throwError("No gameId");
   if (!actionId) throwError("No actionId");
 
-  const action = await selectActionById(actionId);
+  const action = await queries.actions.getActionById(actionId);
 
   return (
     <Layout title={`Action - ${action.name}`}>

@@ -1,8 +1,7 @@
 import { Text } from "@comp/atoms/typography/index.ts";
 import type { FC } from "@kalena/framework";
-import type { InferSelectModel, schema } from "@package/database";
-import { selectUserByEmail } from "@queries/selects/user/selectUserByEmail.ts";
-import { selectGameById } from "@queries/selects/games/selectGameById.ts";
+import { type InferSelectModel, queries, type schema } from "@package/database";
+import { throwError } from "@package/common";
 
 interface Props {
   gameId: string;
@@ -55,10 +54,13 @@ const calculateTimeUntilNextAction = (
 export const TimeUntilNextActionText: FC<Props> = async (props) => {
   const { gameId, email } = props;
 
-  const [user, game] = await Promise.all([
-    selectUserByEmail(email, gameId),
-    selectGameById(gameId),
+  const userAndGame = await Promise.all([
+    queries.users.getUserByEmail(email, gameId),
+    queries.games.getGameById(gameId),
   ]);
+
+  const user = userAndGame[0] ?? throwError("User should exist");
+  const game = userAndGame[1];
 
   const timeString = calculateTimeUntilNextAction(
     game.actionRecoveryInterval,
@@ -74,7 +76,7 @@ export const TimeUntilNextActionText: FC<Props> = async (props) => {
       <Text>
         You have{" "}
         <strong className="dark:text-on-primary-dark text-on-primary">
-          {user.availableActions} available actions
+          {user.user.availableActions} available actions
         </strong>
       </Text>
       <Text>

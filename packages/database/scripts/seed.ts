@@ -1,10 +1,9 @@
-import { db, schema } from "../mod.ts";
-import { asset } from "../db/schema.ts";
+import { db, queries, schema } from "@db/mod.ts";
 import type { InferInsertModel } from "drizzle-orm";
 import { notInArray } from "drizzle-orm";
 
 async function seedAssets() {
-  const assets: InferInsertModel<typeof asset>[] = [
+  const assets: InferInsertModel<typeof schema.asset>[] = [
     {
       type: "location",
       name: "Castle 1",
@@ -297,26 +296,21 @@ async function seedAssets() {
     },
   ];
   console.log("🌱 Seeding assets...");
-  await db.insert(asset).values(assets).onConflictDoNothing();
-  await db.delete(asset).where(
-    notInArray(asset.name, assets.map((a) => a.name)),
+  await queries.assets.setAssets(assets);
+  await db.delete(schema.asset).where(
+    notInArray(schema.asset.name, assets.map((a) => a.name)),
   );
 }
 
 const setAdminUser = async () => {
-  await db.insert(schema.account).values([{
+  await queries.accounts.setAccounts([{
     email: "eidemartin_303@hotmail.com",
     nickname: "Martin",
     canCreateGame: true,
   }, {
     email: "andreas.ander.li@gmail.com",
     canCreateGame: true,
-  }]).onConflictDoUpdate({
-    target: [schema.account.email],
-    set: {
-      canCreateGame: true,
-    },
-  });
+  }]);
 };
 
 // Main seeding function

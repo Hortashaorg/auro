@@ -11,3 +11,6 @@ Administrator:
 UI:
 - Loading states / Optimistic updates pattern
 - Component Testing
+
+Query Work:
+- Contexts and Routes left to refactor

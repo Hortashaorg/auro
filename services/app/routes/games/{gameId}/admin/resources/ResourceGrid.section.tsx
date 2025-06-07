@@ -1,16 +1,16 @@
 import type { FC } from "@kalena/framework";
-import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
 import { Card } from "@comp/atoms/card/index.ts";
 import { MediaCardHeader } from "@comp/molecules/card/index.ts";
 import { Grid, HtmxWrapper } from "@comp/atoms/layout/index.ts";
 import type { BaseComponentProps } from "@comp/utils/props.ts";
+import { queries } from "@package/database";
 
 type Props = {
   gameId: string;
 } & BaseComponentProps;
 
 export const ResourceGrid: FC<Props> = async ({ gameId, ...props }) => {
-  const resourcesData = await selectResourcesByGameId(gameId);
+  const resourcesData = await queries.resources.getResourcesByGameId(gameId);
 
   return (
     <HtmxWrapper {...props} id="resource-section">

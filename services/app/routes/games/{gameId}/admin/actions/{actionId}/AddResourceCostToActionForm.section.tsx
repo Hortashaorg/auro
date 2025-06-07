@@ -3,7 +3,7 @@ import { Form, Label, SelectInput } from "@comp/atoms/form/index.ts";
 import { FormControl } from "@comp/molecules/form/index.ts";
 import { getGlobalContext, v } from "@kalena/framework";
 import { Flex } from "@comp/atoms/layout/index.ts";
-import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
+import { queries } from "@package/database";
 
 const formSchema = v.object({
   resourceId: v.pipe(v.string(), v.uuid()),
@@ -13,7 +13,7 @@ export const AddResourceCostToActionForm = async () => {
   const globalContext = getGlobalContext();
   const gameId = globalContext.req.param("gameId");
 
-  const resources = await selectResourcesByGameId(gameId);
+  const resources = await queries.resources.getResourcesByGameId(gameId);
   const resourceOptions = resources.map((data) => ({
     value: data.resource.id,
     label: data.resource.name,

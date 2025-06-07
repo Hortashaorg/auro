@@ -1,5 +1,10 @@
 import { createRoute, v } from "@kalena/framework";
-import { db, eq, PostgresError, schema } from "@package/database";
+import {
+  db,
+  errorCausedByConstraint,
+  queries,
+  schema,
+} from "@package/database";
 import { GameGrid } from "./GameGrid.section.tsx";
 import { createEvents } from "@comp/utils/events.ts";
 import { throwError } from "@package/common";
@@ -35,42 +40,29 @@ const CreateGame = async () => {
 
   try {
     await db.transaction(async (tx) => {
-      const games = await tx.insert(schema.game)
-        .values({
-          name: result.output.name,
-          actionRecoveryInterval: result.output.action_recovery_interval,
-        })
-        .returning();
+      const game = await queries.games.setGame({
+        name: result.output.name,
+        actionRecoveryInterval: result.output.action_recovery_interval,
+      }, tx);
 
-      const game = games[0] ?? throwError("Just created the Game");
+      const asset = await queries.assets.getAssetByName("Village 2", tx);
 
-      const assets = await tx.select().from(schema.asset).where(
-        eq(schema.asset.name, "Village 2"),
-      );
+      const location = await queries.locations.setLocation({
+        isStarterLocation: true,
+        gameId: game.id,
+        assetId: asset.id,
+        name: "Starter Location",
+      }, tx);
 
-      const asset = assets[0] ??
-        throwError("asset with name of Village 2 should exist");
-
-      const locations = await tx.insert(schema.location)
-        .values({
-          isStarterLocation: true,
-          gameId: game.id,
-          assetId: asset.id,
-          name: "Starter Location",
-        }).returning();
-
-      const location = locations[0] ?? throwError("Location was just created");
-
-      await tx.insert(schema.user)
-        .values({
-          accountId: account?.id ??
-            throwError("No account found"),
-          gameId: game.id,
-          locationId: location.id,
-          availableActions: 15,
-          name: account?.nickname,
-          type: "admin",
-        });
+      await queries.users.setUser({
+        accountId: account?.id ??
+          throwError("No account found"),
+        gameId: game.id,
+        locationId: location.id,
+        availableActions: 15,
+        name: account?.nickname,
+        type: "admin",
+      }, tx);
     });
 
     context.header(
@@ -83,45 +75,19 @@ const CreateGame = async () => {
 
     return <GameGrid hx-swap-oob="true" />;
   } catch (error) {
-    if (error instanceof PostgresError) {
-      console.log("Postgres Error");
-      if (
-        error.constraint_name === "unique_game_name"
-      ) {
-        // Unique constraint violation
-        context.header(
-          "HX-Trigger",
-          createEvents([
-            {
-              name: "form-error",
-              values: {
-                name: "A game with this name already exists",
-              },
+    if (errorCausedByConstraint(error, "unique_game_name")) {
+      context.header(
+        "HX-Trigger",
+        createEvents([
+          {
+            name: "form-error",
+            values: {
+              name: "A game with this name already exists",
             },
-          ]),
-        );
-        return <p>Failure</p>;
-      }
-    }
-    if (error instanceof Error && error.cause instanceof PostgresError) {
-      console.log("Postgres Error");
-      if (
-        error.cause.constraint_name === "unique_game_name"
-      ) {
-        // Unique constraint violation
-        context.header(
-          "HX-Trigger",
-          createEvents([
-            {
-              name: "form-error",
-              values: {
-                name: "A game with this name already exists",
-              },
-            },
-          ]),
-        );
-        return <p>Failure</p>;
-      }
+          },
+        ]),
+      );
+      return <p>Failure</p>;
     }
     throw error;
   }

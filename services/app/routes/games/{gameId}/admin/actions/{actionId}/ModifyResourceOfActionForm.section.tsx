@@ -7,29 +7,23 @@ import {
   TableHeader,
   TableRow,
 } from "@comp/atoms/table/index.ts";
-import { selectResourceRewardsByActionId } from "@queries/selects/actions/selectResourceRewardsByActionId.ts";
 import { type FC, getGlobalContext, type JSX } from "@kalena/framework";
+import { queries } from "@package/database";
 import { ModalButton } from "@comp/molecules/modal/index.ts";
 import { Modal } from "@comp/molecules/modal/index.ts";
 import { DeleteConfirmation } from "./DeleteConfirmation.section.tsx";
 import { Text } from "@comp/atoms/typography/index.ts";
 
 type Props = JSX.IntrinsicElements["form"];
-/**
- * Form component for modifying resources of an action within a table
- *
- * Features:
- * - Renders table rows for each resource
- * - Handles resource rewards editing
- * - Provides form controls for each field
- * - Works with FormContext for state management
- */
+
 export const ModifyResourceOfActionForm: FC<Props> = async ({ ...props }) => {
   const globalContext = getGlobalContext();
   const gameId = globalContext.req.param("gameId");
   const actionId = globalContext.req.param("actionId");
 
-  const resourceRewards = await selectResourceRewardsByActionId(actionId);
+  const resourceRewards = await queries.actions.getResourceRewardsByActionId(
+    actionId,
+  );
 
   return (
     <>

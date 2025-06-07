@@ -1,18 +1,18 @@
 import { getGlobalContext } from "@kalena/framework";
-import { selectResourcesByGameId } from "@queries/selects/resources/selectResourcesByGameId.ts";
 import { Form, Label, SelectInput } from "@comp/atoms/form/index.ts";
 import { FormControl } from "@comp/molecules/form/index.ts";
 import { Button } from "@comp/atoms/buttons/index.ts";
 import { Flex } from "@comp/atoms/layout/index.ts";
+import { queries } from "@package/database";
 
 export const AddResourceToActionForm = async () => {
   const globalContext = getGlobalContext();
   const gameId = globalContext.req.param("gameId");
   const actionId = globalContext.req.param("actionId");
 
-  const availableResources = await selectResourcesByGameId(gameId);
+  const resources = await queries.resources.getResourcesByGameId(gameId);
 
-  const resourceOptions = availableResources.map((data) => ({
+  const resourceOptions = resources.map((data) => ({
     value: data.resource.id,
     label: data.resource.name,
   }));
