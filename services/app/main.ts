@@ -47,7 +47,7 @@ Deno.addSignalListener("SIGINT", () => {
   controller.abort();
 });
 
-const server = Deno.serve({
+Deno.serve({
   port: 4000,
   hostname: "0.0.0.0",
   signal: controller.signal,
